@@ -22,3 +22,31 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases and backups
+*.sqlite3
+*.db
+*.bak
+*.backup
+
+# Python / Django (for future backend)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+db.sqlite3
+
+# Build and tool caches
+.vite/
+coverage/
+.nyc_output/
+
+# Local editor settings
+.idea/
+.vscode-test/

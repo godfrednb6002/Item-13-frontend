@@ -1,122 +1,205 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import DynamicBackground from './components/DynamicBackground';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import CatalogSection from './components/CatalogSection';
+import ComboPairings from './components/ComboPairings';
+import StoryCraft from './components/StoryCraft';
+import Testimonials from './components/Testimonials';
+import CartDrawer from './components/CartDrawer';
+import QuickViewModal from './components/QuickViewModal';
+import Footer from './components/Footer';
+import { POPCORN_ITEMS, DRINK_ITEMS } from './data';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
+  // Theme state: dark / light with persistent storage & system preference fallback
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('popnsizzle-theme');
+    if (saved) return saved;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  });
+
+  // Filter state for catalog
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  // Cart state
+  const [cartItems, setCartItems] = useState([
+    {
+      id: 'pop-1',
+      name: 'Artisan Salted Caramel',
+      price: 6.50,
+      quantity: 1,
+      image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=80',
+    },
+    {
+      id: 'drk-1',
+      name: 'Sparkling Yuzu Blossom',
+      price: 5.50,
+      quantity: 1,
+      image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80',
+    },
+  ]);
+
+  const [cartOpen, setCartOpen] = useState(false);
+  const [quickViewItem, setQuickViewItem] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Sync theme attribute to document root
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('popnsizzle-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
+  // Add individual product
+  const handleAddToCart = (product) => {
+    setCartItems((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: 1,
+          image: product.image,
+        },
+      ];
+    });
+  };
+
+  // Add combo pairing
+  const handleAddCombo = (combo) => {
+    setCartItems((prev) => {
+      const comboId = combo.id;
+      const existing = prev.find((item) => item.id === comboId);
+      if (existing) {
+        return prev.map((item) =>
+          item.id === comboId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [
+        ...prev,
+        {
+          id: comboId,
+          name: `${combo.name} (Pairing Duo)`,
+          price: combo.price,
+          quantity: 1,
+          image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=80',
+        },
+      ];
+    });
+  };
+
+  // Quick add duo from Hero
+  const handleHeroQuickAdd = () => {
+    handleAddCombo({
+      id: 'combo-hero',
+      name: 'Salted Caramel & Yuzu Sparkler Duo',
+      price: 10.00,
+    });
+    setCartOpen(true);
+  };
+
+  const handleUpdateQty = (id, newQty) => {
+    if (newQty <= 0) {
+      handleRemoveItem(id);
+      return;
+    }
+    setCartItems((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, quantity: newQty } : item))
+    );
+  };
+
+  const handleRemoveItem = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
+
+  const totalCartCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-container">
+      {/* Interactive Mobile & Desktop Dynamic Background */}
+      <DynamicBackground />
 
-      <div className="ticks"></div>
+      {/* Sticky Glass Navbar */}
+      <Navbar
+        theme={theme}
+        toggleTheme={toggleTheme}
+        cartCount={totalCartCount}
+        onOpenCart={() => setCartOpen(true)}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+      />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* Main Home Page Content */}
+      <main className="main-content">
+        {/* Hero Section */}
+        <Hero
+          onExploreClick={() => setActiveFilter('all')}
+          onQuickAddCombo={handleHeroQuickAdd}
+        />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* Catalog Section with Category Filter & Search */}
+        <CatalogSection
+          activeFilter={activeFilter}
+          setActiveFilter={setActiveFilter}
+          onAddToCart={handleAddToCart}
+          onQuickView={(item) => setQuickViewItem(item)}
+        />
+
+        {/* Sommelier Combos */}
+        <ComboPairings onAddCombo={handleAddCombo} />
+
+        {/* Quality Story & Micro-batch Craft */}
+        <StoryCraft />
+
+        {/* Reviews & Social Proof */}
+        <Testimonials />
+      </main>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Slide-out Cart Drawer with Glassmorphism */}
+      <CartDrawer
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQty={handleUpdateQty}
+        onRemoveItem={handleRemoveItem}
+        onClearCart={handleClearCart}
+      />
+
+      {/* Quick View Modal */}
+      <QuickViewModal
+        item={quickViewItem}
+        onClose={() => setQuickViewItem(null)}
+        onAddToCart={handleAddToCart}
+      />
+    </div>
+  );
 }
 
-export default App
+export default App;

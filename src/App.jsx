@@ -1,205 +1,429 @@
-import React, { useState, useEffect } from 'react';
-import DynamicBackground from './components/DynamicBackground';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import CatalogSection from './components/CatalogSection';
-import ComboPairings from './components/ComboPairings';
-import StoryCraft from './components/StoryCraft';
-import Testimonials from './components/Testimonials';
-import CartDrawer from './components/CartDrawer';
-import QuickViewModal from './components/QuickViewModal';
-import Footer from './components/Footer';
-import { POPCORN_ITEMS, DRINK_ITEMS } from './data';
-import './App.css';
+import React, { useState } from 'react';
+import confetti from 'canvas-confetti';
+import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
 
-function App() {
-  // Theme state: dark / light with persistent storage & system preference fallback
-  const [theme, setTheme] = useState(() => {
-    const saved = localStorage.getItem('popnsizzle-theme');
-    if (saved) return saved;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-  });
+export default function App() {
+  const [toastMessage, setToastMessage] = useState(null);
+  const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
+  const [cartCount, setCartCount] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Filter state for catalog
-  const [activeFilter, setActiveFilter] = useState('all');
-
-  // Cart state
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 'pop-1',
-      name: 'Artisan Salted Caramel',
-      price: 6.50,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=80',
-    },
-    {
-      id: 'drk-1',
-      name: 'Sparkling Yuzu Blossom',
-      price: 5.50,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=700&q=80',
-    },
-  ]);
-
-  const [cartOpen, setCartOpen] = useState(false);
-  const [quickViewItem, setQuickViewItem] = useState(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // Sync theme attribute to document root
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('popnsizzle-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3200);
   };
 
-  // Add individual product
-  const handleAddToCart = (product) => {
-    setCartItems((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [
-        ...prev,
-        {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: 1,
-          image: product.image,
-        },
-      ];
+  const handleBuyNow = (e) => {
+    // Confetti celebration burst
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+    confetti({
+      particleCount: 60,
+      spread: 70,
+      origin: { x, y },
+      colors: ['#F4B627', '#ffffff', '#FF5722', '#222222']
     });
+
+    setCartCount(prev => prev + 1);
+    showToast("Added 'Classic Popcorn & Soda Duo' to your bag! ($12.90)");
   };
 
-  // Add combo pairing
-  const handleAddCombo = (combo) => {
-    setCartItems((prev) => {
-      const comboId = combo.id;
-      const existing = prev.find((item) => item.id === comboId);
-      if (existing) {
-        return prev.map((item) =>
-          item.id === comboId
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [
-        ...prev,
-        {
-          id: comboId,
-          name: `${combo.name} (Pairing Duo)`,
-          price: combo.price,
-          quantity: 1,
-          image: 'https://images.unsplash.com/photo-1578849278619-e73505e9610f?auto=format&fit=crop&w=700&q=80',
-        },
-      ];
-    });
+  const handleAddMiniItem = (name, price) => {
+    setCartCount(prev => prev + 1);
+    showToast(`Added '${name}' to your bag! (${price})`);
   };
-
-  // Quick add duo from Hero
-  const handleHeroQuickAdd = () => {
-    handleAddCombo({
-      id: 'combo-hero',
-      name: 'Salted Caramel & Yuzu Sparkler Duo',
-      price: 10.00,
-    });
-    setCartOpen(true);
-  };
-
-  const handleUpdateQty = (id, newQty) => {
-    if (newQty <= 0) {
-      handleRemoveItem(id);
-      return;
-    }
-    setCartItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, quantity: newQty } : item))
-    );
-  };
-
-  const handleRemoveItem = (id) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const handleClearCart = () => {
-    setCartItems([]);
-  };
-
-  const totalCartCount = cartItems.reduce((acc, it) => acc + it.quantity, 0);
 
   return (
-    <div className="app-container">
-      {/* Interactive Mobile & Desktop Dynamic Background */}
-      <DynamicBackground />
+    <div className="page-container">
+      {/* Background Graphic Elements */}
+      <div className="diagonal-bg">
+        <svg className="diagonal-svg-canvas" viewBox="0 0 1440 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="fastfood-doodles" width="220" height="220" patternUnits="userSpaceOnUse">
+              {/* Burger doodle */}
+              <g stroke="#6b4c05" strokeWidth="1.5" fill="none" opacity="0.45" transform="translate(20, 20)">
+                <path d="M 10 25 Q 35 5 60 25 Z" />
+                <path d="M 8 28 L 62 28" strokeLinecap="round" />
+                <path d="M 6 34 Q 16 38 26 34 Q 36 38 46 34 Q 56 38 64 34" />
+                <rect x="8" y="38" width="54" height="6" rx="3" />
+                <path d="M 10 48 Q 35 56 60 48" />
+              </g>
 
-      {/* Sticky Glass Navbar */}
-      <Navbar
-        theme={theme}
-        toggleTheme={toggleTheme}
-        cartCount={totalCartCount}
-        onOpenCart={() => setCartOpen(true)}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
-        mobileMenuOpen={mobileMenuOpen}
-        setMobileMenuOpen={setMobileMenuOpen}
-      />
+              {/* Soda Bottle / Cup doodle */}
+              <g stroke="#6b4c05" strokeWidth="1.5" fill="none" opacity="0.45" transform="translate(130, 40)">
+                <line x1="25" y1="5" x2="35" y2="0" strokeLinecap="round"/>
+                <path d="M 15 10 L 45 10 L 40 55 L 20 55 Z" />
+                <line x1="16" y1="22" x2="44" y2="22" />
+                <line x1="18" y1="36" x2="42" y2="36" />
+              </g>
 
-      {/* Main Home Page Content */}
-      <main className="main-content">
-        {/* Hero Section */}
-        <Hero
-          onExploreClick={() => setActiveFilter('all')}
-          onQuickAddCombo={handleHeroQuickAdd}
-        />
+              {/* Fries doodle */}
+              <g stroke="#6b4c05" strokeWidth="1.5" fill="none" opacity="0.45" transform="translate(40, 130)">
+                <path d="M 10 25 L 14 55 L 42 55 L 46 25 Z" />
+                <line x1="16" y1="24" x2="18" y2="10" strokeLinecap="round" />
+                <line x1="24" y1="24" x2="26" y2="6" strokeLinecap="round" />
+                <line x1="32" y1="24" x2="31" y2="8" strokeLinecap="round" />
+                <line x1="40" y1="24" x2="38" y2="12" strokeLinecap="round" />
+              </g>
 
-        {/* Catalog Section with Category Filter & Search */}
-        <CatalogSection
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
-          onAddToCart={handleAddToCart}
-          onQuickView={(item) => setQuickViewItem(item)}
-        />
+              {/* Popcorn doodle */}
+              <g stroke="#6b4c05" strokeWidth="1.5" fill="none" opacity="0.45" transform="translate(140, 140)">
+                <circle cx="15" cy="15" r="7" />
+                <circle cx="24" cy="12" r="6" />
+                <circle cx="21" cy="22" r="7" />
+                <circle cx="12" cy="23" r="6" />
+              </g>
+            </pattern>
 
-        {/* Sommelier Combos */}
-        <ComboPairings onAddCombo={handleAddCombo} />
+            <linearGradient id="yellowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#fbc63b" />
+              <stop offset="60%" stopColor="#f4b627" />
+              <stop offset="100%" stopColor="#e8a514" />
+            </linearGradient>
 
-        {/* Quality Story & Micro-batch Craft */}
-        <StoryCraft />
+            <clipPath id="yellowCurveClip">
+              {/* Starts right in front of Sign in button (~X:1120 in 1440 width), sweeps down-left across hero, and rounds smoothly at the bottom-left corner with an organic curve */}
+              <path d="M 1120 0 
+                       L 1440 0 
+                       L 1440 900 
+                       L 650 900 
+                       C 580 900, 520 860, 520 780 
+                       C 520 700, 570 640, 640 570 
+                       L 1120 0 Z" />
+            </clipPath>
+          </defs>
 
-        {/* Reviews & Social Proof */}
-        <Testimonials />
+          {/* Yellow curved background shape */}
+          <path
+            d="M 1120 0 
+               L 1440 0 
+               L 1440 900 
+               L 650 900 
+               C 580 900, 520 860, 520 780 
+               C 520 700, 570 640, 640 570 
+               L 1120 0 Z"
+            fill="url(#yellowGradient)"
+          />
+
+          {/* Line art doodle overlay within the curved yellow shape */}
+          <g clipPath="url(#yellowCurveClip)">
+            <rect width="1440" height="900" fill="url(#fastfood-doodles)" className="doodle-overlay-rect" />
+          </g>
+        </svg>
+      </div>
+
+      {/* Top Navigation */}
+      <header className="navbar">
+        <div className="brand-logo" onClick={() => showToast("Item13. — Authentic Taste")}>
+          Item13.
+        </div>
+
+        <div className="nav-right">
+          <div className="nav-links">
+            <button className="nav-search-btn" aria-label="Search" onClick={() => showToast("Search menu items...")}>
+              <Search size={18} />
+            </button>
+            <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 is crafted with premium corn and fresh soda flavors."); }}>
+              Why Item13?
+            </a>
+            <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 Cinema Duo: Elevating snack time."); }}>
+              About
+            </a>
+            <a href="#menu" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Explore our full snack & drinks menu."); }}>
+              Menu ▾
+            </a>
+          </div>
+
+          <div className="nav-buttons-group">
+            <div className="nav-buttons-row">
+              <button className="btn-pill btn-pill-yellow" onClick={() => setActiveModal('signin')}>
+                Sign in
+              </button>
+              <button className="btn-pill btn-pill-black" onClick={() => setActiveModal('login')}>
+                Login
+              </button>
+            </div>
+            <button className="btn-pill btn-pill-outline" onClick={() => showToast("Continuing as Guest — welcome!")}>
+              Continue as guest
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Hero Content */}
+      <main className="hero-content">
+        {/* Left Side (Black Matte Background) */}
+        <section className="hero-left">
+          {/* Subtle curved line accent */}
+          <svg className="decorative-wave" viewBox="0 0 40 16" fill="none">
+            <path d="M 2 8 Q 10 0 18 8 T 34 8" stroke="#f4b627" strokeWidth="2.5" strokeLinecap="round" />
+          </svg>
+
+          <p className="hero-subtitle-top">
+            Enjoy our classic theater duo, now simplified with plastic bottles and expanded favorites.
+          </p>
+
+          <h1 className="hero-title">
+            Classic Popcorn <br />
+            <span className="title-accent">& Soda Duo</span>
+          </h1>
+
+          <p className="hero-desc">
+            Item13’s authentic buttered popcorn and chilled soda is a flavor you can find only here.
+          </p>
+
+          {/* Pricing & CTA */}
+          <div className="hero-action-row">
+            <div className="price-container">
+              <span className="price-original">$14.99</span>
+              <span className="price-current">$12.90</span>
+            </div>
+
+            <button className="btn-buy-now" onClick={handleBuyNow} id="buy-now-btn">
+              <span className="bag-icon-badge">
+                <ShoppingBag size={15} />
+              </span>
+              <span>Buy Now</span>
+            </button>
+          </div>
+
+          {/* Customer Favorites in Bottom Left Corner */}
+          <div className="customer-favorites" onClick={() => setActiveModal('favorites')} style={{ cursor: 'pointer' }}>
+            <div className="avatar-stack-ring">
+              <div className="avatar-group">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 1"
+                  className="avatar avatar-1"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 2"
+                  className="avatar avatar-2"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 3"
+                  className="avatar avatar-3"
+                />
+              </div>
+            </div>
+
+            <div className="favorites-text">
+              <span className="favorites-title">Customer Favorites</span>
+              <span className="favorites-link">
+                See top rated dishes <ChevronRight size={14} />
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Right Side (Yellow Background) */}
+        <section className="hero-right">
+          {/* Main Hero Visual: Popcorn bowl + Fanta + Coca Cola */}
+          <div className="hero-product-showcase">
+            <img
+              src="/popcorn_duo_transparent.png"
+              alt="Classic Popcorn and Soda Duo featuring buttered popcorn, Fanta orange soda, and Coca-Cola"
+              className="hero-main-img"
+              id="hero-duo-image"
+            />
+          </div>
+
+          {/* Dashboard Widget: New Menu Items / Latest Additions */}
+          <div className="menu-widget">
+            <div className="widget-header">
+              <span className="widget-title">New Menu Items</span>
+              <span className="widget-subtitle">Latest Additions</span>
+            </div>
+
+            <div className="widget-cards-grid">
+              {/* Product 1: Bistro Popcorn */}
+              <div
+                className="product-mini-card"
+                onClick={() => handleAddMiniItem("Bistro Popcorn", "$12.90")}
+                title="Click to add Bistro Popcorn"
+              >
+                <img
+                  src="/bistro-popcorn.jpg"
+                  alt="Bistro Popcorn"
+                  className="mini-card-thumb"
+                  onError={(e) => {
+                    e.target.src = "https://images.unsplash.com/photo-1578849278619-e73505e9610f?w=120&auto=format&fit=crop&q=80";
+                  }}
+                />
+                <div className="mini-card-info">
+                  <span className="mini-card-name">Bistro Popcorn</span>
+                  <span className="mini-card-price">$12.90</span>
+                </div>
+              </div>
+
+              {/* Product 2: Coca-Cola */}
+              <div
+                className="product-mini-card"
+                onClick={() => handleAddMiniItem("Coca-Cola", "$7.90")}
+                title="Click to add Coca-Cola"
+              >
+                <img
+                  src="/coca-cola.jpg"
+                  alt="Coca-Cola"
+                  className="mini-card-thumb"
+                  onError={(e) => {
+                    e.target.src = "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=120&auto=format&fit=crop&q=80";
+                  }}
+                />
+                <div className="mini-card-info">
+                  <span className="mini-card-name">Coca-Cola</span>
+                  <span className="mini-card-price">$7.90</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <Footer />
+      {/* Floating Bag counter badge if items added */}
+      {cartCount > 0 && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '28px',
+            right: '24px',
+            zIndex: 99,
+            background: 'var(--gold)',
+            color: '#000',
+            fontWeight: '700',
+            padding: '8px 18px',
+            borderRadius: '9999px',
+            boxShadow: '0 8px 20px rgba(244, 182, 39, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            cursor: 'pointer'
+          }}
+          onClick={() => showToast(`Your Bag contains ${cartCount} item(s)! Ready for checkout.`)}
+        >
+          <ShoppingBag size={16} />
+          <span>Bag: {cartCount}</span>
+        </div>
+      )}
 
-      {/* Slide-out Cart Drawer with Glassmorphism */}
-      <CartDrawer
-        isOpen={cartOpen}
-        onClose={() => setCartOpen(false)}
-        cartItems={cartItems}
-        onUpdateQty={handleUpdateQty}
-        onRemoveItem={handleRemoveItem}
-        onClearCart={handleClearCart}
-      />
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="toast-notice">
+          <Check size={18} color="var(--gold)" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
-      {/* Quick View Modal */}
-      <QuickViewModal
-        item={quickViewItem}
-        onClose={() => setQuickViewItem(null)}
-        onAddToCart={handleAddToCart}
-      />
+      {/* Interactive Modals */}
+      {activeModal && (
+        <div className="modal-overlay" onClick={() => setActiveModal(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={() => setActiveModal(null)}>
+              <X size={18} />
+            </button>
+
+            {activeModal === 'signin' && (
+              <div>
+                <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', marginBottom: '8px' }}>
+                  Sign in to Item13
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '20px' }}>
+                  Access member-only movie snack bundles and reward discounts.
+                </p>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    background: '#0e0f12',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    marginBottom: '14px',
+                    outline: 'none'
+                  }}
+                />
+                <button
+                  className="btn-pill btn-pill-yellow"
+                  style={{ width: '100%', padding: '14px' }}
+                  onClick={() => {
+                    setActiveModal(null);
+                    showToast("Welcome back to Item13!");
+                  }}
+                >
+                  Continue with Email
+                </button>
+              </div>
+            )}
+
+            {activeModal === 'login' && (
+              <div>
+                <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#fff', marginBottom: '8px' }}>
+                  Quick Login
+                </h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '20px' }}>
+                  Enter your credentials to manage your snacks and orders.
+                </p>
+                <input
+                  type="text"
+                  placeholder="Username or Phone"
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    background: '#0e0f12',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    marginBottom: '14px',
+                    outline: 'none'
+                  }}
+                />
+                <button
+                  className="btn-pill btn-pill-black"
+                  style={{ width: '100%', padding: '14px', border: '1px solid var(--gold)' }}
+                  onClick={() => {
+                    setActiveModal(null);
+                    showToast("Logged in successfully!");
+                  }}
+                >
+                  Login
+                </button>
+              </div>
+            )}
+
+            {activeModal === 'favorites' && (
+              <div>
+                <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', marginBottom: '14px' }}>
+                  Customer Favorites
+                </h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Buttered Cinema Crunch</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ moviegoers</div>
+                    </div>
+                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>$12.90</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>Fanta Citrus Duo Pack</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.8 ★ by 1,820+ customers</div>
+                    </div>
+                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>$8.50</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-export default App;

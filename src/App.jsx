@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
+import LoginPage from './LoginPage';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login'
+  const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
   const [cartCount, setCartCount] = useState(0);
@@ -36,6 +39,27 @@ export default function App() {
     setCartCount(prev => prev + 1);
     showToast(`Added '${name}' to your bag! (${price})`);
   };
+
+  if (currentPage === 'login') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notification">
+            <Check size={18} className="toast-check-icon" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <LoginPage
+          onNavigate={(page) => setCurrentPage(page)}
+          onLoginSuccess={(userData) => {
+            setUser(userData);
+            setCurrentPage('home');
+            showToast(`Welcome back, ${userData.email.split('@')[0]}!`);
+          }}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="page-container">
@@ -118,8 +142,13 @@ export default function App() {
 
       {/* Top Navigation */}
       <header className="navbar">
-        <div className="brand-logo" onClick={() => showToast("Item13. — Authentic Taste")}>
-          Item13.
+        <div className="brand-logo" onClick={() => showToast("Item13 — The Unexpected Essential")}>
+          <img
+            src="/item13Logo-trimmed.png"
+            alt="Item13 Logo"
+            className="brand-logo-img"
+          />
+          <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
         </div>
 
         <div className="nav-right">
@@ -139,17 +168,37 @@ export default function App() {
           </div>
 
           <div className="nav-buttons-group">
-            <div className="nav-buttons-row">
-              <button className="btn-pill btn-pill-yellow" onClick={() => setActiveModal('signin')}>
-                Sign in
-              </button>
-              <button className="btn-pill btn-pill-black" onClick={() => setActiveModal('login')}>
-                Login
-              </button>
-            </div>
-            <button className="btn-pill btn-pill-outline" onClick={() => showToast("Continuing as Guest — welcome!")}>
-              Continue as guest
-            </button>
+            {user ? (
+              <div className="nav-buttons-row" style={{ alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '13px', color: '#111', fontWeight: 700, background: 'var(--gold)', padding: '6px 14px', borderRadius: '20px' }}>
+                  Hi, {user.email.split('@')[0]}
+                </span>
+                <button
+                  className="btn-pill btn-pill-outline"
+                  onClick={() => {
+                    setUser(null);
+                    showToast("Signed out of Item13.");
+                  }}
+                  style={{ fontSize: '12px', padding: '6px 14px' }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="nav-buttons-row">
+                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('login')}>
+                    Sign in
+                  </button>
+                  <button className="btn-pill btn-pill-black" onClick={() => setCurrentPage('login')}>
+                    Login
+                  </button>
+                </div>
+                <button className="btn-pill btn-pill-outline" onClick={() => showToast("Continuing as Guest — welcome!")}>
+                  Continue as guest
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>

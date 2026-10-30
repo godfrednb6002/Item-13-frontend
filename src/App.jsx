@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
-import LoginPage from './LoginPage';
+import AuthPage from './AuthPage';
+import ProfilePage from './ProfilePage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
@@ -44,8 +45,8 @@ export default function App() {
     return (
       <>
         {toastMessage && (
-          <div className="toast-notification">
-            <Check size={18} className="toast-check-icon" />
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
             <span>{toastMessage}</span>
           </div>
         )}
@@ -414,7 +415,7 @@ export default function App() {
                   Sign in to Item13
                 </h3>
                 <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '20px' }}>
-                  Access member-only movie snack bundles and reward discounts.
+                  Access member-only snack bundles, exclusive discounts, and order tracking.
                 </p>
                 <input
                   type="email"
@@ -486,8 +487,8 @@ export default function App() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
                     <div>
-                      <div style={{ fontWeight: 600 }}>Buttered Cinema Crunch</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ moviegoers</div>
+                      <div style={{ fontWeight: 600 }}>Classic Buttered Crunch</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ popcorn lovers</div>
                     </div>
                     <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS12.90</span>
                   </div>

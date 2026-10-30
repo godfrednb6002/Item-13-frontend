@@ -35,8 +35,8 @@ const recentOrder = {
   number: 'I13-20481',
   date: 'October 24, 2026',
   status: 'On its way',
-  items: 'Classic Popcorn & Soda Duo',
-  total: '$12.90',
+  items: 'Classic Popcorn & Drink Combo',
+  total: 'GHS45.00',
 };
 
 function SectionHeading({ eyebrow, title, description, action, onAction }) {

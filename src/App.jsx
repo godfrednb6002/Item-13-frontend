@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
-import LoginPage from './LoginPage';
+import AuthPage from './AuthPage';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login'
+  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
@@ -32,7 +32,7 @@ export default function App() {
     });
 
     setCartCount(prev => prev + 1);
-    showToast("Added 'Classic Popcorn & Soda Duo' to your bag! ($12.90)");
+    showToast("Added 'Classic Popcorn & Drink Combo' to your bag! (GH₵ 45.00)");
   };
 
   const handleAddMiniItem = (name, price) => {
@@ -40,7 +40,7 @@ export default function App() {
     showToast(`Added '${name}' to your bag! (${price})`);
   };
 
-  if (currentPage === 'login') {
+  if (currentPage === 'login' || currentPage === 'signup') {
     return (
       <>
         {toastMessage && (
@@ -49,12 +49,13 @@ export default function App() {
             <span>{toastMessage}</span>
           </div>
         )}
-        <LoginPage
+        <AuthPage
+          initialMode={currentPage === 'signup' ? 'signup' : 'login'}
           onNavigate={(page) => setCurrentPage(page)}
-          onLoginSuccess={(userData) => {
+          onAuthSuccess={(userData) => {
             setUser(userData);
             setCurrentPage('home');
-            showToast(`Welcome back, ${userData.email.split('@')[0]}!`);
+            showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
       </>
@@ -79,7 +80,7 @@ export default function App() {
 
               {/* Soda Bottle / Cup doodle */}
               <g stroke="#6b4c05" strokeWidth="1.5" fill="none" opacity="0.45" transform="translate(130, 40)">
-                <line x1="25" y1="5" x2="35" y2="0" strokeLinecap="round"/>
+                <line x1="25" y1="5" x2="35" y2="0" strokeLinecap="round" />
                 <path d="M 15 10 L 45 10 L 40 55 L 20 55 Z" />
                 <line x1="16" y1="22" x2="44" y2="22" />
                 <line x1="18" y1="36" x2="42" y2="36" />
@@ -153,16 +154,16 @@ export default function App() {
 
         <div className="nav-right">
           <div className="nav-links">
-            <button className="nav-search-btn" aria-label="Search" onClick={() => showToast("Search menu items...")}>
+            <button className="nav-search-btn" aria-label="Search" onClick={() => showToast("Search our products...")}>
               <Search size={18} />
             </button>
-            <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 is crafted with premium corn and fresh soda flavors."); }}>
+            <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
             </a>
-            <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 Cinema Duo: Elevating snack time."); }}>
+            <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 — Ghana's favourite popcorn and snack delivery brand."); }}>
               About
             </a>
-            <a href="#menu" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Explore our full snack & drinks menu."); }}>
+            <a href="#menu" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Explore our full popcorn and drinks menu."); }}>
               Menu ▾
             </a>
           </div>
@@ -187,8 +188,8 @@ export default function App() {
             ) : (
               <>
                 <div className="nav-buttons-row">
-                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('login')}>
-                    Sign in
+                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('signup')}>
+                    Sign up
                   </button>
                   <button className="btn-pill btn-pill-black" onClick={() => setCurrentPage('login')}>
                     Login
@@ -213,23 +214,23 @@ export default function App() {
           </svg>
 
           <p className="hero-subtitle-top">
-            Enjoy our classic theater duo, now simplified with plastic bottles and expanded favorites.
+            Ghana's favourite popcorn, freshly popped and delivered straight to your doorstep.
           </p>
 
           <h1 className="hero-title">
             Classic Popcorn <br />
-            <span className="title-accent">& Soda Duo</span>
+            <span className="title-accent">& Drinks</span>
           </h1>
 
           <p className="hero-desc">
-            Item13’s authentic buttered popcorn and chilled soda is a flavor you can find only here.
+            Item13’s signature buttered popcorn paired with ice-cold drinks — a taste you won’t find anywhere else. Order now and we’ll deliver across Ghana.
           </p>
 
           {/* Pricing & CTA */}
           <div className="hero-action-row">
             <div className="price-container">
-              <span className="price-original">$14.99</span>
-              <span className="price-current">$12.90</span>
+              <span className="price-original">GHS14.99</span>
+              <span className="price-current">GHS12.90</span>
             </div>
 
             <button className="btn-buy-now" onClick={handleBuyNow} id="buy-now-btn">
@@ -276,7 +277,7 @@ export default function App() {
           {/* Main Hero Visual: Popcorn bowl + Fanta + Coca Cola */}
           <div className="hero-product-showcase">
             <img
-              src="/popcorn_duo_transparent.png"
+              src="/WhatsApp Image 2026-10-29 at 4.31.43 PM-Photoroom.png"
               alt="Classic Popcorn and Soda Duo featuring buttered popcorn, Fanta orange soda, and Coca-Cola"
               className="hero-main-img"
               id="hero-duo-image"
@@ -294,7 +295,7 @@ export default function App() {
               {/* Product 1: Bistro Popcorn */}
               <div
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Bistro Popcorn", "$12.90")}
+                onClick={() => handleAddMiniItem("Bistro Popcorn", "GHS12.90")}
                 title="Click to add Bistro Popcorn"
               >
                 <img
@@ -307,14 +308,14 @@ export default function App() {
                 />
                 <div className="mini-card-info">
                   <span className="mini-card-name">Bistro Popcorn</span>
-                  <span className="mini-card-price">$12.90</span>
+                  <span className="mini-card-price">GHS12.90</span>
                 </div>
               </div>
 
               {/* Product 2: Coca-Cola */}
               <div
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Coca-Cola", "$7.90")}
+                onClick={() => handleAddMiniItem("Coca-Cola", "GHS7.90")}
                 title="Click to add Coca-Cola"
               >
                 <img
@@ -327,7 +328,7 @@ export default function App() {
                 />
                 <div className="mini-card-info">
                   <span className="mini-card-name">Coca-Cola</span>
-                  <span className="mini-card-price">$7.90</span>
+                  <span className="mini-card-price">GHS7.90</span>
                 </div>
               </div>
             </div>
@@ -458,14 +459,14 @@ export default function App() {
                       <div style={{ fontWeight: 600 }}>Buttered Cinema Crunch</div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ moviegoers</div>
                     </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>$12.90</span>
+                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS12.90</span>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
                     <div>
                       <div style={{ fontWeight: 600 }}>Fanta Citrus Duo Pack</div>
                       <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.8 ★ by 1,820+ customers</div>
                     </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>$8.50</span>
+                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS8.50</span>
                   </div>
                 </div>
               </div>

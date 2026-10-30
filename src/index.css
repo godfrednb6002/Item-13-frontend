@@ -287,16 +287,17 @@ a {
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(40px, 4.4vw, 62px);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -1px;
+  font-size: clamp(100px, 4.4vw, 62px);
+  font-weight: 1000;
+  line-height: 0.8;
+  letter-spacing: -3px;
   color: var(--gold);
   margin-bottom: 22px;
 }
 
 .hero-title .title-accent {
   color: #ffca48;
+  font-size: 100px;
 }
 
 .hero-desc {
@@ -401,7 +402,9 @@ a {
 }
 
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .avatar-group {
@@ -420,9 +423,20 @@ a {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-.avatar-1 { top: 0; left: 13px; }
-.avatar-2 { bottom: 2px; left: 0; }
-.avatar-3 { bottom: 2px; right: 0; }
+.avatar-1 {
+  top: 0;
+  left: 13px;
+}
+
+.avatar-2 {
+  bottom: 2px;
+  left: 0;
+}
+
+.avatar-3 {
+  bottom: 2px;
+  right: 0;
+}
 
 .favorites-text {
   display: flex;
@@ -470,8 +484,8 @@ a {
 }
 
 .hero-main-img {
-  width: 100%;
-  max-width: 680px;
+  width: 200%;
+  max-width: 2000px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 25px 35px rgba(110, 72, 10, 0.35));
@@ -486,9 +500,12 @@ a {
 }
 
 @keyframes floatSubtle {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -613,6 +630,7 @@ a {
     transform: translateX(-50%) translateY(40px);
     opacity: 0;
   }
+
   to {
     transform: translateX(-50%) translateY(0);
     opacity: 1;
@@ -634,8 +652,13 @@ a {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .modal-content {
@@ -676,9 +699,11 @@ a {
     gap: 40px;
     padding: 20px 32px;
   }
+
   .navbar {
     padding: 20px 32px;
   }
+
   .diagonal-bg-yellow {
     width: 100%;
     height: 52%;
@@ -686,6 +711,7 @@ a {
     bottom: 0;
     clip-path: polygon(0 18%, 100% 0, 100% 100%, 0 100%);
   }
+
   .menu-widget {
     margin: 0 auto;
     width: 100%;
@@ -698,16 +724,19 @@ a {
     gap: 16px;
     align-items: flex-start;
   }
+
   .nav-right {
     width: 100%;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 12px;
   }
+
   .hero-action-row {
     flex-wrap: wrap;
     gap: 16px;
   }
+
   .btn-buy-now {
     width: 100%;
     justify-content: center;
@@ -1118,12 +1147,12 @@ a {
   transition: all 0.2s ease;
 }
 
-.checkbox-container input:checked + .checkbox-custom {
+.checkbox-container input:checked+.checkbox-custom {
   background: var(--gold);
   border-color: var(--gold);
 }
 
-.checkbox-container input:checked + .checkbox-custom::after {
+.checkbox-container input:checked+.checkbox-custom::after {
   content: '✓';
   position: absolute;
   top: -1px;
@@ -1175,7 +1204,9 @@ a {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .login-footer-callout {
@@ -1206,13 +1237,144 @@ a {
     grid-template-columns: 1fr;
     max-width: 500px;
   }
+
   .login-card-visual {
     display: none;
   }
+
   .login-card-form-wrapper {
     padding: 36px 28px;
   }
+
   .login-header {
     padding: 24px 24px 16px 24px;
+  }
+}
+
+
+/* =========================================================
+   AUTH TAB SWITCHER & MODERN SLOW TRANSITIONS
+   ========================================================= */
+
+.auth-card-shell {
+  width: 100%;
+  max-width: 1040px;
+  perspective: 1200px;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease;
+}
+
+.auth-card-transitioning {
+  opacity: 0.85;
+  transform: scale(0.985) translateY(4px);
+}
+
+.login-card-container {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-tab-switcher {
+  position: relative;
+  display: flex;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  margin-bottom: 24px;
+  width: 100%;
+  max-width: 310px;
+  align-self: center;
+}
+
+.auth-tab-btn {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  text-align: center;
+  transition: color 0.4s ease;
+}
+
+.auth-tab-btn.active {
+  color: #0f1012;
+}
+
+.auth-tab-slider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  width: calc(50% - 4px);
+  background: var(--gold);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 15px rgba(244, 182, 39, 0.35);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.auth-tab-slider.pos-left {
+  transform: translateX(0);
+}
+
+.auth-tab-slider.pos-right {
+  transform: translateX(100%);
+}
+
+/* Dynamic Ambient Glow Positions */
+.glow-pos-right {
+  top: -80px;
+  right: -50px;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-pos-left {
+  top: 100px;
+  right: 180px;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth Fade & Slide transitions for content panes */
+.visual-animated-container,
+.auth-form-animated-body {
+  position: relative;
+  width: 100%;
+}
+
+.visual-pane-fade,
+.form-pane-fade {
+  animation: authPaneSlideFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes authPaneSlideFade {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+.signup-badge {
+  background: rgba(244, 182, 39, 0.2) !important;
+  border-color: rgba(244, 182, 39, 0.5) !important;
+}
+
+.signup-grid-fields {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .signup-grid-fields {
+    grid-template-columns: 1fr;
   }
 }

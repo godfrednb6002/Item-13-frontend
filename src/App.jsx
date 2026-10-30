@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
-import AuthPage from './AuthPage';
-import ProfilePage from './ProfilePage';
+import AuthPage from './pages/AuthPage';
+import ProfilePage from './pages/ProfilePage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'

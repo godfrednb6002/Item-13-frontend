@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import CartDrawer from './features/cart/CartDrawer';
+import CheckoutPage from './pages/CheckoutPage';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
+  const [currentPage, setCurrentPage] = useState(
+    window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home',
+  );
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPage(window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (page) => {
+    const nextPath = page === 'checkout' ? '/checkout' : '/';
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    }
+    setCurrentPage(page);
+  };
 
   const addItemToCart = (productId) => {
     const products = {
@@ -87,6 +107,36 @@ export default function App() {
     showToast(`Added '${name}' to your bag! (${price})`);
   };
 
+  if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
+    return (
+      <CheckoutPage
+        items={cartItems}
+        customer={user}
+        confirmation={orderConfirmation}
+        onBack={() => {
+          setOrderConfirmation(null);
+          navigateTo('home');
+        }}
+        onUpdateQuantity={(productId, quantity) => {
+          setCartItems((items) => items.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+              : item,
+          ));
+        }}
+        onPlaceOrder={(order) => {
+          setOrderConfirmation({
+            ...order,
+            orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+          });
+          setCartItems([]);
+          setCurrentPage('order-confirmation');
+          window.history.pushState({}, '', '/checkout/confirmation');
+        }}
+      />
+    );
+  }
+
   if (currentPage === 'login' || currentPage === 'signup') {
     return (
       <>
@@ -98,10 +148,10 @@ export default function App() {
         )}
         <AuthPage
           initialMode={currentPage === 'signup' ? 'signup' : 'login'}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('home');
+            navigateTo('home');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
@@ -120,11 +170,11 @@ export default function App() {
         )}
         <ProfilePage
           user={user}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onToast={showToast}
           onSignOut={() => {
             setUser(null);
-            setCurrentPage('home');
+            navigateTo('home');
             showToast('Signed out of Item13.');
           }}
         />
@@ -256,7 +306,7 @@ export default function App() {
                 </span>
                 <button
                   className="btn-pill btn-pill-black"
-                  onClick={() => setCurrentPage('profile')}
+                  onClick={() => navigateTo('profile')}
                   style={{ fontSize: '12px', padding: '6px 14px' }}
                 >
                   My account
@@ -275,10 +325,10 @@ export default function App() {
             ) : (
               <>
                 <div className="nav-buttons-row">
-                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('signup')}>
+                  <button className="btn-pill btn-pill-yellow" onClick={() => navigateTo('signup')}>
                     Sign up
                   </button>
-                  <button className="btn-pill btn-pill-black" onClick={() => setCurrentPage('login')}>
+                  <button className="btn-pill btn-pill-black" onClick={() => navigateTo('login')}>
                     Login
                   </button>
                 </div>
@@ -428,9 +478,9 @@ export default function App() {
           items={cartItems}
           onClose={() => setIsCartOpen(false)}
           onContinueShopping={() => setIsCartOpen(false)}
-          onCheckout={({ deliveryMethod }) => {
+          onCheckout={() => {
             setIsCartOpen(false);
-            showToast(`Your bag is ready. ${deliveryMethod === 'pickup' ? 'Pickup' : 'Delivery'} details are next.`);
+            navigateTo('checkout');
           }}
           onAddItem={addItemToCart}
           onUpdateQuantity={(productId, quantity) => {

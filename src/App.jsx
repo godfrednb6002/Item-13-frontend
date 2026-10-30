@@ -3,6 +3,8 @@ import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
+import WelcomePage from './pages/WelcomePage';
+import MenuPage from './pages/MenuPage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
@@ -55,8 +57,55 @@ export default function App() {
           onNavigate={(page) => setCurrentPage(page)}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('home');
+            setCurrentPage('welcome');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
+          }}
+        />
+      </>
+    );
+  }
+
+  if (currentPage === 'welcome') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <WelcomePage
+          user={user}
+          cartCount={cartCount}
+          onNavigate={(page) => setCurrentPage(page)}
+          onToast={showToast}
+          onSignOut={() => {
+            setUser(null);
+            setCurrentPage('home');
+            showToast('Signed out of Item13.');
+          }}
+        />
+      </>
+    );
+  }
+
+  if (currentPage === 'menu') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <MenuPage
+          onNavigate={(page) => setCurrentPage(page)}
+          cartCount={cartCount}
+          onAddToCart={(item) => {
+            const addedQty = item.quantity || 1;
+            setCartCount((prev) => prev + addedQty);
+            const sizeLabel = item.selectedSize ? ` (${item.selectedSize})` : '';
+            showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${(item.totalPrice || item.price).toFixed(2)})`);
           }}
         />
       </>
@@ -178,19 +227,13 @@ export default function App() {
 
         <div className="nav-right">
           <div className="nav-links">
-            <button className="nav-search-btn" aria-label="Search" onClick={() => showToast("Search our products...")}>
-              <Search size={18} />
-            </button>
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
             </a>
             <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 — Ghana's favourite popcorn and snack delivery brand."); }}>
               About
             </a>
-            <a href="#menu" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Explore our full popcorn and drinks menu."); }}>
-              Menu ▾
-            </a>
-          </div>
+            </div>
 
           <div className="nav-buttons-group">
             {user ? (
@@ -200,7 +243,7 @@ export default function App() {
                 </span>
                 <button
                   className="btn-pill btn-pill-black"
-                  onClick={() => setCurrentPage('profile')}
+                  onClick={() => setCurrentPage('welcome')}
                   style={{ fontSize: '12px', padding: '6px 14px' }}
                 >
                   My account
@@ -226,7 +269,7 @@ export default function App() {
                     Login
                   </button>
                 </div>
-                <button className="btn-pill btn-pill-outline" onClick={() => showToast("Continuing as Guest — welcome!")}>
+                <button className="btn-pill btn-pill-outline" onClick={() => setCurrentPage('menu')}>
                   Continue as guest
                 </button>
               </>

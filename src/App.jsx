@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
-import AuthPage from './AuthPage';
+import LoginPage from './LoginPage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
@@ -56,6 +56,29 @@ export default function App() {
             setUser(userData);
             setCurrentPage('home');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
+          }}
+        />
+      </>
+    );
+  }
+
+  if (currentPage === 'profile') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <ProfilePage
+          user={user}
+          onNavigate={(page) => setCurrentPage(page)}
+          onToast={showToast}
+          onSignOut={() => {
+            setUser(null);
+            setCurrentPage('home');
+            showToast('Signed out of Item13.');
           }}
         />
       </>
@@ -174,6 +197,13 @@ export default function App() {
                 <span style={{ fontSize: '13px', color: '#111', fontWeight: 700, background: 'var(--gold)', padding: '6px 14px', borderRadius: '20px' }}>
                   Hi, {user.email.split('@')[0]}
                 </span>
+                <button
+                  className="btn-pill btn-pill-black"
+                  onClick={() => setCurrentPage('profile')}
+                  style={{ fontSize: '12px', padding: '6px 14px' }}
+                >
+                  My account
+                </button>
                 <button
                   className="btn-pill btn-pill-outline"
                   onClick={() => {

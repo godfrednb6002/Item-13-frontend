@@ -1,19 +1,79 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
-import WelcomePage from './pages/WelcomePage';
-import MenuPage from './pages/MenuPage';
-import Footer from './components/Footer';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
+  const [currentPage, setCurrentPage] = useState(
+    window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home',
+  );
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
-  const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPage(window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (page) => {
+    const nextPath = page === 'checkout' ? '/checkout' : '/';
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    }
+    setCurrentPage(page);
+  };
+
+  const addItemToCart = (productId) => {
+    const products = {
+      'classic-combo': {
+        id: 'classic-combo',
+        name: 'Classic Popcorn & Drink Combo',
+        image: '/WhatsApp Image 2026-10-29 at 4.31.43 PM-Photoroom.png',
+        price: 45,
+        variant: 'Buttered popcorn · Cola + Fanta',
+        stock: 8,
+      },
+      'bistro-popcorn': {
+        id: 'bistro-popcorn',
+        name: 'Bistro Popcorn',
+        image: '/bistro-popcorn.jpg',
+        price: 12.9,
+        variant: 'Freshly popped · Classic',
+        stock: 12,
+      },
+      'coca-cola': {
+        id: 'coca-cola',
+        name: 'Coca-Cola',
+        image: '/coca-cola.jpg',
+        price: 7.9,
+        variant: 'Chilled · 330 ml',
+        stock: 20,
+      },
+    };
+    const product = products[productId];
+    if (!product) return;
+
+    setCartItems((currentItems) => {
+      const existing = currentItems.find((item) => item.id === productId);
+      if (existing) {
+        return currentItems.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: Math.min(item.stock, item.quantity + 1) }
+            : item,
+        );
+      }
+      return [...currentItems, { ...product, quantity: 1 }];
+    });
+  };
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -35,14 +95,45 @@ export default function App() {
       colors: ['#F4B627', '#ffffff', '#FF5722', '#222222']
     });
 
-    setCartCount(prev => prev + 1);
+    addItemToCart('classic-combo');
     showToast("Added 'Classic Popcorn & Drink Combo' to your bag! (GH₵ 45.00)");
   };
 
   const handleAddMiniItem = (name, price) => {
-    setCartCount(prev => prev + 1);
+    const productId = name === 'Bistro Popcorn' ? 'bistro-popcorn' : 'coca-cola';
+    addItemToCart(productId);
     showToast(`Added '${name}' to your bag! (${price})`);
   };
+
+  if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
+    return (
+      <CheckoutPage
+        items={cartItems}
+        customer={user}
+        confirmation={orderConfirmation}
+        onBack={() => {
+          setOrderConfirmation(null);
+          navigateTo('home');
+        }}
+        onUpdateQuantity={(productId, quantity) => {
+          setCartItems((items) => items.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+              : item,
+          ));
+        }}
+        onPlaceOrder={(order) => {
+          setOrderConfirmation({
+            ...order,
+            orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+          });
+          setCartItems([]);
+          setCurrentPage('order-confirmation');
+          window.history.pushState({}, '', '/checkout/confirmation');
+        }}
+      />
+    );
+  }
 
   if (currentPage === 'login' || currentPage === 'signup') {
     return (
@@ -55,10 +146,10 @@ export default function App() {
         )}
         <AuthPage
           initialMode={currentPage === 'signup' ? 'signup' : 'login'}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('welcome');
+            setCurrentPage('home');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
@@ -124,11 +215,11 @@ export default function App() {
         )}
         <ProfilePage
           user={user}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onToast={showToast}
           onSignOut={() => {
             setUser(null);
-            setCurrentPage('home');
+            navigateTo('home');
             showToast('Signed out of Item13.');
           }}
         />
@@ -234,9 +325,19 @@ export default function App() {
             <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 — Ghana's favourite popcorn and snack delivery brand."); }}>
               About
             </a>
-            </div>
+          </div>
 
           <div className="nav-buttons-group">
+            <button
+              className="nav-cart-button"
+              type="button"
+              onClick={() => setIsCartOpen(true)}
+              aria-label={`Open bag, ${cartItems.reduce((sum, item) => sum + item.quantity, 0)} items`}
+            >
+              <ShoppingBag size={17} />
+              <span>Bag</span>
+              <b>{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</b>
+            </button>
             {user ? (
               <div className="nav-buttons-row" style={{ alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '13px', color: '#111', fontWeight: 700, background: 'var(--gold)', padding: '6px 14px', borderRadius: '20px' }}>
@@ -244,7 +345,7 @@ export default function App() {
                 </span>
                 <button
                   className="btn-pill btn-pill-black"
-                  onClick={() => setCurrentPage('welcome')}
+                  onClick={() => setCurrentPage('profile')}
                   style={{ fontSize: '12px', padding: '6px 14px' }}
                 >
                   My account
@@ -263,10 +364,10 @@ export default function App() {
             ) : (
               <>
                 <div className="nav-buttons-row">
-                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('signup')}>
+                  <button className="btn-pill btn-pill-yellow" onClick={() => navigateTo('signup')}>
                     Sign up
                   </button>
-                  <button className="btn-pill btn-pill-black" onClick={() => setCurrentPage('login')}>
+                  <button className="btn-pill btn-pill-black" onClick={() => navigateTo('login')}>
                     Login
                   </button>
                 </div>
@@ -414,30 +515,27 @@ export default function App() {
       {/* Global Footer */}
       <Footer onNavigate={(page) => setCurrentPage(page)} onToast={showToast} />
 
-      {/* Floating Bag counter badge if items added */}
-      {cartCount > 0 && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '28px',
-            right: '24px',
-            zIndex: 99,
-            background: 'var(--gold)',
-            color: '#000',
-            fontWeight: '700',
-            padding: '8px 18px',
-            borderRadius: '9999px',
-            boxShadow: '0 8px 20px rgba(244, 182, 39, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer'
+      {isCartOpen && (
+        <CartDrawer
+          items={cartItems}
+          onClose={() => setIsCartOpen(false)}
+          onContinueShopping={() => setIsCartOpen(false)}
+          onCheckout={() => {
+            setIsCartOpen(false);
+            navigateTo('checkout');
           }}
-          onClick={() => showToast(`Your Bag contains ${cartCount} item(s)! Ready for checkout.`)}
-        >
-          <ShoppingBag size={16} />
-          <span>Bag: {cartCount}</span>
-        </div>
+          onAddItem={addItemToCart}
+          onUpdateQuantity={(productId, quantity) => {
+            setCartItems((items) => items.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                : item,
+            ));
+          }}
+          onRemoveItem={(productId) => {
+            setCartItems((items) => items.filter((item) => item.id !== productId));
+          }}
+        />
       )}
 
       {/* Toast Notification */}

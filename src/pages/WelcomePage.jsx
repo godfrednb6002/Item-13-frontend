@@ -38,7 +38,9 @@ export default function WelcomePage({
 
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, badge: null },
-    { id: 'menu', label: 'Order Popcorn', icon: ShoppingBag, badge: 'Hot' },
+    { id: 'menu', label: 'Menu & Catalog', icon: ShoppingBag, badge: 'Hot' },
+    { id: 'cart', label: 'My Bag / Cart', icon: ShoppingBag, badge: cartCount > 0 ? `${cartCount}` : null },
+    { id: 'checkout', label: 'Checkout', icon: CreditCard, badge: null },
     { id: 'profile', label: 'My Profile', icon: User, badge: null },
     { id: 'orders', label: 'Orders & Tracking', icon: Package, badge: '1 Active' },
     { id: 'addresses', label: 'Delivery Addresses', icon: MapPin, badge: null },
@@ -85,7 +87,7 @@ export default function WelcomePage({
         </div>
 
         {/* User Mini Profile Card */}
-        <div className="sidebar-user-box">
+        <div className="sidebar-user-box" style={{ cursor: "pointer" }} onClick={() => onNavigate && onNavigate("profile")} title="Go to Profile">
           <div className="sidebar-user-avatar">
             {displayName.charAt(0).toUpperCase()}
           </div>
@@ -110,6 +112,12 @@ export default function WelcomePage({
                 onClick={() => {
                   if (item.id === 'menu') {
                     if (onNavigate) onNavigate('menu');
+                  } else if (item.id === 'profile') {
+                    if (onNavigate) onNavigate('profile');
+                  } else if (item.id === 'cart') {
+                    if (onNavigate) onNavigate('cart');
+                  } else if (item.id === 'checkout') {
+                    if (onNavigate) onNavigate('checkout');
                   } else {
                     setActiveTab(item.id);
                   }
@@ -173,7 +181,15 @@ export default function WelcomePage({
               <span>Browse Menu</span>
             </button>
             {cartCount > 0 && (
-              <span className="topbar-bag-chip">Bag: {cartCount}</span>
+              <button
+                type="button"
+                className="topbar-bag-chip"
+                onClick={() => onNavigate && onNavigate('cart')}
+                style={{ cursor: 'pointer', border: 'none' }}
+                title="Open Bag"
+              >
+                Bag: {cartCount}
+              </button>
             )}
           </div>
         </header>
@@ -336,50 +352,6 @@ export default function WelcomePage({
                       </div>
                     </div>
                   ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 2. PROFILE TAB */}
-          {activeTab === 'profile' && (
-            <div className="welcome-tab-pane">
-              <div className="pane-header">
-                <h2>Account Profile</h2>
-                <p>Manage your personal information and contact details</p>
-              </div>
-
-              <div className="pane-card">
-                <div className="form-grid-2">
-                  <div className="form-field">
-                    <label>Full Name</label>
-                    <input type="text" defaultValue={displayName} className="dash-input" />
-                  </div>
-                  <div className="form-field">
-                    <label>Email Address</label>
-                    <input type="email" defaultValue={userEmail} className="dash-input" />
-                  </div>
-                  <div className="form-field">
-                    <label>Phone Number (Mobile Money & Delivery)</label>
-                    <input type="tel" defaultValue="+233 54 123 4567" className="dash-input" />
-                  </div>
-                  <div className="form-field">
-                    <label>Default City</label>
-                    <select className="dash-input" defaultValue="accra">
-                      <option value="accra">Accra (Greater Accra)</option>
-                      <option value="tema">Tema</option>
-                      <option value="kumasi">Kumasi</option>
-                      <option value="other">Other Region</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="pane-action-row">
-                  <button
-                    className="btn-dash-primary"
-                    onClick={() => onToast && onToast('Profile details updated successfully!')}
-                  >
-                    Save Changes
-                  </button>
                 </div>
               </div>
             </div>

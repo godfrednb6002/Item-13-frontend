@@ -3,6 +3,11 @@ import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
+import WelcomePage from './pages/WelcomePage';
+import MenuPage from './pages/MenuPage';
+import Footer from './components/Footer';
+import CheckoutPage from './pages/CheckoutPage';
+import CartDrawer from './features/cart/CartDrawer';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(
@@ -12,6 +17,7 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
   const [cartItems, setCartItems] = useState([]);
+  const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderConfirmation, setOrderConfirmation] = useState(null);
@@ -149,7 +155,7 @@ export default function App() {
           onNavigate={navigateTo}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('home');
+            setCurrentPage('welcome');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
@@ -157,7 +163,7 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'welcome') {
+    if (currentPage === 'welcome') {
     return (
       <>
         {toastMessage && (
@@ -169,19 +175,41 @@ export default function App() {
         <WelcomePage
           user={user}
           cartCount={cartCount}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onToast={showToast}
           onSignOut={() => {
             setUser(null);
-            setCurrentPage('home');
+            navigateTo('home');
             showToast('Signed out of Item13.');
           }}
         />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onContinueShopping={() => setIsCartOpen(false)}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
       </>
     );
   }
 
-  if (currentPage === 'menu') {
+    if (currentPage === 'menu') {
     return (
       <>
         {toastMessage && (
@@ -191,15 +219,52 @@ export default function App() {
           </div>
         )}
         <MenuPage
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           cartCount={cartCount}
           onAddToCart={(item) => {
             const addedQty = item.quantity || 1;
-            setCartCount((prev) => prev + addedQty);
+            const itemPrice = item.totalPrice || item.price || 35;
             const sizeLabel = item.selectedSize ? ` (${item.selectedSize})` : '';
-            showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${(item.totalPrice || item.price).toFixed(2)})`);
+            setCartItems((prev) => {
+              const existing = prev.find((p) => p.id === item.id);
+              if (existing) {
+                return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
+              }
+              return [...prev, {
+                id: item.id || ('prod-' + Date.now()),
+                name: item.name + sizeLabel,
+                price: itemPrice,
+                quantity: addedQty,
+                image: item.image || '/bistro-popcorn.jpg',
+                variant: item.category || 'Popcorn Snack',
+                stock: 20
+              }];
+            });
+            showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${itemPrice.toFixed(2)})`);
           }}
         />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onContinueShopping={() => setIsCartOpen(false)}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
       </>
     );
   }

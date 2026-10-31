@@ -89,15 +89,16 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
               <span>Back to Store</span>
             </button>
 
-            {cartCount > 0 && (
-              <div
-                className="menu-bag-pill"
-                onClick={() => onNavigate && onNavigate('cart')}
-              >
-                <ShoppingBag size={16} />
-                <span>Bag: {cartCount}</span>
-              </div>
-            )}
+            <button
+              type="button"
+              className="menu-bag-pill"
+              onClick={() => onNavigate && onNavigate('cart')}
+              style={{ border: 'none', cursor: 'pointer' }}
+              title="View Bag / Cart"
+            >
+              <ShoppingBag size={16} />
+              <span>Bag ({cartCount})</span>
+            </button>
           </div>
         </div>
       </header>
@@ -288,6 +289,27 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
           )}
         </section>
       </main>
+
+      
+      {/* Floating Bottom Bag Notification Bar */}
+      {cartCount > 0 && (
+        <div className="menu-floating-cart-bar">
+          <div className="floating-cart-inner">
+            <div className="floating-cart-info">
+              <ShoppingBag size={18} />
+              <span><strong>{cartCount}</strong> {cartCount === 1 ? 'snack item' : 'snack items'} in your bag</span>
+            </div>
+            <button
+              type="button"
+              className="btn-floating-view-bag"
+              onClick={() => onNavigate && onNavigate('cart')}
+            >
+              <span>View Bag &amp; Checkout</span>
+              <ArrowLeft size={16} style={{ transform: 'rotate(180deg)' }} />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <Footer onNavigate={onNavigate} />

@@ -14,11 +14,14 @@ import {
   Lock,
   MapPin,
   Package,
+  Pencil,
   Plus,
+  Save,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
   UserRound,
+  X,
 } from 'lucide-react';
 
 const navigation = [
@@ -36,7 +39,7 @@ const recentOrder = {
   date: 'October 24, 2026',
   status: 'On its way',
   items: 'Classic Popcorn & Drink Combo',
-  total: 'GHS45.00',
+  total: 'GH₵ 45.00',
 };
 
 function SectionHeading({ eyebrow, title, description, action, onAction }) {
@@ -62,30 +65,78 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
   const [emailUpdates, setEmailUpdates] = useState(true);
   const [smsUpdates, setSmsUpdates] = useState(false);
 
-  const email = user?.email || 'alex.morgan@example.com';
-  const accountName = email
-    .split('@')[0]
-    .split(/[._-]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-  const initials = accountName
+  // Editable Profile States
+  const [isEditing, setIsEditing] = useState(false);
+  const initialName = user?.name || (user?.email
+    ? user.email
+        .split('@')[0]
+        .split(/[._-]/)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ')
+    : 'Kofi Mensah');
+  
+  const [fullName, setFullName] = useState(initialName);
+  const [email, setEmail] = useState(user?.email || 'customer@item13.com');
+  const [phoneNumber, setPhoneNumber] = useState('+233 54 123 4567');
+  const [city, setCity] = useState('Accra (Greater Accra)');
+
+  // Temporary edit buffer
+  const [tempFullName, setTempFullName] = useState(fullName);
+  const [tempEmail, setTempEmail] = useState(email);
+  const [tempPhoneNumber, setTempPhoneNumber] = useState(phoneNumber);
+  const [tempCity, setTempCity] = useState(city);
+
+  const initials = fullName
     .split(' ')
+    .filter(Boolean)
     .map((part) => part[0])
     .slice(0, 2)
-    .join('');
+    .join('')
+    .toUpperCase() || 'IM';
 
-  const notify = (message) => onToast(message);
+  const notify = (message) => onToast && onToast(message);
+
+  const handleStartEdit = () => {
+    setTempFullName(fullName);
+    setTempEmail(email);
+    setTempPhoneNumber(phoneNumber);
+    setTempCity(city);
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleSaveProfile = (e) => {
+    if (e) e.preventDefault();
+    setFullName(tempFullName);
+    setEmail(tempEmail);
+    setPhoneNumber(tempPhoneNumber);
+    setCity(tempCity);
+    setIsEditing(false);
+    notify('Profile details updated successfully!');
+  };
 
   const renderOverview = () => (
     <>
       <section className="profile-welcome-card">
         <div className="profile-welcome-copy">
           <span className="profile-eyebrow">YOUR ITEM13 ACCOUNT</span>
-          <h2>Good to see you, {accountName.split(' ')[0]}.</h2>
-          <p>Your unexpected essential is just a few clicks away.</p>
-          <button className="profile-gold-button" onClick={() => onNavigate('home')}>
-            <ShoppingBag size={16} /> Explore the menu
-          </button>
+          <h2>Good to see you, {fullName.split(' ')[0]}.</h2>
+          <p>Your unexpected essential is hot, fresh, and ready for delivery.</p>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '12px' }}>
+            <button className="profile-gold-button" onClick={() => onNavigate('menu')}>
+              <ShoppingBag size={16} /> Order popcorn now
+            </button>
+            <button
+              className="profile-outline-button"
+              onClick={() => onNavigate('welcome')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <ArrowLeft size={15} /> Back to dashboard
+            </button>
+          </div>
         </div>
         <div className="profile-welcome-art" aria-hidden="true">
         </div>
@@ -98,9 +149,9 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <span className="profile-stat-label">Orders placed</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
-        <button className="profile-stat-card" onClick={() => notify('You have 240 VIP points to use on your next order.')}>
+        <button className="profile-stat-card" onClick={() => notify('You have 280 VIP loyalty points (GH₵ 15 voucher available).')}>
           <span className="profile-stat-icon"><Gift size={18} /></span>
-          <span className="profile-stat-value">240</span>
+          <span className="profile-stat-value">280</span>
           <span className="profile-stat-label">VIP points</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
@@ -148,27 +199,158 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
       </section>
 
       <div className="profile-two-column">
+        {/* Personal Information with Pencil Edit Icon */}
         <section className="profile-panel">
-          <SectionHeading eyebrow="ACCOUNT DETAILS" title="Personal information" />
-          <div className="profile-info-list">
-            <div><span>Full name</span><strong>{accountName}</strong></div>
-            <div><span>Email address</span><strong>{email}</strong></div>
-            <div><span>Phone number</span><strong className="profile-not-set">Not added yet</strong></div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+            <div>
+              <span className="profile-eyebrow">ACCOUNT DETAILS</span>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#ffffff', margin: 0 }}>
+                Personal information
+              </h2>
+            </div>
+            {!isEditing && (
+              <button
+                className="profile-outline-button"
+                onClick={handleStartEdit}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  borderRadius: '20px',
+                  borderColor: 'var(--gold)',
+                  color: 'var(--gold)',
+                  cursor: 'pointer'
+                }}
+                title="Edit your details"
+              >
+                <Pencil size={15} />
+                <span>Edit</span>
+              </button>
+            )}
           </div>
-          <button className="profile-outline-button" onClick={() => notify('Profile editing will be available soon.')}>
-            Edit details
-          </button>
+
+          {!isEditing ? (
+            <>
+              <div className="profile-info-list">
+                <div>
+                  <span>Full name</span>
+                  <strong>{fullName}</strong>
+                </div>
+                <div>
+                  <span>Email address</span>
+                  <strong>{email}</strong>
+                </div>
+                <div>
+                  <span>Phone number (MoMo &amp; Delivery)</span>
+                  <strong>{phoneNumber}</strong>
+                </div>
+                <div>
+                  <span>Default City</span>
+                  <strong>{city}</strong>
+                </div>
+              </div>
+              <button
+                className="profile-outline-button"
+                onClick={handleStartEdit}
+                style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Pencil size={14} /> Edit details
+              </button>
+            </>
+          ) : (
+            <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={tempFullName}
+                  onChange={(e) => setTempFullName(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={tempEmail}
+                  onChange={(e) => setTempEmail(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Phone Number (Mobile Money &amp; Delivery)
+                </label>
+                <input
+                  type="tel"
+                  value={tempPhoneNumber}
+                  onChange={(e) => setTempPhoneNumber(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Default City
+                </label>
+                <select
+                  value={tempCity}
+                  onChange={(e) => setTempCity(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                >
+                  <option value="Accra (Greater Accra)">Accra (Greater Accra)</option>
+                  <option value="Tema">Tema</option>
+                  <option value="Kumasi">Kumasi</option>
+                  <option value="Takoradi">Takoradi</option>
+                  <option value="Other Region">Other Region</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                <button
+                  type="submit"
+                  className="profile-gold-button"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <Save size={15} /> Save Changes
+                </button>
+                <button
+                  type="button"
+                  className="profile-outline-button"
+                  onClick={handleCancelEdit}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <X size={15} /> Cancel
+                </button>
+              </div>
+            </form>
+          )}
         </section>
+
         <section className="profile-panel">
           <SectionHeading eyebrow="READY FOR CHECKOUT" title="Your defaults" />
           <div className="profile-default-item">
             <MapPin size={18} />
-            <div><strong>Delivery address</strong><span>Add an address for faster checkout</span></div>
+            <div><strong>Delivery address</strong><span>East Legon, Accra (GA-182-9021)</span></div>
             <button aria-label="Add delivery address" onClick={() => setActiveSection('addresses')}><Plus size={17} /></button>
           </div>
           <div className="profile-default-item">
             <CreditCard size={18} />
-            <div><strong>Payment method</strong><span>No saved payment methods</span></div>
+            <div><strong>Payment method</strong><span>MTN Mobile Money (*4567)</span></div>
             <button aria-label="Add payment method" onClick={() => setActiveSection('payments')}><Plus size={17} /></button>
           </div>
         </section>
@@ -213,21 +395,21 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
       <SectionHeading eyebrow="DELIVERY DETAILS" title="Your addresses" description="Save delivery locations for a quicker checkout." action="Add address" onAction={() => notify('Address form opened.')} />
       <section className="profile-panel profile-empty-panel">
         <div className="profile-empty-icon"><MapPin size={22} /></div>
-        <h3>No saved addresses yet</h3>
-        <p>Add your home or work address and we’ll have it ready for your next order.</p>
-        <button className="profile-gold-button" onClick={() => notify('Address form opened.')}><Plus size={16} /> Add your first address</button>
+        <h3>Saved addresses</h3>
+        <p>East Legon, Accra (GA-182-9021) • Primary</p>
+        <button className="profile-gold-button" onClick={() => notify('Address form opened.')}><Plus size={16} /> Add another address</button>
       </section>
     </>
   );
 
   const renderPayments = () => (
     <>
-      <SectionHeading eyebrow="SECURE CHECKOUT" title="Payment methods" description="Manage your saved cards and billing preferences." action="Add payment" onAction={() => notify('Secure payment setup is not connected in this demo.')} />
+      <SectionHeading eyebrow="SECURE CHECKOUT" title="Payment methods" description="Manage your saved cards and MoMo accounts." action="Add payment" onAction={() => notify('Secure payment setup is active.')} />
       <section className="profile-panel profile-empty-panel">
         <div className="profile-empty-icon"><CreditCard size={22} /></div>
-        <h3>No saved payment methods</h3>
-        <p>Your payment details are encrypted and never shown in full.</p>
-        <button className="profile-gold-button" onClick={() => notify('Secure payment setup is not connected in this demo.')}><Plus size={16} /> Add a payment method</button>
+        <h3>MTN Mobile Money</h3>
+        <p>Linked number: {phoneNumber} • Instant Popcorn Checkout</p>
+        <button className="profile-gold-button" onClick={() => notify('Payment method setup opened.')}><Plus size={16} /> Add another payment method</button>
       </section>
       <p className="profile-security-note"><ShieldCheck size={16} /> Payment information is securely protected.</p>
     </>
@@ -249,7 +431,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
         </div>
         <div className="profile-setting-row">
           <div className="profile-setting-icon"><Heart size={18} /></div>
-          <div className="profile-setting-copy"><strong>Saved favorites</strong><span>Four delicious picks saved for your next movie night.</span></div>
+          <div className="profile-setting-copy"><strong>Saved favorites</strong><span>Double Butter, Suya Pepper, Salted Caramel Popcorn.</span></div>
           <button className="profile-text-button" onClick={() => notify('Your saved favorites are ready to explore.')}>View favorites <ArrowRight size={15} /></button>
         </div>
       </section>
@@ -284,7 +466,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
     <>
       <SectionHeading eyebrow="WE’RE HERE TO HELP" title="Help & support" description="Find answers or get a hand from our customer care team." />
       <div className="profile-support-grid">
-        <button className="profile-support-card" onClick={() => notify('A support chat will be available soon.')}>
+        <button className="profile-support-card" onClick={() => notify('Support chat: We are available Monday to Sunday, 9am - 10pm.')}>
           <span className="profile-support-icon"><CircleHelp size={20} /></span>
           <strong>Chat with us</strong><span>Get help with an order or account.</span><ArrowRight size={16} />
         </button>
@@ -318,13 +500,20 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <img src="/item13Logo-trimmed.png" alt="Item13" />
           <span>THE UNEXPECTED ESSENTIAL</span>
         </button>
-        <button className="profile-back-link" onClick={() => onNavigate('home')}><ArrowLeft size={16} /> Back to store</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button className="profile-back-link" onClick={() => onNavigate('welcome')}>
+            <ArrowLeft size={16} /> Back to dashboard
+          </button>
+          <button className="profile-back-link" onClick={() => onNavigate('home')}>
+            Storefront
+          </button>
+        </div>
       </header>
 
       <main className="profile-layout">
         <div className="profile-page-intro">
           <div>
-            <span className="profile-eyebrow">VIP CINEMA CLUB MEMBER</span>
+            <span className="profile-eyebrow">VIP SNACK CLUB MEMBER</span>
             <h1>My account</h1>
           </div>
           <button className="profile-logout-button" onClick={onSignOut}>Sign out</button>
@@ -334,7 +523,10 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <aside className="profile-sidebar">
             <div className="profile-member-card">
               <div className="profile-avatar">{initials}</div>
-              <div className="profile-member-copy"><strong>{accountName}</strong><span>{email}</span></div>
+              <div className="profile-member-copy">
+                <strong>{fullName}</strong>
+                <span>{email}</span>
+              </div>
               <span className="profile-member-badge"><Sparkles size={12} /> VIP MEMBER</span>
             </div>
             <nav className="profile-nav" aria-label="Account sections">
@@ -355,7 +547,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
             {content()}
           </div>
         </div>
-        <footer className="profile-footer">© 2026 Item13 <span>·</span> The unexpected esscential</footer>
+        <footer className="profile-footer">© 2026 Item13 <span>·</span> The Unexpected Essential</footer>
       </main>
     </div>
   );

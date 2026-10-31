@@ -14,6 +14,7 @@ import { CATEGORIES, PRODUCTS } from '../features/catalog/productsData';
 import ProductCard from '../features/catalog/ProductCard';
 import ProductDetailModal from '../features/catalog/ProductDetailModal';
 import Footer from '../components/Footer';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
   // Filter States
@@ -81,6 +82,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
           </button>
 
           <div className="menu-header-actions">
+            <ThemeToggle />
             <button
               className="menu-nav-home-btn"
               onClick={() => onNavigate && onNavigate('home')}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ThemeToggle from '../components/ThemeToggle';
 import {
   LayoutDashboard,
   User,
@@ -173,6 +174,7 @@ export default function WelcomePage({
           </div>
 
           <div className="welcome-topbar-actions">
+            <ThemeToggle />
             <button
               className="topbar-action-btn"
               onClick={() => onNavigate && onNavigate('menu')}
@@ -226,6 +228,7 @@ export default function WelcomePage({
                       <span>Track Active Order</span>
                       <ArrowRight size={15} />
                     </button>
+                    <ThemeToggle className="hero-theme-toggle" />
                   </div>
                 </div>
 

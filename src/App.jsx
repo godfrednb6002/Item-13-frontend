@@ -6,6 +6,7 @@ import ProfilePage from './pages/ProfilePage';
 import WelcomePage from './pages/WelcomePage';
 import MenuPage from './pages/MenuPage';
 import Footer from './components/Footer';
+import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
 
@@ -480,6 +481,8 @@ export default function App() {
               </span>
               <span>Buy Now</span>
             </button>
+
+            <ThemeToggle className="hero-theme-toggle" />
           </div>
 
           {/* Customer Favorites in Bottom Left Corner */}

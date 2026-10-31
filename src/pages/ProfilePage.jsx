@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import ThemeToggle from '../components/ThemeToggle';
 import {
   ArrowDownToLine,
   ArrowLeft,
@@ -501,6 +502,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <span>THE UNEXPECTED ESSENTIAL</span>
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <ThemeToggle />
           <button className="profile-back-link" onClick={() => onNavigate('welcome')}>
             <ArrowLeft size={16} /> Back to dashboard
           </button>

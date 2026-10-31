@@ -215,7 +215,7 @@ export default function WelcomePage({
 
                 <div className="dash-hero-illustration">
                   <img
-                    src="/WhatsApp Image 2026-10-29 at 4.31.43 PM-Photoroom.png"
+                    src="/item13BagBGremoved.png"
                     alt="Popcorn and Drinks Duo"
                     className="dash-popcorn-img"
                     onError={(e) => {

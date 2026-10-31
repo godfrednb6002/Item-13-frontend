@@ -13,6 +13,7 @@ import {
 import { CATEGORIES, PRODUCTS } from '../features/catalog/productsData';
 import ProductCard from '../features/catalog/ProductCard';
 import ProductDetailModal from '../features/catalog/ProductDetailModal';
+import Footer from '../components/Footer';
 
 export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
   // Filter States
@@ -287,6 +288,9 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
           )}
         </section>
       </main>
+
+      {/* Footer */}
+      <Footer onNavigate={onNavigate} />
 
       {/* Product Detail Customization Modal */}
       {selectedProduct && (

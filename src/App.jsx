@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import WelcomePage from './pages/WelcomePage';
 import MenuPage from './pages/MenuPage';
+import Footer from './components/Footer';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
@@ -409,6 +410,9 @@ export default function App() {
           </div>
         </section>
       </main>
+
+      {/* Global Footer */}
+      <Footer onNavigate={(page) => setCurrentPage(page)} onToast={showToast} />
 
       {/* Floating Bag counter badge if items added */}
       {cartCount > 0 && (

@@ -467,16 +467,31 @@ html.light-theme .menu-controls-bar {
 }
 
 html.light-theme .menu-search-wrapper {
-  background: #f1f3f7;
-  border-color: rgba(0, 0, 0, 0.1);
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 
 html.light-theme .menu-search-input {
-  color: #111418;
+  background: #ffffff !important;
+  color: #111418 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
 }
 
 html.light-theme .menu-search-input::placeholder {
-  color: #7b8390;
+  color: #7b8390 !important;
+}
+
+html.light-theme .menu-search-wrapper .search-icon {
+  color: #64748b !important;
+}
+
+html.light-theme .search-clear-btn {
+  color: #64748b !important;
+}
+
+html.light-theme .search-clear-btn:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #111418 !important;
 }
 
 html.light-theme .menu-sort-select {
@@ -1241,6 +1256,192 @@ html.light-theme .checkout-confirmation-total strong {
   color: #111418 !important;
 }
 
+/* 7. Cart Drawer fields and checkout bottom in Light Mode */
+html.light-theme .cart-field-label {
+  color: #24292f !important;
+}
+
+html.light-theme .cart-field-label textarea,
+html.light-theme .cart-field-label input,
+html.light-theme .cart-promo-form input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+}
+
+html.light-theme .cart-field-label textarea::placeholder,
+html.light-theme .cart-field-label input::placeholder,
+html.light-theme .cart-promo-form input::placeholder {
+  color: #747c8a !important;
+}
+
+html.light-theme .cart-field-label textarea:focus,
+html.light-theme .cart-field-label input:focus,
+html.light-theme .cart-promo-form input:focus {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .cart-promo-form > label {
+  color: #24292f !important;
+}
+
+html.light-theme .cart-promo-form button {
+  background: rgba(244, 182, 39, 0.16) !important;
+  border: 1px solid rgba(244, 182, 39, 0.5) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .cart-promo-form button:hover {
+  background: var(--gold) !important;
+  color: #000000 !important;
+}
+
+html.light-theme .cart-footer {
+  background: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .cart-checkout-button {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  box-shadow: 0 4px 14px rgba(244, 182, 39, 0.3) !important;
+}
+
+html.light-theme .cart-checkout-button:hover {
+  background: #ffd05c !important;
+}
+
+html.light-theme .cart-continue-link {
+  color: #555e6c !important;
+}
+
+html.light-theme .cart-continue-link:hover {
+  color: #111418 !important;
+}
+
+/* 8. Checkout Promo & Enter Code field in Light Mode */
+html.light-theme .checkout-promo > label {
+  color: #24292f !important;
+}
+
+html.light-theme .checkout-promo input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+}
+
+html.light-theme .checkout-promo input::placeholder {
+  color: #747c8a !important;
+}
+
+html.light-theme .checkout-promo input:focus {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .checkout-promo button {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-promo button:hover {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+}
+
+/* 9. Site Footer in Light Mode */
+html.light-theme .site-footer {
+  background-color: #ffffff !important;
+  color: #111418 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .footer-perks-strip {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .perk-text-block .perk-title {
+  color: #111418 !important;
+}
+
+html.light-theme .perk-text-block .perk-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-brand-bio {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-heading {
+  color: #111418 !important;
+}
+
+html.light-theme .footer-text-link {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-text-link:hover {
+  color: #8c6307 !important;
+}
+
+html.light-theme .contact-item {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-newsletter-box {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .newsletter-title {
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-newsletter-form {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light-theme .newsletter-input {
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-input::placeholder {
+  color: #7b8390 !important;
+}
+
+html.light-theme .social-circle-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #475569 !important;
+}
+
+html.light-theme .social-circle-btn:hover {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .footer-bottom-bar {
+  background: #f1f5f9 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .footer-legal-link {
+  color: #64748b !important;
+}
+
+html.light-theme .footer-legal-link:hover {
+  color: #111418 !important;
+}
+
 /* Theme Toggle Button Component Styles */
 .theme-toggle-btn {
   display: inline-flex;
@@ -1352,13 +1553,18 @@ a {
 
 /* Navbar */
 .navbar {
-  position: relative;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 64px 20px 64px;
+  padding: 20px 64px 18px 64px;
   width: 100%;
+  background: rgba(15, 16, 18, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .brand-logo {
@@ -2068,6 +2274,12 @@ a {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(15, 16, 18, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .profile-brand {
@@ -3131,7 +3343,12 @@ a {
   gap: 20px;
   padding: 12px max(5vw, 28px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(15, 16, 18, 0.84);
+  background: rgba(15, 16, 18, 0.88);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .checkout-brand {
@@ -5216,15 +5433,20 @@ a {
 }
 
 .login-header {
-  position: relative;
-  z-index: 10;
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 32px 64px 20px 64px;
+  padding: 24px 64px 18px 64px;
   width: 100%;
-  max-width: 1300px;
+  max-width: 100%;
   margin: 0 auto;
+  background: rgba(15, 16, 18, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .login-brand-logo {

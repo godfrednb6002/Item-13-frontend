@@ -205,7 +205,7 @@ export default function WelcomePage({
               <div className="dash-hero-card">
                 <div className="dash-hero-content">
                   <div className="dash-hero-tag">
-                    <Sparkles size={14} /> VIP Snack Lounge
+                    Snack Lounge
                   </div>
                   <h1 className="dash-hero-title">
                     Welcome back, <span className="gold-accent">{displayName}</span>!

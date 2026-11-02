@@ -109,7 +109,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
       <section className="menu-hero-banner">
         <div className="menu-hero-content">
           <div className="menu-badge">
-            <Sparkles size={14} /> Freshly Popped in Ghana
+            Freshly Popped in Ghana
           </div>
           <h1 className="menu-hero-title">
             Our Popcorn &amp; <span className="title-gold">Refreshments Menu</span>
@@ -292,7 +292,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
         </section>
       </main>
 
-      
+
       {/* Floating Bottom Bag Notification Bar */}
       {cartCount > 0 && (
         <div className="menu-floating-cart-bar">

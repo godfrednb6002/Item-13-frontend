@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowLeft,
   Star,
@@ -14,6 +14,7 @@ import {
   Droplet,
   Coffee,
   Share2,
+  Heart,
   Milk,
   Nut,
   Wheat,
@@ -31,6 +32,7 @@ import {
   ALLERGEN_DEFINITIONS,
   CATEGORIES
 } from '../features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
 import Footer from '../components/Footer';
 import ThemeToggle from '../components/ThemeToggle';
 
@@ -109,10 +111,17 @@ export default function ProductDetailPage({
     if (onToast) onToast(`Added ${quantity}x "${product.name}" (${currentSize.name}) to your bag!`);
   };
 
-  const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
-      if (onToast) onToast('Product link copied to clipboard!');
+  const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
+
+  useEffect(() => {
+    setIsFav(getSavedFavorites().includes(product.id));
+  }, [product.id]);
+
+  const handleToggleFav = () => {
+    const { isFavorite } = toggleFavorite(product.id);
+    setIsFav(isFavorite);
+    if (onToast) {
+      onToast(isFavorite ? `Added "${product.name}" to Customer Favorites!` : `Removed "${product.name}" from favorites`);
     }
   };
 
@@ -171,14 +180,31 @@ export default function ProductDetailPage({
           <div className="pdp-visual-column">
             <div className="pdp-main-image-card">
               {product.badge && <span className="pdp-badge-pill">{product.badge}</span>}
-              <button
-                type="button"
-                className="pdp-share-btn"
-                onClick={handleShare}
-                title="Share product link"
-              >
-                <Share2 size={16} />
-              </button>
+              <div className="pdp-actions-overlay">
+                <button
+                  type="button"
+                  className={`pdp-overlay-btn ${isFav ? 'is-favorited' : ''}`}
+                  onClick={handleToggleFav}
+                  title={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+                  aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+                >
+                  <Heart size={16} fill={isFav ? 'currentColor' : 'none'} />
+                </button>
+                <button
+                  type="button"
+                  className="pdp-overlay-btn pdp-share-btn"
+                  onClick={() => {
+                    if (navigator.clipboard) {
+                      navigator.clipboard.writeText(window.location.href);
+                      if (onToast) onToast('Product link copied to clipboard!');
+                    }
+                  }}
+                  title="Share product link"
+                  aria-label="Share product link"
+                >
+                  <Share2 size={16} />
+                </button>
+              </div>
 
               <img
                 src={product.image}

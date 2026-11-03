@@ -517,6 +517,38 @@
   border-radius: 6px;
 }
 
+.catalog-fav-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 16, 18, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.catalog-fav-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: scale(1.08);
+}
+
+.catalog-fav-btn.is-favorited {
+  background: rgba(239, 68, 68, 0.95);
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
 .catalog-quickview-btn {
   position: absolute;
   bottom: 12px;

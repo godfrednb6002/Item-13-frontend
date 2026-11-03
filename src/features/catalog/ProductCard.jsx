@@ -1,8 +1,27 @@
-import React from 'react';
-import { Star, ShoppingBag, Eye } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Star, ShoppingBag, Eye, Heart } from 'lucide-react';
+import { getSavedFavorites, toggleFavorite } from './favoritesStorage';
 
-export default function ProductCard({ product, onAddToCart, onQuickView, onNavigate }) {
+export default function ProductCard({ product, onAddToCart, onQuickView, onNavigate, onToast }) {
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+  const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setIsFav(getSavedFavorites().includes(product.id));
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, [product.id]);
+
+  const handleToggleFav = (e) => {
+    e.stopPropagation();
+    const { isFavorite } = toggleFavorite(product.id);
+    setIsFav(isFavorite);
+    if (onToast) {
+      onToast(isFavorite ? `Added "${product.name}" to Customer Favorites!` : `Removed "${product.name}" from favorites`);
+    }
+  };
 
   const handleOpenDetail = () => {
     if (onNavigate) {
@@ -40,6 +59,16 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
             -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
           </span>
         )}
+
+        <button
+          type="button"
+          className={`catalog-fav-btn ${isFav ? 'is-favorited' : ''}`}
+          onClick={handleToggleFav}
+          aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+          title={isFav ? 'Saved in Customer Favorites' : 'Add to Customer Favorites'}
+        >
+          <Heart size={15} fill={isFav ? 'currentColor' : 'none'} />
+        </button>
 
         <button
           className="catalog-quickview-btn"

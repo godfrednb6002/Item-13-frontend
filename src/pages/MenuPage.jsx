@@ -16,7 +16,7 @@ import ProductDetailModal from '../features/catalog/ProductDetailModal';
 import Footer from '../components/Footer';
 import ThemeToggle from '../components/ThemeToggle';
 
-export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
+export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToast }) {
   // Filter States
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -288,6 +288,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
                   }}
                   onQuickView={(item) => setSelectedProduct(item)}
                   onNavigate={onNavigate}
+                  onToast={onToast}
                 />
               ))}
             </div>

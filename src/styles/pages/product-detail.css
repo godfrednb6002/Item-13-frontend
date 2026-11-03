@@ -195,10 +195,17 @@
   z-index: 2;
 }
 
-.pdp-share-btn {
+.pdp-actions-overlay {
   position: absolute;
   top: 20px;
   right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+
+.pdp-overlay-btn {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -210,14 +217,23 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 2;
   transition: all 0.2s ease;
 }
 
-.pdp-share-btn:hover {
+.pdp-overlay-btn:hover {
   background: var(--gold);
   color: #0f1012;
   border-color: var(--gold);
+}
+
+.pdp-overlay-btn.is-favorited {
+  background: #ef4444;
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.pdp-share-btn {
+  /* Inherits from .pdp-overlay-btn */
 }
 
 .pdp-perks-strip {

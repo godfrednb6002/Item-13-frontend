@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import {
   ArrowDownToLine,
@@ -23,10 +23,15 @@ import {
   Sparkles,
   UserRound,
   X,
+  Zap,
+  Trash2
 } from 'lucide-react';
+import { PRODUCTS } from '../features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
 
 const navigation = [
   { id: 'overview', label: 'Overview', icon: UserRound },
+  { id: 'favorites', label: 'Customer Favorites', icon: Heart },
   { id: 'orders', label: 'Orders & returns', icon: Package },
   { id: 'addresses', label: 'Addresses', icon: MapPin },
   { id: 'payments', label: 'Payments', icon: CreditCard },
@@ -60,11 +65,26 @@ function SectionHeading({ eyebrow, title, description, action, onAction }) {
   );
 }
 
-function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
-  const [activeSection, setActiveSection] = useState('overview');
+function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initialSection = 'overview' }) {
+  const [activeSection, setActiveSection] = useState(initialSection);
+  const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(true);
   const [smsUpdates, setSmsUpdates] = useState(false);
+
+  useEffect(() => {
+    setActiveSection(initialSection);
+  }, [initialSection]);
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setFavoriteIds(getSavedFavorites());
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, []);
+
+  const favoriteProducts = PRODUCTS.filter((p) => favoriteIds.includes(p.id));
 
   // Editable Profile States
   const [isEditing, setIsEditing] = useState(false);
@@ -156,9 +176,12 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <span className="profile-stat-label">VIP points</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
-        <button className="profile-stat-card" onClick={() => setActiveSection('preferences')}>
-          <span className="profile-stat-icon"><Heart size={18} /></span>
-          <span className="profile-stat-value">4</span>
+        <button className="profile-stat-card" onClick={() => {
+          setActiveSection('favorites');
+          if (onNavigate) onNavigate('favorites');
+        }}>
+          <span className="profile-stat-icon"><Heart size={18} fill="currentColor" /></span>
+          <span className="profile-stat-value">{favoriteProducts.length}</span>
           <span className="profile-stat-label">Saved favorites</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
@@ -433,7 +456,10 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
         <div className="profile-setting-row">
           <div className="profile-setting-icon"><Heart size={18} /></div>
           <div className="profile-setting-copy"><strong>Saved favorites</strong><span>Double Butter, Suya Pepper, Salted Caramel Popcorn.</span></div>
-          <button className="profile-text-button" onClick={() => notify('Your saved favorites are ready to explore.')}>View favorites <ArrowRight size={15} /></button>
+          <button className="profile-text-button" onClick={() => {
+            setActiveSection('favorites');
+            if (onNavigate) onNavigate('favorites');
+          }}>View favorites <ArrowRight size={15} /></button>
         </div>
       </section>
     </>
@@ -484,8 +510,94 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
     </>
   );
 
+  const handleQuickReorder = (item) => {
+    if (onAddToCart) {
+      onAddToCart(item);
+    } else if (onToast) {
+      onToast(`Added '${item.name}' to bag!`);
+    }
+  };
+
+  const handleRemoveFavorite = (e, productId, name) => {
+    e.stopPropagation();
+    const { updated } = toggleFavorite(productId);
+    setFavoriteIds(updated);
+    if (onToast) onToast(`Removed '${name}' from favorites`);
+  };
+
+  const renderFavorites = () => (
+    <>
+      <SectionHeading
+        eyebrow="YOUR SNACK WISHLIST"
+        title="Customer Favorites"
+        description="Fast 1-click re-order snack wishlist. Re-order your favorite crunch in a single tap."
+        action="Discover more"
+        onAction={() => onNavigate && onNavigate('menu')}
+      />
+      {favoriteProducts.length === 0 ? (
+        <section className="profile-panel profile-empty-panel">
+          <div className="profile-empty-icon"><Heart size={24} /></div>
+          <h3>No saved favorites yet</h3>
+          <p>Explore the Item13 gourmet catalog and save popcorn and drinks you love for quick 1-click re-orders.</p>
+          <button className="profile-gold-button" onClick={() => onNavigate && onNavigate('menu')}>
+            Explore Snacks
+          </button>
+        </section>
+      ) : (
+        <section className="profile-panel">
+          <div className="profile-fav-list">
+            {favoriteProducts.map((item) => (
+              <div key={item.id} className="profile-fav-row">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="profile-fav-thumb"
+                  onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
+                />
+                <div className="profile-fav-info">
+                  <div className="profile-fav-title-wrap">
+                    <span className="profile-fav-cat">{item.category}</span>
+                    {item.badge && <span className="profile-fav-badge">{item.badge}</span>}
+                  </div>
+                  <strong
+                    className="profile-fav-name"
+                    onClick={() => onNavigate && onNavigate(`product-${item.id}`)}
+                  >
+                    {item.name}
+                  </strong>
+                  <span className="profile-fav-price">GH₵ {item.price.toFixed(2)}</span>
+                </div>
+                <div className="profile-fav-actions">
+                  <button
+                    type="button"
+                    className="profile-reorder-btn"
+                    onClick={() => handleQuickReorder(item)}
+                    title="1-Click Re-order"
+                  >
+                    <Zap size={14} />
+                    <span>1-Click Re-order</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="profile-remove-fav-btn"
+                    onClick={(e) => handleRemoveFavorite(e, item.id, item.name)}
+                    title="Remove from favorites"
+                    aria-label={`Remove ${item.name} from favorites`}
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  );
+
   const content = {
     overview: renderOverview,
+    favorites: renderFavorites,
     orders: renderOrders,
     addresses: renderAddresses,
     payments: renderPayments,

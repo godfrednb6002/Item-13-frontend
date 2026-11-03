@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
-import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Search, X, Check, Star, Heart, Zap, ArrowRight, Trash2 } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import WelcomePage from './pages/WelcomePage';
@@ -10,11 +10,15 @@ import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
 import ProductDetailPage from './pages/ProductDetailPage';
+import { PRODUCTS } from './features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from './features/catalog/favoritesStorage';
 
 export default function App() {
   const getInitialPage = () => {
     const path = window.location.pathname;
     if (path.startsWith('/checkout')) return 'checkout';
+    if (path.startsWith('/account/favorites')) return 'favorites';
+    if (path.startsWith('/profile') || path.startsWith('/account')) return 'profile';
     if (path.startsWith('/products/')) {
       const id = path.replace('/products/', '');
       return `product-${id}`;
@@ -31,12 +35,25 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderConfirmation, setOrderConfirmation] = useState(null);
+  const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setModalFavorites(getSavedFavorites());
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, []);
 
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
       if (path.startsWith('/checkout')) {
         setCurrentPage('checkout');
+      } else if (path.startsWith('/account/favorites')) {
+        setCurrentPage('favorites');
+      } else if (path.startsWith('/profile') || path.startsWith('/account')) {
+        setCurrentPage('profile');
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
         setCurrentPage(`product-${id}`);
@@ -51,6 +68,9 @@ export default function App() {
   const navigateTo = (page) => {
     let nextPath = '/';
     if (page === 'checkout') nextPath = '/checkout';
+    else if (page === 'favorites') nextPath = '/account/favorites';
+    else if (page === 'profile') nextPath = '/account/profile';
+    else if (page === 'menu') nextPath = '/menu';
     else if (page.startsWith('product-')) {
       const prodId = page.replace('product-', '');
       nextPath = `/products/${prodId}`;
@@ -136,6 +156,28 @@ export default function App() {
     showToast(`Added '${name}' to your bag! (${price})`);
   };
 
+  const handleAddDirectItem = (item) => {
+    const addedQty = item.quantity || 1;
+    const itemPrice = item.totalPrice || item.price || 35;
+    const sizeLabel = item.selectedSize ? ` (${item.selectedSize})` : '';
+    setCartItems((prev) => {
+      const existing = prev.find((p) => p.id === item.id);
+      if (existing) {
+        return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
+      }
+      return [...prev, {
+        id: item.id || ('prod-' + Date.now()),
+        name: item.name + sizeLabel,
+        price: itemPrice,
+        quantity: addedQty,
+        image: item.image || '/bistro-popcorn.jpg',
+        variant: item.category || 'Popcorn Snack',
+        stock: 20
+      }];
+    });
+    showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${itemPrice.toFixed(2)})`);
+  };
+
   if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
     return (
       <CheckoutPage
@@ -188,7 +230,7 @@ export default function App() {
     );
   }
 
-    if (currentPage === 'welcome') {
+    if (currentPage === 'welcome' || currentPage === 'favorites') {
     return (
       <>
         {toastMessage && (
@@ -200,8 +242,10 @@ export default function App() {
         <WelcomePage
           user={user}
           cartCount={cartCount}
+          initialTab={currentPage === 'favorites' ? 'favorites' : 'dashboard'}
           onNavigate={navigateTo}
           onToast={showToast}
+          onAddToCart={handleAddDirectItem}
           onSignOut={() => {
             setUser(null);
             navigateTo('home');
@@ -246,27 +290,8 @@ export default function App() {
         <MenuPage
           onNavigate={navigateTo}
           cartCount={cartCount}
-          onAddToCart={(item) => {
-            const addedQty = item.quantity || 1;
-            const itemPrice = item.totalPrice || item.price || 35;
-            const sizeLabel = item.selectedSize ? ` (${item.selectedSize})` : '';
-            setCartItems((prev) => {
-              const existing = prev.find((p) => p.id === item.id);
-              if (existing) {
-                return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
-              }
-              return [...prev, {
-                id: item.id || ('prod-' + Date.now()),
-                name: item.name + sizeLabel,
-                price: itemPrice,
-                quantity: addedQty,
-                image: item.image || '/bistro-popcorn.jpg',
-                variant: item.category || 'Popcorn Snack',
-                stock: 20
-              }];
-            });
-            showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${itemPrice.toFixed(2)})`);
-          }}
+          onToast={showToast}
+          onAddToCart={handleAddDirectItem}
         />
         {isCartOpen && (
           <CartDrawer
@@ -369,6 +394,8 @@ export default function App() {
           user={user}
           onNavigate={navigateTo}
           onToast={showToast}
+          onAddToCart={handleAddDirectItem}
+          initialSection="overview"
           onSignOut={() => {
             setUser(null);
             navigateTo('home');
@@ -779,25 +806,119 @@ export default function App() {
             )}
 
             {activeModal === 'favorites' && (
-              <div>
-                <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', marginBottom: '14px' }}>
-                  Customer Favorites
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>Classic Buttered Crunch</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ popcorn lovers</div>
-                    </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS12.90</span>
+              <div className="favorites-modal-content">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                  <div>
+                    <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', margin: 0 }}>
+                      Customer Favorites
+                    </h3>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12.5px', color: 'var(--text-muted)' }}>
+                      Fast 1-click re-order snack wishlist
+                    </p>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>Fanta Citrus Duo Pack</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.8 ★ by 1,820+ customers</div>
+                  <button
+                    className="modal-goto-full-btn"
+                    onClick={() => {
+                      setActiveModal(null);
+                      navigateTo('favorites');
+                    }}
+                    style={{
+                      background: 'rgba(244, 182, 39, 0.15)',
+                      color: 'var(--gold)',
+                      border: '1px solid rgba(244, 182, 39, 0.3)',
+                      borderRadius: '20px',
+                      padding: '6px 12px',
+                      fontSize: '12px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    <span>View All</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '360px', overflowY: 'auto', paddingRight: '4px' }}>
+                  {PRODUCTS.filter((p) => modalFavorites.includes(p.id)).slice(0, 5).map((item) => (
+                    <div
+                      key={item.id}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '10px 12px',
+                        background: 'rgba(255,255,255,0.04)',
+                        borderRadius: '12px',
+                        border: '1px solid rgba(255,255,255,0.06)',
+                        gap: '10px'
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover' }}
+                        onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
+                      />
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, fontSize: '13.5px', color: 'var(--text-white)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {item.name}
+                        </div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                          GH₵ {item.price.toFixed(2)} • {item.category}
+                        </div>
+                      </div>
+                      <button
+                        className="btn-1click-reorder"
+                        onClick={() => {
+                          handleAddDirectItem(item);
+                          setActiveModal(null);
+                        }}
+                        style={{
+                          background: 'var(--gold)',
+                          color: '#0f1012',
+                          border: 'none',
+                          borderRadius: '20px',
+                          padding: '6px 12px',
+                          fontSize: '12px',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          flexShrink: 0
+                        }}
+                      >
+                        <Zap size={13} />
+                        <span>Re-order</span>
+                      </button>
                     </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS8.50</span>
-                  </div>
+                  ))}
+                </div>
+
+                <div style={{ marginTop: '16px', textAlign: 'center' }}>
+                  <button
+                    onClick={() => {
+                      setActiveModal(null);
+                      navigateTo('favorites');
+                    }}
+                    style={{
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'var(--gold)',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}
+                  >
+                    <span>Manage all favorites in your account (/account/favorites)</span>
+                    <ArrowRight size={14} />
+                  </button>
                 </div>
               </div>
             )}

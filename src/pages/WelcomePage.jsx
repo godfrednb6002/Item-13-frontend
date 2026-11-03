@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import {
   LayoutDashboard,
@@ -20,19 +20,54 @@ import {
   Clock,
   ExternalLink,
   ShieldCheck,
-  Plus
+  Plus,
+  Trash2,
+  Zap
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
 
 export default function WelcomePage({
   user,
   onNavigate,
   onSignOut,
   onToast,
+  onAddToCart,
+  initialTab = 'dashboard',
   cartCount = 0
 }) {
   const [collapsed, setCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setFavoriteIds(getSavedFavorites());
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, []);
+
+  const favoriteProducts = PRODUCTS.filter((p) => favoriteIds.includes(p.id));
+
+  const handleQuickReorder = (item) => {
+    if (onAddToCart) {
+      onAddToCart(item);
+    } else if (onToast) {
+      onToast(`Added '${item.name}' to bag!`);
+    }
+  };
+
+  const handleRemoveFavorite = (e, productId, name) => {
+    e.stopPropagation();
+    const { updated } = toggleFavorite(productId);
+    setFavoriteIds(updated);
+    if (onToast) onToast(`Removed '${name}' from favorites`);
+  };
 
   const displayName = user?.name || (user?.email ? user.email.split('@')[0] : 'Snack Lover');
   const userEmail = user?.email || 'customer@item13.com';
@@ -268,14 +303,22 @@ export default function WelcomePage({
                   </div>
                 </div>
 
-                <div className="stat-card">
+                <div
+                  className="stat-card"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    setActiveTab('favorites');
+                    if (onNavigate) onNavigate('favorites');
+                  }}
+                  title="View Saved Favorites"
+                >
                   <div className="stat-icon-wrap purple">
-                    <Heart size={20} />
+                    <Heart size={20} fill="currentColor" />
                   </div>
                   <div className="stat-content">
-                    <span className="stat-label">Favorite Flavor</span>
-                    <span className="stat-value">Double Butter</span>
-                    <span className="stat-sub">Ordered 4 times</span>
+                    <span className="stat-label">Saved Favorites</span>
+                    <span className="stat-value">{favoriteProducts.length} Snacks</span>
+                    <span className="stat-sub">1-Click Fast Re-order</span>
                   </div>
                 </div>
 
@@ -347,9 +390,9 @@ export default function WelcomePage({
                           <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
                           <button
                             className="btn-mini-add"
-                            onClick={() => onNavigate && onNavigate('menu')}
+                            onClick={() => handleQuickReorder(item)}
                           >
-                            Order
+                            + Add to Bag
                           </button>
                         </div>
                       </div>
@@ -482,31 +525,105 @@ export default function WelcomePage({
           {/* 5. FAVORITES TAB */}
           {activeTab === 'favorites' && (
             <div className="welcome-tab-pane">
-              <div className="pane-header">
-                <h2>Your Popcorn Wishlist</h2>
-                <p>Quickly re-order the flavors you love</p>
+              <div className="pane-header fav-header-flex">
+                <div>
+                  <div className="fav-title-row">
+                    <h2>Customer Favorites &amp; Wishlist</h2>
+                    <span className="fav-count-pill">{favoriteProducts.length} Saved</span>
+                  </div>
+                  <p>Fast 1-click re-order snack wishlist. Pop your all-time favorites into your bag in a tap!</p>
+                </div>
+                <button
+                  type="button"
+                  className="btn-browse-more-fav"
+                  onClick={() => onNavigate && onNavigate('menu')}
+                >
+                  <Plus size={16} />
+                  <span>Discover More Snacks</span>
+                </button>
               </div>
 
-              <div className="dash-quick-products">
-                {PRODUCTS.filter((p) => p.badge).map((item) => (
-                  <div key={item.id} className="dash-prod-mini-card">
-                    <img src={item.image} alt={item.name} className="mini-prod-img" />
-                    <div className="mini-prod-info">
-                      <span className="mini-prod-tag">{item.category}</span>
-                      <h4 className="mini-prod-name">{item.name}</h4>
-                      <div className="mini-prod-bottom">
-                        <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
+              {favoriteProducts.length === 0 ? (
+                <div className="fav-empty-state">
+                  <div className="fav-empty-icon">
+                    <Heart size={36} />
+                  </div>
+                  <h3>Your snack wishlist is waiting!</h3>
+                  <p>Browse our gourmet menu and save your favorite freshly popped corn &amp; drinks for instant 1-click re-ordering.</p>
+                  <button
+                    className="btn-fav-explore"
+                    onClick={() => onNavigate && onNavigate('menu')}
+                  >
+                    <ShoppingBag size={16} />
+                    <span>Explore Gourmet Menu</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="dash-quick-products fav-products-grid">
+                  {favoriteProducts.map((item) => (
+                    <div key={item.id} className="dash-prod-mini-card fav-card">
+                      <div className="fav-card-image-wrap">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="mini-prod-img"
+                          onError={(e) => {
+                            e.target.src = '/bistro-popcorn.jpg';
+                          }}
+                        />
                         <button
-                          className="btn-mini-add"
-                          onClick={() => onNavigate && onNavigate('menu')}
+                          type="button"
+                          className="fav-remove-btn"
+                          onClick={(e) => handleRemoveFavorite(e, item.id, item.name)}
+                          title="Remove from favorites"
+                          aria-label={`Remove ${item.name} from favorites`}
                         >
-                          Add to Bag
+                          <Trash2 size={15} />
                         </button>
+                        {item.badge && (
+                          <span className="fav-badge">{item.badge}</span>
+                        )}
+                      </div>
+
+                      <div className="mini-prod-info">
+                        <div className="fav-meta-row">
+                          <span className="mini-prod-tag">{item.category}</span>
+                          {item.rating && (
+                            <span className="fav-rating-pill">★ {item.rating}</span>
+                          )}
+                        </div>
+
+                        <h4
+                          className="mini-prod-name fav-clickable-title"
+                          onClick={() => onNavigate && onNavigate(`product-${item.id}`)}
+                          title="View product details"
+                        >
+                          {item.name}
+                        </h4>
+
+                        <div className="mini-prod-bottom">
+                          <div className="fav-price-box">
+                            <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
+                            {item.originalPrice && item.originalPrice > item.price && (
+                              <span className="fav-old-price">GH₵ {item.originalPrice.toFixed(2)}</span>
+                            )}
+                          </div>
+
+                          <button
+                            type="button"
+                            className="btn-1click-reorder"
+                            onClick={() => handleQuickReorder(item)}
+                            title="Instant 1-Click Re-order"
+                          >
+                            <Zap size={14} className="reorder-bolt" />
+                            <span>1-Click Re-order</span>
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

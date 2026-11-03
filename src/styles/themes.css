@@ -1842,3 +1842,58 @@ html.light-theme .theme-toggle-btn:hover {
   transform: rotate(20deg);
 }
 
+/* Light Mode Overrides for Customer Favorites & Wishlist */
+html.light-theme .fav-empty-state {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .fav-empty-state h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .btn-browse-more-fav {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light-theme .btn-browse-more-fav:hover {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .profile-fav-row {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .profile-fav-row:hover {
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07) !important;
+}
+
+html.light-theme .profile-fav-name {
+  color: #111418 !important;
+}
+
+html.light-theme .profile-remove-fav-btn {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .catalog-fav-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #1a1a1a !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .catalog-fav-btn.is-favorited {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+

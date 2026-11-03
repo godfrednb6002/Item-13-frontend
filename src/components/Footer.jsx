@@ -199,9 +199,18 @@ export default function Footer({ onNavigate, onToast }) {
                 <button
                   type="button"
                   className="footer-text-link"
-                  onClick={() => onToast && onToast('Contact us via WhatsApp for bulk party orders!')}
+                  onClick={() => onNavigate && onNavigate('events')}
                 >
-                  Bulk Event &amp; Party Orders
+                  Bulk Event &amp; Party Orders (/events)
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="footer-text-link"
+                  onClick={() => onNavigate && onNavigate('about')}
+                >
+                  Our Story &amp; Heritage (/about)
                 </button>
               </li>
               <li>

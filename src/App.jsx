@@ -10,6 +10,7 @@ import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
 import ProductDetailPage from './pages/ProductDetailPage';
+import DeliveryPage from './pages/DeliveryPage';
 import { PRODUCTS } from './features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from './features/catalog/favoritesStorage';
 
@@ -17,6 +18,7 @@ export default function App() {
   const getInitialPage = () => {
     const path = window.location.pathname;
     if (path.startsWith('/checkout')) return 'checkout';
+    if (path.startsWith('/delivery')) return 'delivery';
     if (path.startsWith('/account/favorites')) return 'favorites';
     if (path.startsWith('/profile') || path.startsWith('/account')) return 'profile';
     if (path.startsWith('/products/')) {
@@ -50,6 +52,8 @@ export default function App() {
       const path = window.location.pathname;
       if (path.startsWith('/checkout')) {
         setCurrentPage('checkout');
+      } else if (path.startsWith('/delivery')) {
+        setCurrentPage('delivery');
       } else if (path.startsWith('/account/favorites')) {
         setCurrentPage('favorites');
       } else if (path.startsWith('/profile') || path.startsWith('/account')) {
@@ -68,6 +72,7 @@ export default function App() {
   const navigateTo = (page) => {
     let nextPath = '/';
     if (page === 'checkout') nextPath = '/checkout';
+    else if (page === 'delivery') nextPath = '/delivery';
     else if (page === 'favorites') nextPath = '/account/favorites';
     else if (page === 'profile') nextPath = '/account/profile';
     else if (page === 'menu') nextPath = '/menu';
@@ -381,6 +386,46 @@ export default function App() {
     );
   }
 
+  if (currentPage === 'delivery') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <DeliveryPage
+          onNavigate={navigateTo}
+          onToast={showToast}
+          cartCount={cartCount}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onContinueShopping={() => setIsCartOpen(false)}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
   if (currentPage === 'profile') {
     return (
       <>
@@ -500,6 +545,9 @@ export default function App() {
           <div className="nav-links">
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
+            </a>
+            <a href="/delivery" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('delivery'); }}>
+              Delivery Coverage
             </a>
             <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 — Ghana's favourite popcorn and snack delivery brand."); }}>
               About

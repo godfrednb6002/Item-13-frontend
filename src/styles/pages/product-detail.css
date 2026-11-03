@@ -217,6 +217,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  text-decoration: none !important;
+  outline: none;
   transition: all 0.2s ease;
 }
 
@@ -224,16 +226,26 @@
   background: var(--gold);
   color: #0f1012;
   border-color: var(--gold);
+  text-decoration: none !important;
 }
 
 .pdp-overlay-btn.is-favorited {
   background: #ef4444;
   color: #ffffff;
   border-color: #ef4444;
+  text-decoration: none !important;
 }
 
 .pdp-share-btn {
-  /* Inherits from .pdp-overlay-btn */
+  text-decoration: none !important;
+  border-bottom: none !important;
+}
+
+.pdp-share-btn:hover,
+.pdp-share-btn:focus,
+.pdp-share-btn:active {
+  text-decoration: none !important;
+  outline: none;
 }
 
 .pdp-perks-strip {

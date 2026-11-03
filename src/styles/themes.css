@@ -735,6 +735,28 @@ html.light-theme .pdm-close-btn:hover {
   background: #e4e7ed !important;
 }
 
+html.light-theme .pdm-fav-toggle-btn {
+  background: #f8fafc !important;
+  color: #1e293b !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .pdm-fav-toggle-btn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+html.light-theme .pdm-fav-toggle-btn.is-favorited {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
+html.light-theme .pdm-full-view-btn {
+  color: #b45309 !important;
+}
+
 /* 3. Login / Auth Screen */
 html.light-theme .login-screen-wrapper {
   background: #f5f7fb;
@@ -1560,15 +1582,37 @@ html.light-theme .pdp-main-image-card {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06) !important;
 }
 
+html.light-theme .pdp-overlay-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #111418 !important;
+  text-decoration: none !important;
+}
+
+html.light-theme .pdp-overlay-btn:hover {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  border-color: var(--gold) !important;
+  text-decoration: none !important;
+}
+
+html.light-theme .pdp-overlay-btn.is-favorited {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+}
+
 html.light-theme .pdp-share-btn {
   background: rgba(255, 255, 255, 0.9) !important;
   border: 1px solid rgba(0, 0, 0, 0.12) !important;
   color: #111418 !important;
+  text-decoration: none !important;
 }
 
 html.light-theme .pdp-share-btn:hover {
   background: var(--gold) !important;
   color: #0f1012 !important;
+  text-decoration: none !important;
 }
 
 html.light-theme .pdp-perk {
@@ -1895,5 +1939,180 @@ html.light-theme .catalog-fav-btn.is-favorited {
   color: #ffffff !important;
   border-color: #ef4444 !important;
 }
+
+/* Light Theme Overrides for Delivery Coverage (/delivery) */
+html.light-theme .delivery-page-wrapper {
+  background: #f7f9fc !important;
+  color: #14171d !important;
+}
+
+html.light-theme .delivery-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .delivery-back-btn {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .delivery-bag-chip {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .delivery-hero-section {
+  background: radial-gradient(circle at 50% 20%, rgba(244, 182, 39, 0.18) 0%, transparent 70%),
+              linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .delivery-hero-title {
+  color: #111418 !important;
+}
+
+html.light-theme .delivery-calculator-box {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .calc-input {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .calc-result-card {
+  background: rgba(244, 182, 39, 0.12) !important;
+  border-color: rgba(244, 182, 39, 0.35) !important;
+}
+
+html.light-theme .result-zone-title {
+  color: #111418 !important;
+}
+
+html.light-theme .rate-box {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .rate-price {
+  color: #111418 !important;
+}
+
+html.light-theme .city-pill-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #4b5563 !important;
+}
+
+html.light-theme .city-pill-btn.active {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .delivery-search-input {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .speed-switcher-bar {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .speed-toggle-group {
+  background: #f1f4f9 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .table-responsive-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .delivery-fee-table thead th {
+  background: #f7f9fc !important;
+  color: #4b5563 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .delivery-fee-table tbody tr {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .delivery-fee-table tbody tr:hover {
+  background: rgba(244, 182, 39, 0.04) !important;
+}
+
+html.light-theme .zone-name {
+  color: #111418 !important;
+}
+
+html.light-theme .suburb-chip {
+  background: #f0f3f8 !important;
+  color: #374151 !important;
+}
+
+html.light-theme .fee-display .amount {
+  color: #111418 !important;
+}
+
+html.light-theme .btn-table-order {
+  background: #f0f3f8 !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .btn-table-order:hover {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .promise-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .promise-card h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .promises-head h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .schedule-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .schedule-info h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .hour-item strong {
+  color: #111418 !important;
+}
+
+html.light-theme .schedule-cta {
+  background: #fbf8f0 !important;
+  border-color: rgba(244, 182, 39, 0.3) !important;
+}
+
+html.light-theme .schedule-cta h4 {
+  color: #111418 !important;
+}
+
 
 

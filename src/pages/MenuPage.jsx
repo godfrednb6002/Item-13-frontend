@@ -326,6 +326,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
           onNavigate={onNavigate}
+          onToast={onToast}
           onAddToCart={(customizedItem) => {
             if (onAddToCart) onAddToCart(customizedItem);
           }}

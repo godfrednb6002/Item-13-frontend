@@ -60,24 +60,27 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
           </span>
         )}
 
-        <button
-          type="button"
-          className={`catalog-fav-btn ${isFav ? 'is-favorited' : ''}`}
-          onClick={handleToggleFav}
-          aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
-          title={isFav ? 'Saved in Customer Favorites' : 'Add to Customer Favorites'}
-        >
-          <Heart size={15} fill={isFav ? 'currentColor' : 'none'} />
-        </button>
+        {/* Action Controls in Bottom Right: Favorite button directly above Quick View / Detail button */}
+        <div className="catalog-card-actions-stack">
+          <button
+            type="button"
+            className={`catalog-fav-btn ${isFav ? 'is-favorited' : ''}`}
+            onClick={handleToggleFav}
+            aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+            title={isFav ? 'Saved in Customer Favorites' : 'Add to Customer Favorites'}
+          >
+            <Heart size={15} fill={isFav ? 'currentColor' : 'none'} />
+          </button>
 
-        <button
-          className="catalog-quickview-btn"
-          onClick={() => onQuickView && onQuickView(product)}
-          aria-label="Quick view product"
-          title="Quick preview"
-        >
-          <Eye size={16} />
-        </button>
+          <button
+            className="catalog-quickview-btn"
+            onClick={() => onQuickView && onQuickView(product)}
+            aria-label="View product details"
+            title="View details & customize"
+          >
+            <Eye size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Body Details */}

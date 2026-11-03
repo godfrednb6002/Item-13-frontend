@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
-import { X, Star, ShoppingBag, Check, Plus, Minus, ShieldCheck, Flame, ExternalLink, Info } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Star, ShoppingBag, Check, Plus, Minus, ShieldCheck, Flame, ExternalLink, Info, Heart } from 'lucide-react';
 import { ALLERGEN_DEFINITIONS } from './productsData';
+import { getSavedFavorites, toggleFavorite } from './favoritesStorage';
 
-export default function ProductDetailModal({ product, onClose, onAddToCart, onNavigate }) {
+export default function ProductDetailModal({ product, onClose, onAddToCart, onNavigate, onToast }) {
   if (!product) return null;
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
   const [extraButter, setExtraButter] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setIsFav(getSavedFavorites().includes(product.id));
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, [product.id]);
+
+  const handleToggleFav = () => {
+    const { isFavorite } = toggleFavorite(product.id);
+    setIsFav(isFavorite);
+    if (onToast) {
+      onToast(isFavorite ? `Added "${product.name}" to Customer Favorites!` : `Removed "${product.name}" from favorites`);
+    }
+  };
 
   const sizes = product.sizes || [{ name: 'Standard', priceOffset: 0 }];
   const currentSize = sizes[selectedSizeIndex] || sizes[0];
@@ -153,20 +171,34 @@ export default function ProductDetailModal({ product, onClose, onAddToCart, onNa
               <span>Popped fresh on order • Fast delivery across Accra & Tema</span>
             </div>
 
-            {/* View Full Product Page Link */}
-            {onNavigate && (
+            {/* Favorite button directly above View Full Product Page button */}
+            <div className="pdm-modal-actions-group">
               <button
                 type="button"
-                className="pdm-full-view-btn"
-                onClick={() => {
-                  if (onClose) onClose();
-                  onNavigate(`product-${product.id}`);
-                }}
+                className={`pdm-fav-toggle-btn ${isFav ? 'is-favorited' : ''}`}
+                onClick={handleToggleFav}
+                aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+                title={isFav ? 'Saved in Customer Favorites' : 'Add to Customer Favorites'}
               >
-                <span>View Full Product Page</span>
-                <ExternalLink size={14} />
+                <Heart size={15} fill={isFav ? 'currentColor' : 'none'} />
+                <span>{isFav ? 'Saved to Favorites' : 'Add to Favorites'}</span>
               </button>
-            )}
+
+              {/* View Full Product Page Link */}
+              {onNavigate && (
+                <button
+                  type="button"
+                  className="pdm-full-view-btn"
+                  onClick={() => {
+                    if (onClose) onClose();
+                    onNavigate(`product-${product.id}`);
+                  }}
+                >
+                  <span>View Full Product Page</span>
+                  <ExternalLink size={14} />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -190,9 +190,9 @@ export default function Footer({ onNavigate, onToast }) {
                 <button
                   type="button"
                   className="footer-text-link"
-                  onClick={() => onToast && onToast('Delivery Zones: Greater Accra, Tema, Kumasi.')}
+                  onClick={() => onNavigate && onNavigate('delivery')}
                 >
-                  Delivery Zones &amp; Fees
+                  Delivery Zones &amp; Fees (/delivery)
                 </button>
               </li>
               <li>

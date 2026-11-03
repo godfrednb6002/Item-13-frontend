@@ -485,9 +485,20 @@ export default function WelcomePage({
           {/* 4. ADDRESSES TAB */}
           {activeTab === 'addresses' && (
             <div className="welcome-tab-pane">
-              <div className="pane-header">
-                <h2>Saved Delivery Locations</h2>
-                <p>Saved GhanaPost GPS addresses and landmark instructions for swift delivery</p>
+              <div className="pane-header fav-header-flex">
+                <div>
+                  <h2>Saved Delivery Locations &amp; Coverage</h2>
+                  <p>Saved GhanaPost GPS addresses and landmark instructions for swift delivery</p>
+                </div>
+                <button
+                  type="button"
+                  className="btn-browse-more-fav"
+                  onClick={() => onNavigate && onNavigate('delivery')}
+                  title="View transparent fee table & delivery dispatch zones"
+                >
+                  <Truck size={15} />
+                  <span>View Delivery Coverage &amp; Fee Table</span>
+                </button>
               </div>
 
               <div className="addresses-grid">

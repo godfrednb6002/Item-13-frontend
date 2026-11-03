@@ -22,7 +22,11 @@ import {
   ShieldCheck,
   Plus,
   Trash2,
-  Zap
+  Zap,
+  Truck,
+  Info,
+  PartyPopper,
+  PhoneCall,
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
@@ -83,6 +87,10 @@ export default function WelcomePage({
     { id: 'favorites', label: 'Saved Favorites', icon: Heart, badge: null },
     { id: 'payments', label: 'Payments & MoMo', icon: CreditCard, badge: null },
     { id: 'settings', label: 'Settings', icon: Settings, badge: null },
+    { id: 'delivery', label: 'Delivery Coverage', icon: Truck, badge: 'Zones' },
+    { id: 'about', label: 'About Item13', icon: Info, badge: null },
+    { id: 'events', label: 'Party & Weddings', icon: PartyPopper, badge: 'Bulk' },
+    { id: 'contact', label: 'Contact & Support', icon: PhoneCall, badge: null },
   ];
 
   return (
@@ -154,6 +162,14 @@ export default function WelcomePage({
                     if (onNavigate) onNavigate('cart');
                   } else if (item.id === 'checkout') {
                     if (onNavigate) onNavigate('checkout');
+                  } else if (item.id === 'delivery') {
+                    if (onNavigate) onNavigate('delivery');
+                  } else if (item.id === 'about') {
+                    if (onNavigate) onNavigate('about');
+                  } else if (item.id === 'events') {
+                    if (onNavigate) onNavigate('events');
+                  } else if (item.id === 'contact') {
+                    if (onNavigate) onNavigate('contact');
                   } else {
                     setActiveTab(item.id);
                   }

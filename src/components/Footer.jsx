@@ -199,6 +199,15 @@ export default function Footer({ onNavigate, onToast }) {
                 <button
                   type="button"
                   className="footer-text-link"
+                  onClick={() => onNavigate && onNavigate('contact')}
+                >
+                  Contact &amp; Support (/contact)
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className="footer-text-link"
                   onClick={() => onNavigate && onNavigate('events')}
                 >
                   Bulk Event &amp; Party Orders (/events)
@@ -251,7 +260,11 @@ export default function Footer({ onNavigate, onToast }) {
                 <MapPin size={16} className="contact-icon" />
                 <span>East Legon / Spintex Road, Greater Accra, Ghana</span>
               </div>
-              <div className="contact-item">
+              <div
+                className="contact-item"
+                style={{ cursor: 'pointer' }}
+                onClick={() => onNavigate && onNavigate('contact')}
+              >
                 <Phone size={16} className="contact-icon" />
                 <span>+233 54 000 1313 (WhatsApp &amp; Calls)</span>
               </div>

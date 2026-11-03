@@ -24,7 +24,11 @@ import {
   UserRound,
   X,
   Zap,
-  Trash2
+  Trash2,
+  Truck,
+  Info,
+  PartyPopper,
+  PhoneCall
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
@@ -38,6 +42,10 @@ const navigation = [
   { id: 'preferences', label: 'Preferences', icon: Heart },
   { id: 'security', label: 'Security', icon: ShieldCheck },
   { id: 'support', label: 'Help & support', icon: CircleHelp },
+  { id: 'delivery', label: 'Delivery Coverage', icon: Truck, isRoute: true },
+  { id: 'about', label: 'About Item13', icon: Info, isRoute: true },
+  { id: 'events', label: 'Party & Weddings', icon: PartyPopper, isRoute: true },
+  { id: 'contact', label: 'Contact & Support', icon: PhoneCall, isRoute: true },
 ];
 
 const recentOrder = {
@@ -493,19 +501,39 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
     <>
       <SectionHeading eyebrow="WE’RE HERE TO HELP" title="Help & support" description="Find answers or get a hand from our customer care team." />
       <div className="profile-support-grid">
-        <button className="profile-support-card" onClick={() => notify('Support chat: We are available Monday to Sunday, 9am - 10pm.')}>
+        <button
+          className="profile-support-card"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Directing to Contact & Support (/contact)...');
+          }}
+        >
           <span className="profile-support-icon"><CircleHelp size={20} /></span>
-          <strong>Chat with us</strong><span>Get help with an order or account.</span><ArrowRight size={16} />
+          <strong>Chat &amp; Support</strong><span>Operating hours, hotlines &amp; WhatsApp.</span><ArrowRight size={16} />
         </button>
-        <button className="profile-support-card" onClick={() => notify('Opening the Item13 help center.')}>
+        <button
+          className="profile-support-card"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Opening Item13 FAQ and operating hours.');
+          }}
+        >
           <span className="profile-support-icon"><BookOpen size={20} /></span>
-          <strong>Visit help center</strong><span>Shipping, returns, and account FAQs.</span><ArrowRight size={16} />
+          <strong>Visit help center</strong><span>Shipping, returns, and FAQs.</span><ArrowRight size={16} />
         </button>
       </div>
       <section className="profile-panel profile-ticket-panel">
         <h3>Recent support requests</h3>
         <p>You don’t have any open support tickets.</p>
-        <button className="profile-text-button" onClick={() => notify('A support request form will be available soon.')}>Contact customer care <ArrowRight size={15} /></button>
+        <button
+          className="profile-text-button"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Opening contact form...');
+          }}
+        >
+          Contact customer care <ArrowRight size={15} />
+        </button>
       </section>
     </>
   );
@@ -644,8 +672,18 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
               <span className="profile-member-badge"><Sparkles size={12} /> VIP MEMBER</span>
             </div>
             <nav className="profile-nav" aria-label="Account sections">
-              {navigation.map(({ id, label, icon: Icon }) => (
-                <button key={id} className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`} onClick={() => setActiveSection(id)}>
+              {navigation.map(({ id, label, icon: Icon, isRoute }) => (
+                <button
+                  key={id}
+                  className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`}
+                  onClick={() => {
+                    if (isRoute && onNavigate) {
+                      onNavigate(id);
+                    } else {
+                      setActiveSection(id);
+                    }
+                  }}
+                >
                   <Icon size={17} /><span>{label}</span>{activeSection === id && <ChevronRight size={15} />}
                 </button>
               ))}

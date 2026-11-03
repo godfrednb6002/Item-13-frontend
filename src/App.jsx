@@ -12,6 +12,7 @@ import CartDrawer from './features/cart/CartDrawer';
 import ProductDetailPage from './pages/ProductDetailPage';
 import DeliveryPage from './pages/DeliveryPage';
 import AboutEventsPage from './pages/AboutEventsPage';
+import ContactPage from './pages/ContactPage';
 import { PRODUCTS } from './features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from './features/catalog/favoritesStorage';
 
@@ -22,6 +23,7 @@ export default function App() {
     if (path.startsWith('/delivery')) return 'delivery';
     if (path.startsWith('/about')) return 'about';
     if (path.startsWith('/events')) return 'events';
+    if (path.startsWith('/contact')) return 'contact';
     if (path.startsWith('/account/favorites')) return 'favorites';
     if (path.startsWith('/profile') || path.startsWith('/account')) return 'profile';
     if (path.startsWith('/products/')) {
@@ -61,6 +63,8 @@ export default function App() {
         setCurrentPage('about');
       } else if (path.startsWith('/events')) {
         setCurrentPage('events');
+      } else if (path.startsWith('/contact')) {
+        setCurrentPage('contact');
       } else if (path.startsWith('/account/favorites')) {
         setCurrentPage('favorites');
       } else if (path.startsWith('/profile') || path.startsWith('/account')) {
@@ -82,6 +86,7 @@ export default function App() {
     else if (page === 'delivery') nextPath = '/delivery';
     else if (page === 'about') nextPath = '/about';
     else if (page === 'events') nextPath = '/events';
+    else if (page === 'contact') nextPath = '/contact';
     else if (page === 'favorites') nextPath = '/account/favorites';
     else if (page === 'profile') nextPath = '/account/profile';
     else if (page === 'menu') nextPath = '/menu';
@@ -475,6 +480,45 @@ export default function App() {
     );
   }
 
+  if (currentPage === 'contact') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <ContactPage
+          onNavigate={navigateTo}
+          onToast={showToast}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onContinueShopping={() => setIsCartOpen(false)}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
   if (currentPage === 'profile') {
     return (
       <>
@@ -603,6 +647,9 @@ export default function App() {
             </a>
             <a href="/events" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); navigateTo('events'); }}>
               Party &amp; Weddings
+            </a>
+            <a href="/contact" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}>
+              Contact
             </a>
           </div>
 
@@ -798,7 +845,7 @@ export default function App() {
 
       {isCartOpen && (
         <CartDrawer
-          items={cartItems}
+            items={cartItems}
           onClose={() => setIsCartOpen(false)}
           onContinueShopping={() => setIsCartOpen(false)}
           onCheckout={() => {

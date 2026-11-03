@@ -1,4 +1,3 @@
-
 /* Navigation Bar in Light Mode */
 html.light-theme .navbar {
   background: rgba(255, 255, 255, 0.88);
@@ -2289,6 +2288,134 @@ html.light-theme .btn-reset-inquiry {
   border: 1px solid rgba(0, 0, 0, 0.12) !important;
 }
 
+/* =========================================================
+   Contact & Support Page in Light Mode (/contact)
+   ========================================================= */
+html.light-theme .contact-page-wrapper {
+  background-color: #f7f9fc !important;
+  color: #111418 !important;
+}
 
+html.light-theme .contact-header {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
 
+html.light-theme .contact-hero-section {
+  background: radial-gradient(circle at 50% 15%, rgba(244, 182, 39, 0.18) 0%, transparent 70%),
+              linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
 
+html.light-theme .contact-hero-section h1 {
+  color: #0f1115 !important;
+}
+
+html.light-theme .contact-hero-section p {
+  color: #555c68 !important;
+}
+
+html.light-theme .hotline-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .hotline-card:hover {
+  border-color: rgba(244, 182, 39, 0.5) !important;
+  box-shadow: 0 14px 28px rgba(244, 182, 39, 0.1) !important;
+}
+
+html.light-theme .hotline-card h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .hotline-card p {
+  color: #5d6573 !important;
+}
+
+html.light-theme .hotline-action-btn.secondary {
+  background: #f1f4f9 !important;
+  color: #1a1e24 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .hotline-action-btn.secondary:hover {
+  background: #e5ebf3 !important;
+}
+
+html.light-theme .whatsapp-banner-card {
+  background: linear-gradient(135deg, #064e3b 0%, #047857 100%) !important;
+}
+
+html.light-theme .support-form-card,
+html.light-theme .locations-hours-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .support-form-card h2,
+html.light-theme .locations-hours-card h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .support-form-card .form-subtitle,
+html.light-theme .locations-hours-card .locations-subtitle {
+  color: #616875 !important;
+}
+
+html.light-theme .form-field-group label {
+  color: #272d37 !important;
+}
+
+html.light-theme .support-input {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #0f1217 !important;
+}
+
+html.light-theme .support-input:focus {
+  background: #ffffff !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .location-item {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+html.light-theme .location-item h4 {
+  color: #111418 !important;
+}
+
+html.light-theme .hours-badge {
+  background: #e9eef6 !important;
+  color: #2b313a !important;
+}
+
+html.light-theme .faq-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .faq-item.open {
+  border-color: rgba(244, 182, 39, 0.45) !important;
+}
+
+html.light-theme .faq-question-btn {
+  color: #111418 !important;
+}
+
+html.light-theme .faq-answer {
+  color: #4b5362 !important;
+}
+
+html.light-theme .support-confirmation-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+html.light-theme .support-confirmation-card h3 {
+  color: #111418 !important;
+}

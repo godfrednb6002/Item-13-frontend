@@ -595,6 +595,12 @@ html.light-theme .mini-prod-price {
 }
 
 /* Product Detail Modal in Light Mode */
+html.light-theme .pdm-backdrop {
+  background: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+}
+
 html.light-theme .pdm-modal {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
@@ -614,16 +620,109 @@ html.light-theme .pdm-title {
   color: #111418 !important;
 }
 
-html.light-theme .pdm-desc {
-  color: #555e6c !important;
-}
-
-html.light-theme .pdm-price-val {
+html.light-theme .pdm-score {
   color: #111418 !important;
 }
 
-html.light-theme .pdm-price-original {
-  color: #8c93a0 !important;
+html.light-theme .pdm-rev-count {
+  color: #64748b !important;
+}
+
+html.light-theme .pdm-description {
+  color: #4b5563 !important;
+}
+
+html.light-theme .pdm-option-label {
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-size-pill {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.12) !important;
+  color: #24292f !important;
+}
+
+html.light-theme .pdm-size-pill:hover {
+  background: #f8fafc !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-size-pill.active {
+  background: rgba(244, 182, 39, 0.16) !important;
+  border-color: var(--gold) !important;
+  color: #8c6307 !important;
+  font-weight: 700 !important;
+}
+
+html.light-theme .size-pill-price {
+  color: #64748b !important;
+}
+
+html.light-theme .pdm-size-pill.active .size-pill-price {
+  color: #8c6307 !important;
+}
+
+html.light-theme .pdm-addon-card {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-addon-card:hover {
+  background: #f8fafc !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+}
+
+html.light-theme .pdm-addon-card.active {
+  background: #fffdf5 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .addon-title {
+  color: #111418 !important;
+}
+
+html.light-theme .addon-desc {
+  color: #64748b !important;
+}
+
+html.light-theme .addon-price {
+  color: #8c6307 !important;
+}
+
+html.light-theme .pdm-addon-checkbox {
+  background: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.22) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .pdm-addon-card.active .pdm-addon-checkbox {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .pdm-qty-picker {
+  background: #f1f5f9 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .qty-btn {
+  background: transparent !important;
+  color: #111418 !important;
+}
+
+html.light-theme .qty-btn:hover {
+  background: #e2e8f0 !important;
+}
+
+html.light-theme .qty-value {
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-trust-line {
+  color: #64748b !important;
 }
 
 html.light-theme .pdm-close-btn {
@@ -634,32 +733,6 @@ html.light-theme .pdm-close-btn {
 
 html.light-theme .pdm-close-btn:hover {
   background: #e4e7ed !important;
-}
-
-html.light-theme .pdm-option-btn {
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.12) !important;
-  color: #3b424e !important;
-}
-
-html.light-theme .pdm-option-btn.selected {
-  background: rgba(244, 182, 39, 0.18) !important;
-  border-color: var(--gold) !important;
-  color: #8c6307 !important;
-}
-
-html.light-theme .pdm-qty-box {
-  background: #f1f3f7 !important;
-  border: 1px solid rgba(0, 0, 0, 0.1) !important;
-  color: #111418 !important;
-}
-
-html.light-theme .pdm-qty-box button {
-  color: #111418 !important;
-}
-
-html.light-theme .pdm-qty-box span {
-  color: #111418 !important;
 }
 
 /* 3. Login / Auth Screen */

@@ -92,6 +92,18 @@
   position: relative;
 }
 
+.nav-links button.nav-link {
+  padding: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nav-links button.nav-link:hover {
+  color: var(--text-muted);
+}
+
 .nav-link.on-yellow {
   color: rgba(255, 255, 255, 0.85);
   font-weight: 600;

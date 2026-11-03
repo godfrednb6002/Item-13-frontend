@@ -9,15 +9,21 @@ import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
+import MomoPaymentPage from './pages/MomoPaymentPage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(
-    window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home',
+    window.location.pathname.startsWith('/checkout')
+      ? 'checkout'
+      : window.location.pathname.startsWith('/payment')
+        ? 'payment'
+        : 'home',
   );
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
   const [cartItems, setCartItems] = useState([]);
+  const [momoCheckout, setMomoCheckout] = useState(null);
   const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -25,19 +31,29 @@ export default function App() {
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPage(window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home');
+      const path = window.location.pathname;
+      setCurrentPage(path.startsWith('/checkout') ? 'checkout' : path.startsWith('/payment') ? 'payment' : 'home');
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigateTo = (page) => {
-    const nextPath = page === 'checkout' ? '/checkout' : '/';
+    const nextPath = page === 'checkout' ? '/checkout' : page === 'payment' ? '/payment' : '/';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
     setCurrentPage(page);
   };
+
+  if (currentPage === 'payment') {
+    return (
+      <MomoPaymentPage
+        checkoutOrder={momoCheckout}
+        onBack={() => navigateTo(momoCheckout ? 'checkout' : 'home')}
+      />
+    );
+  }
 
   const addItemToCart = (productId) => {
     const products = {
@@ -117,6 +133,7 @@ export default function App() {
       <CheckoutPage
         items={cartItems}
         customer={user}
+        initialValues={momoCheckout?.checkoutValues}
         confirmation={orderConfirmation}
         onBack={() => {
           setOrderConfirmation(null);
@@ -137,6 +154,10 @@ export default function App() {
           setCartItems([]);
           setCurrentPage('order-confirmation');
           window.history.pushState({}, '', '/checkout/confirmation');
+        }}
+        onMomoPayment={(order) => {
+          setMomoCheckout(order);
+          navigateTo('payment');
         }}
       />
     );

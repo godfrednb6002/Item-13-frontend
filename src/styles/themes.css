@@ -878,6 +878,82 @@ html.light-theme .order-total-label strong {
   color: #111418 !important;
 }
 
+/* Dashboard buttons and Live Tracking elements in Light Mode */
+html.light-theme .btn-dash-secondary {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .btn-dash-secondary:hover {
+  background: #f1f4f9 !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  color: #000000 !important;
+}
+
+html.light-theme .live-order-banner {
+  background: #ffffff !important;
+  border: 1px solid rgba(244, 182, 39, 0.5) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .live-order-title {
+  color: #111418 !important;
+}
+
+html.light-theme .live-order-meta {
+  color: #555e6c !important;
+}
+
+html.light-theme .btn-track-order {
+  background: rgba(244, 182, 39, 0.18) !important;
+  border: 1px solid var(--gold) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .btn-track-order:hover {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .order-tracker-timeline {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .track-step {
+  color: #64748b;
+}
+
+html.light-theme .track-step .step-bullet {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+html.light-theme .track-step.done {
+  color: #111418 !important;
+}
+
+html.light-theme .track-step.done .step-bullet {
+  background: #22c55e !important;
+  border-color: #22c55e !important;
+  color: #ffffff !important;
+}
+
+html.light-theme .track-step.current {
+  color: #8c6307 !important;
+}
+
+html.light-theme .track-step.current .step-bullet {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
 /* 5. Cart Drawer in Light Mode */
 html.light-theme .cart-drawer {
   background: #ffffff !important;

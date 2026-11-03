@@ -1,0 +1,208 @@
+/* Navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 64px 18px 64px;
+  width: 100%;
+  background: rgba(15, 16, 18, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.brand-logo-img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-logo:hover .brand-logo-img {
+  transform: rotate(-3deg) scale(1.06);
+}
+
+.brand-logo-tagline {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.9;
+  line-height: 1.2;
+  border-left: 1.5px solid rgba(244, 182, 39, 0.35);
+  padding-left: 12px;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.brand-logo:hover {
+  transform: scale(1.02);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-search-btn {
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.nav-search-btn:hover {
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.2s ease;
+  position: relative;
+}
+
+.nav-link.on-yellow {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.nav-link:hover {
+  color: var(--text-muted);
+}
+
+.nav-link.on-yellow:hover {
+  color: var(--text-muted);
+}
+
+.nav-buttons-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.nav-cart-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 1px solid rgba(244, 182, 39, 0.45);
+  border-radius: 999px;
+  background: rgba(15, 16, 18, 0.78);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.nav-cart-button:hover {
+  border-color: var(--gold);
+  background: #22201a;
+}
+
+.nav-cart-button b {
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #17130a;
+  font-size: 11px;
+}
+
+.nav-cart-button:focus-visible,
+.cart-drawer button:focus-visible,
+.cart-drawer input:focus-visible,
+.cart-drawer textarea:focus-visible {
+  outline: 2px solid #ffd56e;
+  outline-offset: 3px;
+}
+
+.nav-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-pill {
+  padding: 10px 24px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.btn-pill-yellow {
+  background-color: var(--gold);
+  color: var(--text-dark);
+  box-shadow: 0 4px 14px rgba(244, 182, 39, 0.3);
+}
+
+.btn-pill-yellow:hover {
+  background-color: #dfac34;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(244, 182, 39, 0.45);
+}
+
+.btn-pill-black {
+  background-color: #16171a;
+  color: var(--text-white);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.btn-pill-black:hover {
+  background-color: #000000;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.btn-pill-outline {
+  width: 100%;
+  padding: 7px 22px;
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #f3f4f6;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  font-size: 13px;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.btn-pill-outline:hover {
+  background-color: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold);
+  color: var(--gold);
+}

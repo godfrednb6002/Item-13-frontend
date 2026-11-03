@@ -1,0 +1,1419 @@
+
+/* Navigation Bar in Light Mode */
+html.light-theme .navbar {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .nav-link {
+  color: #1a1c20;
+}
+
+html.light-theme .nav-cart-button {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .nav-cart-button b {
+  background: var(--gold);
+  color: #000;
+}
+
+html.light-theme .hero-tagline,
+html.light-theme .hero-title-main,
+html.light-theme .hero-title-bold,
+html.light-theme .hero-heading,
+html.light-theme .section-title {
+  color: #111418 !important;
+}
+
+html.light-theme .product-card-mini,
+html.light-theme .combo-badge-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .mini-card-name,
+html.light-theme .product-title {
+  color: #111418;
+}
+
+/* Welcome Dashboard in Light Mode */
+html.light-theme .welcome-layout {
+  background: #f4f6f9;
+  color: #14171d;
+}
+
+html.light-theme .welcome-sidebar {
+  background: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .sidebar-nav-item {
+  color: #555b66;
+}
+
+html.light-theme .sidebar-nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #111418;
+}
+
+html.light-theme .sidebar-nav-item.active {
+  background: rgba(244, 182, 39, 0.16);
+  color: #8c6307;
+  border-color: rgba(244, 182, 39, 0.4);
+}
+
+html.light-theme .welcome-topbar {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .crumb-current {
+  color: #111418;
+}
+
+html.light-theme .topbar-action-btn {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+html.light-theme .dash-hero-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f6f8fb 100%);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
+}
+
+html.light-theme .dash-hero-title {
+  color: #111418;
+}
+
+html.light-theme .stat-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+html.light-theme .stat-value {
+  color: #111418;
+}
+
+html.light-theme .stat-label {
+  color: #6c7380;
+}
+
+html.light-theme .live-order-banner {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+}
+
+html.light-theme .live-order-title {
+  color: #111418;
+}
+
+html.light-theme .mini-product-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .mini-prod-name {
+  color: #111418;
+}
+
+html.light-theme .sidebar-user-box {
+  background: #f0f3f8;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .user-name {
+  color: #111418;
+}
+
+html.light-theme .sidebar-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .sidebar-footer-btn {
+  color: #555c69;
+}
+
+html.light-theme .sidebar-footer-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #111418;
+}
+
+/* Menu Page in Light Mode */
+html.light-theme .menu-page-wrapper {
+  background: #f8f9fc;
+}
+
+html.light-theme .menu-header {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .menu-nav-home-btn {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+html.light-theme .menu-hero-title {
+  color: #111418;
+}
+
+html.light-theme .filter-panel,
+html.light-theme .filter-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+html.light-theme .filter-title,
+html.light-theme .filter-label {
+  color: #111418;
+}
+
+html.light-theme .search-input-box {
+  background: #f2f4f8;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #111418;
+}
+
+html.light-theme .search-input-box input {
+  color: #111418;
+}
+
+html.light-theme .cat-tab-btn {
+  color: #4b5260;
+  border-color: rgba(0, 0, 0, 0.08);
+  background: #f4f6fa;
+}
+
+html.light-theme .cat-tab-btn:hover {
+  background: #eaeef5;
+  color: #111418;
+}
+
+html.light-theme .cat-tab-btn.active {
+  background: var(--gold);
+  color: #0c0e12;
+  border-color: var(--gold);
+}
+
+html.light-theme .catalog-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .catalog-title {
+  color: #111418;
+}
+
+html.light-theme .results-count {
+  color: #5d6573;
+}
+
+/* Profile Page in Light Mode */
+html.light-theme .profile-page {
+  background: #f5f7fa;
+  color: #111418;
+}
+
+html.light-theme .profile-topbar {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .profile-back-link {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+html.light-theme .profile-welcome-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f7fb 100%);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .profile-welcome-copy h2 {
+  color: #111418;
+}
+
+html.light-theme .profile-stat-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+html.light-theme .profile-stat-value {
+  color: #111418;
+}
+
+html.light-theme .profile-panel {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
+}
+
+html.light-theme .profile-section-heading h2 {
+  color: #111418;
+}
+
+html.light-theme .profile-sidebar {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .profile-member-card {
+  background: #f2f5f9;
+}
+
+html.light-theme .profile-member-copy strong {
+  color: #111418;
+}
+
+html.light-theme .profile-nav-item {
+  color: #4b5260;
+}
+
+html.light-theme .profile-nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+  color: #111418;
+}
+
+html.light-theme .profile-nav-item.is-active {
+  background: rgba(244, 182, 39, 0.16);
+  color: #8c6307;
+}
+
+html.light-theme .dash-input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+}
+
+/* ==========================================================================
+   COMPREHENSIVE LIGHT THEME OVERRIDES FOR HERO, DRAWER, MENU, CART & CHECKOUT
+   ========================================================================== */
+
+/* 1. Hero Landing & Favorites */
+html.light-theme .hero-section {
+  background-color: #f8f9fa;
+}
+
+html.light-theme .hero-left {
+  background: transparent;
+}
+
+html.light-theme .hero-title {
+  color: #111418 !important;
+}
+
+html.light-theme .hero-subtitle-top {
+  color: #4b5260 !important;
+}
+
+html.light-theme .hero-desc {
+  color: #4b5260 !important;
+}
+
+html.light-theme .price-original {
+  color: #7d8594 !important;
+}
+
+html.light-theme .price-current {
+  color: #111418 !important;
+}
+
+html.light-theme .customer-favorites {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .avatar-stack-ring::before {
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+html.light-theme .avatar {
+  border-color: #ffffff;
+}
+
+html.light-theme .favorites-title {
+  color: #111418 !important;
+}
+
+html.light-theme .favorites-link {
+  color: #4b5260 !important;
+}
+
+html.light-theme .favorites-link:hover {
+  color: #8c6307 !important;
+}
+
+html.light-theme .btn-pill-black {
+  background: #111418;
+  color: #ffffff;
+}
+
+html.light-theme .btn-pill-outline {
+  border-color: rgba(0, 0, 0, 0.25);
+  color: #111418;
+}
+
+html.light-theme .btn-pill-outline:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* 2. Menu Page Filter Hover and Options */
+html.light-theme .menu-page {
+  background-color: #f8f9fc;
+  color: #111418;
+}
+
+html.light-theme .menu-hero-banner {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f6fb 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .menu-hero-desc {
+  color: #555e6c;
+}
+
+html.light-theme .menu-controls-bar {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .menu-search-wrapper {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .menu-search-input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .menu-search-input::placeholder {
+  color: #7b8390 !important;
+}
+
+html.light-theme .menu-search-wrapper .search-icon {
+  color: #64748b !important;
+}
+
+html.light-theme .search-clear-btn {
+  color: #64748b !important;
+}
+
+html.light-theme .search-clear-btn:hover {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .menu-sort-select {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+html.light-theme .category-pill {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #4b5260;
+}
+
+html.light-theme .category-pill:hover {
+  background: #f3f5f9 !important;
+  color: #111418 !important;
+  border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+html.light-theme .category-pill.active {
+  background: var(--gold) !important;
+  color: #000000 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .menu-sidebar-filters {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+}
+
+html.light-theme .sidebar-heading {
+  color: #111418;
+}
+
+html.light-theme .filter-price-labels {
+  color: #4b5260;
+}
+
+html.light-theme .price-min {
+  color: #6c7584;
+}
+
+html.light-theme .price-current-tag {
+  background: rgba(244, 182, 39, 0.18);
+  color: #8c6307;
+}
+
+html.light-theme .price-scale-helper {
+  color: #717a88;
+}
+
+html.light-theme .sidebar-perk-box {
+  background: #f8fafc;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .perk-row h4 {
+  color: #111418;
+}
+
+html.light-theme .perk-row p {
+  color: #64748b;
+}
+
+/* Product Cards & Modals in Light Mode */
+html.light-theme .catalog-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .catalog-card:hover {
+  border-color: rgba(244, 182, 39, 0.5) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .catalog-card-image-wrapper {
+  background: #f4f6f9 !important;
+}
+
+html.light-theme .catalog-card-body {
+  background: #ffffff !important;
+}
+
+html.light-theme .catalog-card-title {
+  color: #111418 !important;
+}
+
+html.light-theme .catalog-card-title:hover {
+  color: #8c6307 !important;
+}
+
+html.light-theme .catalog-card-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .catalog-card-tag {
+  background: #f0f3f8 !important;
+  color: #4b5260 !important;
+}
+
+html.light-theme .catalog-card-rating {
+  color: #111418 !important;
+}
+
+html.light-theme .rating-count {
+  color: #717a88 !important;
+}
+
+html.light-theme .catalog-card-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+html.light-theme .catalog-price-val {
+  color: #111418 !important;
+}
+
+html.light-theme .catalog-price-original {
+  color: #8c93a0 !important;
+}
+
+html.light-theme .catalog-add-btn {
+  background: rgba(244, 182, 39, 0.16) !important;
+  border-color: rgba(244, 182, 39, 0.5) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .catalog-add-btn:hover {
+  background: var(--gold) !important;
+  color: #000000 !important;
+}
+
+html.light-theme .catalog-quickview-btn {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .catalog-quickview-btn:hover {
+  background: var(--gold) !important;
+  color: #000000 !important;
+}
+
+/* Quick mini product cards (Dashboard & Favorites) */
+html.light-theme .dash-prod-mini-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .dash-prod-mini-card:hover {
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .mini-prod-img {
+  background: #f4f6f9 !important;
+}
+
+html.light-theme .mini-prod-info {
+  background: #ffffff !important;
+}
+
+html.light-theme .mini-prod-name {
+  color: #111418 !important;
+}
+
+html.light-theme .mini-prod-price {
+  color: #111418 !important;
+}
+
+/* Product Detail Modal in Light Mode */
+html.light-theme .pdm-modal {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-visual {
+  background: #f4f6f9 !important;
+}
+
+html.light-theme .pdm-info {
+  background: #ffffff !important;
+}
+
+html.light-theme .pdm-title {
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .pdm-price-val {
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-price-original {
+  color: #8c93a0 !important;
+}
+
+html.light-theme .pdm-close-btn {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-close-btn:hover {
+  background: #e4e7ed !important;
+}
+
+html.light-theme .pdm-option-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #3b424e !important;
+}
+
+html.light-theme .pdm-option-btn.selected {
+  background: rgba(244, 182, 39, 0.18) !important;
+  border-color: var(--gold) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .pdm-qty-box {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-qty-box button {
+  color: #111418 !important;
+}
+
+html.light-theme .pdm-qty-box span {
+  color: #111418 !important;
+}
+
+/* 3. Login / Auth Screen */
+html.light-theme .login-screen-wrapper {
+  background: #f5f7fb;
+  color: #111418;
+}
+
+html.light-theme .login-card-container {
+  background: #ffffff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.09);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .login-card-visual {
+  background: linear-gradient(145deg, #f0f3f8 0%, #e2e8f0 100%);
+  color: #111418;
+}
+
+html.light-theme .login-visual-title {
+  color: #111418 !important;
+}
+
+html.light-theme .login-visual-sub {
+  color: #4b5260 !important;
+}
+
+html.light-theme .login-perk-item span {
+  color: #2b303a !important;
+}
+
+html.light-theme .login-visual-footer {
+  color: #64748b;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .login-card-form-wrapper {
+  background-color: #ffffff;
+}
+
+html.light-theme .login-form-title {
+  color: #111418 !important;
+}
+
+html.light-theme .login-form-subtitle {
+  color: #555e6c !important;
+}
+
+html.light-theme .auth-tab-switcher {
+  background: #edf0f5;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .auth-tab-btn {
+  color: #555e6c;
+}
+
+html.light-theme .auth-tab-btn.active {
+  color: #111418;
+}
+
+html.light-theme .auth-tab-slider {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .btn-social {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #111418;
+}
+
+html.light-theme .btn-social:hover {
+  background: #f7f9fc;
+}
+
+html.light-theme .input-label {
+  color: #24292f;
+}
+
+html.light-theme .auth-input,
+html.light-theme .input-field-group input {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+html.light-theme .login-divider {
+  color: #8892a0;
+}
+
+html.light-theme .login-divider::before,
+html.light-theme .login-divider::after {
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+html.light-theme .login-back-btn {
+  background: #ffffff;
+  color: #111418;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* 4. Welcome Page Main Background & Drawer Tabs */
+html.light-theme .welcome-layout {
+  background: #f4f6fa !important;
+  color: #111418 !important;
+}
+
+html.light-theme .welcome-main {
+  background: #f4f6fa !important;
+}
+
+html.light-theme .welcome-content-scroll {
+  background: transparent !important;
+}
+
+html.light-theme .welcome-tab-pane {
+  background: transparent;
+}
+
+html.light-theme .pane-header h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .pane-header p {
+  color: #5c6472 !important;
+}
+
+html.light-theme .pane-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .address-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .address-card.default {
+  border-color: var(--gold) !important;
+  background: #fffdf5 !important;
+}
+
+html.light-theme .addr-title {
+  color: #111418 !important;
+}
+
+html.light-theme .addr-text {
+  color: #555e6c !important;
+}
+
+html.light-theme .addr-gps {
+  color: #2a2e36 !important;
+}
+
+html.light-theme .addr-note {
+  color: #6b7280 !important;
+}
+
+html.light-theme .add-address-card {
+  background: #ffffff !important;
+  border: 1.5px dashed rgba(0, 0, 0, 0.18) !important;
+  color: #4b5260 !important;
+}
+
+html.light-theme .add-address-card:hover {
+  border-color: var(--gold) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .payment-method-row {
+  background: #f9fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .payment-method-row.active {
+  border-color: rgba(244, 182, 39, 0.5) !important;
+  background: #fffef8 !important;
+}
+
+html.light-theme .pm-name {
+  color: #111418 !important;
+}
+
+html.light-theme .pm-number {
+  color: #64748b !important;
+}
+
+html.light-theme .settings-toggle-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .setting-title {
+  color: #111418 !important;
+}
+
+html.light-theme .setting-sub {
+  color: #555e6c !important;
+}
+
+html.light-theme .order-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .order-id,
+html.light-theme .order-date,
+html.light-theme .order-item-line {
+  color: #111418 !important;
+}
+
+html.light-theme .order-total-label strong {
+  color: #111418 !important;
+}
+
+/* 5. Cart Drawer in Light Mode */
+html.light-theme .cart-drawer {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border-left: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light-theme .cart-header {
+  background: #fdfdfd !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .cart-header h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-header h2 span {
+  color: #656d79 !important;
+}
+
+html.light-theme .cart-icon-button {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .cart-icon-button:hover {
+  background: #e4e7ed !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .cart-shipping-progress {
+  background: #f6f8fb !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  color: #2b303a !important;
+}
+
+html.light-theme .cart-progress-track {
+  background: #e2e6ed !important;
+}
+
+html.light-theme .cart-item {
+  background: #ffffff !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
+}
+
+html.light-theme .cart-item-heading h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-item-variant {
+  color: #5d6673 !important;
+}
+
+html.light-theme .cart-remove-button {
+  color: #858e9b !important;
+}
+
+html.light-theme .cart-remove-button:hover {
+  color: #ef4444 !important;
+}
+
+html.light-theme .cart-quantity {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .cart-quantity button {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-quantity span {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-item-prices strong {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-item-prices span {
+  color: #6c7582 !important;
+}
+
+html.light-theme .cart-fulfillment {
+  background: #f9fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .cart-fulfillment h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .cart-fulfillment-options button {
+  background: #ffffff !important;
+  color: #4b5260 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .cart-fulfillment-options button.is-selected {
+  background: rgba(244, 182, 39, 0.16) !important;
+  color: #8c6307 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .cart-summary {
+  background: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .cart-summary-row {
+  color: #555e6c !important;
+}
+
+html.light-theme .cart-summary-total {
+  color: #111418 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .cart-empty {
+  color: #5d6673 !important;
+}
+
+html.light-theme .cart-empty h3 {
+  color: #111418 !important;
+}
+
+/* 6. Checkout Page in Light Mode */
+html.light-theme .checkout-page {
+  background: #f8f9fc !important;
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-topbar {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .checkout-brand > span {
+  color: var(--gold) !important;
+}
+
+html.light-theme .checkout-brand small {
+  color: #656d79 !important;
+}
+
+html.light-theme .checkout-progress > span {
+  color: #656d79 !important;
+}
+
+html.light-theme .checkout-progress > span.is-current {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-progress b {
+  border-color: rgba(0, 0, 0, 0.18) !important;
+  color: #555e6c !important;
+}
+
+html.light-theme .checkout-progress .is-current b {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #000000 !important;
+}
+
+html.light-theme .checkout-progress i {
+  background: rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .checkout-secure-label {
+  color: #5d6673 !important;
+}
+
+html.light-theme .checkout-title-row h1 {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-back-link {
+  color: #555e6c !important;
+}
+
+html.light-theme .checkout-back-link:hover {
+  color: #8c6307 !important;
+}
+
+html.light-theme .checkout-demo-notice {
+  background: rgba(244, 182, 39, 0.12) !important;
+  border-color: rgba(244, 182, 39, 0.3) !important;
+  color: #4b3e10 !important;
+}
+
+html.light-theme .checkout-section {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .checkout-section-heading h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-section-heading p {
+  color: #5c6472 !important;
+}
+
+html.light-theme .checkout-field span {
+  color: #24292f !important;
+}
+
+html.light-theme .checkout-field input,
+html.light-theme .checkout-field select {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.18) !important;
+}
+
+html.light-theme .checkout-field input:focus,
+html.light-theme .checkout-field select:focus {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .checkout-method-card {
+  background: #fbfcfd !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-method-card.is-selected {
+  background: #fffdf5 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .checkout-review-section {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .checkout-review-meta span {
+  color: #6c7582 !important;
+}
+
+html.light-theme .checkout-review-meta strong {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-summary {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .checkout-summary-heading h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-summary-heading > span {
+  color: #656d79 !important;
+}
+
+html.light-theme .checkout-summary-copy > strong {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-summary-copy > small {
+  color: #656d79 !important;
+}
+
+html.light-theme .checkout-summary-item > b {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-summary-quantity {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .checkout-summary-quantity button {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-summary-quantity span {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-confirmation-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-confirmation-card h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-confirmation-item span strong {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-confirmation-delivery strong {
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-confirmation-total strong {
+  color: #111418 !important;
+}
+
+/* 7. Cart Drawer fields and checkout bottom in Light Mode */
+html.light-theme .cart-field-label {
+  color: #24292f !important;
+}
+
+html.light-theme .cart-field-label textarea,
+html.light-theme .cart-field-label input,
+html.light-theme .cart-promo-form input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+}
+
+html.light-theme .cart-field-label textarea::placeholder,
+html.light-theme .cart-field-label input::placeholder,
+html.light-theme .cart-promo-form input::placeholder {
+  color: #747c8a !important;
+}
+
+html.light-theme .cart-field-label textarea:focus,
+html.light-theme .cart-field-label input:focus,
+html.light-theme .cart-promo-form input:focus {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .cart-promo-form > label {
+  color: #24292f !important;
+}
+
+html.light-theme .cart-promo-form button {
+  background: rgba(244, 182, 39, 0.16) !important;
+  border: 1px solid rgba(244, 182, 39, 0.5) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .cart-promo-form button:hover {
+  background: var(--gold) !important;
+  color: #000000 !important;
+}
+
+html.light-theme .cart-footer {
+  background: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .cart-checkout-button {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  box-shadow: 0 4px 14px rgba(244, 182, 39, 0.3) !important;
+}
+
+html.light-theme .cart-checkout-button:hover {
+  background: #ffd05c !important;
+}
+
+html.light-theme .cart-continue-link {
+  color: #555e6c !important;
+}
+
+html.light-theme .cart-continue-link:hover {
+  color: #111418 !important;
+}
+
+/* 8. Checkout Promo & Enter Code field in Light Mode */
+html.light-theme .checkout-promo > label {
+  color: #24292f !important;
+}
+
+html.light-theme .checkout-promo input {
+  background: #ffffff !important;
+  color: #111418 !important;
+  border: 1px solid rgba(0, 0, 0, 0.16) !important;
+}
+
+html.light-theme .checkout-promo input::placeholder {
+  color: #747c8a !important;
+}
+
+html.light-theme .checkout-promo input:focus {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .checkout-promo button {
+  background: #f1f3f7 !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .checkout-promo button:hover {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+}
+
+/* 9. Site Footer in Light Mode */
+html.light-theme .site-footer {
+  background-color: #ffffff !important;
+  color: #111418 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .footer-perks-strip {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .perk-text-block .perk-title {
+  color: #111418 !important;
+}
+
+html.light-theme .perk-text-block .perk-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-brand-bio {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-heading {
+  color: #111418 !important;
+}
+
+html.light-theme .footer-text-link {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-text-link:hover {
+  color: #8c6307 !important;
+}
+
+html.light-theme .contact-item {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-newsletter-box {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .newsletter-title {
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .footer-newsletter-form {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+}
+
+html.light-theme .newsletter-input {
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-input::placeholder {
+  color: #7b8390 !important;
+}
+
+html.light-theme .social-circle-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #475569 !important;
+}
+
+html.light-theme .social-circle-btn:hover {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .footer-bottom-bar {
+  background: #f1f5f9 !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .footer-legal-link {
+  color: #64748b !important;
+}
+
+html.light-theme .footer-legal-link:hover {
+  color: #111418 !important;
+}
+
+/* Theme Toggle Button Component Styles */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--gold);
+  padding: 8px 12px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+html.light-theme .theme-toggle-btn {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: #8c6307;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .theme-toggle-btn:hover {
+  background: #f7f9fc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-toggle-btn:hover .theme-toggle-icon {
+  transform: rotate(20deg);
+}
+

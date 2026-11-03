@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+
+/* ==========================================================================
+   ITEM13 THEME SYSTEM (DARK & LIGHT)
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0f1012;
+  --bg-dark-card: #18191d;
+  --bg-page: #0f1012;
+  --bg-card: #18191d;
+  --bg-card-secondary: #141519;
+  --bg-input: #121316;
+  --bg-glass: rgba(18, 19, 23, 0.85);
+  --bg-hover: rgba(255, 255, 255, 0.08);
+
+  --gold: #f4b627;
+  --gold-hover: #e5a71a;
+  --gold-light: #fef4cf;
+  --gold-bg: #f5b729;
+
+  --text-white: #ffffff;
+  --text-main: #ffffff;
+  --text-secondary: #c9ccd6;
+  --text-muted: #9aa0a6;
+  --text-dark: #121214;
+
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-dark: rgba(0, 0, 0, 0.15);
+  
+  --shadow-warm: 0 20px 45px -10px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-button: 0 10px 25px -5px rgba(244, 182, 39, 0.45);
+
+  --radius-full: 9999px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Light Theme Overrides */
+html.light-theme {
+  --bg-dark: #f8f9fa;
+  --bg-dark-card: #ffffff;
+  --bg-page: #f8f9fa;
+  --bg-card: #ffffff;
+  --bg-card-secondary: #f0f2f5;
+  --bg-input: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-hover: rgba(0, 0, 0, 0.05);
+
+  --text-white: #111418;
+  --text-main: #111418;
+  --text-secondary: #3b4049;
+  --text-muted: #656c77;
+
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-card: rgba(0, 0, 0, 0.08);
+
+  --shadow-warm: 0 20px 45px -10px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Base Body Application */
+html.light-theme body {
+  background-color: var(--bg-page);
+  color: var(--text-main);
+}

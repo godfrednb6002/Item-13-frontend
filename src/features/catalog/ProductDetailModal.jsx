@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { X, Star, ShoppingBag, Check, Plus, Minus, ShieldCheck, Flame } from 'lucide-react';
+import { X, Star, ShoppingBag, Check, Plus, Minus, ShieldCheck, Flame, ExternalLink, Info } from 'lucide-react';
+import { ALLERGEN_DEFINITIONS } from './productsData';
 
-export default function ProductDetailModal({ product, onClose, onAddToCart }) {
+export default function ProductDetailModal({ product, onClose, onAddToCart, onNavigate }) {
   if (!product) return null;
 
   const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
@@ -151,6 +152,21 @@ export default function ProductDetailModal({ product, onClose, onAddToCart }) {
               <ShieldCheck size={15} />
               <span>Popped fresh on order • Fast delivery across Accra & Tema</span>
             </div>
+
+            {/* View Full Product Page Link */}
+            {onNavigate && (
+              <button
+                type="button"
+                className="pdm-full-view-btn"
+                onClick={() => {
+                  if (onClose) onClose();
+                  onNavigate(`product-${product.id}`);
+                }}
+              >
+                <span>View Full Product Page</span>
+                <ExternalLink size={14} />
+              </button>
+            )}
           </div>
         </div>
       </div>

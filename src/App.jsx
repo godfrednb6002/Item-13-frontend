@@ -9,11 +9,20 @@ import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
+import ProductDetailPage from './pages/ProductDetailPage';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState(
-    window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home',
-  );
+  const getInitialPage = () => {
+    const path = window.location.pathname;
+    if (path.startsWith('/checkout')) return 'checkout';
+    if (path.startsWith('/products/')) {
+      const id = path.replace('/products/', '');
+      return `product-${id}`;
+    }
+    return 'home';
+  };
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
@@ -25,18 +34,33 @@ export default function App() {
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentPage(window.location.pathname.startsWith('/checkout') ? 'checkout' : 'home');
+      const path = window.location.pathname;
+      if (path.startsWith('/checkout')) {
+        setCurrentPage('checkout');
+      } else if (path.startsWith('/products/')) {
+        const id = path.replace('/products/', '');
+        setCurrentPage(`product-${id}`);
+      } else {
+        setCurrentPage('home');
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigateTo = (page) => {
-    const nextPath = page === 'checkout' ? '/checkout' : '/';
+    let nextPath = '/';
+    if (page === 'checkout') nextPath = '/checkout';
+    else if (page.startsWith('product-')) {
+      const prodId = page.replace('product-', '');
+      nextPath = `/products/${prodId}`;
+    } else if (page === 'home') nextPath = '/';
+    
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
     setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const addItemToCart = (productId) => {
@@ -242,6 +266,68 @@ export default function App() {
               }];
             });
             showToast(`Added '${item.name}${sizeLabel}' to your bag! (GH₵ ${itemPrice.toFixed(2)})`);
+          }}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onContinueShopping={() => setIsCartOpen(false)}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage.startsWith('product-')) {
+    const prodId = currentPage.replace('product-', '');
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <ProductDetailPage
+          productId={prodId}
+          onNavigate={navigateTo}
+          cartCount={cartCount}
+          onToast={showToast}
+          onAddToCart={(item) => {
+            const addedQty = item.quantity || 1;
+            const itemPrice = item.totalPrice || item.price || 35;
+            setCartItems((prev) => {
+              const existing = prev.find((p) => p.id === item.id);
+              if (existing) {
+                return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
+              }
+              return [...prev, {
+                id: item.id || ('prod-' + Date.now()),
+                name: item.name + (item.selectedSize ? ` (${item.selectedSize})` : ''),
+                price: item.price || (itemPrice / addedQty),
+                quantity: addedQty,
+                image: item.image || '/bistro-popcorn.jpg',
+                variant: item.variant || item.category || 'Popcorn Snack',
+                stock: 20
+              }];
+            });
+            showToast(`Added ${addedQty}x '${item.name}' to your bag!`);
           }}
         />
         {isCartOpen && (

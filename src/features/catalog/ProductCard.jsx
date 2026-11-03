@@ -1,8 +1,16 @@
 import React from 'react';
 import { Star, ShoppingBag, Eye } from 'lucide-react';
 
-export default function ProductCard({ product, onAddToCart, onQuickView }) {
+export default function ProductCard({ product, onAddToCart, onQuickView, onNavigate }) {
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
+
+  const handleOpenDetail = () => {
+    if (onNavigate) {
+      onNavigate(`product-${product.id}`);
+    } else if (onQuickView) {
+      onQuickView(product);
+    }
+  };
 
   return (
     <div className="catalog-card">
@@ -59,7 +67,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }) {
 
         <h3
           className="catalog-card-title"
-          onClick={() => onQuickView && onQuickView(product)}
+          onClick={handleOpenDetail}
         >
           {product.name}
         </h3>

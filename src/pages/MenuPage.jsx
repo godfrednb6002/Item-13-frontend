@@ -268,7 +268,9 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
 
           {filteredProducts.length === 0 ? (
             <div className="menu-empty-state">
-              <div className="empty-icon-wrap">🍿</div>
+              <div className="empty-icon-wrap">
+                <ShoppingBag size={38} className="empty-state-svg" />
+              </div>
               <h3>No snacks found matching your filter</h3>
               <p>Try clearing your search query or expanding the price range slider.</p>
               <button className="btn-empty-reset" onClick={clearFilters}>
@@ -285,6 +287,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
                     if (onAddToCart) onAddToCart(item);
                   }}
                   onQuickView={(item) => setSelectedProduct(item)}
+                  onNavigate={onNavigate}
                 />
               ))}
             </div>
@@ -321,6 +324,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0 }) {
         <ProductDetailModal
           product={selectedProduct}
           onClose={() => setSelectedProduct(null)}
+          onNavigate={onNavigate}
           onAddToCart={(customizedItem) => {
             if (onAddToCart) onAddToCart(customizedItem);
           }}

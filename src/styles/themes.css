@@ -1519,6 +1519,282 @@ html.light-theme .footer-legal-link:hover {
   color: #111418 !important;
 }
 
+/* 10. Product Detail Page (/products/:id) in Light Mode */
+html.light-theme .pdp-page-wrapper {
+  background-color: #f8f9fc !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-header {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .pdp-back-button {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.14) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-back-button:hover {
+  background: #f1f4f9 !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .pdp-breadcrumbs-bar {
+  background: #f1f4f8 !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .crumb-link {
+  color: #64748b !important;
+}
+
+html.light-theme .crumb-current {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-main-image-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .pdp-share-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-share-btn:hover {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .pdp-perk {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light-theme .pdp-perk strong {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-perk p {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-score {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-reviews-count {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-product-title {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-product-desc {
+  color: #555e6c !important;
+}
+
+html.light-theme .pdp-section {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .pdp-section-title {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-size-card {
+  background: #fbfcfd !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-size-card:hover {
+  background: #f4f6fa !important;
+  border-color: rgba(0, 0, 0, 0.22) !important;
+}
+
+html.light-theme .pdp-size-card.is-selected {
+  background: #fffdf5 !important;
+  border-color: var(--gold) !important;
+  box-shadow: 0 4px 14px rgba(244, 182, 39, 0.12) !important;
+}
+
+html.light-theme .size-card-name {
+  color: #111418 !important;
+}
+
+html.light-theme .size-card-volume {
+  color: #64748b !important;
+}
+
+html.light-theme .size-card-radio {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+html.light-theme .pdp-size-card.is-selected .size-card-radio {
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .pdp-drizzle-card {
+  background: #fbfcfd !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .pdp-drizzle-card:hover {
+  background: #f4f6fa !important;
+}
+
+html.light-theme .pdp-drizzle-card.is-selected {
+  background: #fffdf5 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .drizzle-name {
+  color: #111418 !important;
+}
+
+html.light-theme .drizzle-desc {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-radio-indicator {
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+html.light-theme .pdp-radio-indicator.checked {
+  background: var(--gold) !important;
+  border-color: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .pdp-drink-card {
+  background: #fbfcfd !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .pdp-drink-card:hover {
+  background: #f4f6fa !important;
+}
+
+html.light-theme .pdp-drink-card.is-selected {
+  background: #fffdf5 !important;
+  border-color: var(--gold) !important;
+}
+
+html.light-theme .drink-card-name {
+  color: #111418 !important;
+}
+
+html.light-theme .drink-card-size {
+  color: #64748b !important;
+}
+
+html.light-theme .drink-add-tag {
+  background: #edf2f7 !important;
+  color: #111418 !important;
+}
+
+html.light-theme .drink-add-tag.added {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+}
+
+html.light-theme .pdp-allergen-chip {
+  background: #f1f5f9 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #1e293b !important;
+}
+
+html.light-theme .pdp-qty-stepper {
+  background: #f1f5f9 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .pdp-qty-btn {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-qty-btn:hover {
+  background: #e2e8f0 !important;
+}
+
+html.light-theme .pdp-qty-display {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-info-tabs-block {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .pdp-tabs-nav {
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .pdp-tab-btn {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-tab-btn:hover {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-tab-btn.active {
+  color: #8c6307 !important;
+  border-bottom-color: var(--gold) !important;
+  background: #ffffff !important;
+}
+
+html.light-theme .tab-pane-content h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .tab-pane-content p {
+  color: #4b5563 !important;
+}
+
+html.light-theme .allergen-detail-card {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .allergen-detail-card strong {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-related-head h2 {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-related-head p {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-related-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light-theme .rel-card-name {
+  color: #111418 !important;
+}
+
+html.light-theme .rel-card-price {
+  color: #111418 !important;
+}
+
 /* Theme Toggle Button Component Styles */
 .theme-toggle-btn {
   display: inline-flex;

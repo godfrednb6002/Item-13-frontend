@@ -58,6 +58,27 @@ export default function App() {
   const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const navMenuRef = useRef(null);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navMenuRef.current && !navMenuRef.current.contains(e.target)) {
+        setIsNavMenuOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifications(false);
+      }
+    };
+    if (isNavMenuOpen || showNotifications) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isNavMenuOpen, showNotifications]);
 
   useEffect(() => {
     const handleFavChange = () => {
@@ -732,33 +753,147 @@ export default function App() {
               <ThemeToggle className="nav-theme-toggle" />
 
               {/* Notification Button */}
-              <button
-                type="button"
-                className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
-                onClick={() => {
-                  setShowNotifications(!showNotifications);
-                  setIsNavMenuOpen(false);
-                }}
-                aria-label="Notifications"
-                title="Notifications"
-              >
-                <Bell size={18} />
-                <span className="nav-badge-dot" />
-              </button>
+              <div ref={notifRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setShowNotifications(!showNotifications);
+                    setIsNavMenuOpen(false);
+                  }}
+                  aria-label="Notifications"
+                  title="Notifications"
+                >
+                  <Bell size={18} />
+                  <span className="nav-badge-dot" />
+                </button>
+
+                {/* Notifications Popover */}
+                {showNotifications && (
+                  <div className="nav-notifications-popover">
+                    <div className="nav-notif-title">
+                      <span>Notifications</span>
+                      <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
+                    </div>
+                    <p className="nav-notif-empty">
+                      🎉 Welcome to Item13! Fresh batches of Gourmet Popcorn are popping now.
+                    </p>
+                  </div>
+                )}
+              </div>
 
               {/* Hamburger Button that expands to modal menu */}
-              <button
-                type="button"
-                className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
-                onClick={() => {
-                  setIsNavMenuOpen(!isNavMenuOpen);
-                  setShowNotifications(false);
-                }}
-                aria-label="Navigation Menu"
-                title="Account & Navigation Menu"
-              >
-                <Menu size={18} />
-              </button>
+              <div ref={navMenuRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setIsNavMenuOpen(!isNavMenuOpen);
+                    setShowNotifications(false);
+                  }}
+                  aria-label={isNavMenuOpen ? 'Close Menu' : 'Open Navigation Menu'}
+                  title={isNavMenuOpen ? 'Close Menu' : 'Account & Navigation Menu'}
+                >
+                  {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                </button>
+
+                {/* Hamburger Modal Popover */}
+                {isNavMenuOpen && (
+                  <div className="nav-menu-popover">
+                    {user ? (
+                      <div className="nav-menu-header">
+                        <span className="nav-menu-user-name">{user.name || user.email.split('@')[0]}</span>
+                        <span className="nav-menu-user-role">VIP Snack Member</span>
+                      </div>
+                    ) : (
+                      <div className="nav-menu-header">
+                        <span className="nav-menu-user-name">Guest Snack Lover</span>
+                        <span className="nav-menu-user-role">Item13 Express</span>
+                      </div>
+                    )}
+
+                    <a
+                      href="/dashboard/profile"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard/profile');
+                      }}
+                    >
+                      <User size={16} />
+                      <span>Profile</span>
+                    </a>
+
+                    <a
+                      href="/dashboard"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard');
+                      }}
+                    >
+                      <LayoutDashboard size={16} />
+                      <span>Dashboard</span>
+                    </a>
+
+                    <a
+                      href="/products"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('menu');
+                      }}
+                    >
+                      <UtensilsCrossed size={16} />
+                      <span>Menu</span>
+                    </a>
+
+                    <a
+                      href="/dashboard/orders"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard/orders');
+                      }}
+                    >
+                      <Package size={16} />
+                      <span>Track Orders</span>
+                    </a>
+
+                    {user ? (
+                      <button
+                        type="button"
+                        className="nav-menu-item nav-menu-item-logout"
+                        onClick={() => {
+                          setIsNavMenuOpen(false);
+                          setUser(null);
+                          showToast('Signed out of Item13.');
+                        }}
+                      >
+                        <LogOut size={16} />
+                        <span>Logout</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="nav-menu-item nav-menu-item-logout"
+                        style={{ color: 'var(--gold)', borderColor: 'rgba(244, 182, 39, 0.2)' }}
+                        onClick={() => {
+                          setIsNavMenuOpen(false);
+                          navigateTo('login');
+                        }}
+                      >
+                        <User size={16} />
+                        <span>Sign in / Sign up</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Bottom row: Sign up, Login and Continue as guest aligned underneath */}
@@ -801,116 +936,6 @@ export default function App() {
                 </a>
               </div>
             ) : null}
-
-            {/* Notifications Popover */}
-            {showNotifications && (
-              <div className="nav-notifications-popover">
-                <div className="nav-notif-title">
-                  <span>Notifications</span>
-                  <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
-                </div>
-                <p className="nav-notif-empty">
-                  🎉 Welcome to Item13! Fresh batches of Gourmet Popcorn are popping now.
-                </p>
-              </div>
-            )}
-
-            {/* Hamburger Modal Popover */}
-            {isNavMenuOpen && (
-              <div className="nav-menu-popover">
-                {user ? (
-                  <div className="nav-menu-header">
-                    <span className="nav-menu-user-name">{user.name || user.email.split('@')[0]}</span>
-                    <span className="nav-menu-user-role">VIP Snack Member</span>
-                  </div>
-                ) : (
-                  <div className="nav-menu-header">
-                    <span className="nav-menu-user-name">Guest Snack Lover</span>
-                    <span className="nav-menu-user-role">Item13 Express</span>
-                  </div>
-                )}
-
-                <a
-                  href="/dashboard/profile"
-                  className="nav-menu-item"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsNavMenuOpen(false);
-                    navigateTo('dashboard/profile');
-                  }}
-                >
-                  <User size={16} />
-                  <span>Profile</span>
-                </a>
-
-                <a
-                  href="/dashboard"
-                  className="nav-menu-item"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsNavMenuOpen(false);
-                    navigateTo('dashboard');
-                  }}
-                >
-                  <LayoutDashboard size={16} />
-                  <span>Dashboard</span>
-                </a>
-
-                <a
-                  href="/products"
-                  className="nav-menu-item"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsNavMenuOpen(false);
-                    navigateTo('menu');
-                  }}
-                >
-                  <UtensilsCrossed size={16} />
-                  <span>Menu</span>
-                </a>
-
-                <a
-                  href="/dashboard/orders"
-                  className="nav-menu-item"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setIsNavMenuOpen(false);
-                    navigateTo('dashboard/orders');
-                  }}
-                >
-                  <Package size={16} />
-                  <span>Track Orders</span>
-                </a>
-
-                {user ? (
-                  <button
-                    type="button"
-                    className="nav-menu-item nav-menu-item-logout"
-                    onClick={() => {
-                      setIsNavMenuOpen(false);
-                      setUser(null);
-                      showToast('Signed out of Item13.');
-                    }}
-                  >
-                    <LogOut size={16} />
-                    <span>Logout</span>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="nav-menu-item nav-menu-item-logout"
-                    style={{ color: 'var(--gold)', borderColor: 'rgba(244, 182, 39, 0.2)' }}
-                    onClick={() => {
-                      setIsNavMenuOpen(false);
-                      navigateTo('login');
-                    }}
-                  >
-                    <User size={16} />
-                    <span>Sign in / Sign up</span>
-                  </button>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </header>

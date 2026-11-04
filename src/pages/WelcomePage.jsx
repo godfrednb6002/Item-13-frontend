@@ -27,9 +27,16 @@ import {
   Info,
   PartyPopper,
   PhoneCall,
+  CircleHelp,
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
+import DeliveryPage from './DeliveryPage';
+import AboutEventsPage from './AboutEventsPage';
+import ContactPage from './ContactPage';
+import CheckoutPage from './CheckoutPage';
+import MenuPage from './MenuPage';
+import ProfilePage from './ProfilePage';
 
 export default function WelcomePage({
   user,
@@ -38,7 +45,11 @@ export default function WelcomePage({
   onToast,
   onAddToCart,
   initialTab = 'dashboard',
-  cartCount = 0
+  cartCount = 0,
+  cartItems = [],
+  onUpdateCartQuantity,
+  onRemoveCartItem,
+  onPlaceOrder,
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -90,6 +101,7 @@ export default function WelcomePage({
     { id: 'delivery', label: 'Delivery Coverage', icon: Truck, badge: 'Zones' },
     { id: 'about', label: 'About Item13', icon: Info, badge: null },
     { id: 'events', label: 'Party & Weddings', icon: PartyPopper, badge: 'Bulk' },
+    { id: 'support', label: 'Help & Support', icon: CircleHelp, badge: null },
     { id: 'contact', label: 'Contact & Support', icon: PhoneCall, badge: null },
   ];
 
@@ -100,22 +112,38 @@ export default function WelcomePage({
         {/* Brand & Toggle Header */}
         <div className="sidebar-brand-box">
           {!collapsed && (
-            <div className="sidebar-brand" onClick={() => onNavigate && onNavigate('home')}>
+            <a
+              href="/"
+              className="sidebar-brand"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ textDecoration: 'none', cursor: 'pointer' }}
+            >
               <img
                 src="/item13Logo-trimmed.png"
                 alt="Item13 Logo"
                 className="brand-logo-img"
               />
               <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-            </div>
+            </a>
           )}
           {collapsed && (
-            <img
-              src="/item13Logo-trimmed.png"
-              alt="Item13 Logo"
-              className="brand-logo-img collapsed-logo"
-              onClick={() => onNavigate && onNavigate('home')}
-            />
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ display: 'inline-block' }}
+            >
+              <img
+                src="/item13Logo-trimmed.png"
+                alt="Item13 Logo"
+                className="brand-logo-img collapsed-logo"
+              />
+            </a>
           )}
 
           {/* Collapse / Expand Toggle Button */}
@@ -131,7 +159,16 @@ export default function WelcomePage({
         </div>
 
         {/* User Mini Profile Card */}
-        <div className="sidebar-user-box" style={{ cursor: "pointer" }} onClick={() => onNavigate && onNavigate("profile")} title="Go to Profile">
+        <a
+          href="/dashboard/profile"
+          className="sidebar-user-box"
+          style={{ cursor: "pointer", textDecoration: 'none', color: 'inherit' }}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onNavigate) onNavigate("dashboard/profile");
+          }}
+          title="Go to Profile"
+        >
           <div className="sidebar-user-avatar">
             {displayName.charAt(0).toUpperCase()}
           </div>
@@ -141,40 +178,34 @@ export default function WelcomePage({
               <span className="user-status">VIP Member • Ghana</span>
             </div>
           )}
-        </div>
+        </a>
 
         {/* Nav Links */}
         <nav className="sidebar-nav">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            const isActive = activeTab === item.id || (item.id === 'profile' && activeTab.startsWith('profile-'));
+            const itemHref =
+              item.id === 'dashboard' ? '/dashboard' : `/dashboard/${item.id}`;
+
             return (
-              <button
+              <a
                 key={item.id}
-                type="button"
+                href={itemHref}
                 className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
-                onClick={() => {
-                  if (item.id === 'menu') {
-                    if (onNavigate) onNavigate('menu');
-                  } else if (item.id === 'profile') {
-                    if (onNavigate) onNavigate('profile');
-                  } else if (item.id === 'cart') {
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.id === 'cart') {
                     if (onNavigate) onNavigate('cart');
-                  } else if (item.id === 'checkout') {
-                    if (onNavigate) onNavigate('checkout');
-                  } else if (item.id === 'delivery') {
-                    if (onNavigate) onNavigate('delivery');
-                  } else if (item.id === 'about') {
-                    if (onNavigate) onNavigate('about');
-                  } else if (item.id === 'events') {
-                    if (onNavigate) onNavigate('events');
-                  } else if (item.id === 'contact') {
-                    if (onNavigate) onNavigate('contact');
                   } else {
+                    if (window.location.pathname !== itemHref) {
+                      window.history.pushState({}, '', itemHref);
+                    }
                     setActiveTab(item.id);
                   }
                 }}
                 title={collapsed ? item.label : ''}
+                style={{ textDecoration: 'none' }}
               >
                 <Icon size={19} className="nav-icon" />
                 {!collapsed && <span className="nav-label">{item.label}</span>}
@@ -183,22 +214,26 @@ export default function WelcomePage({
                     {item.badge}
                   </span>
                 )}
-              </button>
+              </a>
             );
           })}
         </nav>
 
         {/* Bottom Drawer Actions */}
         <div className="sidebar-footer">
-          <button
-            type="button"
+          <a
+            href="/"
             className="sidebar-footer-btn"
-            onClick={() => onNavigate && onNavigate('home')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
             title={collapsed ? 'Back to Storefront' : ''}
+            style={{ textDecoration: 'none' }}
           >
             <ExternalLink size={18} />
             {!collapsed && <span>Storefront</span>}
-          </button>
+          </a>
 
           <button
             type="button"
@@ -714,6 +749,90 @@ export default function WelcomePage({
                   <input type="checkbox" defaultChecked className="setting-checkbox" />
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* 8. EMBEDDED DELIVERY COVERAGE VIEW */}
+          {activeTab === 'delivery' && (
+            <div className="welcome-tab-pane embedded-pane">
+              <DeliveryPage
+                onNavigate={onNavigate}
+                onToast={onToast}
+                cartCount={cartCount}
+              />
+            </div>
+          )}
+
+          {/* 9. EMBEDDED ABOUT VIEW */}
+          {activeTab === 'about' && (
+            <div className="welcome-tab-pane embedded-pane">
+              <AboutEventsPage
+                initialTab="about"
+                onNavigate={onNavigate}
+                onToast={onToast}
+              />
+            </div>
+          )}
+
+          {/* 10. EMBEDDED EVENTS VIEW */}
+          {activeTab === 'events' && (
+            <div className="welcome-tab-pane embedded-pane">
+              <AboutEventsPage
+                initialTab="events"
+                onNavigate={onNavigate}
+                onToast={onToast}
+              />
+            </div>
+          )}
+
+          {/* 11. EMBEDDED CONTACT & SUPPORT VIEW */}
+          {(activeTab === 'contact' || activeTab === 'support') && (
+            <div className="welcome-tab-pane embedded-pane">
+              <ContactPage
+                onNavigate={onNavigate}
+                onToast={onToast}
+              />
+            </div>
+          )}
+
+          {/* 12. EMBEDDED MENU & CATALOG VIEW */}
+          {(activeTab === 'menu' || activeTab === 'products') && (
+            <div className="welcome-tab-pane embedded-pane">
+              <MenuPage
+                onNavigate={onNavigate}
+                onAddToCart={onAddToCart}
+                cartCount={cartCount}
+                onToast={onToast}
+              />
+            </div>
+          )}
+
+          {/* 13. EMBEDDED CHECKOUT VIEW */}
+          {activeTab === 'checkout' && (
+            <div className="welcome-tab-pane embedded-pane">
+              <CheckoutPage
+                items={cartItems}
+                onBack={() => {
+                  window.history.pushState({}, '', '/dashboard');
+                  setActiveTab('dashboard');
+                }}
+                onUpdateQuantity={onUpdateCartQuantity}
+                onPlaceOrder={onPlaceOrder}
+              />
+            </div>
+          )}
+
+          {/* 14. EMBEDDED PROFILE VIEW */}
+          {(activeTab === 'profile' || activeTab.startsWith('profile-')) && (
+            <div className="welcome-tab-pane embedded-pane">
+              <ProfilePage
+                user={user}
+                onNavigate={onNavigate}
+                onToast={onToast}
+                onAddToCart={onAddToCart}
+                initialSection={activeTab.startsWith('profile-') ? activeTab.replace('profile-', '') : 'overview'}
+                onSignOut={onSignOut}
+              />
             </div>
           )}
         </div>

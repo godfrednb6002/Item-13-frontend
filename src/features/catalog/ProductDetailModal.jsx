@@ -185,19 +185,19 @@ export default function ProductDetailModal({ product, onClose, onAddToCart, onNa
               </button>
 
               {/* View Full Product Page Link */}
-              {onNavigate && (
-                <button
-                  type="button"
-                  className="pdm-full-view-btn"
-                  onClick={() => {
-                    if (onClose) onClose();
-                    onNavigate(`product-${product.id}`);
-                  }}
-                >
-                  <span>View Full Product Page</span>
-                  <ExternalLink size={14} />
-                </button>
-              )}
+              <a
+                href={`/products/${product.id}`}
+                className="pdm-full-view-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onClose) onClose();
+                  if (onNavigate) onNavigate(`product-${product.id}`);
+                }}
+                style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <span>View Full Product Page (/products/{product.id})</span>
+                <ExternalLink size={14} />
+              </a>
             </div>
           </div>
         </div>

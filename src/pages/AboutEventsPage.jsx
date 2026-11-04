@@ -133,48 +133,60 @@ export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'abo
       {/* Top Header */}
       <header className="about-header">
         <div className="about-header-inner">
-          <div
+          <a
+            href="/"
             className="about-brand-wrap"
-            onClick={() => onNavigate && onNavigate('home')}
-            style={{ cursor: 'pointer' }}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
           >
             <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="about-brand-logo" />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </div>
+          </a>
 
           <div className="about-header-tabs">
-            <button
-              type="button"
+            <a
+              href="/about"
               className={`header-tab-btn ${activeTab === 'about' ? 'active' : ''}`}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setActiveTab('about');
                 window.history.pushState({}, '', '/about');
               }}
+              style={{ textDecoration: 'none' }}
             >
               Our Story &amp; Brand
-            </button>
-            <button
-              type="button"
+            </a>
+            <a
+              href="/events"
               className={`header-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 setActiveTab('events');
                 window.history.pushState({}, '', '/events');
               }}
+              style={{ textDecoration: 'none' }}
             >
               <PartyPopper size={15} />
               <span>Bulk Party &amp; Weddings</span>
-            </button>
+            </a>
           </div>
 
           <div className="about-header-right">
             <ThemeToggle />
-            <button
-              type="button"
+            <a
+              href="/products"
               className="about-nav-menu-btn"
-              onClick={() => onNavigate && onNavigate('menu')}
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('menu');
+              }}
+              style={{ textDecoration: 'none' }}
             >
               Browse Menu
-            </button>
+            </a>
           </div>
         </div>
       </header>

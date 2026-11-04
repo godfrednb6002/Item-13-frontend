@@ -72,14 +72,24 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
             <Heart size={15} fill={isFav ? 'currentColor' : 'none'} />
           </button>
 
-          <button
+          <a
+            href={`/products/${product.id}`}
             className="catalog-quickview-btn"
-            onClick={() => onQuickView && onQuickView(product)}
+            onClick={(e) => {
+              if (onNavigate) {
+                e.preventDefault();
+                onNavigate(`product-${product.id}`);
+              } else if (onQuickView) {
+                e.preventDefault();
+                onQuickView(product);
+              }
+            }}
             aria-label="View product details"
             title="View details & customize"
+            style={{ display: 'grid', placeItems: 'center', textDecoration: 'none', color: 'inherit' }}
           >
             <Eye size={16} />
-          </button>
+          </a>
         </div>
       </div>
 
@@ -97,11 +107,17 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
           )}
         </div>
 
-        <h3
-          className="catalog-card-title"
-          onClick={handleOpenDetail}
-        >
-          {product.name}
+        <h3 className="catalog-card-title">
+          <a
+            href={`/products/${product.id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              handleOpenDetail();
+            }}
+            style={{ color: 'inherit', textDecoration: 'none' }}
+          >
+            {product.name}
+          </a>
         </h3>
 
         <p className="catalog-card-desc">{product.description}</p>

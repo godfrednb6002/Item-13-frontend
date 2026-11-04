@@ -133,19 +133,31 @@ export default function ProductDetailPage({
       {/* Top Sticky Header */}
       <header className="pdp-header">
         <div className="pdp-header-inner">
-          <button
-            type="button"
+          <a
+            href="/products"
             className="pdp-back-button"
-            onClick={() => onNavigate && onNavigate('menu')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('menu');
+            }}
+            style={{ textDecoration: 'none' }}
           >
             <ArrowLeft size={18} />
             <span>Back to Menu</span>
-          </button>
+          </a>
 
-          <div className="pdp-header-brand" onClick={() => onNavigate && onNavigate('home')}>
+          <a
+            href="/"
+            className="pdp-header-brand"
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
+            style={{ textDecoration: 'none' }}
+          >
             <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="pdp-brand-logo" />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </div>
+          </a>
 
           <div className="pdp-header-actions">
             <ThemeToggle />
@@ -165,9 +177,9 @@ export default function ProductDetailPage({
       {/* Breadcrumbs Row */}
       <div className="pdp-breadcrumbs-bar">
         <div className="pdp-breadcrumbs-inner">
-          <button onClick={() => onNavigate && onNavigate('home')} className="crumb-link">Home</button>
+          <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
           <span className="crumb-sep">/</span>
-          <button onClick={() => onNavigate && onNavigate('menu')} className="crumb-link">Menu</button>
+          <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
           <span className="crumb-sep">/</span>
           <span className="crumb-current">{product.name}</span>
         </div>
@@ -532,10 +544,15 @@ export default function ProductDetailPage({
             </div>
             <div className="pdp-related-grid">
               {relatedProducts.map((rel) => (
-                <div
+                <a
                   key={rel.id}
+                  href={`/products/${rel.id}`}
                   className="pdp-related-card"
-                  onClick={() => onNavigate && onNavigate(`product-${rel.id}`)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate(`product-${rel.id}`);
+                  }}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <img src={rel.image} alt={rel.name} className="rel-card-img" />
                   <div className="rel-card-info">
@@ -543,19 +560,12 @@ export default function ProductDetailPage({
                     <h4 className="rel-card-name">{rel.name}</h4>
                     <div className="rel-card-bottom">
                       <span className="rel-card-price">GH₵{rel.price.toFixed(2)}</span>
-                      <button
-                        type="button"
-                        className="rel-card-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onNavigate && onNavigate(`product-${rel.id}`);
-                        }}
-                      >
+                      <span className="rel-card-btn">
                         Customize
-                      </button>
+                      </span>
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           </section>

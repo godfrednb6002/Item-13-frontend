@@ -121,24 +121,32 @@ export default function ContactPage({ onNavigate, onToast }) {
       {/* Top Header */}
       <header className="contact-header">
         <div className="contact-header-inner">
-          <div
+          <a
+            href="/"
             className="contact-brand-wrap"
-            onClick={() => onNavigate && onNavigate('home')}
-            style={{ cursor: 'pointer' }}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
           >
             <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="contact-brand-logo" />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </div>
+          </a>
 
           <div className="contact-header-actions">
             <ThemeToggle />
-            <button
-              type="button"
+            <a
+              href="/products"
               className="btn-header-menu"
-              onClick={() => onNavigate && onNavigate('menu')}
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('menu');
+              }}
+              style={{ textDecoration: 'none' }}
             >
               Browse Menu
-            </button>
+            </a>
           </div>
         </div>
       </header>

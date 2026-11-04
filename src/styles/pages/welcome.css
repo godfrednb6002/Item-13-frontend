@@ -14,7 +14,7 @@
 
 /* Left Sidebar / Drawer */
 .welcome-sidebar {
-  width: 280px;
+  width: 320px;
   background: #141519;
   border-right: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
@@ -32,20 +32,44 @@
 }
 
 .sidebar-brand-box {
-  padding: 24px 20px;
+  padding: 24px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   min-height: 80px;
+  gap: 12px;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   cursor: pointer;
-  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-brand .brand-logo-img {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar-brand .brand-logo-tagline {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: 0.95;
+  line-height: 1.25;
+  border-left: 1.5px solid rgba(244, 182, 39, 0.35);
+  padding-left: 10px;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 .collapsed-logo {
@@ -134,15 +158,15 @@
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   width: 100%;
-  padding: 12px 14px;
+  padding: 10px 14px;
   background: transparent;
   border: 1px solid transparent;
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -1398,5 +1422,23 @@
   background: var(--gold-hover);
   transform: translateY(-2px);
 }
+
+/* Embedded Panes inside Welcome Dashboard Layout */
+.welcome-tab-pane.embedded-pane {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.welcome-tab-pane.embedded-pane .delivery-page-wrapper,
+.welcome-tab-pane.embedded-pane .about-events-page,
+.welcome-tab-pane.embedded-pane .contact-page-wrapper,
+.welcome-tab-pane.embedded-pane .menu-page-wrapper,
+.welcome-tab-pane.embedded-pane .profile-page,
+.welcome-tab-pane.embedded-pane .checkout-page {
+  min-height: auto;
+  background: transparent;
+}
+
 
 

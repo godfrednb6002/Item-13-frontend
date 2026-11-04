@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { ShoppingBag, ChevronRight, Search, X, Check, Star, Heart, Zap, ArrowRight, Trash2 } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Search, X, Check, Star, Heart, Zap, ArrowRight, Trash2, Bell, Menu, User, LayoutDashboard, UtensilsCrossed, Package, LogOut } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import WelcomePage from './pages/WelcomePage';
@@ -19,13 +19,26 @@ import { getSavedFavorites, toggleFavorite } from './features/catalog/favoritesS
 export default function App() {
   const getInitialPage = () => {
     const path = window.location.pathname;
+    if (path.startsWith('/checkout/confirmation')) return 'order-confirmation';
+    if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
+      const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
+      return `welcome-profile-${section}`;
+    }
+    if (path.startsWith('/dashboard/')) {
+      const sub = path.replace('/dashboard/', '');
+      return `welcome-${sub}`;
+    }
+    if (path === '/dashboard' || path.startsWith('/welcome')) return 'welcome';
     if (path.startsWith('/checkout')) return 'checkout';
     if (path.startsWith('/delivery')) return 'delivery';
     if (path.startsWith('/about')) return 'about';
     if (path.startsWith('/events')) return 'events';
     if (path.startsWith('/contact')) return 'contact';
-    if (path.startsWith('/account/favorites')) return 'favorites';
+    if (path.startsWith('/login')) return 'login';
+    if (path.startsWith('/signup')) return 'signup';
+    if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) return 'favorites';
     if (path.startsWith('/profile') || path.startsWith('/account')) return 'profile';
+    if (path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
     if (path.startsWith('/products/')) {
       const id = path.replace('/products/', '');
       return `product-${id}`;
@@ -43,6 +56,8 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [orderConfirmation, setOrderConfirmation] = useState(null);
   const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const handleFavChange = () => {
@@ -55,7 +70,17 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
-      if (path.startsWith('/checkout')) {
+      if (path.startsWith('/checkout/confirmation')) {
+        setCurrentPage('order-confirmation');
+      } else if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
+        const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
+        setCurrentPage(`welcome-profile-${section}`);
+      } else if (path.startsWith('/dashboard/')) {
+        const sub = path.replace('/dashboard/', '');
+        setCurrentPage(`welcome-${sub}`);
+      } else if (path === '/dashboard' || path.startsWith('/welcome')) {
+        setCurrentPage('welcome');
+      } else if (path.startsWith('/checkout')) {
         setCurrentPage('checkout');
       } else if (path.startsWith('/delivery')) {
         setCurrentPage('delivery');
@@ -65,10 +90,16 @@ export default function App() {
         setCurrentPage('events');
       } else if (path.startsWith('/contact')) {
         setCurrentPage('contact');
-      } else if (path.startsWith('/account/favorites')) {
+      } else if (path.startsWith('/login')) {
+        setCurrentPage('login');
+      } else if (path.startsWith('/signup')) {
+        setCurrentPage('signup');
+      } else if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) {
         setCurrentPage('favorites');
       } else if (path.startsWith('/profile') || path.startsWith('/account')) {
         setCurrentPage('profile');
+      } else if (path === '/products' || path === '/products/' || path.startsWith('/menu')) {
+        setCurrentPage('menu');
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
         setCurrentPage(`product-${id}`);
@@ -83,13 +114,21 @@ export default function App() {
   const navigateTo = (page) => {
     let nextPath = '/';
     if (page === 'checkout') nextPath = '/checkout';
+    else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
     else if (page === 'delivery') nextPath = '/delivery';
     else if (page === 'about') nextPath = '/about';
     else if (page === 'events') nextPath = '/events';
     else if (page === 'contact') nextPath = '/contact';
+    else if (page === 'login') nextPath = '/login';
+    else if (page === 'signup') nextPath = '/signup';
+    else if (page === 'dashboard' || page === 'welcome') nextPath = '/dashboard';
+    else if (page.startsWith('dashboard/profile/')) nextPath = `/${page}`;
+    else if (page.startsWith('dashboard/')) nextPath = `/${page}`;
+    else if (page.startsWith('welcome-profile-')) nextPath = `/dashboard/profile/${page.replace('welcome-profile-', '')}`;
+    else if (page.startsWith('welcome-')) nextPath = `/dashboard/${page.replace('welcome-', '')}`;
     else if (page === 'favorites') nextPath = '/account/favorites';
-    else if (page === 'profile') nextPath = '/account/profile';
-    else if (page === 'menu') nextPath = '/menu';
+    else if (page === 'profile') nextPath = '/profile';
+    else if (page === 'menu' || page === 'products') nextPath = '/products';
     else if (page.startsWith('product-')) {
       const prodId = page.replace('product-', '');
       nextPath = `/products/${prodId}`;
@@ -98,7 +137,13 @@ export default function App() {
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
-    setCurrentPage(page);
+    
+    if (page.startsWith('dashboard/')) {
+      const sub = page.replace('dashboard/', '');
+      setCurrentPage(`welcome-${sub}`);
+    } else {
+      setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : page));
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -241,7 +286,7 @@ export default function App() {
           onNavigate={navigateTo}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('welcome');
+            navigateTo('dashboard');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
@@ -249,7 +294,11 @@ export default function App() {
     );
   }
 
-    if (currentPage === 'welcome' || currentPage === 'favorites') {
+    if (currentPage === 'welcome' || currentPage === 'favorites' || currentPage.startsWith('welcome-')) {
+    const welcomeInitialTab = currentPage.startsWith('welcome-')
+      ? currentPage.replace('welcome-', '')
+      : (currentPage === 'favorites' ? 'favorites' : 'dashboard');
+
     return (
       <>
         {toastMessage && (
@@ -261,10 +310,30 @@ export default function App() {
         <WelcomePage
           user={user}
           cartCount={cartCount}
-          initialTab={currentPage === 'favorites' ? 'favorites' : 'dashboard'}
+          cartItems={cartItems}
+          initialTab={welcomeInitialTab}
           onNavigate={navigateTo}
           onToast={showToast}
           onAddToCart={handleAddDirectItem}
+          onUpdateCartQuantity={(productId, quantity) => {
+            setCartItems((items) => items.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                : item,
+            ));
+          }}
+          onRemoveCartItem={(productId) => {
+            setCartItems((items) => items.filter((item) => item.id !== productId));
+          }}
+          onPlaceOrder={(order) => {
+            setOrderConfirmation({
+              ...order,
+              orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+            });
+            setCartItems([]);
+            setCurrentPage('order-confirmation');
+            window.history.pushState({}, '', '/checkout/confirmation');
+          }}
           onSignOut={() => {
             setUser(null);
             navigateTo('home');
@@ -625,19 +694,22 @@ export default function App() {
 
       {/* Top Navigation */}
       <header className="navbar">
-        <div className="brand-logo" onClick={() => showToast("Item13 — The Unexpected Essential")}>
+        <a href="/" className="brand-logo" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>
           <img
             src="/item13Logo-trimmed.png"
             alt="Item13 Logo"
             className="brand-logo-img"
           />
           <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-        </div>
+        </a>
 
         <div className="nav-right">
           <div className="nav-links">
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
+            </a>
+            <a href="/products" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
+              Menu
             </a>
             <a href="/delivery" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('delivery'); }}>
               Delivery Coverage
@@ -654,53 +726,190 @@ export default function App() {
           </div>
 
           <div className="nav-buttons-group">
-            <button
-              className="nav-cart-button"
-              type="button"
-              onClick={() => setIsCartOpen(true)}
-              aria-label={`Open bag, ${cartItems.reduce((sum, item) => sum + item.quantity, 0)} items`}
-            >
-              <ShoppingBag size={17} />
-              <span>Bag</span>
-              <b>{cartItems.reduce((sum, item) => sum + item.quantity, 0)}</b>
-            </button>
-            {user ? (
-              <div className="nav-buttons-row" style={{ alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13px', color: '#111', fontWeight: 700, background: 'var(--gold)', padding: '6px 14px', borderRadius: '20px' }}>
-                  Hi, {user.email.split('@')[0]}
-                </span>
-                <button
-                  className="btn-pill btn-pill-black"
-                  onClick={() => setCurrentPage('profile')}
-                  style={{ fontSize: '12px', padding: '6px 14px' }}
-                >
-                  My account
-                </button>
-                <button
-                  className="btn-pill btn-pill-outline"
-                  onClick={() => {
-                    setUser(null);
-                    showToast("Signed out of Item13.");
-                  }}
-                  style={{ fontSize: '12px', padding: '6px 14px' }}
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <>
+            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            <div className="nav-tools-row">
+              {/* Theme Toggle Button */}
+              <ThemeToggle className="nav-theme-toggle" />
+
+              {/* Notification Button */}
+              <button
+                type="button"
+                className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
+                onClick={() => {
+                  setShowNotifications(!showNotifications);
+                  setIsNavMenuOpen(false);
+                }}
+                aria-label="Notifications"
+                title="Notifications"
+              >
+                <Bell size={18} />
+                <span className="nav-badge-dot" />
+              </button>
+
+              {/* Hamburger Button that expands to modal menu */}
+              <button
+                type="button"
+                className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                onClick={() => {
+                  setIsNavMenuOpen(!isNavMenuOpen);
+                  setShowNotifications(false);
+                }}
+                aria-label="Navigation Menu"
+                title="Account & Navigation Menu"
+              >
+                <Menu size={18} />
+              </button>
+            </div>
+
+            {/* Bottom row: Sign up, Login and Continue as guest aligned underneath */}
+            {!user ? (
+              <div className="nav-guest-actions">
                 <div className="nav-buttons-row">
-                  <button className="btn-pill btn-pill-yellow" onClick={() => navigateTo('signup')}>
+                  <a
+                    href="/signup"
+                    className="btn-pill btn-pill-yellow"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo('signup');
+                    }}
+                    style={{ textDecoration: 'none' }}
+                  >
                     Sign up
-                  </button>
-                  <button className="btn-pill btn-pill-black" onClick={() => navigateTo('login')}>
+                  </a>
+                  <a
+                    href="/login"
+                    className="btn-pill btn-pill-black"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo('login');
+                    }}
+                    style={{ textDecoration: 'none' }}
+                  >
                     Login
-                  </button>
+                  </a>
                 </div>
-                <button className="btn-pill btn-pill-outline" onClick={() => setCurrentPage('menu')}>
+                <a
+                  href="/products"
+                  className="btn-pill btn-pill-outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('menu');
+                  }}
+                  style={{ textDecoration: 'none', textAlign: 'center' }}
+                >
                   Continue as guest
-                </button>
-              </>
+                </a>
+              </div>
+            ) : null}
+
+            {/* Notifications Popover */}
+            {showNotifications && (
+              <div className="nav-notifications-popover">
+                <div className="nav-notif-title">
+                  <span>Notifications</span>
+                  <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
+                </div>
+                <p className="nav-notif-empty">
+                  🎉 Welcome to Item13! Fresh batches of Gourmet Popcorn are popping now.
+                </p>
+              </div>
+            )}
+
+            {/* Hamburger Modal Popover */}
+            {isNavMenuOpen && (
+              <div className="nav-menu-popover">
+                {user ? (
+                  <div className="nav-menu-header">
+                    <span className="nav-menu-user-name">{user.name || user.email.split('@')[0]}</span>
+                    <span className="nav-menu-user-role">VIP Snack Member</span>
+                  </div>
+                ) : (
+                  <div className="nav-menu-header">
+                    <span className="nav-menu-user-name">Guest Snack Lover</span>
+                    <span className="nav-menu-user-role">Item13 Express</span>
+                  </div>
+                )}
+
+                <a
+                  href="/dashboard/profile"
+                  className="nav-menu-item"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsNavMenuOpen(false);
+                    navigateTo('dashboard/profile');
+                  }}
+                >
+                  <User size={16} />
+                  <span>Profile</span>
+                </a>
+
+                <a
+                  href="/dashboard"
+                  className="nav-menu-item"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsNavMenuOpen(false);
+                    navigateTo('dashboard');
+                  }}
+                >
+                  <LayoutDashboard size={16} />
+                  <span>Dashboard</span>
+                </a>
+
+                <a
+                  href="/products"
+                  className="nav-menu-item"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsNavMenuOpen(false);
+                    navigateTo('menu');
+                  }}
+                >
+                  <UtensilsCrossed size={16} />
+                  <span>Menu</span>
+                </a>
+
+                <a
+                  href="/dashboard/orders"
+                  className="nav-menu-item"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsNavMenuOpen(false);
+                    navigateTo('dashboard/orders');
+                  }}
+                >
+                  <Package size={16} />
+                  <span>Track Orders</span>
+                </a>
+
+                {user ? (
+                  <button
+                    type="button"
+                    className="nav-menu-item nav-menu-item-logout"
+                    onClick={() => {
+                      setIsNavMenuOpen(false);
+                      setUser(null);
+                      showToast('Signed out of Item13.');
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="nav-menu-item nav-menu-item-logout"
+                    style={{ color: 'var(--gold)', borderColor: 'rgba(244, 182, 39, 0.2)' }}
+                    onClick={() => {
+                      setIsNavMenuOpen(false);
+                      navigateTo('login');
+                    }}
+                  >
+                    <User size={16} />
+                    <span>Sign in / Sign up</span>
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -741,12 +950,18 @@ export default function App() {
               </span>
               <span>Buy Now</span>
             </button>
-
-            <ThemeToggle className="hero-theme-toggle" />
           </div>
 
           {/* Customer Favorites in Bottom Left Corner */}
-          <div className="customer-favorites" onClick={() => setActiveModal('favorites')} style={{ cursor: 'pointer' }}>
+          <a
+            href="/account/favorites"
+            className="customer-favorites"
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveModal('favorites');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
+          >
             <div className="avatar-stack-ring">
               <div className="avatar-group">
                 <img
@@ -773,7 +988,7 @@ export default function App() {
                 See top rated dishes <ChevronRight size={14} />
               </span>
             </div>
-          </div>
+          </a>
         </section>
 
         {/* Right Side (Yellow Background) */}
@@ -792,15 +1007,27 @@ export default function App() {
           <div className="menu-widget">
             <div className="widget-header">
               <span className="widget-title">New Menu Items</span>
-              <span className="widget-subtitle">Latest Additions</span>
+              <a
+                href="/products"
+                className="widget-subtitle"
+                onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}
+                style={{ cursor: 'pointer', textDecoration: 'none' }}
+              >
+                Latest Additions
+              </a>
             </div>
 
             <div className="widget-cards-grid">
               {/* Product 1: Bistro Popcorn */}
-              <div
+              <a
+                href="/products/pop-classic-butter"
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Bistro Popcorn", "GHS12.90")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAddMiniItem("Bistro Popcorn", "GHS12.90");
+                }}
                 title="Click to add Bistro Popcorn"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <img
                   src="/bistro-popcorn.jpg"
@@ -814,13 +1041,18 @@ export default function App() {
                   <span className="mini-card-name">Bistro Popcorn</span>
                   <span className="mini-card-price">GHS12.90</span>
                 </div>
-              </div>
+              </a>
 
               {/* Product 2: Coca-Cola */}
-              <div
+              <a
+                href="/products/drink-coca-cola"
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Coca-Cola", "GHS7.90")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAddMiniItem("Coca-Cola", "GHS7.90");
+                }}
                 title="Click to add Coca-Cola"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <img
                   src="/coca-cola.jpg"
@@ -834,7 +1066,7 @@ export default function App() {
                   <span className="mini-card-name">Coca-Cola</span>
                   <span className="mini-card-price">GHS7.90</span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </section>
@@ -963,9 +1195,11 @@ export default function App() {
                       Fast 1-click re-order snack wishlist
                     </p>
                   </div>
-                  <button
+                  <a
+                    href="/account/favorites"
                     className="modal-goto-full-btn"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       setActiveModal(null);
                       navigateTo('favorites');
                     }}
@@ -980,12 +1214,13 @@ export default function App() {
                       cursor: 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px'
+                      gap: '4px',
+                      textDecoration: 'none'
                     }}
                   >
                     <span>View All</span>
                     <ArrowRight size={13} />
-                  </button>
+                  </a>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '360px', overflowY: 'auto', paddingRight: '4px' }}>
@@ -1009,14 +1244,22 @@ export default function App() {
                         style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover' }}
                         onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
                       />
-                      <div style={{ flex: 1, minWidth: 0 }}>
+                      <a
+                        href={`/products/${item.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setActiveModal(null);
+                          navigateTo(`product-${item.id}`);
+                        }}
+                        style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}
+                      >
                         <div style={{ fontWeight: 700, fontSize: '13.5px', color: 'var(--text-white)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {item.name}
                         </div>
                         <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
                           GH₵ {item.price.toFixed(2)} • {item.category}
                         </div>
-                      </div>
+                      </a>
                       <button
                         className="btn-1click-reorder"
                         onClick={() => {
@@ -1046,8 +1289,10 @@ export default function App() {
                 </div>
 
                 <div style={{ marginTop: '16px', textAlign: 'center' }}>
-                  <button
-                    onClick={() => {
+                  <a
+                    href="/account/favorites"
+                    onClick={(e) => {
+                      e.preventDefault();
                       setActiveModal(null);
                       navigateTo('favorites');
                     }}
@@ -1060,12 +1305,13 @@ export default function App() {
                       cursor: 'pointer',
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '6px'
+                      gap: '6px',
+                      textDecoration: 'none'
                     }}
                   >
                     <span>Manage all favorites in your account (/account/favorites)</span>
                     <ArrowRight size={14} />
-                  </button>
+                  </a>
                 </div>
               </div>
             )}

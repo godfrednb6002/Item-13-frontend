@@ -41,11 +41,6 @@ const navigation = [
   { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'preferences', label: 'Preferences', icon: Heart },
   { id: 'security', label: 'Security', icon: ShieldCheck },
-  { id: 'support', label: 'Help & support', icon: CircleHelp },
-  { id: 'delivery', label: 'Delivery Coverage', icon: Truck, isRoute: true },
-  { id: 'about', label: 'About Item13', icon: Info, isRoute: true },
-  { id: 'events', label: 'Party & Weddings', icon: PartyPopper, isRoute: true },
-  { id: 'contact', label: 'Contact & Support', icon: PhoneCall, isRoute: true },
 ];
 
 const recentOrder = {
@@ -637,18 +632,18 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
   return (
     <div className="profile-page">
       <header className="profile-topbar">
-        <button className="profile-brand" onClick={() => onNavigate('home')} aria-label="Item13 home">
+        <a href="/" className="profile-brand" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} aria-label="Item13 home" style={{ textDecoration: 'none' }}>
           <img src="/item13Logo-trimmed.png" alt="Item13" />
           <span>THE UNEXPECTED ESSENTIAL</span>
-        </button>
+        </a>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <ThemeToggle />
-          <button className="profile-back-link" onClick={() => onNavigate('welcome')}>
+          <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
             <ArrowLeft size={16} /> Back to dashboard
-          </button>
-          <button className="profile-back-link" onClick={() => onNavigate('home')}>
+          </a>
+          <a href="/" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} style={{ textDecoration: 'none' }}>
             Storefront
-          </button>
+          </a>
         </div>
       </header>
 
@@ -672,27 +667,32 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
               <span className="profile-member-badge"><Sparkles size={12} /> VIP MEMBER</span>
             </div>
             <nav className="profile-nav" aria-label="Account sections">
-              {navigation.map(({ id, label, icon: Icon, isRoute }) => (
-                <button
-                  key={id}
-                  className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`}
-                  onClick={() => {
-                    if (isRoute && onNavigate) {
-                      onNavigate(id);
-                    } else {
-                      setActiveSection(id);
-                    }
-                  }}
-                >
-                  <Icon size={17} /><span>{label}</span>{activeSection === id && <ChevronRight size={15} />}
-                </button>
-              ))}
+              {navigation.map(({ id, label, icon: Icon, isRoute }) => {
+                const itemHref = `/dashboard/profile/${id}`;
+
+                return (
+                  <a
+                    key={id}
+                    href={itemHref}
+                    className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (onNavigate) {
+                        onNavigate(`dashboard/profile/${id}`);
+                      } else {
+                        if (window.location.pathname !== itemHref) {
+                          window.history.pushState({}, '', itemHref);
+                        }
+                        setActiveSection(id);
+                      }
+                    }}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Icon size={17} /><span>{label}</span>{activeSection === id && <ChevronRight size={15} />}
+                  </a>
+                );
+              })}
             </nav>
-            <div className="profile-sidebar-help">
-              <CircleHelp size={17} />
-              <div><strong>Need a hand?</strong><span>We’re here for you.</span></div>
-              <button onClick={() => setActiveSection('support')} aria-label="Go to support"><ArrowRight size={15} /></button>
-            </div>
           </aside>
 
           <div className="profile-content" key={activeSection}>

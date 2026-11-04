@@ -74,9 +74,14 @@ export default function Footer({ onNavigate, onToast }) {
         <div className="footer-main-container">
           {/* Column 1: Brand & Bio */}
           <div className="footer-col footer-col-brand">
-            <div
+            <a
+              href="/"
               className="footer-brand-logo"
-              onClick={() => onNavigate && onNavigate('home')}
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate && onNavigate('home');
+              }}
+              style={{ textDecoration: 'none' }}
             >
               <img
                 src="/item13Logo-trimmed.png"
@@ -84,7 +89,7 @@ export default function Footer({ onNavigate, onToast }) {
                 className="brand-logo-img"
               />
               <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-            </div>
+            </a>
 
             <p className="footer-brand-bio">
               Ghana's premier artisan popcorn and refreshments brand. Freshly popped butterfly kernels with rich real butter, artisan sweet caramel, and fiery suya spices delivered to your home, office, or event.
@@ -135,49 +140,69 @@ export default function Footer({ onNavigate, onToast }) {
             <h4 className="footer-heading">Menu &amp; Combos</h4>
             <ul className="footer-link-list">
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/products/pop-classic-butter"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('menu')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('product-pop-classic-butter');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Classic Buttered Popcorn
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/products/pop-golden-caramel"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('menu')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('product-pop-golden-caramel');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Artisan Golden Caramel
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/products/pop-accra-suya"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('menu')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('product-pop-accra-suya');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Accra Suya Pepper Crunch
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/products"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('menu')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('menu');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Chilled Sodas &amp; Malta
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/products"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('menu')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('menu');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Meal Combos
-                </button>
+                </a>
               </li>
             </ul>
           </div>
@@ -187,49 +212,69 @@ export default function Footer({ onNavigate, onToast }) {
             <h4 className="footer-heading">Help &amp; Delivery</h4>
             <ul className="footer-link-list">
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/delivery"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('delivery')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('delivery');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Delivery Zones &amp; Fees (/delivery)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/contact"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('contact')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('contact');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Contact &amp; Support (/contact)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/events"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('events')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('events');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Bulk Event &amp; Party Orders (/events)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/about"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('about')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('about');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Our Story &amp; Heritage (/about)
-                </button>
+                </a>
               </li>
               <li>
-                <button
-                  type="button"
+                <a
+                  href="/login"
                   className="footer-text-link"
-                  onClick={() => onNavigate && onNavigate('login')}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('login');
+                  }}
+                  style={{ textDecoration: 'none' }}
                 >
                   Track My Order
-                </button>
+                </a>
               </li>
               <li>
                 <button

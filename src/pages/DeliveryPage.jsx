@@ -67,35 +67,48 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0 }) {
       {/* Top Sticky Header */}
       <header className="delivery-header">
         <div className="delivery-header-inner">
-          <button
-            type="button"
+          <a
+            href="/"
             className="delivery-back-btn"
-            onClick={() => onNavigate && onNavigate('home')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
             aria-label="Back to home"
+            style={{ textDecoration: 'none' }}
           >
             <ArrowLeft size={18} />
             <span>Storefront</span>
-          </button>
+          </a>
 
-          <div
+          <a
+            href="/"
             className="delivery-brand"
-            onClick={() => onNavigate && onNavigate('home')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
             title="Item13 — The Unexpected Essential"
+            style={{ textDecoration: 'none' }}
           >
             <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="delivery-brand-logo" />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </div>
+          </a>
 
           <div className="delivery-header-actions">
             <ThemeToggle />
-            <button
-              type="button"
+            <a
+              href="/products"
               className="delivery-nav-menu-btn"
-              onClick={() => onNavigate && onNavigate('menu')}
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('menu');
+              }}
+              style={{ textDecoration: 'none' }}
             >
               <ShoppingBag size={16} />
               <span>Browse Menu</span>
-            </button>
+            </a>
             {cartCount > 0 && (
               <button
                 type="button"

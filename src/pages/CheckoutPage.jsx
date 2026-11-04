@@ -213,10 +213,10 @@ export default function CheckoutPage({
     return (
       <main className="checkout-page checkout-confirmation-page">
         <header className="checkout-topbar">
-          <button type="button" className="checkout-brand" onClick={onBack}>
+          <a href="/" className="checkout-brand" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none' }}>
             <img src="/item13Logo-trimmed.png" alt="Item13" />
             <span>ITEM13 <small>THE UNEXPECTED ESSENTIAL</small></span>
-          </button>
+          </a>
           <span className="checkout-secure-label"><LockKeyhole size={14} /> Secure checkout</span>
         </header>
         <section className="checkout-confirmation">
@@ -248,9 +248,9 @@ export default function CheckoutPage({
           <p className="checkout-email-note">
             <Check size={16} /> A confirmation email would be sent to <strong>{confirmation.customer.email}</strong> after live checkout is connected.
           </p>
-          <button type="button" className="checkout-place-order" onClick={onBack}>
+          <a href="/products" className="checkout-place-order" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             Back to Item13 <ArrowRight size={17} />
-          </button>
+          </a>
           <p className="checkout-security-copy"><ShieldCheck size={15} /> Thanks for supporting a local favourite.</p>
         </section>
       </main>
@@ -261,16 +261,16 @@ export default function CheckoutPage({
     return (
       <main className="checkout-page">
         <header className="checkout-topbar">
-          <button type="button" className="checkout-brand" onClick={onBack}>
+          <a href="/" className="checkout-brand" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none' }}>
             <img src="/item13Logo-trimmed.png" alt="Item13" />
             <span>ITEM13 <small>THE UNEXPECTED ESSENTIAL</small></span>
-          </button>
+          </a>
         </header>
         <section className="checkout-empty">
           <ShoppingBag size={36} />
           <h1>Your bag is empty</h1>
           <p>Add something freshly popped before heading to checkout.</p>
-          <button className="checkout-place-order" type="button" onClick={onBack}>Return to the menu</button>
+          <a href="/products" className="checkout-place-order" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Return to the menu</a>
         </section>
       </main>
     );
@@ -279,10 +279,10 @@ export default function CheckoutPage({
   return (
     <main className="checkout-page">
       <header className="checkout-topbar">
-        <button type="button" className="checkout-brand" onClick={onBack} aria-label="Return to Item13">
+        <a href="/" className="checkout-brand" onClick={(e) => { e.preventDefault(); onBack(); }} aria-label="Return to Item13" style={{ textDecoration: 'none' }}>
           <img src="/item13Logo-trimmed.png" alt="Item13" />
           <span>ITEM13 <small>THE UNEXPECTED ESSENTIAL</small></span>
-        </button>
+        </a>
         <div className="checkout-progress">
           <span className="is-current"><b>1</b> Details</span>
           <i />
@@ -493,7 +493,7 @@ export default function CheckoutPage({
         </aside>
       </div>
       <footer className="checkout-footer">
-        <span><ShieldCheck size={15} /> Safe checkout</span><span>Item13 · Ghana</span><button type="button" onClick={onBack}>Continue shopping</button>
+        <span><ShieldCheck size={15} /> Safe checkout</span><span>Item13 · Ghana</span><a href="/products" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ color: 'inherit', textDecoration: 'underline' }}>Continue shopping</a>
       </footer>
     </main>
   );

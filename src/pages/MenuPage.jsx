@@ -68,10 +68,15 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
       {/* Top Bar Header */}
       <header className="menu-header">
         <div className="menu-header-inner">
-          <button
+          <a
+            href="/"
             className="menu-brand-logo"
-            onClick={() => onNavigate && onNavigate('home')}
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
             title="Back to Item13 Home"
+            style={{ textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
           >
             <img
               src="/item13Logo-trimmed.png"
@@ -79,17 +84,22 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
               className="brand-logo-img"
             />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </button>
+          </a>
 
           <div className="menu-header-actions">
             <ThemeToggle />
-            <button
+            <a
+              href="/"
               className="menu-nav-home-btn"
-              onClick={() => onNavigate && onNavigate('home')}
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ textDecoration: 'none' }}
             >
               <ArrowLeft size={16} />
               <span>Back to Store</span>
-            </button>
+            </a>
 
             <button
               type="button"

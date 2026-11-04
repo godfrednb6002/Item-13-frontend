@@ -1211,12 +1211,12 @@ export default function App() {
 
             {activeModal === 'favorites' && (
               <div className="favorites-modal-content">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <div className="fav-modal-header">
                   <div>
-                    <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', margin: 0 }}>
+                    <h3 className="fav-modal-title">
                       Customer Favorites
                     </h3>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '12.5px', color: 'var(--text-muted)' }}>
+                    <p className="fav-modal-sub">
                       Fast 1-click re-order snack wishlist
                     </p>
                   </div>
@@ -1228,45 +1228,22 @@ export default function App() {
                       setActiveModal(null);
                       navigateTo('favorites');
                     }}
-                    style={{
-                      background: 'rgba(244, 182, 39, 0.15)',
-                      color: 'var(--gold)',
-                      border: '1px solid rgba(244, 182, 39, 0.3)',
-                      borderRadius: '20px',
-                      padding: '6px 12px',
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      textDecoration: 'none'
-                    }}
                   >
                     <span>View All</span>
                     <ArrowRight size={13} />
                   </a>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '360px', overflowY: 'auto', paddingRight: '4px' }}>
+                <div className="fav-modal-list">
                   {PRODUCTS.filter((p) => modalFavorites.includes(p.id)).slice(0, 5).map((item) => (
                     <div
                       key={item.id}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '10px 12px',
-                        background: 'rgba(255,255,255,0.04)',
-                        borderRadius: '12px',
-                        border: '1px solid rgba(255,255,255,0.06)',
-                        gap: '10px'
-                      }}
+                      className="fav-modal-item-row"
                     >
                       <img
                         src={item.image}
                         alt={item.name}
-                        style={{ width: '42px', height: '42px', borderRadius: '8px', objectFit: 'cover' }}
+                        className="fav-modal-item-thumb"
                         onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
                       />
                       <a
@@ -1276,12 +1253,12 @@ export default function App() {
                           setActiveModal(null);
                           navigateTo(`product-${item.id}`);
                         }}
-                        style={{ flex: 1, minWidth: 0, textDecoration: 'none' }}
+                        className="fav-modal-item-link"
                       >
-                        <div style={{ fontWeight: 700, fontSize: '13.5px', color: 'var(--text-white)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <div className="fav-modal-item-name">
                           {item.name}
                         </div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                        <div className="fav-modal-item-meta">
                           GH₵ {item.price.toFixed(2)} • {item.category}
                         </div>
                       </a>
@@ -1291,20 +1268,6 @@ export default function App() {
                           handleAddDirectItem(item);
                           setActiveModal(null);
                         }}
-                        style={{
-                          background: 'var(--gold)',
-                          color: '#0f1012',
-                          border: 'none',
-                          borderRadius: '20px',
-                          padding: '6px 12px',
-                          fontSize: '12px',
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          flexShrink: 0
-                        }}
                       >
                         <Zap size={13} />
                         <span>Re-order</span>
@@ -1313,7 +1276,7 @@ export default function App() {
                   ))}
                 </div>
 
-                <div style={{ marginTop: '16px', textAlign: 'center' }}>
+                <div className="fav-modal-footer">
                   <a
                     href="/account/favorites"
                     onClick={(e) => {
@@ -1321,18 +1284,7 @@ export default function App() {
                       setActiveModal(null);
                       navigateTo('favorites');
                     }}
-                    style={{
-                      background: 'transparent',
-                      border: 'none',
-                      color: 'var(--gold)',
-                      fontSize: '13px',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      textDecoration: 'none'
-                    }}
+                    className="fav-modal-footer-link"
                   >
                     <span>Manage all favorites in your account (/account/favorites)</span>
                     <ArrowRight size={14} />

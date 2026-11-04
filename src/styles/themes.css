@@ -486,6 +486,61 @@ html.light-theme .perk-row p {
 }
 
 /* Product Cards & Modals in Light Mode */
+html.light-theme .modal-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.16) !important;
+  color: #111418;
+}
+
+html.light-theme .modal-close-btn {
+  color: #64748b;
+}
+
+html.light-theme .modal-close-btn:hover {
+  color: #111418;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .fav-modal-title {
+  color: #926600 !important;
+}
+
+html.light-theme .fav-modal-sub {
+  color: #64748b !important;
+}
+
+html.light-theme .modal-goto-full-btn {
+  background: rgba(244, 182, 39, 0.15) !important;
+  color: #926600 !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+}
+
+html.light-theme .modal-goto-full-btn:hover {
+  background: rgba(244, 182, 39, 0.25) !important;
+}
+
+html.light-theme .fav-modal-item-row {
+  background: #f8fafc !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .fav-modal-item-row:hover {
+  background: #f1f5f9 !important;
+}
+
+html.light-theme .fav-modal-item-name {
+  color: #0f172a !important;
+}
+
+html.light-theme .fav-modal-item-meta {
+  color: #64748b !important;
+}
+
+html.light-theme .fav-modal-footer-link {
+  color: #926600 !important;
+}
+
 html.light-theme .catalog-card {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;

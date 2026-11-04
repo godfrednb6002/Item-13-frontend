@@ -474,15 +474,20 @@ html.light-theme .price-scale-helper {
 
 html.light-theme .sidebar-perk-box {
   background: #f8fafc;
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
 
+html.light-theme .sidebar-perk-box .perk-title,
+html.light-theme .perk-row .perk-title,
 html.light-theme .perk-row h4 {
-  color: #111418;
+  color: #111418 !important;
 }
 
+html.light-theme .sidebar-perk-box .perk-desc,
+html.light-theme .perk-row .perk-desc,
 html.light-theme .perk-row p {
-  color: #64748b;
+  color: #555e6c !important;
 }
 
 /* Product Cards & Modals in Light Mode */

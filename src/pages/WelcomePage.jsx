@@ -300,13 +300,22 @@ export default function WelcomePage({
                     Ready for your next crunch? Fresh buttered, caramel, and suya pepper popcorn are hot and ready to dispatch to your location.
                   </p>
                   <div className="dash-hero-buttons">
-                    <button
+                    <a
+                      href="/products"
                       className="btn-dash-primary"
-                      onClick={() => onNavigate && onNavigate('menu')}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setActiveTab('menu');
+                        if (window.location.pathname !== '/dashboard/menu') {
+                          window.history.pushState({}, '', '/dashboard/menu');
+                        }
+                        if (onNavigate) onNavigate('menu');
+                      }}
+                      style={{ textDecoration: 'none' }}
                     >
                       <ShoppingBag size={16} />
                       <span>Order Popcorn Now</span>
-                    </button>
+                    </a>
                     <button
                       className="btn-dash-secondary"
                       onClick={() => setActiveTab('orders')}
@@ -415,12 +424,21 @@ export default function WelcomePage({
                     <h2 className="section-title">Popular Items to Add</h2>
                     <p className="section-desc">Ghana’s best-selling popcorn flavors and chilled sodas</p>
                   </div>
-                  <button
+                  <a
+                    href="/products"
                     className="view-all-link"
-                    onClick={() => onNavigate && onNavigate('menu')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveTab('menu');
+                      if (window.location.pathname !== '/dashboard/menu') {
+                        window.history.pushState({}, '', '/dashboard/menu');
+                      }
+                      if (onNavigate) onNavigate('menu');
+                    }}
+                    style={{ textDecoration: 'none' }}
                   >
                     View Full Menu <ArrowRight size={14} />
-                  </button>
+                  </a>
                 </div>
 
                 <div className="dash-quick-products">
@@ -612,13 +630,22 @@ export default function WelcomePage({
                   </div>
                   <h3>Your snack wishlist is waiting!</h3>
                   <p>Browse our gourmet menu and save your favorite freshly popped corn &amp; drinks for instant 1-click re-ordering.</p>
-                  <button
+                  <a
+                    href="/products"
                     className="btn-fav-explore"
-                    onClick={() => onNavigate && onNavigate('menu')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveTab('menu');
+                      if (window.location.pathname !== '/dashboard/menu') {
+                        window.history.pushState({}, '', '/dashboard/menu');
+                      }
+                      if (onNavigate) onNavigate('menu');
+                    }}
+                    style={{ textDecoration: 'none' }}
                   >
                     <ShoppingBag size={16} />
                     <span>Explore Gourmet Menu</span>
-                  </button>
+                  </a>
                 </div>
               ) : (
                 <div className="dash-quick-products fav-products-grid">

@@ -20,6 +20,7 @@ export default function App() {
   const getInitialPage = () => {
     const path = window.location.pathname;
     if (path.startsWith('/checkout/confirmation')) return 'order-confirmation';
+    if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
     if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
       const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
       return `welcome-profile-${section}`;
@@ -93,6 +94,9 @@ export default function App() {
       const path = window.location.pathname;
       if (path.startsWith('/checkout/confirmation')) {
         setCurrentPage('order-confirmation');
+      } else if (path.startsWith('/cart') || path.startsWith('/bag')) {
+        setCurrentPage('cart');
+        setIsCartOpen(true);
       } else if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
         const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
         setCurrentPage(`welcome-profile-${section}`);
@@ -134,6 +138,10 @@ export default function App() {
 
   const navigateTo = (page) => {
     let nextPath = '/';
+    if (page === 'cart' || page === 'bag') {
+      setIsCartOpen(true);
+      return;
+    }
     if (page === 'checkout') nextPath = '/checkout';
     else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
     else if (page === 'delivery') nextPath = '/delivery';
@@ -752,6 +760,18 @@ export default function App() {
               {/* Theme Toggle Button */}
               <ThemeToggle className="nav-theme-toggle" />
 
+              {/* Cart / Bag Button */}
+              <button
+                type="button"
+                className={`nav-icon-btn ${isCartOpen ? 'is-active' : ''}`}
+                onClick={() => setIsCartOpen(true)}
+                aria-label={`Open Bag (${cartCount} items)`}
+                title="Open Bag / Cart"
+              >
+                <ShoppingBag size={18} />
+                {cartCount > 0 && <span className="nav-badge-dot" />}
+              </button>
+
               {/* Notification Button */}
               <div ref={notifRef} style={{ position: 'relative' }}>
                 <button
@@ -850,6 +870,18 @@ export default function App() {
                       <UtensilsCrossed size={16} />
                       <span>Menu</span>
                     </a>
+
+                    <button
+                      type="button"
+                      className="nav-menu-item"
+                      onClick={() => {
+                        setIsNavMenuOpen(false);
+                        setIsCartOpen(true);
+                      }}
+                    >
+                      <ShoppingBag size={16} />
+                      <span>My Bag / Cart ({cartCount})</span>
+                    </button>
 
                     <a
                       href="/dashboard/orders"

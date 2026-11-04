@@ -53,6 +53,7 @@ function Field({ label, name, value, onChange, onBlur, error, ...props }) {
 export default function CheckoutPage({
   items,
   onBack,
+  onNavigate,
   onUpdateQuantity,
   onPlaceOrder,
   customer,
@@ -270,7 +271,23 @@ export default function CheckoutPage({
           <ShoppingBag size={36} />
           <h1>Your bag is empty</h1>
           <p>Add something freshly popped before heading to checkout.</p>
-          <a href="/products" className="checkout-place-order" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>Return to the menu</a>
+          <a
+            href="/products"
+            className="checkout-place-order"
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) {
+                onNavigate('menu');
+              } else if (onBack) {
+                onBack();
+              } else {
+                window.location.href = '/products';
+              }
+            }}
+            style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            Return to the menu
+          </a>
         </section>
       </main>
     );

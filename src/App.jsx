@@ -277,9 +277,10 @@ export default function App() {
         items={cartItems}
         customer={user}
         confirmation={orderConfirmation}
+        onNavigate={navigateTo}
         onBack={() => {
           setOrderConfirmation(null);
-          navigateTo('home');
+          navigateTo('menu');
         }}
         onUpdateQuantity={(productId, quantity) => {
           setCartItems((items) => items.map((item) =>
@@ -373,7 +374,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -414,7 +419,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -476,7 +485,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -516,7 +529,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -556,7 +573,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -595,7 +616,11 @@ export default function App() {
           <CartDrawer
             items={cartItems}
             onClose={() => setIsCartOpen(false)}
-            onContinueShopping={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
             onCheckout={() => {
               setIsCartOpen(false);
               navigateTo('checkout');
@@ -1134,9 +1159,13 @@ export default function App() {
 
       {isCartOpen && (
         <CartDrawer
-            items={cartItems}
+          items={cartItems}
           onClose={() => setIsCartOpen(false)}
-          onContinueShopping={() => setIsCartOpen(false)}
+          onNavigate={navigateTo}
+          onContinueShopping={() => {
+            setIsCartOpen(false);
+            navigateTo('menu');
+          }}
           onCheckout={() => {
             setIsCartOpen(false);
             navigateTo('checkout');

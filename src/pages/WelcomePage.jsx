@@ -839,9 +839,10 @@ export default function WelcomePage({
             <div className="welcome-tab-pane embedded-pane">
               <CheckoutPage
                 items={cartItems}
+                onNavigate={onNavigate}
                 onBack={() => {
-                  window.history.pushState({}, '', '/dashboard');
-                  setActiveTab('dashboard');
+                  window.history.pushState({}, '', '/dashboard/menu');
+                  setActiveTab('menu');
                 }}
                 onUpdateQuantity={onUpdateCartQuantity}
                 onPlaceOrder={onPlaceOrder}

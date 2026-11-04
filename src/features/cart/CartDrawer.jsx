@@ -35,6 +35,7 @@ export default function CartDrawer({
   items,
   onClose,
   onContinueShopping,
+  onNavigate,
   onCheckout,
   onAddItem,
   onUpdateQuantity,
@@ -298,9 +299,24 @@ export default function CartDrawer({
               <div className="cart-empty-icon"><span>13</span></div>
               <h3>Your bag’s taking a breather</h3>
               <p>Freshly popped favourites are just a click away.</p>
-              <button type="button" className="cart-empty-cta" onClick={onContinueShopping}>
+              <a
+                href="/products"
+                className="cart-empty-cta"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onClose) onClose();
+                  if (onNavigate) {
+                    onNavigate('menu');
+                  } else if (onContinueShopping) {
+                    onContinueShopping();
+                  } else {
+                    window.location.href = '/products';
+                  }
+                }}
+                style={{ textDecoration: 'none' }}
+              >
                 Explore the menu <ArrowRight size={17} />
-              </button>
+              </a>
             </div>
           )}
         </div>

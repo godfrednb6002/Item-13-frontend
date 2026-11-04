@@ -169,7 +169,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           eyebrow="THE LATEST"
           title="Your recent order"
           action="View all orders"
-          onAction={() => setActiveSection('orders')}
+          onAction={() => onNavigate('account-orders')}
         />
         <div className="profile-order-row">
           <div className="profile-order-icon"><ShoppingBag size={20} /></div>
@@ -361,7 +361,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
 
   const renderOrders = () => (
     <>
-      <SectionHeading eyebrow="YOUR PURCHASES" title="Orders & returns" description="Track deliveries, review past orders, and manage returns." />
+      <SectionHeading eyebrow="YOUR PURCHASES" title="Orders & returns" description="Track deliveries, review past orders, and manage returns." action="View all orders" onAction={() => onNavigate('account-orders')} />
       <section className="profile-panel">
         <div className="profile-order-row">
           <div className="profile-order-icon"><ShoppingBag size={20} /></div>
@@ -393,12 +393,12 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
 
   const renderAddresses = () => (
     <>
-      <SectionHeading eyebrow="DELIVERY DETAILS" title="Your addresses" description="Save delivery locations for a quicker checkout." action="Add address" onAction={() => notify('Address form opened.')} />
+      <SectionHeading eyebrow="DELIVERY DETAILS" title="Your addresses" description="Save delivery locations for a quicker checkout." action="Manage saved addresses" onAction={() => onNavigate('account-addresses')} />
       <section className="profile-panel profile-empty-panel">
         <div className="profile-empty-icon"><MapPin size={22} /></div>
         <h3>Saved addresses</h3>
         <p>East Legon, Accra (GA-182-9021) • Primary</p>
-        <button className="profile-gold-button" onClick={() => notify('Address form opened.')}><Plus size={16} /> Add another address</button>
+        <button className="profile-gold-button" onClick={() => onNavigate('account-addresses')}><Plus size={16} /> Add another address</button>
       </section>
     </>
   );
@@ -533,7 +533,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
             </div>
             <nav className="profile-nav" aria-label="Account sections">
               {navigation.map(({ id, label, icon: Icon }) => (
-                <button key={id} className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`} onClick={() => setActiveSection(id)}>
+                <button key={id} className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`} onClick={() => id === 'addresses' ? onNavigate('account-addresses') : setActiveSection(id)}>
                   <Icon size={17} /><span>{label}</span>{activeSection === id && <ChevronRight size={15} />}
                 </button>
               ))}

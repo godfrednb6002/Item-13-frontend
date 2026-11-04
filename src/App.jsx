@@ -10,6 +10,9 @@ import ThemeToggle from './components/ThemeToggle';
 import CheckoutPage from './pages/CheckoutPage';
 import CartDrawer from './features/cart/CartDrawer';
 import MomoPaymentPage from './pages/MomoPaymentPage';
+import OrderTrackingPage, { mockOrder } from './pages/OrderTrackingPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import SavedAddressesPage from './pages/SavedAddressesPage';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState(
@@ -17,7 +20,18 @@ export default function App() {
       ? 'checkout'
       : window.location.pathname.startsWith('/payment')
         ? 'payment'
-        : 'home',
+        : window.location.pathname.startsWith('/orders/')
+          ? 'order-tracking'
+          : window.location.pathname === '/account/orders'
+            ? 'account-orders'
+            : window.location.pathname === '/account/addresses'
+              ? 'account-addresses'
+          : 'home',
+  );
+  const [trackedOrderId, setTrackedOrderId] = useState(
+    window.location.pathname.startsWith('/orders/')
+      ? decodeURIComponent(window.location.pathname.split('/')[2] || mockOrder.id)
+      : mockOrder.id,
   );
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
@@ -32,19 +46,101 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
-      setCurrentPage(path.startsWith('/checkout') ? 'checkout' : path.startsWith('/payment') ? 'payment' : 'home');
+      setCurrentPage(
+        path.startsWith('/checkout') ? 'checkout'
+          : path.startsWith('/payment') ? 'payment'
+            : path.startsWith('/orders/') ? 'order-tracking'
+              : path === '/account/orders' ? 'account-orders'
+                : path === '/account/addresses' ? 'account-addresses'
+              : 'home',
+      );
+      if (path.startsWith('/orders/')) {
+        setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
   const navigateTo = (page) => {
-    const nextPath = page === 'checkout' ? '/checkout' : page === 'payment' ? '/payment' : '/';
+    const nextPath = page === 'checkout' ? '/checkout'
+      : page === 'payment' ? '/payment'
+        : page === 'account-orders' ? '/account/orders'
+          : page === 'account-addresses' ? '/account/addresses'
+          : '/';
+    if (page === 'checkout') {
+      setOrderConfirmation(null);
+    }
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
     setCurrentPage(page);
   };
+
+  if (currentPage === 'order-tracking') {
+    const confirmedValues = orderConfirmation?.checkoutValues?.values;
+    const confirmedOrder = orderConfirmation && trackedOrderId === orderConfirmation.orderNumber
+      ? {
+          ...mockOrder,
+          id: orderConfirmation.orderNumber,
+          customer: {
+            ...orderConfirmation.customer,
+            phone: orderConfirmation.customer.phone || mockOrder.customer.phone,
+          },
+          orderDate: new Date().toLocaleString('en-GH', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+          }),
+          expectedDelivery: orderConfirmation.deliveryEstimate,
+          status: 'Processing',
+          carrier: 'Item13 delivery',
+          trackingNumber: 'Tracking updates available after dispatch',
+          items: orderConfirmation.items,
+          subtotal: orderConfirmation.subtotal,
+          shipping: orderConfirmation.shipping,
+          discount: orderConfirmation.discount,
+          promoCode: confirmedValues?.promoCode || '—',
+          tax: orderConfirmation.tax,
+          total: orderConfirmation.total,
+          paymentMethod: confirmedValues?.cardNumber
+            ? `Visa ending in ${confirmedValues.cardNumber.replace(/\D/g, '').slice(-4)}`
+            : orderConfirmation.paymentMethod === 'mobile-money'
+              ? 'Mobile Money'
+              : orderConfirmation.paymentMethod,
+          shippingAddress: orderConfirmation.address.split(', '),
+          billingAddress: confirmedValues?.billingAddress
+            ? [
+                orderConfirmation.customer.name,
+                confirmedValues.billingAddress,
+                confirmedValues.billingCity,
+                confirmedValues.billingRegion,
+              ].filter(Boolean)
+            : orderConfirmation.address.split(', '),
+          shippingLog: [
+            {
+              time: new Date().toLocaleTimeString('en-GH', { hour: 'numeric', minute: '2-digit' }),
+              date: new Date().toLocaleDateString('en-GH', { month: 'short', day: 'numeric' }),
+              location: 'Item13',
+              detail: 'Order placed and confirmed',
+              complete: true,
+            },
+          ],
+        }
+      : { ...mockOrder, id: trackedOrderId };
+
+    return (
+      <OrderTrackingPage
+        order={confirmedOrder}
+        onBack={() => {
+          window.history.pushState({}, '', '/');
+          setCurrentPage('home');
+        }}
+      />
+    );
+  }
 
   if (currentPage === 'payment') {
     return (
@@ -128,6 +224,49 @@ export default function App() {
     showToast(`Added '${name}' to your bag! (${price})`);
   };
 
+  if (currentPage === 'account-orders') {
+    const addOrderToCart = (order) => {
+      setCartItems((currentItems) => {
+        const nextItems = [...currentItems];
+        order.items.forEach((item) => {
+          const existingIndex = nextItems.findIndex((cartItem) => cartItem.id === item.id);
+          if (existingIndex >= 0) {
+            const existing = nextItems[existingIndex];
+            nextItems[existingIndex] = {
+              ...existing,
+              quantity: Math.min(existing.stock || 20, existing.quantity + item.quantity),
+            };
+          } else {
+            nextItems.push({ ...item, stock: 20 });
+          }
+        });
+        return nextItems;
+      });
+    };
+
+    return (
+      <OrderHistoryPage
+        onBack={() => navigateTo('home')}
+        onViewOrder={(orderId) => {
+          setTrackedOrderId(orderId);
+          setCurrentPage('order-tracking');
+          window.history.pushState({}, '', `/orders/${encodeURIComponent(orderId)}`);
+        }}
+        onReorder={addOrderToCart}
+        onViewCart={() => {
+          navigateTo('home');
+          setIsCartOpen(true);
+        }}
+        onCheckout={() => navigateTo('checkout')}
+        onExplore={() => navigateTo('menu')}
+      />
+    );
+  }
+
+  if (currentPage === 'account-addresses') {
+    return <SavedAddressesPage onBack={() => navigateTo('profile')} />;
+  }
+
   if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
     return (
       <CheckoutPage
@@ -138,6 +277,16 @@ export default function App() {
         onBack={() => {
           setOrderConfirmation(null);
           navigateTo('home');
+        }}
+        onViewCheckout={() => {
+          setOrderConfirmation(null);
+          navigateTo('checkout');
+        }}
+        onTrackOrder={() => {
+          const orderId = orderConfirmation?.orderNumber || mockOrder.id;
+          setTrackedOrderId(orderId);
+          setCurrentPage('order-tracking');
+          window.history.pushState({}, '', `/orders/${encodeURIComponent(orderId)}`);
         }}
         onUpdateQuantity={(productId, quantity) => {
           setCartItems((items) => items.map((item) =>

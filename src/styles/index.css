@@ -25,3 +25,6 @@
 @import './pages/auth.css';
 @import './pages/welcome.css';
 @import './pages/momo-payment.css';
+@import './pages/order-tracking.css';
+@import './pages/order-history.css';
+@import './pages/saved-addresses.css';

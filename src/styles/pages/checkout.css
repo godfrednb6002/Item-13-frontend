@@ -1001,6 +1001,55 @@
   margin-bottom: 65px;
 }
 
+/* Slightly enlarge checkout copy while preserving its existing hierarchy. */
+.checkout-progress > span,
+.checkout-secure-label,
+.checkout-back-link,
+.checkout-demo-notice,
+.checkout-section-heading p,
+.checkout-field,
+.checkout-field input,
+.checkout-choice-copy small,
+.checkout-payment-option small,
+.checkout-same-address,
+.checkout-pickup-note,
+.checkout-faq-toggle,
+.checkout-faq-copy,
+.checkout-saved-method-note,
+.checkout-demo-warning,
+.checkout-review-meta span,
+.checkout-review-meta strong,
+.checkout-trust-box strong,
+.checkout-trust-box small,
+.checkout-terms,
+.checkout-summary-heading > span,
+.checkout-summary-copy > strong,
+.checkout-summary-copy > small,
+.checkout-costs > p,
+.checkout-costs > p strong {
+  font-size: 11px;
+}
+
+.checkout-choice-copy strong,
+.checkout-choice-card > b,
+.checkout-place-order > span,
+.checkout-place-order > strong,
+.checkout-empty p,
+.checkout-confirmation-lede {
+  font-size: 12px;
+}
+
+.checkout-field > small,
+.checkout-guest-note,
+.checkout-costs > small,
+.checkout-side-reassurance,
+.checkout-returns-reassurance,
+.checkout-footer,
+.checkout-footer button,
+.checkout-payment-logos span {
+  font-size: 9px;
+}
+
 .checkout-confirmation-mark {
   width: 58px;
   height: 58px;
@@ -1167,6 +1216,48 @@
   max-width: 300px;
   display: flex;
   justify-content: center;
+}
+
+.checkout-confirmation > .checkout-view-checkout {
+  min-height: 40px;
+  display: block;
+  margin: 10px auto 0;
+  padding: 0 16px;
+  border: 1px solid rgba(244, 182, 39, 0.3);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--gold);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.checkout-confirmation > .checkout-view-checkout:hover {
+  border-color: var(--gold);
+  background: rgba(244, 182, 39, 0.07);
+}
+
+.checkout-confirmation > .checkout-view-tracking {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px auto 0;
+  padding: 0 18px;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: var(--gold);
+  color: #201a0e;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.checkout-confirmation > .checkout-view-tracking:hover {
+  background: #ffca4f;
 }
 
 .checkout-security-copy {
@@ -1376,5 +1467,12 @@
 
   .checkout-confirmation {
     margin-top: 30px;
+  }
+}
+
+@media (max-width: 800px) {
+  .checkout-footer,
+  .checkout-footer button {
+    font-size: 9px;
   }
 }

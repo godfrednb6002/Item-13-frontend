@@ -8,6 +8,7 @@ import {
   MapPin,
   ShieldCheck,
   ShoppingBag,
+  Truck,
 } from 'lucide-react';
 
 const FREE_SHIPPING_THRESHOLD = 80;
@@ -56,6 +57,8 @@ export default function CheckoutPage({
   onUpdateQuantity,
   onPlaceOrder,
   onMomoPayment,
+  onViewCheckout,
+  onTrackOrder,
   customer,
   confirmation,
   initialValues,
@@ -270,6 +273,12 @@ export default function CheckoutPage({
           </p>
           <button type="button" className="checkout-place-order" onClick={onBack}>
             Back to Item13 <ArrowRight size={17} />
+          </button>
+          <button type="button" className="checkout-view-checkout" onClick={onViewCheckout}>
+            View checkout
+          </button>
+          <button type="button" className="checkout-view-tracking" onClick={onTrackOrder}>
+            <Truck size={17} /> Track your order
           </button>
           <p className="checkout-security-copy"><ShieldCheck size={15} /> Thanks for supporting a local favourite.</p>
         </section>

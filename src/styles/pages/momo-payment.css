@@ -833,3 +833,46 @@
     animation-duration: 2s;
   }
 }
+
+/* Bump supporting copy and form text for easier reading. */
+.momo-eyebrow,
+.momo-side-eyebrow {
+  font-size: 11px;
+}
+
+.momo-heading > p,
+.momo-field,
+.momo-field > input,
+.momo-input-wrap input,
+.momo-input-wrap.amount > span,
+.momo-network-fieldset legend,
+.momo-payment-status p,
+.momo-inline-button,
+.momo-monitor-row,
+.momo-monitor-row strong,
+.momo-docs-card summary,
+.momo-docs-card p,
+.momo-docs-card a,
+.momo-qr-note strong,
+.momo-qr-note p {
+  font-size: 12px;
+}
+
+.momo-mode-banner,
+.momo-field > small,
+.momo-network-option strong,
+.momo-network-option small,
+.momo-error,
+.momo-reference code,
+.momo-monitor-row code,
+.momo-reference button,
+.momo-safety-note p,
+.momo-steps p,
+.momo-monitor-caption,
+.momo-footer {
+  font-size: 11px;
+}
+
+.momo-reference > span {
+  font-size: 9px;
+}

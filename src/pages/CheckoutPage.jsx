@@ -8,6 +8,7 @@ import {
   MapPin,
   ShieldCheck,
   ShoppingBag,
+  Truck,
 } from 'lucide-react';
 
 const FREE_SHIPPING_THRESHOLD = 80;
@@ -56,13 +57,17 @@ export default function CheckoutPage({
   onNavigate,
   onUpdateQuantity,
   onPlaceOrder,
+  onMomoPayment,
+  onViewCheckout,
+  onTrackOrder,
   customer,
   confirmation,
+  initialValues,
 }) {
   const [values, setValues] = useState({
-    name: customer?.name || '',
-    email: customer?.email || '',
-    phone: '',
+    name: initialValues?.name || customer?.name || '',
+    email: initialValues?.email || customer?.email || '',
+    phone: initialValues?.phone || '',
     billingAddress: '',
     billingCity: '',
     billingRegion: '',
@@ -74,16 +79,17 @@ export default function CheckoutPage({
     cardNumber: '',
     cardExpiry: '',
     cardCvc: '',
-    mobileMoneyNumber: '',
+    mobileMoneyNumber: initialValues?.mobileMoneyNumber || '',
+    ...(initialValues?.values || {}),
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [sameAsBilling, setSameAsBilling] = useState(true);
-  const [shippingMethod, setShippingMethod] = useState('standard');
-  const [paymentMethod, setPaymentMethod] = useState('card');
-  const [promoCode, setPromoCode] = useState('');
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [promoFeedback, setPromoFeedback] = useState('');
+  const [sameAsBilling, setSameAsBilling] = useState(initialValues?.sameAsBilling ?? true);
+  const [shippingMethod, setShippingMethod] = useState(initialValues?.shippingMethod || 'standard');
+  const [paymentMethod, setPaymentMethod] = useState(initialValues?.paymentMethod || 'card');
+  const [promoCode, setPromoCode] = useState(initialValues?.promoCode || '');
+  const [promoApplied, setPromoApplied] = useState(initialValues?.promoApplied || false);
+  const [promoFeedback, setPromoFeedback] = useState(initialValues?.promoFeedback || '');
   const [faqOpen, setFaqOpen] = useState(false);
 
   const subtotal = useMemo(
@@ -187,7 +193,16 @@ export default function CheckoutPage({
       return;
     }
 
-    onPlaceOrder({
+    const order = {
+      checkoutValues: {
+        values,
+        sameAsBilling,
+        shippingMethod,
+        paymentMethod,
+        promoCode,
+        promoApplied,
+        promoFeedback,
+      },
       customer: {
         name: values.name,
         email: values.email,
@@ -207,7 +222,15 @@ export default function CheckoutPage({
         : sameAsBilling
           ? `${values.billingAddress}, ${values.billingCity}, ${values.billingRegion}`
           : `${values.shippingAddress}, ${values.shippingCity}, ${values.shippingRegion}`,
-    });
+      mobileMoneyNumber: values.mobileMoneyNumber,
+    };
+
+    if (paymentMethod === 'mobile-money') {
+      onMomoPayment(order);
+      return;
+    }
+
+    onPlaceOrder(order);
   };
 
   if (confirmation) {
@@ -409,7 +432,7 @@ export default function CheckoutPage({
             <div className="checkout-payment-options">
               {[
                 ['card', 'Credit or debit card', 'Visa · Mastercard'],
-                ['mobile-money', 'Mobile Money', 'MTN MoMo · Telecel Cash'],
+                ['mobile-money', 'Mobile Money', 'MTN MoMo'],
                 ['paypal', 'PayPal', 'Provider integration required'],
               ].map(([method, label, caption]) => (
                 <label key={method} className={`checkout-payment-option${paymentMethod === method ? ' is-selected' : ''}`}>
@@ -432,7 +455,7 @@ export default function CheckoutPage({
             {paymentMethod === 'mobile-money' && (
               <div className="checkout-card-fields">
                 <Field label="Mobile Money number" name="mobileMoneyNumber" type="tel" inputMode="tel" autoComplete="tel" value={values.mobileMoneyNumber} onChange={handleChange} onBlur={handleBlur} error={errors.mobileMoneyNumber} placeholder="+233 24 000 0000" />
-                <p className="checkout-demo-warning">Demo only: no Mobile Money prompt will be sent.</p>
+                <p className="checkout-demo-warning">Continue to the MTN MoMo payment page to review and approve your payment request.</p>
               </div>
             )}
             {paymentMethod === 'paypal' && (
@@ -456,7 +479,7 @@ export default function CheckoutPage({
           </section>
 
           <button className="checkout-place-order checkout-mobile-cta" type="submit">
-            <span>Place Order</span><strong>{formatPrice(total)}</strong><ArrowRight size={18} />
+            <span>{paymentMethod === 'mobile-money' ? 'Continue to MTN MoMo' : 'Place Order'}</span><strong>{formatPrice(total)}</strong><ArrowRight size={18} />
           </button>
           <p className="checkout-terms">By placing your order, you agree to the store’s terms and returns policy.</p>
         </form>
@@ -500,7 +523,7 @@ export default function CheckoutPage({
             <small className="checkout-tax-note">Tax is estimated and shown before you place your order.</small>
           </div>
           <button className="checkout-place-order checkout-desktop-cta" type="button" onClick={() => document.querySelector('.checkout-form')?.requestSubmit()}>
-            <span>Place Order</span><strong>{formatPrice(total)}</strong><ArrowRight size={18} />
+            <span>{paymentMethod === 'mobile-money' ? 'Continue to MTN MoMo' : 'Place Order'}</span><strong>{formatPrice(total)}</strong><ArrowRight size={18} />
           </button>
           <div className="checkout-payment-logos" aria-label="Payment methods">
             <span>VISA</span><span>mastercard</span><span>PayPal</span><span>MoMo</span>
@@ -515,3 +538,4 @@ export default function CheckoutPage({
     </main>
   );
 }
+

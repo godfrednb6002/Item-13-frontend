@@ -1,0 +1,878 @@
+.momo-page {
+  min-height: 100vh;
+  color: var(--text-white);
+  background:
+    radial-gradient(ellipse at 12% 0%, rgba(244, 182, 39, 0.1), transparent 34rem),
+    var(--bg-dark);
+}
+
+.momo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 84px;
+  padding: 14px max(28px, calc((100% - 1240px) / 2));
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(15, 16, 18, 0.86);
+}
+
+.momo-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+  color: var(--text-white);
+  text-align: left;
+}
+
+.momo-brand img {
+  width: auto;
+  height: 45px;
+  object-fit: contain;
+}
+
+.momo-brand > span {
+  display: grid;
+  gap: 3px;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.momo-brand small {
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.momo-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.momo-back-link,
+.momo-footer button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.momo-back-link:hover,
+.momo-footer button:hover {
+  color: var(--gold);
+}
+
+.momo-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.75fr);
+  align-items: start;
+  gap: 24px;
+  width: min(1120px, calc(100% - 48px));
+  margin: 52px auto 72px;
+}
+
+.momo-main-card,
+.momo-info-card,
+.momo-docs-card,
+.momo-qr-note {
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  background: var(--bg-dark-card);
+  box-shadow: var(--shadow-card);
+}
+
+.momo-main-card {
+  padding: clamp(24px, 4vw, 42px);
+}
+
+.momo-heading {
+  margin-bottom: 25px;
+}
+
+.momo-eyebrow,
+.momo-side-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+.momo-heading h1 {
+  margin-top: 15px;
+  color: var(--text-white);
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 5vw, 3.3rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 1.04;
+}
+
+.momo-heading h1 span {
+  color: var(--gold);
+}
+
+.momo-heading > p {
+  max-width: 550px;
+  margin-top: 13px;
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.momo-mode-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 23px;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.momo-mode-banner svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.momo-mode-banner strong {
+  font-weight: 800;
+}
+
+.momo-mode-banner.demo {
+  border-color: rgba(244, 182, 39, 0.28);
+  background: rgba(244, 182, 39, 0.09);
+  color: #f7daa0;
+}
+
+.momo-mode-banner.live {
+  border-color: rgba(81, 190, 130, 0.3);
+  background: rgba(81, 190, 130, 0.08);
+  color: #b7e7c9;
+}
+
+.momo-mode-banner.warning {
+  border-color: rgba(248, 193, 90, 0.28);
+  background: rgba(248, 193, 90, 0.08);
+  color: #f7daa0;
+}
+
+.momo-form {
+  display: grid;
+  gap: 17px;
+}
+
+.momo-field {
+  display: grid;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.momo-field > span small {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.momo-field > input,
+.momo-input-wrap {
+  min-height: 48px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 11px;
+  background: var(--bg-input);
+  color: var(--text-white);
+}
+
+.momo-field > input {
+  width: 100%;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.momo-field input::placeholder {
+  color: #767d87;
+  opacity: 1;
+}
+
+.momo-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 13px;
+  color: var(--gold);
+}
+
+.momo-input-wrap:focus-within,
+.momo-field > input:focus {
+  border-color: var(--gold);
+  outline: 2px solid rgba(244, 182, 39, 0.16);
+}
+
+.momo-input-wrap input {
+  width: 100%;
+  min-width: 0;
+  height: 46px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-white);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.momo-input-wrap.amount > span {
+  color: var(--text-white);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.momo-input-wrap.amount input {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.momo-field > small {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.momo-network-fieldset {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+  margin: 3px 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.momo-network-fieldset legend {
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.momo-network-option {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  align-items: center;
+  gap: 8px;
+  min-height: 58px;
+  padding: 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 11px;
+  background: var(--bg-input);
+}
+
+.momo-network-option.selected {
+  border-color: var(--gold);
+  background: rgba(244, 182, 39, 0.08);
+}
+
+.momo-network-option > input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.momo-network-option > svg {
+  position: absolute;
+  top: 8px;
+  right: 7px;
+  color: var(--gold);
+}
+
+.momo-network-mark {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffcc00;
+  color: #151515;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.momo-network-mark.telecel {
+  background: #d72d34;
+  color: #fff;
+}
+
+.momo-network-mark.airtel {
+  background: #ee2027;
+  color: #fff;
+}
+
+.momo-network-option > span:nth-of-type(2) {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.momo-network-option strong {
+  color: var(--text-white);
+  font-size: 10px;
+}
+
+.momo-network-option small {
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.momo-network-option.future {
+  opacity: 0.55;
+}
+
+.momo-pay-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 3px;
+  border-radius: 12px;
+  background: var(--gold);
+  color: #17130a;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.momo-pay-button:hover:not(:disabled) {
+  background: #ffd56e;
+  box-shadow: var(--shadow-button);
+  transform: translateY(-1px);
+}
+
+.momo-pay-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.momo-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid rgba(242, 103, 103, 0.28);
+  border-radius: 10px;
+  background: rgba(242, 103, 103, 0.09);
+  color: #ffb6b6;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.momo-error svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.momo-payment-status {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 13px;
+  margin-top: 22px;
+  padding: 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: var(--bg-input);
+}
+
+.momo-payment-status.pending {
+  border-color: rgba(244, 182, 39, 0.36);
+}
+
+.momo-payment-status.success {
+  border-color: rgba(81, 190, 130, 0.34);
+}
+
+.momo-status-icon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(244, 182, 39, 0.14);
+  color: var(--gold);
+}
+
+.momo-payment-status.success .momo-status-icon {
+  background: rgba(81, 190, 130, 0.13);
+  color: #78d89b;
+}
+
+.momo-payment-status h2 {
+  color: var(--text-white);
+  font-family: var(--font-heading);
+  font-size: 17px;
+}
+
+.momo-payment-status p {
+  margin-top: 7px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.momo-payment-status .momo-pin-reminder {
+  color: var(--text-secondary);
+}
+
+.momo-inline-button {
+  margin-top: 12px;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.momo-reference {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-card);
+}
+
+.momo-reference > span {
+  width: 100%;
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.momo-reference code,
+.momo-monitor-row code {
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-family: Consolas, monospace;
+  font-size: 10px;
+}
+
+.momo-reference button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 10px;
+}
+
+.momo-safety-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 23px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-card);
+  color: #b6d8c0;
+}
+
+.momo-safety-note svg {
+  flex-shrink: 0;
+  color: #8bd1a2;
+}
+
+.momo-safety-note p {
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.momo-side-column {
+  display: grid;
+  gap: 16px;
+}
+
+.momo-info-card {
+  padding: 22px;
+}
+
+.momo-side-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 16px;
+  place-items: center;
+  border-radius: 11px;
+  background: rgba(244, 182, 39, 0.12);
+  color: var(--gold);
+}
+
+.momo-side-eyebrow {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+.momo-info-card h2 {
+  color: var(--text-white);
+  font-family: var(--font-heading);
+  font-size: 19px;
+}
+
+.momo-steps {
+  display: grid;
+  gap: 13px;
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.momo-steps li {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  align-items: start;
+  gap: 10px;
+}
+
+.momo-steps li > span {
+  display: grid;
+  width: 23px;
+  height: 23px;
+  place-items: center;
+  border: 1px solid rgba(244, 182, 39, 0.35);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.momo-steps p {
+  padding-top: 3px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.momo-monitor-card .momo-side-icon {
+  margin-bottom: 13px;
+}
+
+.momo-monitor-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border-card);
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.momo-monitor-row strong {
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.momo-monitor-row .momo-monitor-state {
+  color: var(--gold);
+}
+
+.momo-monitor-state.successful {
+  color: #78d89b;
+}
+
+.momo-monitor-state.failed,
+.momo-monitor-state.rejected,
+.momo-monitor-state.expired {
+  color: #ff9a9a;
+}
+
+.momo-monitor-caption {
+  margin-top: 13px;
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.momo-docs-card {
+  padding: 16px;
+}
+
+.momo-docs-card summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: var(--text-white);
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.momo-docs-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.momo-docs-card[open] summary > svg {
+  transform: rotate(90deg);
+}
+
+.momo-docs-card p {
+  margin-top: 13px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.65;
+}
+
+.momo-docs-card code {
+  color: var(--gold);
+  font-family: Consolas, monospace;
+}
+
+.momo-docs-card pre {
+  overflow-x: auto;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--border-card);
+  border-radius: 9px;
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  line-height: 1.6;
+}
+
+.momo-docs-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 13px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.momo-qr-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  box-shadow: none;
+}
+
+.momo-qr-note .momo-side-icon {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.momo-qr-note strong {
+  color: var(--text-white);
+  font-size: 11px;
+}
+
+.momo-qr-note p {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
+.momo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px max(28px, calc((100% - 1120px) / 2));
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+.momo-footer > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.momo-footer > span svg {
+  color: #84d69e;
+}
+
+.momo-footer button {
+  padding: 4px 0;
+}
+
+.momo-spinner {
+  animation: momo-spin 1s linear infinite;
+}
+
+@keyframes momo-spin {
+  to { transform: rotate(360deg); }
+}
+
+.momo-page button:focus-visible,
+.momo-page input:focus-visible,
+.momo-page summary:focus-visible {
+  outline: 2px solid #ffd56e;
+  outline-offset: 3px;
+}
+
+@media (max-width: 850px) {
+  .momo-layout {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 620px;
+    margin-top: 32px;
+  }
+
+  .momo-side-column {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .momo-docs-card,
+  .momo-qr-note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .momo-header {
+    min-height: 70px;
+    padding: 10px 17px;
+  }
+
+  .momo-brand img {
+    height: 38px;
+  }
+
+  .momo-brand > span {
+    font-size: 12px;
+  }
+
+  .momo-brand small {
+    font-size: 7px;
+  }
+
+  .momo-header-actions {
+    gap: 10px;
+  }
+
+  .momo-back-link {
+    font-size: 0;
+  }
+
+  .momo-back-link svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .momo-layout {
+    width: calc(100% - 24px);
+    margin: 20px auto 38px;
+  }
+
+  .momo-main-card {
+    padding: 22px 17px;
+    border-radius: 16px;
+  }
+
+  .momo-heading h1 {
+    font-size: 2.25rem;
+  }
+
+  .momo-network-fieldset {
+    grid-template-columns: 1fr;
+  }
+
+  .momo-network-option {
+    min-height: 53px;
+  }
+
+  .momo-side-column {
+    grid-template-columns: 1fr;
+  }
+
+  .momo-docs-card,
+  .momo-qr-note {
+    grid-column: auto;
+  }
+
+  .momo-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .momo-spinner {
+    animation-duration: 2s;
+  }
+}
+
+/* Bump supporting copy and form text for easier reading. */
+.momo-eyebrow,
+.momo-side-eyebrow {
+  font-size: 11px;
+}
+
+.momo-heading > p,
+.momo-field,
+.momo-field > input,
+.momo-input-wrap input,
+.momo-input-wrap.amount > span,
+.momo-network-fieldset legend,
+.momo-payment-status p,
+.momo-inline-button,
+.momo-monitor-row,
+.momo-monitor-row strong,
+.momo-docs-card summary,
+.momo-docs-card p,
+.momo-docs-card a,
+.momo-qr-note strong,
+.momo-qr-note p {
+  font-size: 12px;
+}
+
+.momo-mode-banner,
+.momo-field > small,
+.momo-network-option strong,
+.momo-network-option small,
+.momo-error,
+.momo-reference code,
+.momo-monitor-row code,
+.momo-reference button,
+.momo-safety-note p,
+.momo-steps p,
+.momo-monitor-caption,
+.momo-footer {
+  font-size: 11px;
+}
+
+.momo-reference > span {
+  font-size: 9px;
+}

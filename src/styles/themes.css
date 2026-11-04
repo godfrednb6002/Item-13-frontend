@@ -2398,6 +2398,20 @@ html.light-theme .contact-hero-section {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 
+html.light-theme .hero-whatsapp-strip {
+  background: rgba(37, 211, 102, 0.12) !important;
+  border: 1px solid rgba(37, 211, 102, 0.45) !important;
+  box-shadow: 0 4px 18px rgba(37, 211, 102, 0.08) !important;
+}
+
+html.light-theme .wa-text-col strong {
+  color: #111418 !important;
+}
+
+html.light-theme .wa-text-col span {
+  color: #4b5362 !important;
+}
+
 html.light-theme .contact-hero-section h1 {
   color: #0f1115 !important;
 }

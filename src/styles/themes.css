@@ -1017,10 +1017,46 @@ html.light-theme .order-card {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04) !important;
 }
 
+html.light-theme .order-card.active-order {
+  border-color: rgba(244, 182, 39, 0.45) !important;
+}
+
 html.light-theme .order-id,
 html.light-theme .order-date,
 html.light-theme .order-item-line {
   color: #111418 !important;
+}
+
+html.light-theme .order-badge.in-progress {
+  background: rgba(244, 182, 39, 0.2) !important;
+  color: #926600 !important;
+  border: 1px solid rgba(244, 182, 39, 0.5) !important;
+}
+
+html.light-theme .order-badge.completed {
+  background: rgba(34, 197, 94, 0.15) !important;
+  color: #15803d !important;
+}
+
+html.light-theme .order-items-summary {
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .item-name {
+  color: #111418 !important;
+}
+
+html.light-theme .item-qty {
+  color: #926600 !important;
+}
+
+html.light-theme .item-price {
+  color: #111418 !important;
+}
+
+html.light-theme .order-total-label {
+  color: #4b5362 !important;
 }
 
 html.light-theme .order-total-label strong {
@@ -2449,21 +2485,35 @@ html.light-theme .hours-badge {
   color: #2b313a !important;
 }
 
-html.light-theme .faq-item {
+html.light-theme .faq-item,
+html.light-theme .faq-card {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
 }
 
-html.light-theme .faq-item.open {
-  border-color: rgba(244, 182, 39, 0.45) !important;
+html.light-theme .faq-item.open,
+html.light-theme .faq-card.is-open {
+  border-color: rgba(244, 182, 39, 0.5) !important;
+  box-shadow: 0 6px 20px rgba(244, 182, 39, 0.1) !important;
 }
 
 html.light-theme .faq-question-btn {
   color: #111418 !important;
 }
 
-html.light-theme .faq-answer {
-  color: #4b5362 !important;
+html.light-theme .faq-question-btn:hover {
+  color: #926600 !important;
+}
+
+html.light-theme .faq-answer,
+html.light-theme .faq-answer-content {
+  color: #374151 !important;
+}
+
+html.light-theme .faq-answer p,
+html.light-theme .faq-answer-content p {
+  color: #374151 !important;
 }
 
 html.light-theme .support-confirmation-card {

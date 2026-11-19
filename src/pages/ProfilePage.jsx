@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ThemeToggle from '../components/ThemeToggle';
+import SavedAddressesPage from './SavedAddressesPage';
 import {
   ArrowDownToLine,
   ArrowLeft,
@@ -14,21 +16,32 @@ import {
   Lock,
   MapPin,
   Package,
+  Pencil,
   Plus,
+  Save,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
   UserRound,
+  X,
+  Zap,
+  Trash2,
+  Truck,
+  Info,
+  PartyPopper,
+  PhoneCall
 } from 'lucide-react';
+import { PRODUCTS } from '../features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
 
 const navigation = [
   { id: 'overview', label: 'Overview', icon: UserRound },
+  { id: 'favorites', label: 'Customer Favorites', icon: Heart },
   { id: 'orders', label: 'Orders & returns', icon: Package },
   { id: 'addresses', label: 'Addresses', icon: MapPin },
   { id: 'payments', label: 'Payments', icon: CreditCard },
   { id: 'preferences', label: 'Preferences', icon: Heart },
   { id: 'security', label: 'Security', icon: ShieldCheck },
-  { id: 'support', label: 'Help & support', icon: CircleHelp },
 ];
 
 const recentOrder = {
@@ -36,7 +49,7 @@ const recentOrder = {
   date: 'October 24, 2026',
   status: 'On its way',
   items: 'Classic Popcorn & Drink Combo',
-  total: 'GHS45.00',
+  total: 'GH₵ 45.00',
 };
 
 function SectionHeading({ eyebrow, title, description, action, onAction }) {
@@ -56,36 +69,99 @@ function SectionHeading({ eyebrow, title, description, action, onAction }) {
   );
 }
 
-function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
-  const [activeSection, setActiveSection] = useState('overview');
+function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initialSection = 'overview' }) {
+  const [activeSection, setActiveSection] = useState(initialSection);
+  const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(true);
   const [smsUpdates, setSmsUpdates] = useState(false);
 
-  const email = user?.email || 'alex.morgan@example.com';
-  const accountName = email
-    .split('@')[0]
-    .split(/[._-]/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-  const initials = accountName
+  useEffect(() => {
+    setActiveSection(initialSection);
+  }, [initialSection]);
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setFavoriteIds(getSavedFavorites());
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, []);
+
+  const favoriteProducts = PRODUCTS.filter((p) => favoriteIds.includes(p.id));
+
+  // Editable Profile States
+  const [isEditing, setIsEditing] = useState(false);
+  const initialName = user?.name || (user?.email
+    ? user.email
+      .split('@')[0]
+      .split(/[._-]/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(' ')
+    : 'Kofi Mensah');
+
+  const [fullName, setFullName] = useState(initialName);
+  const [email, setEmail] = useState(user?.email || 'customer@item13.com');
+  const [phoneNumber, setPhoneNumber] = useState('+233 54 123 4567');
+  const [city, setCity] = useState('Accra (Greater Accra)');
+
+  // Temporary edit buffer
+  const [tempFullName, setTempFullName] = useState(fullName);
+  const [tempEmail, setTempEmail] = useState(email);
+  const [tempPhoneNumber, setTempPhoneNumber] = useState(phoneNumber);
+  const [tempCity, setTempCity] = useState(city);
+
+  const initials = fullName
     .split(' ')
+    .filter(Boolean)
     .map((part) => part[0])
     .slice(0, 2)
-    .join('');
+    .join('')
+    .toUpperCase() || 'IM';
 
-  const notify = (message) => onToast(message);
+  const notify = (message) => onToast && onToast(message);
+
+  const handleStartEdit = () => {
+    setTempFullName(fullName);
+    setTempEmail(email);
+    setTempPhoneNumber(phoneNumber);
+    setTempCity(city);
+    setIsEditing(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
+
+  const handleSaveProfile = (e) => {
+    if (e) e.preventDefault();
+    setFullName(tempFullName);
+    setEmail(tempEmail);
+    setPhoneNumber(tempPhoneNumber);
+    setCity(tempCity);
+    setIsEditing(false);
+    notify('Profile details updated successfully!');
+  };
 
   const renderOverview = () => (
     <>
       <section className="profile-welcome-card">
         <div className="profile-welcome-copy">
           <span className="profile-eyebrow">YOUR ITEM13 ACCOUNT</span>
-          <h2>Good to see you, {accountName.split(' ')[0]}.</h2>
-          <p>Your unexpected essential is just a few clicks away.</p>
-          <button className="profile-gold-button" onClick={() => onNavigate('home')}>
-            <ShoppingBag size={16} /> Explore the menu
-          </button>
+          <h2>Good to see you, {fullName.split(' ')[0]}.</h2>
+          <p>Your unexpected essential is hot, fresh, and ready for delivery.</p>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '12px' }}>
+            <button className="profile-gold-button" onClick={() => onNavigate('menu')}>
+              <ShoppingBag size={16} /> Order popcorn now
+            </button>
+            <button
+              className="profile-outline-button"
+              onClick={() => onNavigate('welcome')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+            >
+              <ArrowLeft size={15} /> Back to dashboard
+            </button>
+          </div>
         </div>
         <div className="profile-welcome-art" aria-hidden="true">
         </div>
@@ -98,15 +174,18 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <span className="profile-stat-label">Orders placed</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
-        <button className="profile-stat-card" onClick={() => notify('You have 240 VIP points to use on your next order.')}>
+        <button className="profile-stat-card" onClick={() => notify('You have 280 VIP loyalty points (GH₵ 15 voucher available).')}>
           <span className="profile-stat-icon"><Gift size={18} /></span>
-          <span className="profile-stat-value">240</span>
+          <span className="profile-stat-value">280</span>
           <span className="profile-stat-label">VIP points</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
-        <button className="profile-stat-card" onClick={() => setActiveSection('preferences')}>
-          <span className="profile-stat-icon"><Heart size={18} /></span>
-          <span className="profile-stat-value">4</span>
+        <button className="profile-stat-card" onClick={() => {
+          setActiveSection('favorites');
+          if (onNavigate) onNavigate('favorites');
+        }}>
+          <span className="profile-stat-icon"><Heart size={18} fill="currentColor" /></span>
+          <span className="profile-stat-value">{favoriteProducts.length}</span>
           <span className="profile-stat-label">Saved favorites</span>
           <ChevronRight size={16} className="profile-stat-arrow" />
         </button>
@@ -117,7 +196,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           eyebrow="THE LATEST"
           title="Your recent order"
           action="View all orders"
-          onAction={() => setActiveSection('orders')}
+          onAction={() => onNavigate('account-orders')}
         />
         <div className="profile-order-row">
           <div className="profile-order-icon"><ShoppingBag size={20} /></div>
@@ -148,27 +227,158 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
       </section>
 
       <div className="profile-two-column">
+        {/* Personal Information with Pencil Edit Icon */}
         <section className="profile-panel">
-          <SectionHeading eyebrow="ACCOUNT DETAILS" title="Personal information" />
-          <div className="profile-info-list">
-            <div><span>Full name</span><strong>{accountName}</strong></div>
-            <div><span>Email address</span><strong>{email}</strong></div>
-            <div><span>Phone number</span><strong className="profile-not-set">Not added yet</strong></div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+            <div>
+              <span className="profile-eyebrow">ACCOUNT DETAILS</span>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#ffffff', margin: 0 }}>
+                Personal information
+              </h2>
+            </div>
+            {!isEditing && (
+              <button
+                className="profile-outline-button"
+                onClick={handleStartEdit}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '6px 14px',
+                  borderRadius: '20px',
+                  borderColor: 'var(--gold)',
+                  color: 'var(--gold)',
+                  cursor: 'pointer'
+                }}
+                title="Edit your details"
+              >
+                <Pencil size={15} />
+                <span>Edit</span>
+              </button>
+            )}
           </div>
-          <button className="profile-outline-button" onClick={() => notify('Profile editing will be available soon.')}>
-            Edit details
-          </button>
+
+          {!isEditing ? (
+            <>
+              <div className="profile-info-list">
+                <div>
+                  <span>Full name</span>
+                  <strong>{fullName}</strong>
+                </div>
+                <div>
+                  <span>Email address</span>
+                  <strong>{email}</strong>
+                </div>
+                <div>
+                  <span>Phone number (MoMo &amp; Delivery)</span>
+                  <strong>{phoneNumber}</strong>
+                </div>
+                <div>
+                  <span>Default City</span>
+                  <strong>{city}</strong>
+                </div>
+              </div>
+              <button
+                className="profile-outline-button"
+                onClick={handleStartEdit}
+                style={{ marginTop: '16px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Pencil size={14} /> Edit details
+              </button>
+            </>
+          ) : (
+            <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Full Name
+                </label>
+                <input
+                  type="text"
+                  value={tempFullName}
+                  onChange={(e) => setTempFullName(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={tempEmail}
+                  onChange={(e) => setTempEmail(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Phone Number (Mobile Money &amp; Delivery)
+                </label>
+                <input
+                  type="tel"
+                  value={tempPhoneNumber}
+                  onChange={(e) => setTempPhoneNumber(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#a0a3ad', marginBottom: '6px', textTransform: 'uppercase' }}>
+                  Default City
+                </label>
+                <select
+                  value={tempCity}
+                  onChange={(e) => setTempCity(e.target.value)}
+                  className="dash-input"
+                  style={{ width: '100%' }}
+                >
+                  <option value="Accra (Greater Accra)">Accra (Greater Accra)</option>
+                  <option value="Tema">Tema</option>
+                  <option value="Kumasi">Kumasi</option>
+                  <option value="Takoradi">Takoradi</option>
+                  <option value="Other Region">Other Region</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                <button
+                  type="submit"
+                  className="profile-gold-button"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <Save size={15} /> Save Changes
+                </button>
+                <button
+                  type="button"
+                  className="profile-outline-button"
+                  onClick={handleCancelEdit}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <X size={15} /> Cancel
+                </button>
+              </div>
+            </form>
+          )}
         </section>
+
         <section className="profile-panel">
           <SectionHeading eyebrow="READY FOR CHECKOUT" title="Your defaults" />
           <div className="profile-default-item">
             <MapPin size={18} />
-            <div><strong>Delivery address</strong><span>Add an address for faster checkout</span></div>
+            <div><strong>Delivery address</strong><span>East Legon, Accra (GA-182-9021)</span></div>
             <button aria-label="Add delivery address" onClick={() => setActiveSection('addresses')}><Plus size={17} /></button>
           </div>
           <div className="profile-default-item">
             <CreditCard size={18} />
-            <div><strong>Payment method</strong><span>No saved payment methods</span></div>
+            <div><strong>Payment method</strong><span>MTN Mobile Money (*4567)</span></div>
             <button aria-label="Add payment method" onClick={() => setActiveSection('payments')}><Plus size={17} /></button>
           </div>
         </section>
@@ -178,7 +388,7 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
 
   const renderOrders = () => (
     <>
-      <SectionHeading eyebrow="YOUR PURCHASES" title="Orders & returns" description="Track deliveries, review past orders, and manage returns." />
+      <SectionHeading eyebrow="YOUR PURCHASES" title="Orders & returns" description="Track deliveries, review past orders, and manage returns." action="View all orders" onAction={() => onNavigate('account-orders')} />
       <section className="profile-panel">
         <div className="profile-order-row">
           <div className="profile-order-icon"><ShoppingBag size={20} /></div>
@@ -209,25 +419,22 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
   );
 
   const renderAddresses = () => (
-    <>
-      <SectionHeading eyebrow="DELIVERY DETAILS" title="Your addresses" description="Save delivery locations for a quicker checkout." action="Add address" onAction={() => notify('Address form opened.')} />
-      <section className="profile-panel profile-empty-panel">
-        <div className="profile-empty-icon"><MapPin size={22} /></div>
-        <h3>No saved addresses yet</h3>
-        <p>Add your home or work address and we’ll have it ready for your next order.</p>
-        <button className="profile-gold-button" onClick={() => notify('Address form opened.')}><Plus size={16} /> Add your first address</button>
-      </section>
-    </>
+    <div style={{ width: '100%' }}>
+      <SavedAddressesPage
+        onBack={() => setActiveSection('overview')}
+        isEmbedded={true}
+      />
+    </div>
   );
 
   const renderPayments = () => (
     <>
-      <SectionHeading eyebrow="SECURE CHECKOUT" title="Payment methods" description="Manage your saved cards and billing preferences." action="Add payment" onAction={() => notify('Secure payment setup is not connected in this demo.')} />
+      <SectionHeading eyebrow="SECURE CHECKOUT" title="Payment methods" description="Manage your saved cards and MoMo accounts." action="Add payment" onAction={() => notify('Secure payment setup is active.')} />
       <section className="profile-panel profile-empty-panel">
         <div className="profile-empty-icon"><CreditCard size={22} /></div>
-        <h3>No saved payment methods</h3>
-        <p>Your payment details are encrypted and never shown in full.</p>
-        <button className="profile-gold-button" onClick={() => notify('Secure payment setup is not connected in this demo.')}><Plus size={16} /> Add a payment method</button>
+        <h3>MTN Mobile Money</h3>
+        <p>Linked number: {phoneNumber} • Instant Popcorn Checkout</p>
+        <button className="profile-gold-button" onClick={() => notify('Payment method setup opened.')}><Plus size={16} /> Add another payment method</button>
       </section>
       <p className="profile-security-note"><ShieldCheck size={16} /> Payment information is securely protected.</p>
     </>
@@ -249,8 +456,11 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
         </div>
         <div className="profile-setting-row">
           <div className="profile-setting-icon"><Heart size={18} /></div>
-          <div className="profile-setting-copy"><strong>Saved favorites</strong><span>Four delicious picks saved for your next movie night.</span></div>
-          <button className="profile-text-button" onClick={() => notify('Your saved favorites are ready to explore.')}>View favorites <ArrowRight size={15} /></button>
+          <div className="profile-setting-copy"><strong>Saved favorites</strong><span>Double Butter, Suya Pepper, Salted Caramel Popcorn.</span></div>
+          <button className="profile-text-button" onClick={() => {
+            setActiveSection('favorites');
+            if (onNavigate) onNavigate('favorites');
+          }}>View favorites <ArrowRight size={15} /></button>
         </div>
       </section>
     </>
@@ -284,25 +494,131 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
     <>
       <SectionHeading eyebrow="WE’RE HERE TO HELP" title="Help & support" description="Find answers or get a hand from our customer care team." />
       <div className="profile-support-grid">
-        <button className="profile-support-card" onClick={() => notify('A support chat will be available soon.')}>
+        <button
+          className="profile-support-card"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Directing to Contact & Support (/contact)...');
+          }}
+        >
           <span className="profile-support-icon"><CircleHelp size={20} /></span>
-          <strong>Chat with us</strong><span>Get help with an order or account.</span><ArrowRight size={16} />
+          <strong>Chat &amp; Support</strong><span>Operating hours, hotlines &amp; WhatsApp.</span><ArrowRight size={16} />
         </button>
-        <button className="profile-support-card" onClick={() => notify('Opening the Item13 help center.')}>
+        <button
+          className="profile-support-card"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Opening Item13 FAQ and operating hours.');
+          }}
+        >
           <span className="profile-support-icon"><BookOpen size={20} /></span>
-          <strong>Visit help center</strong><span>Shipping, returns, and account FAQs.</span><ArrowRight size={16} />
+          <strong>Visit help center</strong><span>Shipping, returns, and FAQs.</span><ArrowRight size={16} />
         </button>
       </div>
       <section className="profile-panel profile-ticket-panel">
         <h3>Recent support requests</h3>
         <p>You don’t have any open support tickets.</p>
-        <button className="profile-text-button" onClick={() => notify('A support request form will be available soon.')}>Contact customer care <ArrowRight size={15} /></button>
+        <button
+          className="profile-text-button"
+          onClick={() => {
+            if (onNavigate) onNavigate('contact');
+            else notify('Opening contact form...');
+          }}
+        >
+          Contact customer care <ArrowRight size={15} />
+        </button>
       </section>
+    </>
+  );
+
+  const handleQuickReorder = (item) => {
+    if (onAddToCart) {
+      onAddToCart(item);
+    } else if (onToast) {
+      onToast(`Added '${item.name}' to bag!`);
+    }
+  };
+
+  const handleRemoveFavorite = (e, productId, name) => {
+    e.stopPropagation();
+    const { updated } = toggleFavorite(productId);
+    setFavoriteIds(updated);
+    if (onToast) onToast(`Removed '${name}' from favorites`);
+  };
+
+  const renderFavorites = () => (
+    <>
+      <SectionHeading
+        eyebrow="YOUR SNACK WISHLIST"
+        title="Customer Favorites"
+        description="Fast 1-click re-order snack wishlist. Re-order your favorite crunch in a single tap."
+        action="Discover more"
+        onAction={() => onNavigate && onNavigate('menu')}
+      />
+      {favoriteProducts.length === 0 ? (
+        <section className="profile-panel profile-empty-panel">
+          <div className="profile-empty-icon"><Heart size={24} /></div>
+          <h3>No saved favorites yet</h3>
+          <p>Explore the Item13 gourmet catalog and save popcorn and drinks you love for quick 1-click re-orders.</p>
+          <button className="profile-gold-button" onClick={() => onNavigate && onNavigate('menu')}>
+            Explore Snacks
+          </button>
+        </section>
+      ) : (
+        <section className="profile-panel">
+          <div className="profile-fav-list">
+            {favoriteProducts.map((item) => (
+              <div key={item.id} className="profile-fav-row">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="profile-fav-thumb"
+                  onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
+                />
+                <div className="profile-fav-info">
+                  <div className="profile-fav-title-wrap">
+                    <span className="profile-fav-cat">{item.category}</span>
+                    {item.badge && <span className="profile-fav-badge">{item.badge}</span>}
+                  </div>
+                  <strong
+                    className="profile-fav-name"
+                    onClick={() => onNavigate && onNavigate(`product-${item.id}`)}
+                  >
+                    {item.name}
+                  </strong>
+                  <span className="profile-fav-price">GH₵ {item.price.toFixed(2)}</span>
+                </div>
+                <div className="profile-fav-actions">
+                  <button
+                    type="button"
+                    className="profile-reorder-btn"
+                    onClick={() => handleQuickReorder(item)}
+                    title="1-Click Re-order"
+                  >
+                    <Zap size={14} />
+                    <span>1-Click Re-order</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="profile-remove-fav-btn"
+                    onClick={(e) => handleRemoveFavorite(e, item.id, item.name)}
+                    title="Remove from favorites"
+                    aria-label={`Remove ${item.name} from favorites`}
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 
   const content = {
     overview: renderOverview,
+    favorites: renderFavorites,
     orders: renderOrders,
     addresses: renderAddresses,
     payments: renderPayments,
@@ -314,17 +630,25 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
   return (
     <div className="profile-page">
       <header className="profile-topbar">
-        <button className="profile-brand" onClick={() => onNavigate('home')} aria-label="Item13 home">
+        <a href="/" className="profile-brand" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} aria-label="Item13 home" style={{ textDecoration: 'none' }}>
           <img src="/item13Logo-trimmed.png" alt="Item13" />
           <span>THE UNEXPECTED ESSENTIAL</span>
-        </button>
-        <button className="profile-back-link" onClick={() => onNavigate('home')}><ArrowLeft size={16} /> Back to store</button>
+        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <ThemeToggle />
+          <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
+            <ArrowLeft size={16} /> Back to dashboard
+          </a>
+          <a href="/" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} style={{ textDecoration: 'none' }}>
+            Storefront
+          </a>
+        </div>
       </header>
 
       <main className="profile-layout">
         <div className="profile-page-intro">
           <div>
-            <span className="profile-eyebrow">VIP CINEMA CLUB MEMBER</span>
+            <span className="profile-eyebrow">VIP SNACK CLUB MEMBER</span>
             <h1>My account</h1>
           </div>
           <button className="profile-logout-button" onClick={onSignOut}>Sign out</button>
@@ -334,7 +658,10 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
           <aside className="profile-sidebar">
             <div className="profile-member-card">
               <div className="profile-avatar">{initials}</div>
-              <div className="profile-member-copy"><strong>{accountName}</strong><span>{email}</span></div>
+              <div className="profile-member-copy">
+                <strong>{fullName}</strong>
+                <span>{email}</span>
+              </div>
               <span className="profile-member-badge"><Sparkles size={12} /> VIP MEMBER</span>
             </div>
             <nav className="profile-nav" aria-label="Account sections">
@@ -344,18 +671,13 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast }) {
                 </button>
               ))}
             </nav>
-            <div className="profile-sidebar-help">
-              <CircleHelp size={17} />
-              <div><strong>Need a hand?</strong><span>We’re here for you.</span></div>
-              <button onClick={() => setActiveSection('support')} aria-label="Go to support"><ArrowRight size={15} /></button>
-            </div>
           </aside>
 
           <div className="profile-content" key={activeSection}>
             {content()}
           </div>
         </div>
-        <footer className="profile-footer">© 2026 Item13 <span>·</span> The unexpected esscential</footer>
+        <footer className="profile-footer">© 2026 Item13 <span>·</span> The Unexpected Essential</footer>
       </main>
     </div>
   );

@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
 
 export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSuccess }) {
   const [mode, setMode] = useState(initialMode); // 'login' | 'signup'
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
 
   // Login Form States
   const [loginEmail, setLoginEmail] = useState('');
@@ -23,11 +27,16 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Slow, elegant modern transition between Login and Sign Up
+  // Slow, elegant modern transition between Login and Sign Up with URL synchronization
   const switchMode = (newMode) => {
     if (newMode === mode || isTransitioning) return;
     setError('');
     setIsTransitioning(true);
+
+    const nextPath = newMode === 'signup' ? '/signup' : '/login';
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    }
 
     setTimeout(() => {
       setMode(newMode);
@@ -103,10 +112,15 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
 
       {/* Top Bar Navigation */}
       <header className="login-header">
-        <button
+        <a
+          href="/"
           className="login-brand-logo"
-          onClick={() => onNavigate && onNavigate('home')}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onNavigate) onNavigate('home');
+          }}
           title="Back to home"
+          style={{ textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
         >
           <img
             src="/item13Logo-trimmed.png"
@@ -114,14 +128,19 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
             className="brand-logo-img"
           />
           <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-        </button>
+        </a>
 
-        <button
+        <a
+          href="/"
           className="login-back-btn"
-          onClick={() => onNavigate && onNavigate('home')}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onNavigate) onNavigate('home');
+          }}
+          style={{ textDecoration: 'none' }}
         >
           ← Go Back
-        </button>
+        </a>
       </header>
 
       {/* Main Authentication Card */}
@@ -360,13 +379,16 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
 
                     <div className="login-footer-callout">
                       <span>Don't have an account yet?</span>
-                      <button
-                        type="button"
+                      <a
+                        href="/signup"
                         className="signup-link-btn"
-                        onClick={() => switchMode('signup')}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          switchMode('signup');
+                        }}
                       >
                         Create Account
-                      </button>
+                      </a>
                     </div>
                   </div>
                 ) : (
@@ -526,13 +548,16 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
 
                     <div className="login-footer-callout">
                       <span>Already have an account?</span>
-                      <button
-                        type="button"
+                      <a
+                        href="/login"
                         className="signup-link-btn"
-                        onClick={() => switchMode('login')}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          switchMode('login');
+                        }}
                       >
                         Sign In
-                      </button>
+                      </a>
                     </div>
                   </div>
                 )}

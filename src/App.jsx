@@ -1,16 +1,350 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import confetti from 'canvas-confetti';
-import { ShoppingBag, ChevronRight, Search, X, Check, Star } from 'lucide-react';
+import { ShoppingBag, ChevronRight, Search, X, Check, Star, Heart, Zap, ArrowRight, Trash2, Bell, Menu, User, LayoutDashboard, UtensilsCrossed, Package, LogOut } from 'lucide-react';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
+import WelcomePage from './pages/WelcomePage';
+import MenuPage from './pages/MenuPage';
+import Footer from './components/Footer';
+import ThemeToggle from './components/ThemeToggle';
+import CheckoutPage from './pages/CheckoutPage';
+import CartDrawer from './features/cart/CartDrawer';
+import ProductDetailPage from './pages/ProductDetailPage';
+import DeliveryPage from './pages/DeliveryPage';
+import AboutEventsPage from './pages/AboutEventsPage';
+import ContactPage from './pages/ContactPage';
+import { PRODUCTS } from './features/catalog/productsData';
+import { getSavedFavorites, toggleFavorite } from './features/catalog/favoritesStorage';
+import MomoPaymentPage from './pages/MomoPaymentPage';
+import OrderTrackingPage, { mockOrder } from './pages/OrderTrackingPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
+import SavedAddressesPage from './pages/SavedAddressesPage';
+import LandingShowcasePage from './pages/LandingShowcasePage';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' | 'login' | 'signup'
+  const getInitialPage = () => {
+    const path = window.location.pathname;
+    if (path.startsWith('/checkout/confirmation')) return 'order-confirmation';
+    if (path.startsWith('/checkout')) return 'checkout';
+    if (path.startsWith('/payment')) return 'payment';
+    if (path.startsWith('/orders/')) return 'order-tracking';
+    if (path === '/account/orders') return 'account-orders';
+    if (path === '/account/addresses' || path === '/dashboard/addresses') return 'welcome-addresses';
+    if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
+    if (path.startsWith('/dashboard/profile/')) {
+      const section = path.replace('/dashboard/profile/', '');
+      return 'welcome-profile-' + section;
+    }
+    if (path === '/dashboard/profile') return 'welcome-profile';
+    if (path.startsWith('/profile') || path.startsWith('/account')) {
+      window.history.replaceState({}, '', '/dashboard/profile');
+      return 'welcome-profile';
+    }
+    if (path.startsWith('/dashboard/')) {
+      const sub = path.replace('/dashboard/', '');
+      return 'welcome-' + sub;
+    }
+    if (path === '/dashboard' || path.startsWith('/welcome')) return 'welcome';
+    if (path.startsWith('/delivery')) return 'delivery';
+    if (path.startsWith('/about')) return 'about';
+    if (path.startsWith('/events')) return 'events';
+    if (path.startsWith('/contact')) return 'contact';
+    if (path.startsWith('/login')) return 'login';
+    if (path.startsWith('/signup')) return 'signup';
+    if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) return 'favorites';
+    if (path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
+    if (path.startsWith('/products/')) {
+      const id = path.replace('/products/', '');
+      return 'product-' + id;
+    }
+    if (path === '/showcase' || path === '/landing') return 'showcase';
+    if (path === '/' || path === '') return 'showcase';
+    return 'home';
+  };
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage);
+  const [trackedOrderId, setTrackedOrderId] = useState(
+    window.location.pathname.startsWith('/orders/')
+      ? decodeURIComponent(window.location.pathname.split('/')[2] || mockOrder.id)
+      : mockOrder.id,
+  );
   const [user, setUser] = useState(null);
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
-  const [cartCount, setCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [momoCheckout, setMomoCheckout] = useState(null);
+  const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [orderConfirmation, setOrderConfirmation] = useState(null);
+  const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const navMenuRef = useRef(null);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (navMenuRef.current && !navMenuRef.current.contains(e.target)) {
+        setIsNavMenuOpen(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifications(false);
+      }
+    };
+    if (isNavMenuOpen || showNotifications) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isNavMenuOpen, showNotifications]);
+
+  useEffect(() => {
+    const handleFavChange = () => {
+      setModalFavorites(getSavedFavorites());
+    };
+    window.addEventListener('item13_favorites_changed', handleFavChange);
+    return () => window.removeEventListener('item13_favorites_changed', handleFavChange);
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path.startsWith('/checkout/confirmation')) {
+        setCurrentPage('order-confirmation');
+      } else if (path.startsWith('/checkout')) {
+        setCurrentPage('checkout');
+      } else if (path.startsWith('/payment')) {
+        setCurrentPage('payment');
+      } else if (path.startsWith('/orders/')) {
+        setCurrentPage('order-tracking');
+        setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
+      } else if (path === '/account/orders') {
+        setCurrentPage('account-orders');
+      } else if (path === '/account/addresses' || path === '/dashboard/addresses') {
+        setCurrentPage('welcome-addresses');
+      } else if (path.startsWith('/cart') || path.startsWith('/bag')) {
+        setCurrentPage('cart');
+        setIsCartOpen(true);
+      } else if (path.startsWith('/dashboard/profile/')) {
+        const section = path.replace('/dashboard/profile/', '');
+        setCurrentPage('welcome-profile-' + section);
+      } else if (path === '/dashboard/profile') {
+        setCurrentPage('welcome-profile');
+      } else if (path.startsWith('/profile') || path.startsWith('/account')) {
+        window.history.replaceState({}, '', '/dashboard/profile');
+        setCurrentPage('welcome-profile');
+      } else if (path.startsWith('/dashboard/')) {
+        const sub = path.replace('/dashboard/', '');
+        setCurrentPage('welcome-' + sub);
+      } else if (path === '/dashboard' || path.startsWith('/welcome')) {
+        setCurrentPage('welcome');
+      } else if (path.startsWith('/delivery')) {
+        setCurrentPage('delivery');
+      } else if (path.startsWith('/about')) {
+        setCurrentPage('about');
+      } else if (path.startsWith('/events')) {
+        setCurrentPage('events');
+      } else if (path.startsWith('/contact')) {
+        setCurrentPage('contact');
+      } else if (path.startsWith('/login')) {
+        setCurrentPage('login');
+      } else if (path.startsWith('/signup')) {
+        setCurrentPage('signup');
+      } else if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) {
+        setCurrentPage('favorites');
+      } else if (path === '/products' || path === '/products/' || path.startsWith('/menu')) {
+        setCurrentPage('menu');
+      } else if (path.startsWith('/products/')) {
+        const id = path.replace('/products/', '');
+        setCurrentPage('product-' + id);
+      } else if (path === '/showcase' || path === '/landing') {
+        setCurrentPage('showcase');
+      } else if (path === '/' || path === '') {
+        setCurrentPage(user ? 'home' : 'showcase');
+      } else {
+        setCurrentPage('home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (page) => {
+    let nextPath = '/';
+    if (page === 'cart' || page === 'bag') {
+      setIsCartOpen(true);
+      return;
+    }
+    if (page === 'checkout') {
+      nextPath = '/checkout';
+      setOrderConfirmation(null);
+    }
+    else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
+    else if (page === 'payment') nextPath = '/payment';
+    else if (page === 'account-orders') nextPath = '/account/orders';
+    else if (page === 'account-addresses' || page === 'addresses') nextPath = '/account/addresses';
+    else if (page === 'delivery') nextPath = '/delivery';
+    else if (page === 'about') nextPath = '/about';
+    else if (page === 'events') nextPath = '/events';
+    else if (page === 'contact') nextPath = '/contact';
+    else if (page === 'login') nextPath = '/login';
+    else if (page === 'signup') nextPath = '/signup';
+    else if (page === 'dashboard' || page === 'welcome') nextPath = '/dashboard';
+    else if (page.startsWith('dashboard/profile/')) nextPath = '/' + page;
+    else if (page.startsWith('dashboard/')) nextPath = '/' + page;
+    else if (page.startsWith('welcome-profile-')) nextPath = '/dashboard/profile/' + page.replace('welcome-profile-', '');
+    else if (page.startsWith('welcome-')) nextPath = '/dashboard/' + page.replace('welcome-', '');
+    else if (page === 'favorites') nextPath = '/account/favorites';
+    else if (page === 'profile') nextPath = '/dashboard/profile';
+    else if (page === 'menu' || page === 'products') nextPath = '/products';
+    else if (page.startsWith('order-tracking/')) {
+      const orderId = page.replace('order-tracking/', '');
+      setTrackedOrderId(orderId);
+      nextPath = '/orders/' + encodeURIComponent(orderId);
+      setCurrentPage('order-tracking');
+      window.history.pushState({}, '', nextPath);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    else if (page.startsWith('product-')) {
+      const prodId = page.replace('product-', '');
+      nextPath = '/products/' + prodId;
+    } else if (page === 'showcase' || page === 'landing') {
+      nextPath = '/showcase';
+    } else if (page === 'home') nextPath = '/';
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
+    }
+    
+    if (page.startsWith('dashboard/')) {
+      const sub = page.replace('dashboard/', '');
+      setCurrentPage(`welcome-${sub}`);
+    } else {
+      setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : (page === 'profile' ? 'welcome-profile' : page)));
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  if (currentPage === 'order-tracking') {
+    const confirmedValues = orderConfirmation?.checkoutValues?.values;
+    const confirmedOrder = orderConfirmation && trackedOrderId === orderConfirmation.orderNumber
+      ? {
+          ...mockOrder,
+          id: orderConfirmation.orderNumber,
+          customer: {
+            ...orderConfirmation.customer,
+            phone: orderConfirmation.customer.phone || mockOrder.customer.phone,
+          },
+          orderDate: new Date().toLocaleString('en-GH', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+          }),
+          expectedDelivery: orderConfirmation.deliveryEstimate,
+          status: 'Processing',
+          carrier: 'Item13 delivery',
+          trackingNumber: 'Tracking updates available after dispatch',
+          items: orderConfirmation.items,
+          subtotal: orderConfirmation.subtotal,
+          shipping: orderConfirmation.shipping,
+          discount: orderConfirmation.discount,
+          promoCode: confirmedValues?.promoCode || '—',
+          tax: orderConfirmation.tax,
+          total: orderConfirmation.total,
+          paymentMethod: confirmedValues?.cardNumber
+            ? `Visa ending in ${confirmedValues.cardNumber.replace(/\D/g, '').slice(-4)}`
+            : orderConfirmation.paymentMethod === 'mobile-money'
+              ? 'Mobile Money'
+              : orderConfirmation.paymentMethod,
+          shippingAddress: orderConfirmation.address.split(', '),
+          billingAddress: confirmedValues?.billingAddress
+            ? [
+                orderConfirmation.customer.name,
+                confirmedValues.billingAddress,
+                confirmedValues.billingCity,
+                confirmedValues.billingRegion,
+              ].filter(Boolean)
+            : orderConfirmation.address.split(', '),
+          shippingLog: [
+            {
+              time: new Date().toLocaleTimeString('en-GH', { hour: 'numeric', minute: '2-digit' }),
+              date: new Date().toLocaleDateString('en-GH', { month: 'short', day: 'numeric' }),
+              location: 'Item13',
+              detail: 'Order placed and confirmed',
+              complete: true,
+            },
+          ],
+        }
+      : { ...mockOrder, id: trackedOrderId };
+
+    return (
+      <OrderTrackingPage
+        order={confirmedOrder}
+        onBack={() => {
+          window.history.pushState({}, '', '/');
+          setCurrentPage('home');
+        }}
+      />
+    );
+  }
+
+  if (currentPage === 'payment') {
+    return (
+      <MomoPaymentPage
+        checkoutOrder={momoCheckout}
+        onBack={() => navigateTo(momoCheckout ? 'checkout' : 'home')}
+      />
+    );
+  }
+
+  const addItemToCart = (productId) => {
+    const products = {
+      'classic-combo': {
+        id: 'classic-combo',
+        name: 'Classic Popcorn & Drink Combo',
+        image: '/WhatsApp Image 2026-10-29 at 4.31.43 PM-Photoroom.png',
+        price: 45,
+        variant: 'Buttered popcorn · Cola + Fanta',
+        stock: 8,
+      },
+      'bistro-popcorn': {
+        id: 'bistro-popcorn',
+        name: 'Bistro Popcorn',
+        image: '/bistro-popcorn.jpg',
+        price: 12.9,
+        variant: 'Freshly popped · Classic',
+        stock: 12,
+      },
+      'coca-cola': {
+        id: 'coca-cola',
+        name: 'Coca-Cola',
+        image: '/coca-cola.jpg',
+        price: 7.9,
+        variant: 'Chilled · 330 ml',
+        stock: 20,
+      },
+    };
+    const product = products[productId];
+    if (!product) return;
+
+    setCartItems((currentItems) => {
+      const existing = currentItems.find((item) => item.id === productId);
+      if (existing) {
+        return currentItems.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: Math.min(item.stock, item.quantity + 1) }
+            : item,
+        );
+      }
+      return [...currentItems, { ...product, quantity: 1 }];
+    });
+  };
 
   const showToast = (msg) => {
     setToastMessage(msg);
@@ -32,14 +366,123 @@ export default function App() {
       colors: ['#F4B627', '#ffffff', '#FF5722', '#222222']
     });
 
-    setCartCount(prev => prev + 1);
+    addItemToCart('classic-combo');
     showToast("Added 'Classic Popcorn & Drink Combo' to your bag! (GH₵ 45.00)");
   };
 
   const handleAddMiniItem = (name, price) => {
-    setCartCount(prev => prev + 1);
+    const productId = name === 'Bistro Popcorn' ? 'bistro-popcorn' : 'coca-cola';
+    addItemToCart(productId);
     showToast(`Added '${name}' to your bag! (${price})`);
   };
+
+  const handleAddDirectItem = (item) => {
+    const addedQty = item.quantity || 1;
+    const itemPrice = item.totalPrice || item.price || 35;
+    const sizeLabel = item.selectedSize ? ' (' + item.selectedSize + ')' : '';
+    setCartItems((prev) => {
+      const existing = prev.find((p) => p.id === item.id);
+      if (existing) {
+        return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
+      }
+      return [...prev, {
+        id: item.id || ('prod-' + Date.now()),
+        name: item.name + sizeLabel,
+        price: itemPrice,
+        quantity: addedQty,
+        image: item.image || '/bistro-popcorn.jpg',
+        variant: item.category || 'Popcorn Snack',
+        stock: 20
+      }];
+    });
+    showToast('Added \'' + item.name + sizeLabel + '\' to your bag! (GH₵ ' + itemPrice.toFixed(2) + ')');
+  };
+
+  if (currentPage === 'account-orders') {
+    const addOrderToCart = (order) => {
+      setCartItems((currentItems) => {
+        const nextItems = [...currentItems];
+        order.items.forEach((item) => {
+          const existingIndex = nextItems.findIndex((cartItem) => cartItem.id === item.id);
+          if (existingIndex >= 0) {
+            const existing = nextItems[existingIndex];
+            nextItems[existingIndex] = {
+              ...existing,
+              quantity: Math.min(existing.stock || 20, existing.quantity + item.quantity),
+            };
+          } else {
+            nextItems.push({ ...item, stock: 20 });
+          }
+        });
+        return nextItems;
+      });
+    };
+
+    return (
+      <OrderHistoryPage
+        onBack={() => navigateTo('home')}
+        onViewOrder={(orderId) => {
+          setTrackedOrderId(orderId);
+          setCurrentPage('order-tracking');
+          window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+        }}
+        onReorder={addOrderToCart}
+        onViewCart={() => {
+          navigateTo('home');
+          setIsCartOpen(true);
+        }}
+        onCheckout={() => navigateTo('checkout')}
+        onExplore={() => navigateTo('menu')}
+      />
+    );
+  }
+
+
+  if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
+    return (
+      <CheckoutPage
+        items={cartItems}
+        customer={user}
+        initialValues={momoCheckout?.checkoutValues}
+        confirmation={orderConfirmation}
+        onNavigate={navigateTo}
+        onBack={() => {
+          setOrderConfirmation(null);
+          navigateTo('menu');
+        }}
+        onViewCheckout={() => {
+          setOrderConfirmation(null);
+          navigateTo('checkout');
+        }}
+        onTrackOrder={() => {
+          const orderId = orderConfirmation?.orderNumber || mockOrder.id;
+          setTrackedOrderId(orderId);
+          setCurrentPage('order-tracking');
+          window.history.pushState({}, '', `/orders/${encodeURIComponent(orderId)}`);
+        }}
+        onUpdateQuantity={(productId, quantity) => {
+          setCartItems((items) => items.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+              : item,
+          ));
+        }}
+        onPlaceOrder={(order) => {
+          setOrderConfirmation({
+            ...order,
+            orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+          });
+          setCartItems([]);
+          setCurrentPage('order-confirmation');
+          window.history.pushState({}, '', '/checkout/confirmation');
+        }}
+        onMomoPayment={(order) => {
+          setMomoCheckout(order);
+          navigateTo('payment');
+        }}
+      />
+    );
+  }
 
   if (currentPage === 'login' || currentPage === 'signup') {
     return (
@@ -52,10 +495,10 @@ export default function App() {
         )}
         <AuthPage
           initialMode={currentPage === 'signup' ? 'signup' : 'login'}
-          onNavigate={(page) => setCurrentPage(page)}
+          onNavigate={navigateTo}
           onAuthSuccess={(userData) => {
             setUser(userData);
-            setCurrentPage('home');
+            navigateTo('dashboard');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
         />
@@ -63,7 +506,11 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'profile') {
+    if (currentPage === 'welcome' || currentPage === 'favorites' || currentPage.startsWith('welcome-')) {
+    const welcomeInitialTab = currentPage.startsWith('welcome-')
+      ? currentPage.replace('welcome-', '')
+      : (currentPage === 'favorites' ? 'favorites' : 'dashboard');
+
     return (
       <>
         {toastMessage && (
@@ -72,16 +519,360 @@ export default function App() {
             <span>{toastMessage}</span>
           </div>
         )}
-        <ProfilePage
+        <WelcomePage
           user={user}
-          onNavigate={(page) => setCurrentPage(page)}
+          cartCount={cartCount}
+          cartItems={cartItems}
+          initialTab={welcomeInitialTab}
+          onNavigate={navigateTo}
           onToast={showToast}
+          onAddToCart={handleAddDirectItem}
+          onUpdateCartQuantity={(productId, quantity) => {
+            setCartItems((items) => items.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                : item,
+            ));
+          }}
+          onRemoveCartItem={(productId) => {
+            setCartItems((items) => items.filter((item) => item.id !== productId));
+          }}
+          onViewOrder={(orderId) => {
+            setTrackedOrderId(orderId);
+            setCurrentPage('order-tracking');
+            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+          }}
+          onPlaceOrder={(order) => {
+            setOrderConfirmation({
+              ...order,
+              orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+            });
+            setCartItems([]);
+            setCurrentPage('order-confirmation');
+            window.history.pushState({}, '', '/checkout/confirmation');
+          }}
           onSignOut={() => {
             setUser(null);
-            setCurrentPage('home');
+            navigateTo('home');
             showToast('Signed out of Item13.');
           }}
         />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+    if (currentPage === 'menu') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <MenuPage
+          onNavigate={navigateTo}
+          cartCount={cartCount}
+          onToast={showToast}
+          onAddToCart={handleAddDirectItem}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage.startsWith('product-')) {
+    const prodId = currentPage.replace('product-', '');
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <ProductDetailPage
+          productId={prodId}
+          onNavigate={navigateTo}
+          cartCount={cartCount}
+          onToast={showToast}
+          onAddToCart={(item) => {
+            const addedQty = item.quantity || 1;
+            const itemPrice = item.totalPrice || item.price || 35;
+            setCartItems((prev) => {
+              const existing = prev.find((p) => p.id === item.id);
+              if (existing) {
+                return prev.map((p) => p.id === item.id ? { ...p, quantity: p.quantity + addedQty } : p);
+              }
+              return [...prev, {
+                id: item.id || ('prod-' + Date.now()),
+                name: item.name + (item.selectedSize ? ` (${item.selectedSize})` : ''),
+                price: item.price || (itemPrice / addedQty),
+                quantity: addedQty,
+                image: item.image || '/bistro-popcorn.jpg',
+                variant: item.variant || item.category || 'Popcorn Snack',
+                stock: 20
+              }];
+            });
+            showToast(`Added ${addedQty}x '${item.name}' to your bag!`);
+          }}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage === 'delivery') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <DeliveryPage
+          onNavigate={navigateTo}
+          onToast={showToast}
+          cartCount={cartCount}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage === 'about' || currentPage === 'events') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <AboutEventsPage
+          initialTab={currentPage === 'events' ? 'events' : 'about'}
+          onNavigate={navigateTo}
+          onToast={showToast}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage === 'contact') {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <ContactPage
+          onNavigate={navigateTo}
+          onToast={showToast}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  if (currentPage === 'showcase' || (!user && currentPage === 'home')) {
+    return (
+      <>
+        {toastMessage && (
+          <div className="toast-notice">
+            <Check size={18} color="var(--gold)" />
+            <span>{toastMessage}</span>
+          </div>
+        )}
+        <LandingShowcasePage
+          user={user}
+          setUser={setUser}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          onAddToCart={handleAddDirectItem}
+          showToast={showToast}
+        />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
       </>
     );
   }
@@ -167,70 +958,251 @@ export default function App() {
 
       {/* Top Navigation */}
       <header className="navbar">
-        <div className="brand-logo" onClick={() => showToast("Item13 — The Unexpected Essential")}>
+        <a href="/" className="brand-logo" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>
           <img
             src="/item13Logo-trimmed.png"
             alt="Item13 Logo"
             className="brand-logo-img"
           />
           <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-        </div>
+        </a>
 
         <div className="nav-right">
           <div className="nav-links">
-            <button className="nav-search-btn" aria-label="Search" onClick={() => showToast("Search our products...")}>
-              <Search size={18} />
-            </button>
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
             </a>
-            <a href="#about" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Item13 — Ghana's favourite popcorn and snack delivery brand."); }}>
+            <a href="/products" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
+              Menu
+            </a>
+            <a href="/delivery" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('delivery'); }}>
+              Delivery Coverage
+            </a>
+            <a href="/about" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('about'); }}>
               About
             </a>
-            <a href="#menu" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); showToast("Explore our full popcorn and drinks menu."); }}>
-              Menu ▾
+            <a href="/events" className="nav-link on-yellow" onClick={(e) => { e.preventDefault(); navigateTo('events'); }}>
+              Party &amp; Weddings
+            </a>
+            <a href="/contact" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('contact'); }}>
+              Contact
             </a>
           </div>
 
           <div className="nav-buttons-group">
-            {user ? (
-              <div className="nav-buttons-row" style={{ alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13px', color: '#111', fontWeight: 700, background: 'var(--gold)', padding: '6px 14px', borderRadius: '20px' }}>
-                  Hi, {user.email.split('@')[0]}
-                </span>
+            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            <div className="nav-tools-row">
+              {/* Theme Toggle Button */}
+              <ThemeToggle className="nav-theme-toggle" />
+
+              {/* Cart / Bag Button */}
+              <button
+                type="button"
+                className={`nav-icon-btn ${isCartOpen ? 'is-active' : ''}`}
+                onClick={() => setIsCartOpen(true)}
+                aria-label={`Open Bag (${cartCount} items)`}
+                title="Open Bag / Cart"
+              >
+                <ShoppingBag size={18} />
+                {cartCount > 0 && <span className="nav-badge-dot" />}
+              </button>
+
+              {/* Notification Button */}
+              <div ref={notifRef} style={{ position: 'relative' }}>
                 <button
-                  className="btn-pill btn-pill-black"
-                  onClick={() => setCurrentPage('profile')}
-                  style={{ fontSize: '12px', padding: '6px 14px' }}
-                >
-                  My account
-                </button>
-                <button
-                  className="btn-pill btn-pill-outline"
+                  type="button"
+                  className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
                   onClick={() => {
-                    setUser(null);
-                    showToast("Signed out of Item13.");
+                    setShowNotifications(!showNotifications);
+                    setIsNavMenuOpen(false);
                   }}
-                  style={{ fontSize: '12px', padding: '6px 14px' }}
+                  aria-label="Notifications"
+                  title="Notifications"
                 >
-                  Logout
+                  <Bell size={18} />
+                  <span className="nav-badge-dot" />
                 </button>
+
+                {/* Notifications Popover */}
+                {showNotifications && (
+                  <div className="nav-notifications-popover">
+                    <div className="nav-notif-title">
+                      <span>Notifications</span>
+                      <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
+                    </div>
+                    <p className="nav-notif-empty">
+                      🎉 Welcome to Item13! Fresh batches of Gourmet Popcorn are popping now.
+                    </p>
+                  </div>
+                )}
               </div>
-            ) : (
-              <>
-                <div className="nav-buttons-row">
-                  <button className="btn-pill btn-pill-yellow" onClick={() => setCurrentPage('signup')}>
-                    Sign up
-                  </button>
-                  <button className="btn-pill btn-pill-black" onClick={() => setCurrentPage('login')}>
-                    Login
-                  </button>
-                </div>
-                <button className="btn-pill btn-pill-outline" onClick={() => showToast("Continuing as Guest — welcome!")}>
-                  Continue as guest
+
+              {/* Hamburger Button that expands to modal menu */}
+              <div ref={navMenuRef} style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                  onClick={() => {
+                    setIsNavMenuOpen(!isNavMenuOpen);
+                    setShowNotifications(false);
+                  }}
+                  aria-label={isNavMenuOpen ? 'Close Menu' : 'Open Navigation Menu'}
+                  title={isNavMenuOpen ? 'Close Menu' : 'Account & Navigation Menu'}
+                >
+                  {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
                 </button>
-              </>
-            )}
+
+                {/* Hamburger Modal Popover */}
+                {isNavMenuOpen && (
+                  <div className="nav-menu-popover">
+                    {user ? (
+                      <div className="nav-menu-header">
+                        <span className="nav-menu-user-name">{user.name || user.email.split('@')[0]}</span>
+                        <span className="nav-menu-user-role">VIP Snack Member</span>
+                      </div>
+                    ) : (
+                      <div className="nav-menu-header">
+                        <span className="nav-menu-user-name">Guest Snack Lover</span>
+                        <span className="nav-menu-user-role">Item13 Express</span>
+                      </div>
+                    )}
+
+                    <a
+                      href="/dashboard/profile"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard/profile');
+                      }}
+                    >
+                      <User size={16} />
+                      <span>Profile</span>
+                    </a>
+
+                    <a
+                      href="/dashboard"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard');
+                      }}
+                    >
+                      <LayoutDashboard size={16} />
+                      <span>Dashboard</span>
+                    </a>
+
+                    <a
+                      href="/products"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('menu');
+                      }}
+                    >
+                      <UtensilsCrossed size={16} />
+                      <span>Menu</span>
+                    </a>
+
+                    <button
+                      type="button"
+                      className="nav-menu-item"
+                      onClick={() => {
+                        setIsNavMenuOpen(false);
+                        setIsCartOpen(true);
+                      }}
+                    >
+                      <ShoppingBag size={16} />
+                      <span>My Bag / Cart ({cartCount})</span>
+                    </button>
+
+                    <a
+                      href="/dashboard/orders"
+                      className="nav-menu-item"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsNavMenuOpen(false);
+                        navigateTo('dashboard/orders');
+                      }}
+                    >
+                      <Package size={16} />
+                      <span>Track Orders</span>
+                    </a>
+
+                    {user ? (
+                      <button
+                        type="button"
+                        className="nav-menu-item nav-menu-item-logout"
+                        onClick={() => {
+                          setIsNavMenuOpen(false);
+                          setUser(null);
+                          showToast('Signed out of Item13.');
+                        }}
+                      >
+                        <LogOut size={16} />
+                        <span>Logout</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="nav-menu-item nav-menu-item-logout"
+                        style={{ color: 'var(--gold)', borderColor: 'rgba(244, 182, 39, 0.2)' }}
+                        onClick={() => {
+                          setIsNavMenuOpen(false);
+                          navigateTo('login');
+                        }}
+                      >
+                        <User size={16} />
+                        <span>Sign in / Sign up</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Bottom row: Sign up, Login and Continue as guest aligned underneath */}
+            {!user ? (
+              <div className="nav-guest-actions">
+                <div className="nav-buttons-row">
+                  <a
+                    href="/signup"
+                    className="btn-pill btn-pill-yellow"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo('signup');
+                    }}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Sign up
+                  </a>
+                  <a
+                    href="/login"
+                    className="btn-pill btn-pill-black"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigateTo('login');
+                    }}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Login
+                  </a>
+                </div>
+                <a
+                  href="/products"
+                  className="btn-pill btn-pill-outline"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo('menu');
+                  }}
+                  style={{ textDecoration: 'none', textAlign: 'center' }}
+                >
+                  Continue as guest
+                </a>
+              </div>
+            ) : null}
           </div>
         </div>
       </header>
@@ -273,7 +1245,15 @@ export default function App() {
           </div>
 
           {/* Customer Favorites in Bottom Left Corner */}
-          <div className="customer-favorites" onClick={() => setActiveModal('favorites')} style={{ cursor: 'pointer' }}>
+          <a
+            href="/account/favorites"
+            className="customer-favorites"
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveModal('favorites');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
+          >
             <div className="avatar-stack-ring">
               <div className="avatar-group">
                 <img
@@ -300,7 +1280,7 @@ export default function App() {
                 See top rated dishes <ChevronRight size={14} />
               </span>
             </div>
-          </div>
+          </a>
         </section>
 
         {/* Right Side (Yellow Background) */}
@@ -319,15 +1299,27 @@ export default function App() {
           <div className="menu-widget">
             <div className="widget-header">
               <span className="widget-title">New Menu Items</span>
-              <span className="widget-subtitle">Latest Additions</span>
+              <a
+                href="/products"
+                className="widget-subtitle"
+                onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}
+                style={{ cursor: 'pointer', textDecoration: 'none' }}
+              >
+                Latest Additions
+              </a>
             </div>
 
             <div className="widget-cards-grid">
               {/* Product 1: Bistro Popcorn */}
-              <div
+              <a
+                href="/products/pop-classic-butter"
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Bistro Popcorn", "GHS12.90")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAddMiniItem("Bistro Popcorn", "GHS12.90");
+                }}
                 title="Click to add Bistro Popcorn"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <img
                   src="/bistro-popcorn.jpg"
@@ -341,13 +1333,18 @@ export default function App() {
                   <span className="mini-card-name">Bistro Popcorn</span>
                   <span className="mini-card-price">GHS12.90</span>
                 </div>
-              </div>
+              </a>
 
               {/* Product 2: Coca-Cola */}
-              <div
+              <a
+                href="/products/drink-coca-cola"
                 className="product-mini-card"
-                onClick={() => handleAddMiniItem("Coca-Cola", "GHS7.90")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAddMiniItem("Coca-Cola", "GHS7.90");
+                }}
                 title="Click to add Coca-Cola"
+                style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 <img
                   src="/coca-cola.jpg"
@@ -361,36 +1358,40 @@ export default function App() {
                   <span className="mini-card-name">Coca-Cola</span>
                   <span className="mini-card-price">GHS7.90</span>
                 </div>
-              </div>
+              </a>
             </div>
           </div>
         </section>
       </main>
 
-      {/* Floating Bag counter badge if items added */}
-      {cartCount > 0 && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '28px',
-            right: '24px',
-            zIndex: 99,
-            background: 'var(--gold)',
-            color: '#000',
-            fontWeight: '700',
-            padding: '8px 18px',
-            borderRadius: '9999px',
-            boxShadow: '0 8px 20px rgba(244, 182, 39, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: 'pointer'
+      {/* Global Footer */}
+      <Footer onNavigate={(page) => setCurrentPage(page)} onToast={showToast} />
+
+      {isCartOpen && (
+        <CartDrawer
+          items={cartItems}
+          onClose={() => setIsCartOpen(false)}
+          onNavigate={navigateTo}
+          onContinueShopping={() => {
+            setIsCartOpen(false);
+            navigateTo('menu');
           }}
-          onClick={() => showToast(`Your Bag contains ${cartCount} item(s)! Ready for checkout.`)}
-        >
-          <ShoppingBag size={16} />
-          <span>Bag: {cartCount}</span>
-        </div>
+          onCheckout={() => {
+            setIsCartOpen(false);
+            navigateTo('checkout');
+          }}
+          onAddItem={addItemToCart}
+          onUpdateQuantity={(productId, quantity) => {
+            setCartItems((items) => items.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                : item,
+            ));
+          }}
+          onRemoveItem={(productId) => {
+            setCartItems((items) => items.filter((item) => item.id !== productId));
+          }}
+        />
       )}
 
       {/* Toast Notification */}
@@ -480,25 +1481,85 @@ export default function App() {
             )}
 
             {activeModal === 'favorites' && (
-              <div>
-                <h3 style={{ fontSize: '22px', fontWeight: '800', color: 'var(--gold)', marginBottom: '14px' }}>
-                  Customer Favorites
-                </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>Classic Buttered Crunch</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.9 ★ by 2,400+ popcorn lovers</div>
-                    </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS12.90</span>
+              <div className="favorites-modal-content">
+                <div className="fav-modal-header">
+                  <div>
+                    <h3 className="fav-modal-title">
+                      Customer Favorites
+                    </h3>
+                    <p className="fav-modal-sub">
+                      Fast 1-click re-order snack wishlist
+                    </p>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px' }}>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>Fanta Citrus Duo Pack</div>
-                      <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Rated 4.8 ★ by 1,820+ customers</div>
+                  <a
+                    href="/account/favorites"
+                    className="modal-goto-full-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveModal(null);
+                      navigateTo('favorites');
+                    }}
+                  >
+                    <span>View All</span>
+                    <ArrowRight size={13} />
+                  </a>
+                </div>
+
+                <div className="fav-modal-list">
+                  {PRODUCTS.filter((p) => modalFavorites.includes(p.id)).slice(0, 5).map((item) => (
+                    <div
+                      key={item.id}
+                      className="fav-modal-item-row"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="fav-modal-item-thumb"
+                        onError={(e) => { e.target.src = '/bistro-popcorn.jpg'; }}
+                      />
+                      <a
+                        href={`/products/${item.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setActiveModal(null);
+                          navigateTo(`product-${item.id}`);
+                        }}
+                        className="fav-modal-item-link"
+                      >
+                        <div className="fav-modal-item-name">
+                          {item.name}
+                        </div>
+                        <div className="fav-modal-item-meta">
+                          GH₵ {item.price.toFixed(2)} • {item.category}
+                        </div>
+                      </a>
+                      <button
+                        className="btn-1click-reorder"
+                        onClick={() => {
+                          handleAddDirectItem(item);
+                          setActiveModal(null);
+                        }}
+                      >
+                        <Zap size={13} />
+                        <span>Re-order</span>
+                      </button>
                     </div>
-                    <span style={{ color: 'var(--gold)', fontWeight: 700 }}>GHS8.50</span>
-                  </div>
+                  ))}
+                </div>
+
+                <div className="fav-modal-footer">
+                  <a
+                    href="/account/favorites"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveModal(null);
+                      navigateTo('favorites');
+                    }}
+                    className="fav-modal-footer-link"
+                  >
+                    <span>Manage all favorites in your account (/account/favorites)</span>
+                    <ArrowRight size={14} />
+                  </a>
                 </div>
               </div>
             )}

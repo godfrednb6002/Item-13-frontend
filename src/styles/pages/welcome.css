@@ -1438,6 +1438,14 @@
 .welcome-tab-pane.embedded-pane .checkout-page {
   min-height: auto;
   background: transparent;
+  padding: 0 0 40px 0;
+}
+
+.welcome-tab-pane.embedded-pane .delivery-hero-section,
+.welcome-tab-pane.embedded-pane .about-hero,
+.welcome-tab-pane.embedded-pane .catering-hero-section,
+.welcome-tab-pane.embedded-pane .contact-hero-section {
+  padding-top: 24px;
 }
 
 

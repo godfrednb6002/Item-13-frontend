@@ -25,3 +25,11 @@
 @import './pages/checkout.css';
 @import './pages/auth.css';
 @import './pages/welcome.css';
+@import './pages/delivery.css';
+@import './pages/about-events.css';
+@import './pages/contact.css';
+@import './pages/momo-payment.css';
+@import './pages/order-history.css';
+@import './pages/order-tracking.css';
+@import './pages/saved-addresses.css';
+@import './pages/landing-showcase.css';

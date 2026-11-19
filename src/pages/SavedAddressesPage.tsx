@@ -230,9 +230,11 @@ function AddressForm({
 export default function SavedAddressesPage({
   onBack,
   addresses = mockAddresses,
+  isEmbedded = false,
 }: {
   onBack: () => void;
   addresses?: SavedAddress[];
+  isEmbedded?: boolean;
 }) {
   const [savedAddresses, setAddresses] = useState<SavedAddress[]>(addresses);
   const [editingAddress, setEditingAddress] = useState<SavedAddress | null>(null);
@@ -272,16 +274,18 @@ export default function SavedAddressesPage({
 
   return (
     <main className="addresses-page">
-      <header className="addresses-topbar">
-        <button type="button" className="addresses-back-link" onClick={onBack}>
-          <ArrowLeft size={17} aria-hidden="true" /> My account
-        </button>
-        <a className="addresses-brand" href="/" aria-label="Item13 home">
-          <img src="/item13Logo-trimmed.png" alt="" />
-          <span>ITEM13 <small>YOUR ACCOUNT</small></span>
-        </a>
-        <span className="addresses-topbar-spacer" aria-hidden="true" />
-      </header>
+      {!isEmbedded && (
+        <header className="addresses-topbar">
+          <button type="button" className="addresses-back-link" onClick={onBack}>
+            <ArrowLeft size={17} aria-hidden="true" /> My account
+          </button>
+          <a className="addresses-brand" href="/" aria-label="Item13 home">
+            <img src="/item13Logo-trimmed.png" alt="" />
+            <span>ITEM13 <small>YOUR ACCOUNT</small></span>
+          </a>
+          <span className="addresses-topbar-spacer" aria-hidden="true" />
+        </header>
+      )}
 
       <div className="addresses-layout">
         <section className="addresses-page-heading" aria-labelledby="addresses-title">

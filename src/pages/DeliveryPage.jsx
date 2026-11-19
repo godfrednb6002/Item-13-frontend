@@ -22,7 +22,7 @@ import ThemeToggle from '../components/ThemeToggle';
 
 const CITIES = ['All Zones', 'Accra', 'Tema', 'Kumasi', 'Surrounding Zones'];
 
-export default function DeliveryPage({ onNavigate, onToast, cartCount = 0 }) {
+export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmbedded = false }) {
   const [selectedCity, setSelectedCity] = useState('All Zones');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSpeedTab, setActiveSpeedTab] = useState('standard'); // 'standard' | 'express'
@@ -64,63 +64,65 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0 }) {
 
   return (
     <div className="delivery-page-wrapper">
-      {/* Top Sticky Header */}
-      <header className="delivery-header">
-        <div className="delivery-header-inner">
-          <a
-            href="/"
-            className="delivery-back-btn"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            aria-label="Back to home"
-            style={{ textDecoration: 'none' }}
-          >
-            <ArrowLeft size={18} />
-            <span>Storefront</span>
-          </a>
-
-          <a
-            href="/"
-            className="delivery-brand"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            title="Item13 — The Unexpected Essential"
-            style={{ textDecoration: 'none' }}
-          >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="delivery-brand-logo" />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
-
-          <div className="delivery-header-actions">
-            <ThemeToggle />
+      {/* Top Sticky Header (only shown when not embedded in dashboard drawer) */}
+      {!isEmbedded && (
+        <header className="delivery-header">
+          <div className="delivery-header-inner">
             <a
-              href="/products"
-              className="delivery-nav-menu-btn"
+              href="/"
+              className="delivery-back-btn"
               onClick={(e) => {
                 e.preventDefault();
-                if (onNavigate) onNavigate('menu');
+                if (onNavigate) onNavigate('home');
               }}
+              aria-label="Back to home"
               style={{ textDecoration: 'none' }}
             >
-              <ShoppingBag size={16} />
-              <span>Browse Menu</span>
+              <ArrowLeft size={18} />
+              <span>Storefront</span>
             </a>
-            {cartCount > 0 && (
-              <button
-                type="button"
-                className="delivery-bag-chip"
-                onClick={() => onNavigate && onNavigate('cart')}
+
+            <a
+              href="/"
+              className="delivery-brand"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              title="Item13 — The Unexpected Essential"
+              style={{ textDecoration: 'none' }}
+            >
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="delivery-brand-logo" />
+              <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+            </a>
+
+            <div className="delivery-header-actions">
+              <ThemeToggle />
+              <a
+                href="/products"
+                className="delivery-nav-menu-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('menu');
+                }}
+                style={{ textDecoration: 'none' }}
               >
-                Bag: {cartCount}
-              </button>
-            )}
+                <ShoppingBag size={16} />
+                <span>Browse Menu</span>
+              </a>
+              {cartCount > 0 && (
+                <button
+                  type="button"
+                  className="delivery-bag-chip"
+                  onClick={() => onNavigate && onNavigate('cart')}
+                >
+                  Bag: {cartCount}
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Hero Banner */}
       <section className="delivery-hero-section">
@@ -424,8 +426,8 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0 }) {
         </section>
       </main>
 
-      {/* Footer */}
-      <Footer onNavigate={onNavigate} onToast={onToast} />
+      {/* Footer (only when not embedded in dashboard) */}
+      {!isEmbedded && <Footer onNavigate={onNavigate} onToast={onToast} />}
     </div>
   );
 }

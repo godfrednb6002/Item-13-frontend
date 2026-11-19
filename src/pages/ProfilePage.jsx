@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
+import SavedAddressesPage from './SavedAddressesPage';
 import {
   ArrowDownToLine,
   ArrowLeft,
@@ -418,15 +419,12 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
   );
 
   const renderAddresses = () => (
-    <>
-      <SectionHeading eyebrow="DELIVERY DETAILS" title="Your addresses" description="Save delivery locations for a quicker checkout." action="Manage saved addresses" onAction={() => onNavigate('account-addresses')} />
-      <section className="profile-panel profile-empty-panel">
-        <div className="profile-empty-icon"><MapPin size={22} /></div>
-        <h3>Saved addresses</h3>
-        <p>East Legon, Accra (GA-182-9021) • Primary</p>
-        <button className="profile-gold-button" onClick={() => onNavigate('account-addresses')}><Plus size={16} /> Add another address</button>
-      </section>
-    </>
+    <div style={{ width: '100%' }}>
+      <SavedAddressesPage
+        onBack={() => setActiveSection('overview')}
+        isEmbedded={true}
+      />
+    </div>
   );
 
   const renderPayments = () => (

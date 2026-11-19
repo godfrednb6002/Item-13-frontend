@@ -66,6 +66,47 @@ html.light-theme .sidebar-nav-item.active {
   border-color: rgba(244, 182, 39, 0.4);
 }
 
+html.light-theme .nav-badge {
+  background: rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .nav-badge.badge-hot {
+  background: #ef4444;
+  color: #ffffff;
+  border: none;
+}
+
+html.light-theme .sidebar-nav-item.active .nav-badge {
+  background: rgba(140, 99, 7, 0.15);
+  color: #8c6307;
+}
+
+html.light-theme .sidebar-brand .brand-logo-tagline {
+  color: #8c6307;
+  border-left-color: rgba(140, 99, 7, 0.35);
+}
+
+html.light-theme .sidebar-brand-box {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .sidebar-collapse-toggle {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #1e293b;
+}
+
+html.light-theme .sidebar-collapse-toggle:hover {
+  background: var(--gold);
+  color: #0f1012;
+}
+
+html.light-theme .sidebar-user-details .user-status {
+  color: #8c6307;
+}
+
 html.light-theme .welcome-topbar {
   background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);

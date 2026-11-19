@@ -194,3 +194,23 @@ html.light-theme .address-cancel-button { border-color: rgba(0, 0, 0, 0.15); col
 @media (prefers-reduced-motion: reduce) {
   .addresses-page *, .addresses-page *::before, .addresses-page *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
+
+/* Embedded SavedAddressesPage inside Dashboard Drawer and Account Drawer */
+.embedded-pane .addresses-page,
+.profile-content .addresses-page {
+  min-height: auto;
+  background: transparent;
+  padding-bottom: 24px;
+}
+
+.embedded-pane .addresses-layout,
+.profile-content .addresses-layout {
+  width: 100%;
+  margin: 0;
+  max-width: none;
+}
+
+.embedded-pane .addresses-page-heading,
+.profile-content .addresses-page-heading {
+  padding: 10px 0 20px;
+}

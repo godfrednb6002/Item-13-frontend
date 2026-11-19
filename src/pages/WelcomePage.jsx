@@ -37,6 +37,7 @@ import ContactPage from './ContactPage';
 import CheckoutPage from './CheckoutPage';
 import MenuPage from './MenuPage';
 import ProfilePage from './ProfilePage';
+import SavedAddressesPage from './SavedAddressesPage';
 
 export default function WelcomePage({
   user,
@@ -50,10 +51,22 @@ export default function WelcomePage({
   onUpdateCartQuantity,
   onRemoveCartItem,
   onPlaceOrder,
+  onViewOrder,
 }) {
   const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
+
+  const handleTrackOrder = (orderId = 'ITM-8921') => {
+    const cleanId = orderId.replace(/^#/, '');
+    if (onViewOrder) {
+      onViewOrder(cleanId);
+    } else if (onNavigate) {
+      onNavigate('order-tracking/' + cleanId);
+    } else {
+      window.location.href = '/orders/' + encodeURIComponent(cleanId);
+    }
+  };
 
   useEffect(() => {
     setActiveTab(initialTab);
@@ -101,7 +114,6 @@ export default function WelcomePage({
     { id: 'delivery', label: 'Delivery Coverage', icon: Truck, badge: 'Zones' },
     { id: 'about', label: 'About Item13', icon: Info, badge: null },
     { id: 'events', label: 'Party & Weddings', icon: PartyPopper, badge: 'Bulk' },
-    { id: 'support', label: 'Help & Support', icon: CircleHelp, badge: null },
     { id: 'contact', label: 'Contact & Support', icon: PhoneCall, badge: null },
   ];
 
@@ -410,7 +422,7 @@ export default function WelcomePage({
                 </div>
                 <button
                   className="btn-track-order"
-                  onClick={() => setActiveTab('orders')}
+                  onClick={() => handleTrackOrder('ITM-8921')}
                 >
                   <span>View Live Tracker</span>
                   <ArrowRight size={15} />
@@ -482,13 +494,32 @@ export default function WelcomePage({
 
               <div className="order-history-list">
                 {/* Active Order Card */}
-                <div className="order-card active-order">
+                <div
+                  className="order-card active-order"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleTrackOrder('ITM-8921')}
+                  title="Click to view live order tracking"
+                >
                   <div className="order-card-header">
                     <div>
                       <span className="order-badge in-progress">In Transit</span>
                       <span className="order-id">#ITM-8921</span>
                     </div>
-                    <span className="order-date">Today, 4:15 PM</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span className="order-date">Today, 4:15 PM</span>
+                      <button
+                        type="button"
+                        className="btn-track-order"
+                        style={{ padding: '4px 12px', fontSize: '12px' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTrackOrder('ITM-8921');
+                        }}
+                      >
+                        <Truck size={14} />
+                        <span>Track Live</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="order-items-summary">
@@ -520,13 +551,32 @@ export default function WelcomePage({
                 </div>
 
                 {/* Past Order Card */}
-                <div className="order-card">
+                <div
+                  className="order-card"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => handleTrackOrder('ITM-8104')}
+                  title="Click to view order delivery details"
+                >
                   <div className="order-card-header">
                     <div>
                       <span className="order-badge completed">Delivered</span>
                       <span className="order-id">#ITM-8104</span>
                     </div>
-                    <span className="order-date">October 24, 2026</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span className="order-date">October 24, 2026</span>
+                      <button
+                        type="button"
+                        className="btn-track-order"
+                        style={{ padding: '4px 12px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.14)', color: '#ffffff' }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTrackOrder('ITM-8104');
+                        }}
+                      >
+                        <Package size={14} />
+                        <span>View Details</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div className="order-items-summary">
@@ -551,54 +601,18 @@ export default function WelcomePage({
             </div>
           )}
 
-          {/* 4. ADDRESSES TAB */}
+          {/* 4. ADDRESSES TAB (Full SavedAddressesPage component) */}
           {activeTab === 'addresses' && (
-            <div className="welcome-tab-pane">
-              <div className="pane-header fav-header-flex">
-                <div>
-                  <h2>Saved Delivery Locations &amp; Coverage</h2>
-                  <p>Saved GhanaPost GPS addresses and landmark instructions for swift delivery</p>
-                </div>
-                <button
-                  type="button"
-                  className="btn-browse-more-fav"
-                  onClick={() => onNavigate && onNavigate('delivery')}
-                  title="View transparent fee table & delivery dispatch zones"
-                >
-                  <Truck size={15} />
-                  <span>View Delivery Coverage &amp; Fee Table</span>
-                </button>
-              </div>
-
-              <div className="addresses-grid">
-                <div className="address-card default">
-                  <div className="address-type-row">
-                    <span className="addr-tag">Home (Default)</span>
-                    <span className="addr-check"><Check size={14} /></span>
-                  </div>
-                  <h4 className="addr-title">East Legon Residence</h4>
-                  <p className="addr-text">Boundary Road, Near A&amp;C Mall, Accra</p>
-                  <p className="addr-gps">GhanaPost GPS: <strong>GA-182-9021</strong></p>
-                  <p className="addr-note">"Call on arrival at the gate"</p>
-                </div>
-
-                <div className="address-card">
-                  <div className="address-type-row">
-                    <span className="addr-tag">Office</span>
-                  </div>
-                  <h4 className="addr-title">Airport City Office</h4>
-                  <p className="addr-text">One Airport Square, 4th Floor, Accra</p>
-                  <p className="addr-gps">GhanaPost GPS: <strong>GA-054-1102</strong></p>
-                </div>
-
-                <button
-                  className="add-address-card"
-                  onClick={() => onToast && onToast('Address modal will open')}
-                >
-                  <Plus size={24} />
-                  <span>Add New Delivery Address</span>
-                </button>
-              </div>
+            <div className="welcome-tab-pane embedded-pane">
+              <SavedAddressesPage
+                onBack={() => {
+                  if (window.location.pathname !== '/dashboard/profile') {
+                    window.history.pushState({}, '', '/dashboard/profile');
+                  }
+                  setActiveTab('profile');
+                }}
+                isEmbedded={true}
+              />
             </div>
           )}
 
@@ -786,6 +800,7 @@ export default function WelcomePage({
                 onNavigate={onNavigate}
                 onToast={onToast}
                 cartCount={cartCount}
+                isEmbedded={true}
               />
             </div>
           )}
@@ -797,6 +812,7 @@ export default function WelcomePage({
                 initialTab="about"
                 onNavigate={onNavigate}
                 onToast={onToast}
+                isEmbedded={true}
               />
             </div>
           )}
@@ -808,6 +824,7 @@ export default function WelcomePage({
                 initialTab="events"
                 onNavigate={onNavigate}
                 onToast={onToast}
+                isEmbedded={true}
               />
             </div>
           )}
@@ -818,6 +835,7 @@ export default function WelcomePage({
               <ContactPage
                 onNavigate={onNavigate}
                 onToast={onToast}
+                isEmbedded={true}
               />
             </div>
           )}

@@ -90,7 +90,7 @@ const FAQS = [
   },
 ];
 
-export default function ContactPage({ onNavigate, onToast }) {
+export default function ContactPage({ onNavigate, onToast, isEmbedded = false }) {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [formData, setFormData] = useState({
@@ -118,38 +118,40 @@ export default function ContactPage({ onNavigate, onToast }) {
 
   return (
     <div className="contact-page-wrapper">
-      {/* Top Header */}
-      <header className="contact-header">
-        <div className="contact-header-inner">
-          <a
-            href="/"
-            className="contact-brand-wrap"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            style={{ cursor: 'pointer', textDecoration: 'none' }}
-          >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="contact-brand-logo" />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
-
-          <div className="contact-header-actions">
-            <ThemeToggle />
+      {/* Top Header (only when not embedded in dashboard) */}
+      {!isEmbedded && (
+        <header className="contact-header">
+          <div className="contact-header-inner">
             <a
-              href="/products"
-              className="btn-header-menu"
+              href="/"
+              className="contact-brand-wrap"
               onClick={(e) => {
                 e.preventDefault();
-                if (onNavigate) onNavigate('menu');
+                if (onNavigate) onNavigate('home');
               }}
-              style={{ textDecoration: 'none' }}
+              style={{ cursor: 'pointer', textDecoration: 'none' }}
             >
-              Browse Menu
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="contact-brand-logo" />
+              <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
             </a>
+
+            <div className="contact-header-actions">
+              <ThemeToggle />
+              <a
+                href="/products"
+                className="btn-header-menu"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('menu');
+                }}
+                style={{ textDecoration: 'none' }}
+              >
+                Browse Menu
+              </a>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Hero Section */}
       <section className="contact-hero-section">
@@ -438,8 +440,8 @@ export default function ContactPage({ onNavigate, onToast }) {
         </section>
       </main>
 
-      {/* Footer */}
-      <Footer onNavigate={onNavigate} onToast={onToast} />
+      {/* Footer (only when not embedded in dashboard) */}
+      {!isEmbedded && <Footer onNavigate={onNavigate} onToast={onToast} />}
     </div>
   );
 }

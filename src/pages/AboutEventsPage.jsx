@@ -80,7 +80,7 @@ const FLAVORS_LIST = [
   'Double Butter Drizzle',
 ];
 
-export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'about' }) {
+export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'about', isEmbedded = false }) {
   const [activeTab, setActiveTab] = useState(initialTab); // 'about' | 'events'
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -130,66 +130,68 @@ export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'abo
 
   return (
     <div className="about-events-page">
-      {/* Top Header */}
-      <header className="about-header">
-        <div className="about-header-inner">
-          <a
-            href="/"
-            className="about-brand-wrap"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            style={{ cursor: 'pointer', textDecoration: 'none' }}
-          >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="about-brand-logo" />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
+      {/* Top Header (only when not embedded in dashboard) */}
+      {!isEmbedded && (
+        <header className="about-header">
+          <div className="about-header-inner">
+            <a
+              href="/"
+              className="about-brand-wrap"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ cursor: 'pointer', textDecoration: 'none' }}
+            >
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="about-brand-logo" />
+              <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+            </a>
 
-          <div className="about-header-tabs">
-            <a
-              href="/about"
-              className={`header-tab-btn ${activeTab === 'about' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('about');
-                window.history.pushState({}, '', '/about');
-              }}
-              style={{ textDecoration: 'none' }}
-            >
-              Our Story &amp; Brand
-            </a>
-            <a
-              href="/events"
-              className={`header-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveTab('events');
-                window.history.pushState({}, '', '/events');
-              }}
-              style={{ textDecoration: 'none' }}
-            >
-              <PartyPopper size={15} />
-              <span>Bulk Party &amp; Weddings</span>
-            </a>
-          </div>
+            <div className="about-header-tabs">
+              <a
+                href="/about"
+                className={`header-tab-btn ${activeTab === 'about' ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveTab('about');
+                  window.history.pushState({}, '', '/about');
+                }}
+                style={{ textDecoration: 'none' }}
+              >
+                Our Story &amp; Brand
+              </a>
+              <a
+                href="/events"
+                className={`header-tab-btn ${activeTab === 'events' ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setActiveTab('events');
+                  window.history.pushState({}, '', '/events');
+                }}
+                style={{ textDecoration: 'none' }}
+              >
+                <PartyPopper size={15} />
+                <span>Bulk Party &amp; Weddings</span>
+              </a>
+            </div>
 
-          <div className="about-header-right">
-            <ThemeToggle />
-            <a
-              href="/products"
-              className="about-nav-menu-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                if (onNavigate) onNavigate('menu');
-              }}
-              style={{ textDecoration: 'none' }}
-            >
-              Browse Menu
-            </a>
+            <div className="about-header-right">
+              <ThemeToggle />
+              <a
+                href="/products"
+                className="about-nav-menu-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('menu');
+                }}
+                style={{ textDecoration: 'none' }}
+              >
+                Browse Menu
+              </a>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
+      )}
 
       {/* Main Content Pane */}
       {activeTab === 'about' ? (
@@ -615,8 +617,8 @@ export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'abo
         </div>
       )}
 
-      {/* Shared Footer */}
-      <Footer onNavigate={onNavigate} onToast={onToast} />
+      {/* Shared Footer (only when not embedded in dashboard) */}
+      {!isEmbedded && <Footer onNavigate={onNavigate} onToast={onToast} />}
     </div>
   );
 }

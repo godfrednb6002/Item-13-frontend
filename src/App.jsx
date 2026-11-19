@@ -19,6 +19,7 @@ import MomoPaymentPage from './pages/MomoPaymentPage';
 import OrderTrackingPage, { mockOrder } from './pages/OrderTrackingPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import SavedAddressesPage from './pages/SavedAddressesPage';
+import LandingShowcasePage from './pages/LandingShowcasePage';
 
 export default function App() {
   const getInitialPage = () => {
@@ -28,11 +29,16 @@ export default function App() {
     if (path.startsWith('/payment')) return 'payment';
     if (path.startsWith('/orders/')) return 'order-tracking';
     if (path === '/account/orders') return 'account-orders';
-    if (path === '/account/addresses') return 'account-addresses';
+    if (path === '/account/addresses' || path === '/dashboard/addresses') return 'welcome-addresses';
     if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
-    if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
-      const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
+    if (path.startsWith('/dashboard/profile/')) {
+      const section = path.replace('/dashboard/profile/', '');
       return 'welcome-profile-' + section;
+    }
+    if (path === '/dashboard/profile') return 'welcome-profile';
+    if (path.startsWith('/profile') || path.startsWith('/account')) {
+      window.history.replaceState({}, '', '/dashboard/profile');
+      return 'welcome-profile';
     }
     if (path.startsWith('/dashboard/')) {
       const sub = path.replace('/dashboard/', '');
@@ -46,12 +52,13 @@ export default function App() {
     if (path.startsWith('/login')) return 'login';
     if (path.startsWith('/signup')) return 'signup';
     if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) return 'favorites';
-    if (path.startsWith('/profile') || path.startsWith('/account')) return 'profile';
     if (path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
     if (path.startsWith('/products/')) {
       const id = path.replace('/products/', '');
       return 'product-' + id;
     }
+    if (path === '/showcase' || path === '/landing') return 'showcase';
+    if (path === '/' || path === '') return 'showcase';
     return 'home';
   };
 
@@ -117,14 +124,19 @@ export default function App() {
         setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
       } else if (path === '/account/orders') {
         setCurrentPage('account-orders');
-      } else if (path === '/account/addresses') {
-        setCurrentPage('account-addresses');
+      } else if (path === '/account/addresses' || path === '/dashboard/addresses') {
+        setCurrentPage('welcome-addresses');
       } else if (path.startsWith('/cart') || path.startsWith('/bag')) {
         setCurrentPage('cart');
         setIsCartOpen(true);
-      } else if (path.startsWith('/dashboard/profile/') || path.startsWith('/profile/')) {
-        const section = path.replace('/dashboard/profile/', '').replace('/profile/', '');
+      } else if (path.startsWith('/dashboard/profile/')) {
+        const section = path.replace('/dashboard/profile/', '');
         setCurrentPage('welcome-profile-' + section);
+      } else if (path === '/dashboard/profile') {
+        setCurrentPage('welcome-profile');
+      } else if (path.startsWith('/profile') || path.startsWith('/account')) {
+        window.history.replaceState({}, '', '/dashboard/profile');
+        setCurrentPage('welcome-profile');
       } else if (path.startsWith('/dashboard/')) {
         const sub = path.replace('/dashboard/', '');
         setCurrentPage('welcome-' + sub);
@@ -144,13 +156,15 @@ export default function App() {
         setCurrentPage('signup');
       } else if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) {
         setCurrentPage('favorites');
-      } else if (path.startsWith('/profile') || path.startsWith('/account')) {
-        setCurrentPage('profile');
       } else if (path === '/products' || path === '/products/' || path.startsWith('/menu')) {
         setCurrentPage('menu');
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
         setCurrentPage('product-' + id);
+      } else if (path === '/showcase' || path === '/landing') {
+        setCurrentPage('showcase');
+      } else if (path === '/' || path === '') {
+        setCurrentPage(user ? 'home' : 'showcase');
       } else {
         setCurrentPage('home');
       }
@@ -172,7 +186,7 @@ export default function App() {
     else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
     else if (page === 'payment') nextPath = '/payment';
     else if (page === 'account-orders') nextPath = '/account/orders';
-    else if (page === 'account-addresses') nextPath = '/account/addresses';
+    else if (page === 'account-addresses' || page === 'addresses') nextPath = '/account/addresses';
     else if (page === 'delivery') nextPath = '/delivery';
     else if (page === 'about') nextPath = '/about';
     else if (page === 'events') nextPath = '/events';
@@ -185,11 +199,22 @@ export default function App() {
     else if (page.startsWith('welcome-profile-')) nextPath = '/dashboard/profile/' + page.replace('welcome-profile-', '');
     else if (page.startsWith('welcome-')) nextPath = '/dashboard/' + page.replace('welcome-', '');
     else if (page === 'favorites') nextPath = '/account/favorites';
-    else if (page === 'profile') nextPath = '/profile';
+    else if (page === 'profile') nextPath = '/dashboard/profile';
     else if (page === 'menu' || page === 'products') nextPath = '/products';
+    else if (page.startsWith('order-tracking/')) {
+      const orderId = page.replace('order-tracking/', '');
+      setTrackedOrderId(orderId);
+      nextPath = '/orders/' + encodeURIComponent(orderId);
+      setCurrentPage('order-tracking');
+      window.history.pushState({}, '', nextPath);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     else if (page.startsWith('product-')) {
       const prodId = page.replace('product-', '');
       nextPath = '/products/' + prodId;
+    } else if (page === 'showcase' || page === 'landing') {
+      nextPath = '/showcase';
     } else if (page === 'home') nextPath = '/';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
@@ -199,7 +224,7 @@ export default function App() {
       const sub = page.replace('dashboard/', '');
       setCurrentPage(`welcome-${sub}`);
     } else {
-      setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : page));
+      setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : (page === 'profile' ? 'welcome-profile' : page)));
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -412,9 +437,6 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'account-addresses') {
-    return <SavedAddressesPage onBack={() => navigateTo('profile')} />;
-  }
 
   if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
     return (
@@ -514,6 +536,11 @@ export default function App() {
           }}
           onRemoveCartItem={(productId) => {
             setCartItems((items) => items.filter((item) => item.id !== productId));
+          }}
+          onViewOrder={(orderId) => {
+            setTrackedOrderId(orderId);
+            setCurrentPage('order-tracking');
+            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
           }}
           onPlaceOrder={(order) => {
             setOrderConfirmation({
@@ -802,7 +829,7 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'profile') {
+  if (currentPage === 'showcase' || (!user && currentPage === 'home')) {
     return (
       <>
         {toastMessage && (
@@ -811,18 +838,41 @@ export default function App() {
             <span>{toastMessage}</span>
           </div>
         )}
-        <ProfilePage
+        <LandingShowcasePage
           user={user}
+          setUser={setUser}
           onNavigate={navigateTo}
-          onToast={showToast}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
           onAddToCart={handleAddDirectItem}
-          initialSection="overview"
-          onSignOut={() => {
-            setUser(null);
-            navigateTo('home');
-            showToast('Signed out of Item13.');
-          }}
+          showToast={showToast}
         />
+        {isCartOpen && (
+          <CartDrawer
+            items={cartItems}
+            onClose={() => setIsCartOpen(false)}
+            onNavigate={navigateTo}
+            onContinueShopping={() => {
+              setIsCartOpen(false);
+              navigateTo('menu');
+            }}
+            onCheckout={() => {
+              setIsCartOpen(false);
+              navigateTo('checkout');
+            }}
+            onAddItem={addItemToCart}
+            onUpdateQuantity={(productId, quantity) => {
+              setCartItems((items) => items.map((item) =>
+                item.id === productId
+                  ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                  : item,
+              ));
+            }}
+            onRemoveItem={(productId) => {
+              setCartItems((items) => items.filter((item) => item.id !== productId));
+            }}
+          />
+        )}
       </>
     );
   }

@@ -102,7 +102,11 @@ export default function LandingShowcasePage({
             alt="Item13 Logo"
             className="brand-logo-img"
           />
-          <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+          <span className="brand-logo-tagline">
+            THE UNEXPECTED
+            <br />
+            ESSENTIAL
+          </span>
         </a>
 
         <div className="nav-right">
@@ -247,32 +251,6 @@ export default function LandingShowcasePage({
                     )}
 
                     <a
-                      href="/dashboard/profile"
-                      className="nav-menu-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard/profile');
-                      }}
-                    >
-                      <User size={16} />
-                      <span>Profile</span>
-                    </a>
-
-                    <a
-                      href="/dashboard"
-                      className="nav-menu-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard');
-                      }}
-                    >
-                      <LayoutDashboard size={16} />
-                      <span>Dashboard</span>
-                    </a>
-
-                    <a
                       href="/products"
                       className="nav-menu-item"
                       onClick={(e) => {
@@ -393,7 +371,11 @@ export default function LandingShowcasePage({
       <main className="inspo-hero-container">
         <section className="inspo-hero-left">
           <div className="inspo-eyebrow">
-            <span>THE UNEXPECTED ESSENTIAL</span>
+            <span>
+              THE UNEXPECTED
+              <br />
+              ESSENTIAL
+            </span>
           </div>
 
           <h1 className="inspo-main-heading">

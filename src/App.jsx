@@ -1070,7 +1070,11 @@ export default function App() {
             alt="Item13 Logo"
             className="brand-logo-img"
           />
-          <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+          <span className="brand-logo-tagline">
+            THE UNEXPECTED
+            <br />
+            ESSENTIAL
+          </span>
         </a>
 
         <div className="nav-right">

@@ -37,17 +37,18 @@
 
 .brand-logo-tagline {
   font-family: var(--font-heading);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: 2.2px;
-  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-transform: none;
   color: var(--gold);
-  opacity: 0.9;
-  line-height: 1.2;
+  opacity: 0.92;
+  line-height: 1.25;
   border-left: 1.5px solid rgba(244, 182, 39, 0.35);
-  padding-left: 12px;
+  padding-left: 10px;
   display: inline-block;
-  white-space: nowrap;
+  white-space: normal;
+  text-align: left;
 }
 
 .brand-logo:hover {

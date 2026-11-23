@@ -16,7 +16,7 @@ import ProductDetailModal from '../features/catalog/ProductDetailModal';
 import Footer from '../components/Footer';
 import ThemeToggle from '../components/ThemeToggle';
 
-export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToast }) {
+export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToast, isCartOpen = false }) {
   // Loading & Filter States
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
@@ -406,7 +406,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
 
 
       {/* Floating Bottom Bag Notification Bar */}
-      {cartCount > 0 && (
+      {cartCount > 0 && !isCartOpen && (
         <div className="menu-floating-cart-bar">
           <div className="floating-cart-inner">
             <div className="floating-cart-info">

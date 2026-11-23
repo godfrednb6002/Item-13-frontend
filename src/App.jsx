@@ -661,6 +661,7 @@ export default function App() {
           cartCount={cartCount}
           onToast={showToast}
           onAddToCart={handleAddDirectItem}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer

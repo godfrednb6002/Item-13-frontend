@@ -12,7 +12,16 @@ import {
   LayoutDashboard,
   UtensilsCrossed,
   Package,
-  LogOut
+  LogOut,
+  Home,
+  MapPin,
+  Heart,
+  Truck,
+  Info,
+  PartyPopper,
+  PhoneCall,
+  MoreHorizontal,
+  ChevronRight
 } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import '../styles/pages/landing-showcase.css';
@@ -28,6 +37,7 @@ export default function LandingShowcasePage({
 }) {
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isMobileMoreDrawerOpen, setIsMobileMoreDrawerOpen] = useState(false);
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
 
@@ -70,6 +80,19 @@ export default function LandingShowcasePage({
       showToast('Added Fresh Crunch Package to your bag!');
     }
   };
+
+  const drawerNavLinks = [
+    { label: 'Dashboard', icon: LayoutDashboard, action: () => onNavigate && onNavigate('dashboard') },
+    { label: 'Menu & Catalog', icon: UtensilsCrossed, action: () => onNavigate && onNavigate('menu'), badge: 'Hot' },
+    { label: 'Orders & Tracking', icon: Package, action: () => onNavigate && onNavigate('dashboard/orders') },
+    { label: 'My Profile', icon: User, action: () => onNavigate && onNavigate('dashboard/profile') },
+    { label: 'Delivery Addresses', icon: MapPin, action: () => onNavigate && onNavigate('dashboard/addresses') },
+    { label: 'Saved Favorites', icon: Heart, action: () => onNavigate && onNavigate('dashboard/favorites') },
+    { label: 'Delivery Coverage', icon: Truck, action: () => onNavigate && onNavigate('delivery'), badge: 'Zones' },
+    { label: 'Party & Weddings', icon: PartyPopper, action: () => onNavigate && onNavigate('events'), badge: 'Bulk' },
+    { label: 'About Item13', icon: Info, action: () => onNavigate && onNavigate('about') },
+    { label: 'Contact & Support', icon: PhoneCall, action: () => onNavigate && onNavigate('contact') },
+  ];
 
   return (
     <div className="inspo-landing-page">
@@ -387,7 +410,6 @@ export default function LandingShowcasePage({
       <main className="inspo-hero-container">
         <section className="inspo-hero-left">
           <div className="inspo-eyebrow">
-            <Sparkles size={14} />
             <span>THE UNEXPECTED ESSENTIAL</span>
           </div>
 
@@ -397,19 +419,29 @@ export default function LandingShowcasePage({
           </h1>
 
           <p className="inspo-subtext">
-            Item13 creates warm, handcrafted artisan popcorn and chilled gourmet refreshments 
-            popped upon order in Accra. Every sweet caramel and savory batch turns simple moments 
+            Item13 creates warm, handcrafted artisan popcorn and chilled gourmet refreshments
+            popped upon order in Accra. Every sweet caramel and savory batch turns simple moments
             into memorable, crave-worthy experiences.
           </p>
 
-          <button
-            type="button"
-            className="inspo-btn-order-now"
-            onClick={handleOrderNow}
-          >
-            <span>Order Now</span>
-            <ArrowRight size={18} />
-          </button>
+          <div className="inspo-hero-actions-wrap">
+            <button
+              type="button"
+              className="inspo-btn-order-now"
+              onClick={handleOrderNow}
+            >
+              <span>Order Now</span>
+              <ArrowRight size={18} />
+            </button>
+            <button
+              type="button"
+              className="inspo-btn-menu-ghost"
+              onClick={() => onNavigate && onNavigate('menu')}
+            >
+              <UtensilsCrossed size={17} />
+              <span>Explore Flavors</span>
+            </button>
+          </div>
         </section>
       </main>
 
@@ -443,6 +475,188 @@ export default function LandingShowcasePage({
           </div>
         </div>
       </section>
+
+      {/* ================= MOBILE BOTTOM TAB BAR ================= */}
+      <nav className="mobile-bottom-tabbar" aria-label="Mobile Navigation">
+        <button
+          type="button"
+          className="mobile-tab-item active"
+          onClick={() => {
+            setIsMobileMoreDrawerOpen(false);
+            if (onNavigate) onNavigate('home');
+          }}
+        >
+          <Home size={20} />
+          <span>Home</span>
+        </button>
+
+        <button
+          type="button"
+          className="mobile-tab-item"
+          onClick={() => {
+            setIsMobileMoreDrawerOpen(false);
+            if (onNavigate) onNavigate('menu');
+          }}
+        >
+          <UtensilsCrossed size={20} />
+          <span>Menu</span>
+        </button>
+
+        <button
+          type="button"
+          className="mobile-tab-item mobile-tab-center-cart"
+          onClick={() => {
+            setIsMobileMoreDrawerOpen(false);
+            if (onOpenCart) onOpenCart();
+          }}
+        >
+          <div className="mobile-tab-cart-circle">
+            <ShoppingBag size={21} />
+            {cartCount > 0 && <span className="mobile-tab-badge">{cartCount}</span>}
+          </div>
+          <span>Bag</span>
+        </button>
+
+        <button
+          type="button"
+          className="mobile-tab-item"
+          onClick={() => {
+            setIsMobileMoreDrawerOpen(false);
+            if (onNavigate) onNavigate('dashboard/orders');
+          }}
+        >
+          <Package size={20} />
+          <span>Orders</span>
+        </button>
+
+        <button
+          type="button"
+          className="mobile-tab-item"
+          onClick={() => {
+            setIsMobileMoreDrawerOpen(false);
+            if (onNavigate) onNavigate('dashboard/profile');
+          }}
+        >
+          <User size={20} />
+          <span>Profile</span>
+        </button>
+
+        <button
+          type="button"
+          className={`mobile-tab-item ${isMobileMoreDrawerOpen ? 'active' : ''}`}
+          onClick={() => setIsMobileMoreDrawerOpen(!isMobileMoreDrawerOpen)}
+          aria-label="More Navigation Options"
+        >
+          <MoreHorizontal size={20} />
+          <span>More</span>
+        </button>
+      </nav>
+
+      {/* ================= MOBILE "MORE" DRAWER MODAL ================= */}
+      {isMobileMoreDrawerOpen && (
+        <div
+          className="mobile-more-drawer-overlay"
+          onClick={() => setIsMobileMoreDrawerOpen(false)}
+        >
+          <div
+            className="mobile-more-drawer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mobile-drawer-handle-bar" />
+            <div className="mobile-drawer-header">
+              <div className="mobile-drawer-user-info">
+                <div className="mobile-drawer-avatar">
+                  {user ? (user.name || user.email || 'U').charAt(0).toUpperCase() : 'I'}
+                </div>
+                <div className="mobile-drawer-user-text">
+                  <strong>{user ? (user.name || user.email.split('@')[0]) : 'Item13 Express Snack'}</strong>
+                  <span>{user ? 'VIP Member • Ghana' : 'Guest Snacker'}</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="mobile-drawer-close-btn"
+                onClick={() => setIsMobileMoreDrawerOpen(false)}
+                aria-label="Close Drawer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="mobile-drawer-scroll-body">
+              <div className="mobile-drawer-section-title">Navigation &amp; Services</div>
+              <div className="mobile-drawer-links-grid">
+                {drawerNavLinks.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <button
+                      key={item.label}
+                      type="button"
+                      className="mobile-drawer-nav-card"
+                      onClick={() => {
+                        setIsMobileMoreDrawerOpen(false);
+                        item.action();
+                      }}
+                    >
+                      <div className="drawer-nav-card-icon">
+                        <Icon size={19} />
+                      </div>
+                      <span className="drawer-nav-card-label">{item.label}</span>
+                      {item.badge && (
+                        <span className={`drawer-badge ${item.badge === 'Hot' ? 'badge-hot' : ''}`}>
+                          {item.badge}
+                        </span>
+                      )}
+                      <ChevronRight size={15} className="drawer-card-arrow" />
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Guest Auth / Sign In buttons if guest, else logout */}
+              <div className="mobile-drawer-auth-box">
+                {!user ? (
+                  <>
+                    <button
+                      type="button"
+                      className="mobile-drawer-auth-btn yellow"
+                      onClick={() => {
+                        setIsMobileMoreDrawerOpen(false);
+                        if (onNavigate) onNavigate('signup');
+                      }}
+                    >
+                      Sign up for VIP Crunch Perks
+                    </button>
+                    <button
+                      type="button"
+                      className="mobile-drawer-auth-btn black"
+                      onClick={() => {
+                        setIsMobileMoreDrawerOpen(false);
+                        if (onNavigate) onNavigate('login');
+                      }}
+                    >
+                      Login to Existing Account
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="mobile-drawer-auth-btn logout"
+                    onClick={() => {
+                      setIsMobileMoreDrawerOpen(false);
+                      if (setUser) setUser(null);
+                      if (showToast) showToast('Signed out of Item13.');
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>Sign Out of Account</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

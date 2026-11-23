@@ -1198,6 +1198,39 @@
     padding: 0 12px;
   }
 
+  /* Hide theme toggle on menu page in mobile view */
+  .menu-header-actions .theme-toggle-btn {
+    display: none !important;
+  }
+
+  /* Compact Back Button in Mobile Header: Hide text and keep only the back arrow */
+  .menu-nav-home-btn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .menu-nav-home-btn span {
+    display: none;
+  }
+
+  /* Compact Back Button in Mobile Header: Hide text and keep only the back arrow */
+  .menu-nav-home-btn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .menu-nav-home-btn span {
+    display: none;
+  }
+
   /* Single horizontal line row: Reduced Search Box + Sort Icon + Filter Icon */
   .menu-controls-inner {
     display: flex;

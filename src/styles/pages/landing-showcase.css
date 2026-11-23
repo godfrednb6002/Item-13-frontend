@@ -703,9 +703,17 @@ html.light-theme .inspo-big-watermark-title {
     min-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 92px 16px calc(88px + env(safe-area-inset-bottom, 0px));
     /* top clearance for taller fixed header, bottom clearance for floating capsule bar */
     -webkit-overflow-scrolling: touch;
+  }
+
+  .inspo-landing-page::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
   }
 
   .inspo-header {

@@ -38,6 +38,7 @@ export default function LandingShowcasePage({
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isMobileMoreDrawerOpen, setIsMobileMoreDrawerOpen] = useState(false);
+  const [activeMobileTab, setActiveMobileTab] = useState('home');
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
 
@@ -433,14 +434,6 @@ export default function LandingShowcasePage({
               <span>Order Now</span>
               <ArrowRight size={18} />
             </button>
-            <button
-              type="button"
-              className="inspo-btn-menu-ghost"
-              onClick={() => onNavigate && onNavigate('menu')}
-            >
-              <UtensilsCrossed size={17} />
-              <span>Explore Flavors</span>
-            </button>
           </div>
         </section>
       </main>
@@ -480,75 +473,98 @@ export default function LandingShowcasePage({
       <nav className="mobile-bottom-tabbar" aria-label="Mobile Navigation">
         <button
           type="button"
-          className="mobile-tab-item active"
+          className={`mobile-tab-item ${activeMobileTab === 'home' && !isMobileMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
+            setActiveMobileTab('home');
             setIsMobileMoreDrawerOpen(false);
             if (onNavigate) onNavigate('home');
           }}
+          aria-label="Home"
         >
-          <Home size={20} />
-          <span>Home</span>
+          <div className="mobile-tab-icon-wrap">
+            <Home size={21} />
+          </div>
+          <span className="mobile-tab-label">Home</span>
         </button>
 
         <button
           type="button"
-          className="mobile-tab-item"
+          className={`mobile-tab-item ${activeMobileTab === 'menu' && !isMobileMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
+            setActiveMobileTab('menu');
             setIsMobileMoreDrawerOpen(false);
             if (onNavigate) onNavigate('menu');
           }}
+          aria-label="Menu"
         >
-          <UtensilsCrossed size={20} />
-          <span>Menu</span>
+          <div className="mobile-tab-icon-wrap">
+            <UtensilsCrossed size={21} />
+          </div>
+          <span className="mobile-tab-label">Menu</span>
         </button>
 
         <button
           type="button"
-          className="mobile-tab-item mobile-tab-center-cart"
+          className={`mobile-tab-item ${activeMobileTab === 'bag' && !isMobileMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
+            setActiveMobileTab('bag');
             setIsMobileMoreDrawerOpen(false);
             if (onOpenCart) onOpenCart();
           }}
+          aria-label="Bag"
         >
-          <div className="mobile-tab-cart-circle">
+          <div className="mobile-tab-icon-wrap">
             <ShoppingBag size={21} />
             {cartCount > 0 && <span className="mobile-tab-badge">{cartCount}</span>}
           </div>
-          <span>Bag</span>
+          <span className="mobile-tab-label">Bag</span>
         </button>
 
         <button
           type="button"
-          className="mobile-tab-item"
+          className={`mobile-tab-item ${activeMobileTab === 'orders' && !isMobileMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
+            setActiveMobileTab('orders');
             setIsMobileMoreDrawerOpen(false);
             if (onNavigate) onNavigate('dashboard/orders');
           }}
+          aria-label="Orders"
         >
-          <Package size={20} />
-          <span>Orders</span>
+          <div className="mobile-tab-icon-wrap">
+            <Package size={21} />
+          </div>
+          <span className="mobile-tab-label">Orders</span>
         </button>
 
         <button
           type="button"
-          className="mobile-tab-item"
+          className={`mobile-tab-item ${activeMobileTab === 'profile' && !isMobileMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
+            setActiveMobileTab('profile');
             setIsMobileMoreDrawerOpen(false);
             if (onNavigate) onNavigate('dashboard/profile');
           }}
+          aria-label="Profile"
         >
-          <User size={20} />
-          <span>Profile</span>
+          <div className="mobile-tab-icon-wrap">
+            <User size={21} />
+          </div>
+          <span className="mobile-tab-label">Profile</span>
         </button>
 
         <button
           type="button"
           className={`mobile-tab-item ${isMobileMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => setIsMobileMoreDrawerOpen(!isMobileMoreDrawerOpen)}
-          aria-label="More Navigation Options"
+          onClick={() => {
+            setActiveMobileTab('more');
+            setIsMobileMoreDrawerOpen(!isMobileMoreDrawerOpen);
+          }}
+          aria-label="More Options"
         >
-          <MoreHorizontal size={20} />
-          <span>More</span>
+          <div className="mobile-tab-icon-wrap">
+            <MoreHorizontal size={21} />
+          </div>
+          <span className="mobile-tab-label">More</span>
         </button>
       </nav>
 

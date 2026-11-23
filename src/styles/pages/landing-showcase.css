@@ -668,7 +668,7 @@ html.light-theme .inspo-big-watermark-title {
     min-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 16px 84px; /* clearance for bottom tab bar */
+    padding: 0 16px calc(88px + env(safe-area-inset-bottom, 0px)); /* clearance for floating capsule bar */
     -webkit-overflow-scrolling: touch;
   }
 
@@ -680,7 +680,8 @@ html.light-theme .inspo-big-watermark-title {
   /* Simplify top nav on mobile so bottom bar does primary navigation */
   .inspo-header-guest,
   .inspo-header-user-badge,
-  .inspo-menu-trigger-btn {
+  .inspo-menu-trigger-btn,
+  .inspo-eyebrow {
     display: none;
   }
 
@@ -737,24 +738,26 @@ html.light-theme .inspo-big-watermark-title {
   }
 
   /* --------------------------------------------------------------------------
-     MOBILE BOTTOM TAB BAR
+     MOBILE BOTTOM TAB BAR (FLOATING CAPSULE)
      -------------------------------------------------------------------------- */
   .mobile-bottom-tabbar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 64px;
-    background: rgba(18, 12, 4, 0.94);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(244, 182, 39, 0.22);
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(92vw, 420px);
+    height: 62px;
+    background: rgba(22, 15, 6, 0.88);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(244, 182, 39, 0.3);
+    border-radius: 999px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 0 6px env(safe-area-inset-bottom, 0px);
+    justify-content: space-between;
+    padding: 0 10px;
     z-index: 1000;
-    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.55);
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(244, 182, 39, 0.15);
   }
 
   .mobile-tab-item {
@@ -765,88 +768,79 @@ html.light-theme .inspo-big-watermark-title {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.62);
     font-family: inherit;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 600;
-    padding: 6px 10px;
-    border-radius: 12px;
+    padding: 6px 4px;
+    border-radius: 999px;
     cursor: pointer;
-    transition: color 0.18s ease, transform 0.15s ease;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     flex: 1;
     max-width: 68px;
+    min-height: 48px;
   }
 
   .mobile-tab-item:active {
-    transform: scale(0.92);
+    transform: scale(0.9);
   }
 
   .mobile-tab-item.active {
     color: var(--gold, #f4b627);
+    background: rgba(244, 182, 39, 0.12);
   }
 
   .mobile-tab-item.active svg {
     stroke: var(--gold, #f4b627);
   }
 
-  /* Elevated Center Bag / Cart Button */
-  .mobile-tab-center-cart {
-    background: transparent;
-    border: none;
-    outline: none;
-    display: flex;
-    flex-direction: column;
+  .mobile-tab-icon-wrap {
+    position: relative;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    position: relative;
-    top: -12px;
-    padding: 0 4px;
+    transition: transform 0.2s ease;
   }
 
-  .mobile-tab-center-cart:active .mobile-cart-circle {
-    transform: scale(0.92);
+  /* Names/labels are hidden by default, only shown when active/tapped */
+  .mobile-tab-label {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(4px);
+    transition: max-height 0.22s ease, opacity 0.2s ease, transform 0.2s ease;
+    font-size: 9.5px;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 0;
+    letter-spacing: 0.01em;
+    pointer-events: none;
   }
 
-  .mobile-cart-circle {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #f4b627 0%, #e09f16 100%);
-    color: #120c04;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 18px rgba(244, 182, 39, 0.45);
-    border: 3px solid #140d05;
-    position: relative;
-    transition: transform 0.15s ease;
+  .mobile-tab-item.active .mobile-tab-label {
+    max-height: 14px;
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 3px;
   }
 
-  .mobile-cart-badge {
+  .mobile-tab-badge {
     position: absolute;
-    top: -3px;
-    right: -3px;
+    top: -5px;
+    right: -8px;
     background: #ff3838;
     color: #ffffff;
-    font-size: 10px;
+    font-size: 9.5px;
     font-weight: 800;
-    min-width: 17px;
-    height: 17px;
+    min-width: 15px;
+    height: 15px;
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
-    border: 2px solid #140d05;
-  }
-
-  .mobile-cart-label {
-    font-size: 10px;
-    font-weight: 700;
-    color: var(--gold, #f4b627);
-    margin-top: 2px;
+    padding: 0 3px;
+    line-height: 1;
+    border: 1.5px solid #140d05;
   }
 
   /* --------------------------------------------------------------------------
@@ -1082,9 +1076,9 @@ html.light-theme .inspo-big-watermark-title {
 
   /* Light Theme Adjustments for Mobile Nav & Drawer */
   html.light-theme .mobile-bottom-tabbar {
-    background: rgba(253, 246, 227, 0.94);
-    border-top-color: rgba(180, 130, 20, 0.25);
-    box-shadow: 0 -8px 24px rgba(120, 90, 20, 0.15);
+    background: rgba(253, 246, 227, 0.88);
+    border-color: rgba(180, 130, 20, 0.35);
+    box-shadow: 0 12px 34px rgba(120, 90, 20, 0.18), 0 2px 8px rgba(180, 130, 20, 0.1);
   }
 
   html.light-theme .mobile-tab-item {
@@ -1099,8 +1093,8 @@ html.light-theme .inspo-big-watermark-title {
     stroke: #a46d00;
   }
 
-  html.light-theme .mobile-cart-circle {
-    border-color: #fcf4dc;
+  html.light-theme .mobile-tab-badge {
+    border-color: #fdf5de;
   }
 
   html.light-theme .mobile-more-drawer {

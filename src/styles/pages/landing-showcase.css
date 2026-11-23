@@ -677,6 +677,11 @@ html.light-theme .inspo-big-watermark-title {
     margin-top: 0;
   }
 
+  /* Hide horizontal text links in top navbar on mobile */
+  .inspo-landing-page .nav-links {
+    display: none !important;
+  }
+
   /* Simplify top nav on mobile so bottom bar does primary navigation */
   .inspo-header-guest,
   .inspo-header-user-badge,

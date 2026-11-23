@@ -20,6 +20,7 @@ import OrderTrackingPage, { mockOrder } from './pages/OrderTrackingPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import SavedAddressesPage from './pages/SavedAddressesPage';
 import LandingShowcasePage from './pages/LandingShowcasePage';
+import MobileBottomTabs from './components/MobileBottomTabs';
 
 export default function App() {
   const getInitialPage = () => {
@@ -284,13 +285,24 @@ export default function App() {
       : { ...mockOrder, id: trackedOrderId };
 
     return (
-      <OrderTrackingPage
-        order={confirmedOrder}
-        onBack={() => {
-          window.history.pushState({}, '', '/');
-          setCurrentPage('home');
-        }}
-      />
+      <>
+        <OrderTrackingPage
+          order={confirmedOrder}
+          onBack={() => {
+            window.history.pushState({}, '', '/');
+            setCurrentPage('home');
+          }}
+        />
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
+      </>
     );
   }
 
@@ -419,68 +431,90 @@ export default function App() {
     };
 
     return (
-      <OrderHistoryPage
-        onBack={() => navigateTo('home')}
-        onViewOrder={(orderId) => {
-          setTrackedOrderId(orderId);
-          setCurrentPage('order-tracking');
-          window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
-        }}
-        onReorder={addOrderToCart}
-        onViewCart={() => {
-          navigateTo('home');
-          setIsCartOpen(true);
-        }}
-        onCheckout={() => navigateTo('checkout')}
-        onExplore={() => navigateTo('menu')}
-      />
+      <>
+        <OrderHistoryPage
+          onBack={() => navigateTo('home')}
+          onViewOrder={(orderId) => {
+            setTrackedOrderId(orderId);
+            setCurrentPage('order-tracking');
+            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+          }}
+          onReorder={addOrderToCart}
+          onViewCart={() => {
+            navigateTo('home');
+            setIsCartOpen(true);
+          }}
+          onCheckout={() => navigateTo('checkout')}
+          onExplore={() => navigateTo('menu')}
+        />
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
+      </>
     );
   }
 
 
   if (currentPage === 'checkout' || currentPage === 'order-confirmation') {
     return (
-      <CheckoutPage
-        items={cartItems}
-        customer={user}
-        initialValues={momoCheckout?.checkoutValues}
-        confirmation={orderConfirmation}
-        onNavigate={navigateTo}
-        onBack={() => {
-          setOrderConfirmation(null);
-          navigateTo('menu');
-        }}
-        onViewCheckout={() => {
-          setOrderConfirmation(null);
-          navigateTo('checkout');
-        }}
-        onTrackOrder={() => {
-          const orderId = orderConfirmation?.orderNumber || mockOrder.id;
-          setTrackedOrderId(orderId);
-          setCurrentPage('order-tracking');
-          window.history.pushState({}, '', `/orders/${encodeURIComponent(orderId)}`);
-        }}
-        onUpdateQuantity={(productId, quantity) => {
-          setCartItems((items) => items.map((item) =>
-            item.id === productId
-              ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
-              : item,
-          ));
-        }}
-        onPlaceOrder={(order) => {
-          setOrderConfirmation({
-            ...order,
-            orderNumber: `I13-${Date.now().toString().slice(-8)}`,
-          });
-          setCartItems([]);
-          setCurrentPage('order-confirmation');
-          window.history.pushState({}, '', '/checkout/confirmation');
-        }}
-        onMomoPayment={(order) => {
-          setMomoCheckout(order);
-          navigateTo('payment');
-        }}
-      />
+      <>
+        <CheckoutPage
+          items={cartItems}
+          customer={user}
+          initialValues={momoCheckout?.checkoutValues}
+          confirmation={orderConfirmation}
+          onNavigate={navigateTo}
+          onBack={() => {
+            setOrderConfirmation(null);
+            navigateTo('menu');
+          }}
+          onViewCheckout={() => {
+            setOrderConfirmation(null);
+            navigateTo('checkout');
+          }}
+          onTrackOrder={() => {
+            const orderId = orderConfirmation?.orderNumber || mockOrder.id;
+            setTrackedOrderId(orderId);
+            setCurrentPage('order-tracking');
+            window.history.pushState({}, '', `/orders/${encodeURIComponent(orderId)}`);
+          }}
+          onUpdateQuantity={(productId, quantity) => {
+            setCartItems((items) => items.map((item) =>
+              item.id === productId
+                ? { ...item, quantity: Math.max(1, Math.min(item.stock, quantity)) }
+                : item,
+            ));
+          }}
+          onPlaceOrder={(order) => {
+            setOrderConfirmation({
+              ...order,
+              orderNumber: `I13-${Date.now().toString().slice(-8)}`,
+            });
+            setCartItems([]);
+            setCurrentPage('order-confirmation');
+            window.history.pushState({}, '', '/checkout/confirmation');
+          }}
+          onMomoPayment={(order) => {
+            setMomoCheckout(order);
+            navigateTo('payment');
+          }}
+        />
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
+      </>
     );
   }
 
@@ -501,6 +535,15 @@ export default function App() {
             navigateTo('dashboard');
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}
+        />
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
         />
       </>
     );
@@ -583,6 +626,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -628,6 +680,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -694,6 +755,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -738,6 +808,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -782,6 +861,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -825,6 +913,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -873,6 +970,15 @@ export default function App() {
             }}
           />
         )}
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
       </>
     );
   }
@@ -1566,6 +1672,16 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Floating Mobile Tab Bar for Storefront / Home view */}
+      <MobileBottomTabs
+        currentPage={currentPage}
+        onNavigate={navigateTo}
+        onOpenCart={() => setIsCartOpen(true)}
+        cartCount={cartCount}
+        user={user}
+        setUser={setUser}
+        showToast={showToast}
+      />
     </div>
   );
 }

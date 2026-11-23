@@ -25,6 +25,16 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'price-asc' | 'price-desc' | 'rating'
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [isCountBumping, setIsCountBumping] = useState(false);
+
+  // Trigger pulse/bump effect when cartCount increases
+  useEffect(() => {
+    if (cartCount > 0) {
+      setIsCountBumping(true);
+      const timer = setTimeout(() => setIsCountBumping(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [cartCount]);
 
   // Initial skeleton loading timer
   useEffect(() => {
@@ -401,7 +411,12 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
           <div className="floating-cart-inner">
             <div className="floating-cart-info">
               <ShoppingBag size={18} />
-              <span><strong>{cartCount}</strong> {cartCount === 1 ? 'snack in cart' : 'snacks in cart'}</span>
+              <span>
+                <strong className={`floating-cart-count ${isCountBumping ? 'bump' : ''}`}>
+                  {cartCount}
+                </strong>{' '}
+                {cartCount === 1 ? 'snack in cart' : 'snacks in cart'}
+              </span>
             </div>
             <button
               type="button"

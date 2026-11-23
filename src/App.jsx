@@ -360,10 +360,16 @@ export default function App() {
     });
   };
 
+  const toastTimeoutRef = useRef(null);
+
   const showToast = (msg) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
     setToastMessage(msg);
-    setTimeout(() => {
+    toastTimeoutRef.current = setTimeout(() => {
       setToastMessage(null);
+      toastTimeoutRef.current = null;
     }, 3200);
   };
 
@@ -409,7 +415,10 @@ export default function App() {
         stock: 20
       }];
     });
-    showToast('Added \'' + item.name + sizeLabel + '\' to your bag! (GH₵ ' + itemPrice.toFixed(2) + ')');
+    // On the menu page, the dedicated bottom bag capsule updates directly; suppress overlapping toast
+    if (currentPage !== 'menu') {
+      showToast('Added \'' + item.name + sizeLabel + '\' to your bag! (GH₵ ' + itemPrice.toFixed(2) + ')');
+    }
   };
 
   if (currentPage === 'account-orders') {

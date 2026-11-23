@@ -161,6 +161,8 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
               className="menu-sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              aria-label="Sort snacks"
+              title="Sort snacks"
             >
               <option value="featured">Featured / Popular</option>
               <option value="price-asc">Price: Low to High</option>
@@ -171,11 +173,14 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
 
           {/* Mobile Filter Toggle */}
           <button
+            type="button"
             className="mobile-filter-trigger"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
+            aria-label="Filter snacks"
+            title="Filter snacks"
           >
             <SlidersHorizontal size={16} />
-            <span>Filters</span>
+            <span className="mobile-filter-text">Filters</span>
           </button>
         </div>
 

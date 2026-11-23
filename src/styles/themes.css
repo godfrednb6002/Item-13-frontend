@@ -468,6 +468,14 @@ html.light-theme .menu-sort-select {
   border: 1px solid rgba(0, 0, 0, 0.14);
 }
 
+html.light-theme .menu-sort-wrapper,
+html.light-theme .mobile-filter-trigger {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  color: var(--gold) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
 html.light-theme .category-pill {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);

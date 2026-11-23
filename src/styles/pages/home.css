@@ -374,8 +374,19 @@
   align-items: center;
   gap: 10px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 1050;
   animation: slideUp 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .toast-notice {
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    width: min(92vw, 420px);
+    justify-content: center;
+    text-align: center;
+    padding: 10px 18px;
+    font-size: 13px;
+  }
 }
 
 @keyframes slideUp {

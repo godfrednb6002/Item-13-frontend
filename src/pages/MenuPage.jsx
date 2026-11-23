@@ -401,7 +401,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
           <div className="floating-cart-inner">
             <div className="floating-cart-info">
               <ShoppingBag size={18} />
-              <span><strong>{cartCount}</strong> {cartCount === 1 ? 'snack item' : 'snack items'} in your bag</span>
+              <span><strong>{cartCount}</strong> {cartCount === 1 ? 'snack in cart' : 'snacks in cart'}</span>
             </div>
             <button
               type="button"

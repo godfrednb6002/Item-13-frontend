@@ -23,6 +23,7 @@ export default function MobileBottomTabs({
   currentPage = 'home',
   onNavigate,
   onOpenCart,
+  onCloseCart,
   isCartOpen = false,
   cartCount = 0,
   user = null,
@@ -31,9 +32,20 @@ export default function MobileBottomTabs({
 }) {
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
 
+  // Helper to close cart when navigating to another tab
+  const handleTabNavigate = (action) => {
+    setIsMoreDrawerOpen(false);
+    if (isCartOpen && onCloseCart) {
+      onCloseCart();
+    }
+    if (action) {
+      action();
+    }
+  };
+
   // Compute active tab based on isCartOpen & currentPage
   const getActiveTab = () => {
-    if (isCartOpen || currentPage === 'cart' || currentPage === 'bag') return 'bag';
+    if (isCartOpen) return 'bag';
     if (currentPage === 'showcase' || currentPage === 'home' || currentPage === '') return 'home';
     if (
       currentPage === 'menu' ||
@@ -67,16 +79,16 @@ export default function MobileBottomTabs({
   const activeTab = getActiveTab();
 
   const drawerNavLinks = [
-    { label: 'Dashboard', icon: LayoutDashboard, action: () => onNavigate && onNavigate('dashboard') },
-    { label: 'Menu & Catalog', icon: UtensilsCrossed, action: () => onNavigate && onNavigate('menu'), badge: 'Hot' },
-    { label: 'Orders & Tracking', icon: Package, action: () => onNavigate && onNavigate('dashboard/orders') },
-    { label: 'My Profile', icon: User, action: () => onNavigate && onNavigate('dashboard/profile') },
-    { label: 'Delivery Addresses', icon: MapPin, action: () => onNavigate && onNavigate('dashboard/addresses') },
-    { label: 'Saved Favorites', icon: Heart, action: () => onNavigate && onNavigate('dashboard/favorites') },
-    { label: 'Delivery Coverage', icon: Truck, action: () => onNavigate && onNavigate('delivery'), badge: 'Zones' },
-    { label: 'Party & Weddings', icon: PartyPopper, action: () => onNavigate && onNavigate('events'), badge: 'Bulk' },
-    { label: 'About Item13', icon: Info, action: () => onNavigate && onNavigate('about') },
-    { label: 'Contact & Support', icon: PhoneCall, action: () => onNavigate && onNavigate('contact') },
+    { label: 'Dashboard', icon: LayoutDashboard, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard')) },
+    { label: 'Menu & Catalog', icon: UtensilsCrossed, action: () => handleTabNavigate(() => onNavigate && onNavigate('menu')), badge: 'Hot' },
+    { label: 'Orders & Tracking', icon: Package, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/orders')) },
+    { label: 'My Profile', icon: User, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/profile')) },
+    { label: 'Delivery Addresses', icon: MapPin, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/addresses')) },
+    { label: 'Saved Favorites', icon: Heart, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/favorites')) },
+    { label: 'Delivery Coverage', icon: Truck, action: () => handleTabNavigate(() => onNavigate && onNavigate('delivery')), badge: 'Zones' },
+    { label: 'Party & Weddings', icon: PartyPopper, action: () => handleTabNavigate(() => onNavigate && onNavigate('events')), badge: 'Bulk' },
+    { label: 'About Item13', icon: Info, action: () => handleTabNavigate(() => onNavigate && onNavigate('about')) },
+    { label: 'Contact & Support', icon: PhoneCall, action: () => handleTabNavigate(() => onNavigate && onNavigate('contact')) },
   ];
 
   return (
@@ -86,10 +98,7 @@ export default function MobileBottomTabs({
         <button
           type="button"
           className={`mobile-tab-item ${activeTab === 'home' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (onNavigate) onNavigate('home');
-          }}
+          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('home'))}
           aria-label="Home"
         >
           <div className="mobile-tab-icon-wrap">
@@ -101,10 +110,7 @@ export default function MobileBottomTabs({
         <button
           type="button"
           className={`mobile-tab-item ${activeTab === 'menu' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (onNavigate) onNavigate('menu');
-          }}
+          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('menu'))}
           aria-label="Menu"
         >
           <div className="mobile-tab-icon-wrap">
@@ -118,7 +124,11 @@ export default function MobileBottomTabs({
           className={`mobile-tab-item ${activeTab === 'bag' && !isMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => {
             setIsMoreDrawerOpen(false);
-            if (onOpenCart) onOpenCart();
+            if (isCartOpen && onCloseCart) {
+              onCloseCart();
+            } else if (onOpenCart) {
+              onOpenCart();
+            }
           }}
           aria-label="Bag"
         >
@@ -132,10 +142,7 @@ export default function MobileBottomTabs({
         <button
           type="button"
           className={`mobile-tab-item ${activeTab === 'orders' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (onNavigate) onNavigate('dashboard/orders');
-          }}
+          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('dashboard/orders'))}
           aria-label="Orders"
         >
           <div className="mobile-tab-icon-wrap">
@@ -147,10 +154,7 @@ export default function MobileBottomTabs({
         <button
           type="button"
           className={`mobile-tab-item ${activeTab === 'profile' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (onNavigate) onNavigate('dashboard/profile');
-          }}
+          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('dashboard/profile'))}
           aria-label="Profile"
         >
           <div className="mobile-tab-icon-wrap">
@@ -162,7 +166,12 @@ export default function MobileBottomTabs({
         <button
           type="button"
           className={`mobile-tab-item ${isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => setIsMoreDrawerOpen(!isMoreDrawerOpen)}
+          onClick={() => {
+            if (isCartOpen && onCloseCart) {
+              onCloseCart();
+            }
+            setIsMoreDrawerOpen(!isMoreDrawerOpen);
+          }}
           aria-label="More Options"
         >
           <div className="mobile-tab-icon-wrap">

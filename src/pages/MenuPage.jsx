@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Search,
   SlidersHorizontal,
@@ -17,13 +17,22 @@ import Footer from '../components/Footer';
 import ThemeToggle from '../components/ThemeToggle';
 
 export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToast }) {
-  // Filter States
+  // Loading & Filter States
+  const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [maxPrice, setMaxPrice] = useState(150);
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'price-asc' | 'price-desc' | 'rating'
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Initial skeleton loading timer
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 450);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Filter & Sort Logic
   const filteredProducts = useMemo(() => {
@@ -336,7 +345,26 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
             </span>
           </div>
 
-          {filteredProducts.length === 0 ? (
+          {isLoading ? (
+            <div className="menu-products-grid">
+              {[1, 2, 3, 4, 5, 6].map((idx) => (
+                <div key={idx} className="catalog-card-skeleton">
+                  <div className="skeleton-img skeleton-shimmer" />
+                  <div className="skeleton-body">
+                    <div className="skeleton-row">
+                      <div className="skeleton-line sm skeleton-shimmer" />
+                      <div className="skeleton-line sm skeleton-shimmer" style={{ width: '25%' }} />
+                    </div>
+                    <div className="skeleton-line md skeleton-shimmer" />
+                    <div className="skeleton-row" style={{ marginTop: 'auto', paddingTop: '10px' }}>
+                      <div className="skeleton-line sm skeleton-shimmer" style={{ width: '35%', height: '18px' }} />
+                      <div className="skeleton-line btn skeleton-shimmer" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="menu-empty-state">
               <div className="empty-icon-wrap">
                 <ShoppingBag size={38} className="empty-state-svg" />

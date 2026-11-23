@@ -16,6 +16,7 @@
 @import './components/navbar.css';
 @import './components/cart.css';
 @import './components/footer.css';
+@import './components/skeleton.css';
 
 /* 5. Page-level stylesheets */
 @import './pages/home.css';

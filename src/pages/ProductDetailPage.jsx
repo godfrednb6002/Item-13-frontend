@@ -75,6 +75,15 @@ export default function ProductDetailPage({
   const [selectedDrinkId, setSelectedDrinkId] = useState(null); // Optional drink pairing
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('details'); // 'details' | 'allergens' | 'delivery'
+  const [isDetailLoading, setIsDetailLoading] = useState(true);
+
+  useEffect(() => {
+    setIsDetailLoading(true);
+    const timer = setTimeout(() => {
+      setIsDetailLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [productId]);
 
   // Pricing calculations
   const currentSize = availableSizes[selectedSizeIndex] || availableSizes[0];
@@ -186,7 +195,22 @@ export default function ProductDetailPage({
       </div>
 
       {/* Main PDP Grid Layout */}
-      <main className="pdp-stage">
+      {isDetailLoading ? (
+        <div className="pdp-skeleton-container">
+          <div className="pdp-skeleton-visual skeleton-shimmer" />
+          <div className="pdp-skeleton-content">
+            <div className="skeleton-line sm skeleton-shimmer" style={{ width: '30%' }} />
+            <div className="skeleton-line md skeleton-shimmer" style={{ height: '32px', width: '80%' }} />
+            <div className="skeleton-line sm skeleton-shimmer" style={{ width: '45%' }} />
+            <div className="skeleton-line full skeleton-shimmer" style={{ height: '70px', marginTop: '10px' }} />
+            <div className="skeleton-row" style={{ marginTop: '20px' }}>
+              <div className="skeleton-line sm skeleton-shimmer" style={{ width: '35%', height: '24px' }} />
+              <div className="skeleton-line btn skeleton-shimmer" style={{ width: '140px', height: '44px' }} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <main className="pdp-stage">
         <div className="pdp-main-grid">
           {/* Left Column: Product Showcase Visuals */}
           <div className="pdp-visual-column">
@@ -571,6 +595,7 @@ export default function ProductDetailPage({
           </section>
         )}
       </main>
+      )}
 
       {/* Footer */}
       <Footer onNavigate={onNavigate} onToast={onToast} />

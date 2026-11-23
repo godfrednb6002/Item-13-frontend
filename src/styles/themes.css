@@ -46,67 +46,6 @@ html.light-theme .welcome-layout {
   color: #14171d;
 }
 
-html.light-theme .welcome-sidebar {
-  background: #ffffff;
-  border-right: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-html.light-theme .sidebar-nav-item {
-  color: #555b66;
-}
-
-html.light-theme .sidebar-nav-item:hover {
-  background: rgba(0, 0, 0, 0.04);
-  color: #111418;
-}
-
-html.light-theme .sidebar-nav-item.active {
-  background: rgba(244, 182, 39, 0.16);
-  color: #8c6307;
-  border-color: rgba(244, 182, 39, 0.4);
-}
-
-html.light-theme .nav-badge {
-  background: rgba(0, 0, 0, 0.08);
-  color: #1e293b;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-html.light-theme .nav-badge.badge-hot {
-  background: #ef4444;
-  color: #ffffff;
-  border: none;
-}
-
-html.light-theme .sidebar-nav-item.active .nav-badge {
-  background: rgba(140, 99, 7, 0.15);
-  color: #8c6307;
-}
-
-html.light-theme .sidebar-brand .brand-logo-tagline {
-  color: #8c6307;
-  border-left-color: rgba(140, 99, 7, 0.35);
-}
-
-html.light-theme .sidebar-brand-box {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-html.light-theme .sidebar-collapse-toggle {
-  background: #f1f5f9;
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #1e293b;
-}
-
-html.light-theme .sidebar-collapse-toggle:hover {
-  background: var(--gold);
-  color: #0f1012;
-}
-
-html.light-theme .sidebar-user-details .user-status {
-  color: #8c6307;
-}
-
 html.light-theme .welcome-topbar {
   background: rgba(255, 255, 255, 0.85);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -114,12 +53,6 @@ html.light-theme .welcome-topbar {
 
 html.light-theme .crumb-current {
   color: #111418;
-}
-
-html.light-theme .topbar-action-btn {
-  background: #ffffff;
-  color: #111418;
-  border: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 html.light-theme .dash-hero-card {
@@ -165,25 +98,7 @@ html.light-theme .mini-prod-name {
   color: #111418;
 }
 
-html.light-theme .sidebar-user-box {
-  background: #f0f3f8;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
 html.light-theme .user-name {
-  color: #111418;
-}
-
-html.light-theme .sidebar-footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-html.light-theme .sidebar-footer-btn {
-  color: #555c69;
-}
-
-html.light-theme .sidebar-footer-btn:hover {
-  background: rgba(0, 0, 0, 0.05);
   color: #111418;
 }
 

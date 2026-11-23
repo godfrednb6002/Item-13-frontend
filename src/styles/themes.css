@@ -476,6 +476,31 @@ html.light-theme .mobile-filter-trigger {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+html.light-theme .mobile-filter-popup {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.18) !important;
+}
+
+html.light-theme .mobile-filter-popup-title {
+  color: #111418 !important;
+}
+
+html.light-theme .mobile-filter-popup-header,
+html.light-theme .mobile-filter-popup-actions {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .mobile-filter-close-btn {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #555e6c !important;
+}
+
+html.light-theme .mobile-filter-reset-btn {
+  border-color: rgba(0, 0, 0, 0.14) !important;
+  color: #111418 !important;
+}
+
 html.light-theme .category-pill {
   background: #ffffff;
   border: 1px solid rgba(0, 0, 0, 0.1);

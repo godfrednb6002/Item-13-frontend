@@ -172,16 +172,80 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
           </div>
 
           {/* Mobile Filter Toggle */}
-          <button
-            type="button"
-            className="mobile-filter-trigger"
-            onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            aria-label="Filter snacks"
-            title="Filter snacks"
-          >
-            <SlidersHorizontal size={16} />
-            <span className="mobile-filter-text">Filters</span>
-          </button>
+          <div className="mobile-filter-wrapper">
+            <button
+              type="button"
+              className="mobile-filter-trigger"
+              onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
+              aria-label="Filter snacks"
+              title="Filter snacks"
+            >
+              <SlidersHorizontal size={16} />
+              <span className="mobile-filter-text">Filters</span>
+            </button>
+
+            {/* Mobile Filter Small Pop-Up Modal */}
+            {mobileFilterOpen && (
+              <>
+                <div
+                  className="mobile-filter-backdrop"
+                  onClick={() => setMobileFilterOpen(false)}
+                />
+                <div className="mobile-filter-popup">
+                  <div className="mobile-filter-popup-header">
+                    <span className="mobile-filter-popup-title">Filter by Price</span>
+                    <button
+                      type="button"
+                      className="mobile-filter-close-btn"
+                      onClick={() => setMobileFilterOpen(false)}
+                      aria-label="Close filter"
+                    >
+                      <X size={15} />
+                    </button>
+                  </div>
+
+                  <div className="filter-group" style={{ marginBottom: '14px' }}>
+                    <div className="filter-price-labels">
+                      <span className="price-min">GH₵ 10</span>
+                      <span className="price-current-tag">Max: GH₵ {maxPrice}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="12"
+                      max="150"
+                      step="2"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(Number(e.target.value))}
+                      className="gold-range-slider"
+                    />
+                    <div className="price-scale-helper" style={{ fontSize: '10px', marginTop: '4px' }}>
+                      <span>Under GH₵30: Quick Drinks</span>
+                      <span>Under GH₵50: Regular Tubs</span>
+                    </div>
+                  </div>
+
+                  <div className="mobile-filter-popup-actions">
+                    {(activeCategory !== 'all' || searchQuery || maxPrice < 150) && (
+                      <button
+                        type="button"
+                        className="mobile-filter-reset-btn"
+                        onClick={clearFilters}
+                      >
+                        Reset
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      className="mobile-filter-apply-btn"
+                      onClick={() => setMobileFilterOpen(false)}
+                    >
+                      Apply ({filteredProducts.length})
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Category Horizontal Tab List */}
@@ -206,7 +270,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
       {/* Main Catalog Layout: Sidebar Filters + Products Grid */}
       <main className="menu-catalog-layout">
         {/* Desktop Sidebar Filters */}
-        <aside className={`menu-sidebar-filters ${mobileFilterOpen ? 'mobile-open' : ''}`}>
+        <aside className="menu-sidebar-filters">
           <div className="sidebar-inner">
             <div className="sidebar-header-row">
               <h2 className="sidebar-heading">Filter by Price</h2>
@@ -255,15 +319,6 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
                 </div>
               </div>
             </div>
-
-            {mobileFilterOpen && (
-              <button
-                className="mobile-apply-btn"
-                onClick={() => setMobileFilterOpen(false)}
-              >
-                Apply Filters ({filteredProducts.length} items)
-              </button>
-            )}
           </div>
         </aside>
 

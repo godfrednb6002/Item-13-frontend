@@ -297,6 +297,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -451,6 +452,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -509,6 +511,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -540,6 +543,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -630,6 +634,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -684,6 +689,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -759,6 +765,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -812,6 +819,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -865,6 +873,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -917,6 +926,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}
@@ -940,6 +950,7 @@ export default function App() {
           setUser={setUser}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           onAddToCart={handleAddDirectItem}
           showToast={showToast}
@@ -1674,6 +1685,7 @@ export default function App() {
           currentPage={currentPage}
           onNavigate={navigateTo}
           onOpenCart={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
           cartCount={cartCount}
           user={user}
           setUser={setUser}

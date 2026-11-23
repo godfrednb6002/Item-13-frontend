@@ -23,6 +23,7 @@ export default function MobileBottomTabs({
   currentPage = 'home',
   onNavigate,
   onOpenCart,
+  isCartOpen = false,
   cartCount = 0,
   user = null,
   setUser,
@@ -30,13 +31,36 @@ export default function MobileBottomTabs({
 }) {
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
 
-  // Compute active tab based on currentPage
+  // Compute active tab based on isCartOpen & currentPage
   const getActiveTab = () => {
+    if (isCartOpen || currentPage === 'cart' || currentPage === 'bag') return 'bag';
     if (currentPage === 'showcase' || currentPage === 'home' || currentPage === '') return 'home';
-    if (currentPage === 'menu' || currentPage.startsWith('product-')) return 'menu';
-    if (currentPage === 'cart' || currentPage === 'bag') return 'bag';
-    if (currentPage === 'order-tracking' || currentPage === 'account-orders' || currentPage === 'welcome-orders') return 'orders';
-    if (currentPage === 'welcome-profile' || currentPage.startsWith('welcome-profile') || currentPage === 'login' || currentPage === 'signup') return 'profile';
+    if (
+      currentPage === 'menu' ||
+      currentPage === 'products' ||
+      currentPage === 'welcome-menu' ||
+      currentPage === 'welcome-products' ||
+      currentPage.startsWith('product-')
+    ) {
+      return 'menu';
+    }
+    if (
+      currentPage === 'order-tracking' ||
+      currentPage === 'account-orders' ||
+      currentPage === 'welcome-orders' ||
+      currentPage.startsWith('order-tracking')
+    ) {
+      return 'orders';
+    }
+    if (
+      currentPage === 'welcome-profile' ||
+      currentPage.startsWith('welcome-profile') ||
+      currentPage === 'profile' ||
+      currentPage === 'login' ||
+      currentPage === 'signup'
+    ) {
+      return 'profile';
+    }
     return '';
   };
 

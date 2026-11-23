@@ -78,6 +78,11 @@ export default function MobileBottomTabs({
 
   const activeTab = getActiveTab();
 
+  // If the cart pop-up / bottom sheet is currently open, hide the bottom tab bar completely
+  if (isCartOpen) {
+    return null;
+  }
+
   const drawerNavLinks = [
     { label: 'Dashboard', icon: LayoutDashboard, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard')) },
     { label: 'Menu & Catalog', icon: UtensilsCrossed, action: () => handleTabNavigate(() => onNavigate && onNavigate('menu')), badge: 'Hot' },

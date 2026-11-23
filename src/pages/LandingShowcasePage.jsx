@@ -103,9 +103,10 @@ export default function LandingShowcasePage({
             className="brand-logo-img"
           />
           <span className="brand-logo-tagline">
-            THE UNEXPECTED
-            <br />
-            ESSENTIAL
+            <span>THE UNEXPECTED</span>
+            <span className="brand-tagline-space"> </span>
+            <br className="brand-tagline-break" />
+            <span>ESSENTIAL</span>
           </span>
         </a>
 
@@ -371,11 +372,10 @@ export default function LandingShowcasePage({
       <main className="inspo-hero-container">
         <section className="inspo-hero-left">
           <div className="inspo-eyebrow">
-            <span>
-              THE UNEXPECTED
-              <br />
-              ESSENTIAL
-            </span>
+            <span>THE UNEXPECTED</span>
+            <span className="brand-tagline-space"> </span>
+            <br className="brand-tagline-break" />
+            <span>ESSENTIAL</span>
           </div>
 
           <h1 className="inspo-main-heading">

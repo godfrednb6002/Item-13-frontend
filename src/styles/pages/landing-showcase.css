@@ -17,7 +17,8 @@
   /* No scroll */
   box-sizing: border-box;
   font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-  padding: 0 48px 0; /* Extends flush to top edge */
+  padding: 0 48px 0;
+  /* Extends flush to top edge */
   transition: background 0.4s ease, color 0.4s ease;
 }
 
@@ -50,7 +51,8 @@ html.light-theme .inspo-landing-page {
   width: clamp(520px, 68vw, 1050px);
   max-width: 1050px;
   pointer-events: none;
-  z-index: 3; /* Overlays the watermark text (z-index: 1), sits behind package (z-index: 50) */
+  z-index: 3;
+  /* Overlays the watermark text (z-index: 1), sits behind package (z-index: 50) */
   opacity: 0.32;
   filter: blur(0.4px);
   user-select: none;
@@ -410,14 +412,34 @@ html.light-theme .inspo-drawer-link {
   background: rgba(244, 182, 39, 0.15);
   border: 1px solid rgba(244, 182, 39, 0.45);
   color: var(--gold, #f4b627);
-  padding: 6px 16px;
-  border-radius: 16px;
+  padding: 5px 16px;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 1px;
-  line-height: 1.3;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
   margin-bottom: 12px;
-  text-align: left;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .inspo-eyebrow .brand-tagline-break {
+    display: none;
+  }
+
+  .inspo-eyebrow .brand-tagline-space {
+    display: inline;
+  }
+}
+
+@media (max-width: 768px) {
+  .inspo-eyebrow .brand-tagline-break {
+    display: inline;
+  }
+
+  .inspo-eyebrow .brand-tagline-space {
+    display: none;
+  }
 }
 
 .inspo-main-heading {
@@ -507,7 +529,8 @@ html.light-theme .inspo-btn-order-now:hover {
   margin-top: 0px;
   z-index: 25;
   pointer-events: none;
-  overflow: visible; /* Do NOT clip the top of the package */
+  overflow: visible;
+  /* Do NOT clip the top of the package */
 }
 
 /* Big Item 13 text overlayed */
@@ -526,7 +549,8 @@ html.light-theme .inspo-btn-order-now:hover {
   white-space: nowrap;
   user-select: none;
   line-height: 0.8;
-  z-index: 1; /* In the background behind the package */
+  z-index: 1;
+  /* In the background behind the package */
   pointer-events: none;
 }
 
@@ -552,14 +576,16 @@ html.light-theme .inspo-big-watermark-title {
 /* Opened package image container overlaying big text */
 .inspo-package-overlay-wrap {
   position: relative;
-  z-index: 50; /* Topmost stack above text and glow */
+  z-index: 50;
+  /* Topmost stack above text and glow */
   display: flex;
   flex-direction: column;
   align-items: center;
   pointer-events: auto;
   cursor: pointer;
   justify-content: flex-end;
-  margin-bottom: -150px; /* Moved down a bit more */
+  margin-bottom: -150px;
+  /* Moved down a bit more */
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -584,7 +610,8 @@ html.light-theme .inspo-big-watermark-title {
 
 .inspo-package-tag {
   position: absolute;
-  bottom: 165px; /* Shifted up relative to package base so it stays visible */
+  bottom: 165px;
+  /* Shifted up relative to package base so it stays visible */
   left: 50%;
   transform: translateX(-50%);
   display: inline-flex;
@@ -665,12 +692,19 @@ html.light-theme .inspo-big-watermark-title {
 }
 
 @media (max-width: 768px) {
+  .inspo-top-navbar {
+    margin: 0;
+    width: 100%;
+    top: 0;
+  }
+
   .inspo-landing-page {
     height: auto;
     min-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0 16px calc(88px + env(safe-area-inset-bottom, 0px)); /* clearance for floating capsule bar */
+    padding: 92px 16px calc(88px + env(safe-area-inset-bottom, 0px));
+    /* top clearance for taller fixed header, bottom clearance for floating capsule bar */
     -webkit-overflow-scrolling: touch;
   }
 
@@ -865,8 +899,13 @@ html.light-theme .inspo-big-watermark-title {
   }
 
   @keyframes drawerFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   .mobile-more-drawer {
@@ -885,8 +924,13 @@ html.light-theme .inspo-big-watermark-title {
   }
 
   @keyframes drawerSlideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
   }
 
   .mobile-drawer-handle-bar {

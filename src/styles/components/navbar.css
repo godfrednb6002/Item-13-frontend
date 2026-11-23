@@ -37,18 +37,173 @@
 
 .brand-logo-tagline {
   font-family: var(--font-heading);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: none;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   color: var(--gold);
   opacity: 0.92;
-  line-height: 1.25;
+  line-height: 1.2;
   border-left: 1.5px solid rgba(244, 182, 39, 0.35);
-  padding-left: 10px;
+  padding-left: 12px;
   display: inline-block;
-  white-space: normal;
-  text-align: left;
+  white-space: nowrap;
+}
+
+/* Desktop & large screens: horizontal single-line */
+@media (min-width: 769px) {
+  .brand-logo-tagline .brand-tagline-break {
+    display: none;
+  }
+
+  .brand-logo-tagline .brand-tagline-space {
+    display: inline;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    position: fixed !important;
+    top: 0 !important;
+    top: env(safe-area-inset-top, 0px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
+    z-index: 100 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    min-height: 76px !important;
+    padding: 16px 18px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    background: rgba(15, 16, 18, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  html.light-theme .navbar {
+    background: rgba(253, 242, 204, 0.88);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+  }
+
+  .brand-logo {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .brand-logo-img {
+    height: 32px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .brand-logo-tagline {
+    font-size: 8px !important;
+    letter-spacing: 0.8px !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+    padding-left: 6px !important;
+    flex-shrink: 1 !important;
+  }
+
+  .brand-logo-tagline .brand-tagline-break {
+    display: inline;
+  }
+
+  .brand-logo-tagline .brand-tagline-space {
+    display: none;
+  }
+
+  .nav-right {
+    margin-left: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    flex-shrink: 0 !important;
+    gap: 0 !important;
+    width: auto !important;
+  }
+
+  .nav-buttons-group {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    flex-shrink: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .nav-guest-actions {
+    display: none !important;
+  }
+
+  .nav-tools-row {
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    flex-wrap: nowrap !important;
+    gap: 5px !important;
+    margin-left: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Make all 4 buttons (theme, bag, notif, hamburger) uniform circular icons flush on the right (+44% total size) */
+  .nav-tools-row .nav-icon-btn,
+  .nav-tools-row .theme-toggle-btn {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .nav-tools-row .nav-icon-btn svg,
+  .nav-tools-row .theme-toggle-btn svg {
+    width: 19px !important;
+    height: 19px !important;
+  }
+
+  .nav-tools-row .nav-badge-dot {
+    top: 7px !important;
+    right: 7px !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-width: 2px !important;
+  }
+
+  .nav-tools-row .theme-toggle-label {
+    display: none !important;
+  }
+
+  .nav-tools-row .nav-menu-popover,
+  .nav-tools-row .nav-notifications-popover {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    max-width: calc(100vw - 24px);
+    z-index: 120;
+  }
 }
 
 .brand-logo:hover {
@@ -303,6 +458,7 @@
     opacity: 0;
     transform: translateY(-6px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);

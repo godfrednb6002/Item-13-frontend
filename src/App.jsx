@@ -220,7 +220,7 @@ export default function App() {
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
-    
+
     if (page.startsWith('dashboard/')) {
       const sub = page.replace('dashboard/', '');
       setCurrentPage(`welcome-${sub}`);
@@ -234,54 +234,54 @@ export default function App() {
     const confirmedValues = orderConfirmation?.checkoutValues?.values;
     const confirmedOrder = orderConfirmation && trackedOrderId === orderConfirmation.orderNumber
       ? {
-          ...mockOrder,
-          id: orderConfirmation.orderNumber,
-          customer: {
-            ...orderConfirmation.customer,
-            phone: orderConfirmation.customer.phone || mockOrder.customer.phone,
+        ...mockOrder,
+        id: orderConfirmation.orderNumber,
+        customer: {
+          ...orderConfirmation.customer,
+          phone: orderConfirmation.customer.phone || mockOrder.customer.phone,
+        },
+        orderDate: new Date().toLocaleString('en-GH', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+        }),
+        expectedDelivery: orderConfirmation.deliveryEstimate,
+        status: 'Processing',
+        carrier: 'Item13 delivery',
+        trackingNumber: 'Tracking updates available after dispatch',
+        items: orderConfirmation.items,
+        subtotal: orderConfirmation.subtotal,
+        shipping: orderConfirmation.shipping,
+        discount: orderConfirmation.discount,
+        promoCode: confirmedValues?.promoCode || '—',
+        tax: orderConfirmation.tax,
+        total: orderConfirmation.total,
+        paymentMethod: confirmedValues?.cardNumber
+          ? `Visa ending in ${confirmedValues.cardNumber.replace(/\D/g, '').slice(-4)}`
+          : orderConfirmation.paymentMethod === 'mobile-money'
+            ? 'Mobile Money'
+            : orderConfirmation.paymentMethod,
+        shippingAddress: orderConfirmation.address.split(', '),
+        billingAddress: confirmedValues?.billingAddress
+          ? [
+            orderConfirmation.customer.name,
+            confirmedValues.billingAddress,
+            confirmedValues.billingCity,
+            confirmedValues.billingRegion,
+          ].filter(Boolean)
+          : orderConfirmation.address.split(', '),
+        shippingLog: [
+          {
+            time: new Date().toLocaleTimeString('en-GH', { hour: 'numeric', minute: '2-digit' }),
+            date: new Date().toLocaleDateString('en-GH', { month: 'short', day: 'numeric' }),
+            location: 'Item13',
+            detail: 'Order placed and confirmed',
+            complete: true,
           },
-          orderDate: new Date().toLocaleString('en-GH', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: '2-digit',
-          }),
-          expectedDelivery: orderConfirmation.deliveryEstimate,
-          status: 'Processing',
-          carrier: 'Item13 delivery',
-          trackingNumber: 'Tracking updates available after dispatch',
-          items: orderConfirmation.items,
-          subtotal: orderConfirmation.subtotal,
-          shipping: orderConfirmation.shipping,
-          discount: orderConfirmation.discount,
-          promoCode: confirmedValues?.promoCode || '—',
-          tax: orderConfirmation.tax,
-          total: orderConfirmation.total,
-          paymentMethod: confirmedValues?.cardNumber
-            ? `Visa ending in ${confirmedValues.cardNumber.replace(/\D/g, '').slice(-4)}`
-            : orderConfirmation.paymentMethod === 'mobile-money'
-              ? 'Mobile Money'
-              : orderConfirmation.paymentMethod,
-          shippingAddress: orderConfirmation.address.split(', '),
-          billingAddress: confirmedValues?.billingAddress
-            ? [
-                orderConfirmation.customer.name,
-                confirmedValues.billingAddress,
-                confirmedValues.billingCity,
-                confirmedValues.billingRegion,
-              ].filter(Boolean)
-            : orderConfirmation.address.split(', '),
-          shippingLog: [
-            {
-              time: new Date().toLocaleTimeString('en-GH', { hour: 'numeric', minute: '2-digit' }),
-              date: new Date().toLocaleDateString('en-GH', { month: 'short', day: 'numeric' }),
-              location: 'Item13',
-              detail: 'Order placed and confirmed',
-              complete: true,
-            },
-          ],
-        }
+        ],
+      }
       : { ...mockOrder, id: trackedOrderId };
 
     return (
@@ -549,7 +549,7 @@ export default function App() {
     );
   }
 
-    if (currentPage === 'welcome' || currentPage === 'favorites' || currentPage.startsWith('welcome-')) {
+  if (currentPage === 'welcome' || currentPage === 'favorites' || currentPage.startsWith('welcome-')) {
     const welcomeInitialTab = currentPage.startsWith('welcome-')
       ? currentPage.replace('welcome-', '')
       : (currentPage === 'favorites' ? 'favorites' : 'dashboard');
@@ -639,7 +639,7 @@ export default function App() {
     );
   }
 
-    if (currentPage === 'menu') {
+  if (currentPage === 'menu') {
     return (
       <>
         {toastMessage && (
@@ -970,15 +970,6 @@ export default function App() {
             }}
           />
         )}
-        <MobileBottomTabs
-          currentPage={currentPage}
-          onNavigate={navigateTo}
-          onOpenCart={() => setIsCartOpen(true)}
-          cartCount={cartCount}
-          user={user}
-          setUser={setUser}
-          showToast={showToast}
-        />
       </>
     );
   }
@@ -1071,9 +1062,10 @@ export default function App() {
             className="brand-logo-img"
           />
           <span className="brand-logo-tagline">
-            THE UNEXPECTED
-            <br />
-            ESSENTIAL
+            <span>THE UNEXPECTED</span>
+            <span className="brand-tagline-space"> </span>
+            <br className="brand-tagline-break" />
+            <span>ESSENTIAL</span>
           </span>
         </a>
 
@@ -1676,16 +1668,18 @@ export default function App() {
           </div>
         </div>
       )}
-      {/* Floating Mobile Tab Bar for Storefront / Home view */}
-      <MobileBottomTabs
-        currentPage={currentPage}
-        onNavigate={navigateTo}
-        onOpenCart={() => setIsCartOpen(true)}
-        cartCount={cartCount}
-        user={user}
-        setUser={setUser}
-        showToast={showToast}
-      />
+      {/* Floating Mobile Tab Bar for Storefront / Home view (only after login) */}
+      {user && (
+        <MobileBottomTabs
+          currentPage={currentPage}
+          onNavigate={navigateTo}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartCount={cartCount}
+          user={user}
+          setUser={setUser}
+          showToast={showToast}
+        />
+      )}
     </div>
   );
 }

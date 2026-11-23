@@ -12,7 +12,13 @@ import {
   LayoutDashboard,
   UtensilsCrossed,
   Package,
-  LogOut
+  LogOut,
+  MapPin,
+  Heart,
+  Truck,
+  Info,
+  PartyPopper,
+  PhoneCall
 } from 'lucide-react';
 import ThemeToggle from '../components/ThemeToggle';
 import '../styles/pages/landing-showcase.css';
@@ -96,7 +102,12 @@ export default function LandingShowcasePage({
             alt="Item13 Logo"
             className="brand-logo-img"
           />
-          <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+          <span className="brand-logo-tagline">
+            <span>THE UNEXPECTED</span>
+            <span className="brand-tagline-space"> </span>
+            <br className="brand-tagline-break" />
+            <span>ESSENTIAL</span>
+          </span>
         </a>
 
         <div className="nav-right">
@@ -241,32 +252,6 @@ export default function LandingShowcasePage({
                     )}
 
                     <a
-                      href="/dashboard/profile"
-                      className="nav-menu-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard/profile');
-                      }}
-                    >
-                      <User size={16} />
-                      <span>Profile</span>
-                    </a>
-
-                    <a
-                      href="/dashboard"
-                      className="nav-menu-item"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard');
-                      }}
-                    >
-                      <LayoutDashboard size={16} />
-                      <span>Dashboard</span>
-                    </a>
-
-                    <a
                       href="/products"
                       className="nav-menu-item"
                       onClick={(e) => {
@@ -387,8 +372,10 @@ export default function LandingShowcasePage({
       <main className="inspo-hero-container">
         <section className="inspo-hero-left">
           <div className="inspo-eyebrow">
-            <Sparkles size={14} />
-            <span>THE UNEXPECTED ESSENTIAL</span>
+            <span>THE UNEXPECTED</span>
+            <span className="brand-tagline-space"> </span>
+            <br className="brand-tagline-break" />
+            <span>ESSENTIAL</span>
           </div>
 
           <h1 className="inspo-main-heading">
@@ -397,19 +384,21 @@ export default function LandingShowcasePage({
           </h1>
 
           <p className="inspo-subtext">
-            Item13 creates warm, handcrafted artisan popcorn and chilled gourmet refreshments 
-            popped upon order in Accra. Every sweet caramel and savory batch turns simple moments 
+            Item13 creates warm, handcrafted artisan popcorn and chilled gourmet refreshments
+            popped upon order in Accra. Every sweet caramel and savory batch turns simple moments
             into memorable, crave-worthy experiences.
           </p>
 
-          <button
-            type="button"
-            className="inspo-btn-order-now"
-            onClick={handleOrderNow}
-          >
-            <span>Order Now</span>
-            <ArrowRight size={18} />
-          </button>
+          <div className="inspo-hero-actions-wrap">
+            <button
+              type="button"
+              className="inspo-btn-order-now"
+              onClick={handleOrderNow}
+            >
+              <span>Order Now</span>
+              <ArrowRight size={18} />
+            </button>
+          </div>
         </section>
       </main>
 

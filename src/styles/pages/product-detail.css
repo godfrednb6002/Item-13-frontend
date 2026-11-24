@@ -876,11 +876,31 @@
 }
 
 .pdp-image-action-bar .pdp-qty-display {
-  width: 32px;
+  width: 36px;
   text-align: center;
   font-size: 15px;
   font-weight: 800;
   color: #ffffff;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  cursor: text;
+  -moz-appearance: textfield;
+}
+
+.pdp-image-action-bar .pdp-qty-display::-webkit-outer-spin-button,
+.pdp-image-action-bar .pdp-qty-display::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pdp-image-action-bar .pdp-qty-display:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: var(--gold);
 }
 
 .pdp-image-action-bar .pdp-add-to-cart-cta {

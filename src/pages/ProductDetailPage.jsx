@@ -135,15 +135,17 @@ export default function ProductDetailPage({
   const drinkPrice = drinkPairing ? drinkPairing.price : 0;
 
   const baseUnitPrice = product.price + sizeOffset + butterPrice + drinkPrice;
-  const totalPrice = baseUnitPrice * quantity;
+  const numericQuantity = Math.max(1, Number(quantity) || 1);
+  const totalPrice = baseUnitPrice * numericQuantity;
 
   const handleAddToCart = () => {
+    const finalQty = Math.max(1, Number(quantity) || 1);
     const itemToAdd = {
       id: `${product.id}-${currentSize.id || currentSize.name}-${selectedButterId}${selectedDrinkId ? '-' + selectedDrinkId : ''}`,
       name: product.name,
       price: baseUnitPrice,
-      totalPrice: totalPrice,
-      quantity,
+      totalPrice: baseUnitPrice * finalQty,
+      quantity: finalQty,
       image: product.image,
       selectedSize: currentSize.name,
       butterDrizzle: isPopcornOrCombo && selectedButterId !== 'none' ? butterOption.name : null,
@@ -156,7 +158,7 @@ export default function ProductDetailPage({
     };
 
     if (onAddToCart) onAddToCart(itemToAdd);
-    if (onToast) onToast(`Added ${quantity}x "${product.name}" (${currentSize.name}) to your bag!`);
+    if (onToast) onToast(`Added ${finalQty}x "${product.name}" (${currentSize.name}) to your bag!`);
   };
 
   const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
@@ -322,16 +324,44 @@ export default function ProductDetailPage({
                     <button
                       type="button"
                       className="pdp-qty-btn"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      onClick={() => setQuantity(Math.max(1, (Number(quantity) || 1) - 1))}
                       aria-label="Decrease quantity"
                     >
                       <Minus size={16} />
                     </button>
-                    <span className="pdp-qty-display">{quantity}</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="99"
+                      className="pdp-qty-display pdp-qty-input"
+                      value={quantity}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '') {
+                          setQuantity('');
+                        } else {
+                          const parsed = parseInt(val, 10);
+                          if (!isNaN(parsed)) {
+                            setQuantity(Math.max(1, Math.min(99, parsed)));
+                          }
+                        }
+                      }}
+                      onBlur={() => {
+                        if (!quantity || isNaN(quantity) || Number(quantity) < 1) {
+                          setQuantity(1);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.target.blur();
+                        }
+                      }}
+                      aria-label="Item quantity"
+                    />
                     <button
                       type="button"
                       className="pdp-qty-btn"
-                      onClick={() => setQuantity(quantity + 1)}
+                      onClick={() => setQuantity(Math.min(99, (Number(quantity) || 1) + 1))}
                       aria-label="Increase quantity"
                     >
                       <Plus size={16} />

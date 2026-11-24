@@ -1264,7 +1264,34 @@
   }
 
   .pdp-related-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .pdp-related-head h2 {
+    font-size: 20px;
+  }
+
+  .rel-card-img {
+    height: 130px;
+  }
+
+  .rel-card-info {
+    padding: 12px;
+  }
+
+  .rel-card-name {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .rel-card-price {
+    font-size: 14px;
+  }
+
+  .rel-card-btn {
+    font-size: 11px;
+    padding: 4px 10px;
   }
 }
 

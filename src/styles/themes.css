@@ -1835,6 +1835,30 @@ html.light-theme .crumb-current {
   color: #111418 !important;
 }
 
+html.light-theme .pdp-image-action-bar {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+html.light-theme .pdp-image-action-bar .pdp-qty-stepper {
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .pdp-image-action-bar .pdp-qty-btn {
+  color: #111418;
+}
+
+html.light-theme .pdp-image-action-bar .pdp-qty-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #000000;
+}
+
+html.light-theme .pdp-image-action-bar .pdp-qty-display {
+  color: #111418;
+}
+
 html.light-theme .pdp-main-image-card {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;

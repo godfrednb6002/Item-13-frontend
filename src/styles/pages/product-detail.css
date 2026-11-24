@@ -827,6 +827,113 @@
   margin-top: 2px;
 }
 
+/* Floating Action Bar at the bottom of the Image */
+.pdp-image-action-bar {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+  padding: 8px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(18, 19, 24, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.pdp-image-action-bar .pdp-qty-stepper {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.pdp-image-action-bar .pdp-qty-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pdp-image-action-bar .pdp-qty-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--gold);
+}
+
+.pdp-image-action-bar .pdp-qty-display {
+  width: 32px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.pdp-image-action-bar .pdp-add-to-cart-cta {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--gold);
+  color: #0f1012;
+  font-size: 14.5px;
+  font-weight: 800;
+  padding: 12px 20px;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(244, 182, 39, 0.35);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.pdp-image-action-bar .pdp-add-to-cart-cta:hover {
+  background: var(--gold-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(244, 182, 39, 0.5);
+}
+
+@media (max-width: 480px) {
+  .pdp-image-action-bar {
+    bottom: 12px;
+    left: 10px;
+    right: 10px;
+    gap: 8px;
+    padding: 6px 8px;
+  }
+
+  .pdp-image-action-bar .pdp-qty-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pdp-image-action-bar .pdp-qty-display {
+    width: 26px;
+    font-size: 13.5px;
+  }
+
+  .pdp-image-action-bar .pdp-add-to-cart-cta {
+    font-size: 13px;
+    padding: 10px 14px;
+    gap: 6px;
+  }
+}
+
 .pdp-order-action-bar {
   display: flex;
   align-items: center;

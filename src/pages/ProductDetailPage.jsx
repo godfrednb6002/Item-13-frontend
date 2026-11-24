@@ -315,6 +315,38 @@ export default function ProductDetailPage({
                     e.target.src = product.fallbackImage || '/bistro-popcorn.jpg';
                   }}
                 />
+
+                {/* Floating Bottom Action Bar on the image */}
+                <div className="pdp-image-action-bar">
+                  <div className="pdp-qty-stepper">
+                    <button
+                      type="button"
+                      className="pdp-qty-btn"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <span className="pdp-qty-display">{quantity}</span>
+                    <button
+                      type="button"
+                      className="pdp-qty-btn"
+                      onClick={() => setQuantity(quantity + 1)}
+                      aria-label="Increase quantity"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="pdp-add-to-cart-cta"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingBag size={18} />
+                    <span>Add to Bag • GH₵{totalPrice.toFixed(2)}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Quality Perks Strip - Desktop 3 items, Mobile single interactive card with icon buttons */}
@@ -637,38 +669,6 @@ export default function ProductDetailPage({
                   </div>
                 </section>
               )}
-
-              {/* 5. QUANTITY STEPPER & ADD TO CART CTA */}
-              <div className="pdp-order-action-bar">
-                <div className="pdp-qty-stepper">
-                  <button
-                    type="button"
-                    className="pdp-qty-btn"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    aria-label="Decrease quantity"
-                  >
-                    <Minus size={16} />
-                  </button>
-                  <span className="pdp-qty-display">{quantity}</span>
-                  <button
-                    type="button"
-                    className="pdp-qty-btn"
-                    onClick={() => setQuantity(quantity + 1)}
-                    aria-label="Increase quantity"
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
-
-                <button
-                  type="button"
-                  className="pdp-add-to-cart-cta"
-                  onClick={handleAddToCart}
-                >
-                  <ShoppingBag size={18} />
-                  <span>Add to Bag • GH₵{totalPrice.toFixed(2)}</span>
-                </button>
-              </div>
             </div>
           </div>
 

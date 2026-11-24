@@ -621,7 +621,7 @@
   position: relative;
 }
 
-/* Light diagonal reflection sweep that matches Order Now button timing and opacity */
+/* Light diagonal reflection sweep with 5s rest interval */
 .catalog-card::after {
   content: '';
   position: absolute;
@@ -644,7 +644,7 @@
 }
 
 .catalog-card.has-reflection::after {
-  animation: cardLightReflection 2.8s infinite ease-in-out;
+  animation: cardLightReflection 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cardLightReflection {
@@ -652,7 +652,7 @@
     left: -120%;
     opacity: 1;
   }
-  38%, 100% {
+  100% {
     left: 170%;
     opacity: 1;
   }

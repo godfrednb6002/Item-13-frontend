@@ -173,49 +173,37 @@
   aspect-ratio: 1 / 1;
 }
 
-/* Light diagonal reflection: 1.8s movement + 10s interval = 11.8s total cycle */
+/* Light diagonal reflection: 1.5s sweep + 5s rest interval = 6.5s total cycle */
 .pdp-main-image-card::after {
   content: '';
   position: absolute;
-  top: -60%;
-  left: -110%;
-  width: 50%;
-  height: 220%;
-  background: linear-gradient(115deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.005) 35%,
-      rgba(255, 255, 255, 0.07) 50%,
-      rgba(244, 182, 39, 0.08) 55%,
-      transparent 70%);
+  top: -50%;
+  left: -120%;
+  width: 70%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
   transform: rotate(25deg);
   pointer-events: none;
   z-index: 5;
-  animation: pdpCardLightReflection 11.8s linear infinite;
+  animation: pdpCardLightReflection 6.5s infinite ease-in-out;
 }
 
 @keyframes pdpCardLightReflection {
   0% {
-    left: -110%;
-    opacity: 0;
+    left: -120%;
   }
-
-  3% {
-    opacity: 0.55;
+  23% {
+    left: 170%;
   }
-
-  12% {
-    opacity: 0.5;
-  }
-
-  15.25% {
-    left: 175%;
-    opacity: 0;
-  }
-
-  15.26%,
   100% {
-    left: 175%;
-    opacity: 0;
+    left: 170%;
   }
 }
 

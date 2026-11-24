@@ -12,18 +12,18 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
     let cancelActive = false;
 
     const scheduleReflection = () => {
-      // Random delay between 4s and 10s for independent cadence
-      const delay = Math.floor(Math.random() * 6000) + 4000;
+      // 5s rest interval
+      const delay = 5000;
       timeoutId = setTimeout(() => {
         if (cancelActive) return;
         setIsReflecting(true);
-        // Sweep duration matches Order Now button timing: 2.8s
+        // Sweep duration is 1.5s
         setTimeout(() => {
           if (!cancelActive) {
             setIsReflecting(false);
             scheduleReflection();
           }
-        }, 2800);
+        }, 1500);
       }, delay);
     };
 

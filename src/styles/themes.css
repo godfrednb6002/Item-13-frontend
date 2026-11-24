@@ -450,6 +450,31 @@ html.light-theme .menu-search-input {
   border: none !important;
 }
 
+html.light-theme .menu-search-dropdown {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12) !important;
+}
+
+html.light-theme .search-dropdown-header {
+  color: #64748b !important;
+}
+
+html.light-theme .search-tag-chip {
+  background: #f1f5f9 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .search-tag-text {
+  color: #111418 !important;
+}
+
+html.light-theme .search-suggestion-pill {
+  background: rgba(244, 182, 39, 0.12) !important;
+  border-color: rgba(244, 182, 39, 0.35) !important;
+  color: #b45309 !important;
+}
+
 html.light-theme .menu-search-input::placeholder {
   color: #7b8390 !important;
 }

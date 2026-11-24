@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import {
   Search,
   SlidersHorizontal,
@@ -9,6 +9,8 @@ import {
   X,
   Check,
   Flame,
+  History,
+  Trash2,
 } from 'lucide-react';
 import { CATEGORIES, PRODUCTS } from '../features/catalog/productsData';
 import ProductCard from '../features/catalog/ProductCard';
@@ -21,11 +23,69 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
   const [isLoading, setIsLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [recentSearches, setRecentSearches] = useState(() => {
+    try {
+      const saved = localStorage.getItem('item13_recent_searches');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const searchWrapperRef = useRef(null);
   const [maxPrice, setMaxPrice] = useState(150);
   const [sortBy, setSortBy] = useState('featured'); // 'featured' | 'price-asc' | 'price-desc' | 'rating'
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [isCountBumping, setIsCountBumping] = useState(false);
+
+  // Close search suggestions on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (searchWrapperRef.current && !searchWrapperRef.current.contains(e.target)) {
+        setIsSearchFocused(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
+  const saveSearchQuery = (term) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    setRecentSearches((prev) => {
+      const updated = [trimmed, ...prev.filter((t) => t.toLowerCase() !== trimmed.toLowerCase())].slice(0, 5);
+      try {
+        localStorage.setItem('item13_recent_searches', JSON.stringify(updated));
+      } catch {
+        // ignore storage errors
+      }
+      return updated;
+    });
+  };
+
+  const handleClearRecentSearches = (e) => {
+    e.stopPropagation();
+    setRecentSearches([]);
+    try {
+      localStorage.removeItem('item13_recent_searches');
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleRemoveSingleSearch = (e, termToRemove) => {
+    e.stopPropagation();
+    setRecentSearches((prev) => {
+      const updated = prev.filter((t) => t !== termToRemove);
+      try {
+        localStorage.setItem('item13_recent_searches', JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+      return updated;
+    });
+  };
 
   // Trigger pulse/bump effect when cartCount increases
   useEffect(() => {
@@ -163,23 +223,100 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
       <section className="menu-controls-bar">
         <div className="menu-controls-inner">
           {/* Search Box */}
-          <div className="menu-search-wrapper">
+          <div className="menu-search-wrapper" ref={searchWrapperRef}>
             <Search size={18} className="search-icon" />
             <input
               type="text"
               className="menu-search-input"
-              placeholder="Search popcorn, caramel, suya spice, sodas..."
+              placeholder={isSearchFocused ? "Search popcorn, caramel, suya spice, drinks..." : "Search menu..."}
               value={searchQuery}
+              onFocus={() => setIsSearchFocused(true)}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  saveSearchQuery(searchQuery);
+                  setIsSearchFocused(false);
+                }
+              }}
             />
             {searchQuery && (
               <button
+                type="button"
                 className="search-clear-btn"
                 onClick={() => setSearchQuery('')}
-                aria-label="Clear search"
+                aria-label="Clear current search"
+                title="Clear current search"
               >
                 <X size={15} />
               </button>
+            )}
+
+            {/* Suggestions & Recent Searches Pop-Up Dropdown */}
+            {isSearchFocused && (
+              <div className="menu-search-dropdown">
+                {/* Recent Searches */}
+                {recentSearches.length > 0 && (
+                  <div className="search-dropdown-section">
+                    <div className="search-dropdown-header">
+                      <span><History size={13} className="inline-icon" /> Recent Searches</span>
+                      <button
+                        type="button"
+                        className="search-clear-all-btn"
+                        onClick={handleClearRecentSearches}
+                      >
+                        Clear All
+                      </button>
+                    </div>
+                    <div className="search-tags-row">
+                      {recentSearches.map((term) => (
+                        <div key={term} className="search-tag-chip">
+                          <button
+                            type="button"
+                            className="search-tag-text"
+                            onClick={() => {
+                              setSearchQuery(term);
+                              setIsSearchFocused(false);
+                            }}
+                          >
+                            {term}
+                          </button>
+                          <button
+                            type="button"
+                            className="search-tag-remove"
+                            onClick={(e) => handleRemoveSingleSearch(e, term)}
+                            aria-label={`Remove ${term}`}
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Popular sample searches (only visible when user is actively searching) */}
+                <div className="search-dropdown-section">
+                  <div className="search-dropdown-header">
+                    <span>Popular Suggestions</span>
+                  </div>
+                  <div className="search-tags-row">
+                    {['Classic Buttered', 'Salted Caramel', 'Fiery Suya', 'Sharwama Crunch', 'Ice Cold Drinks'].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        className="search-suggestion-pill"
+                        onClick={() => {
+                          setSearchQuery(suggestion);
+                          saveSearchQuery(suggestion);
+                          setIsSearchFocused(false);
+                        }}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 

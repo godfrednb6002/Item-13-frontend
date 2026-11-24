@@ -252,6 +252,17 @@ html.light-theme .catalog-card {
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
 }
 
+html.light-theme .catalog-card::after {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(244, 182, 39, 0.15) 55%,
+    transparent 70%
+  ) !important;
+}
+
 html.light-theme .catalog-title {
   color: #111418;
 }

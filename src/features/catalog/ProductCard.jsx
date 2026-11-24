@@ -17,13 +17,13 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
       timeoutId = setTimeout(() => {
         if (cancelActive) return;
         setIsReflecting(true);
-        // Sweep duration is 1.6s
+        // Sweep duration is 1.8s (slowed by 20%)
         setTimeout(() => {
           if (!cancelActive) {
             setIsReflecting(false);
             scheduleReflection();
           }
-        }, 1600);
+        }, 1900);
       }, delay);
     };
 

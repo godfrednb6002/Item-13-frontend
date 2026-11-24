@@ -635,7 +635,7 @@
 }
 
 .catalog-card.has-reflection::after {
-  animation: cardLightReflection 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: cardLightReflection 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cardLightReflection {

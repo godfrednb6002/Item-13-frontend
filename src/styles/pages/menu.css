@@ -105,7 +105,7 @@
   z-index: 10;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 48px 40px 24px 40px;
+  padding: 24px 40px 16px 40px;
 }
 
 .menu-hero-content {
@@ -547,9 +547,9 @@
   transform: translateY(22px) scale(0.85);
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.2s ease,
-              color 0.2s ease;
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 /* Show and transition smoothly upwards on card hover, or always stay visible if already favorited */
@@ -1436,8 +1436,13 @@
   }
 
   @keyframes filterFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes filterPopIn {
@@ -1445,6 +1450,7 @@
       opacity: 0;
       transform: translateY(-8px) scale(0.95);
     }
+
     to {
       opacity: 1;
       transform: translateY(0) scale(1);
@@ -1571,4 +1577,3 @@
     height: 12px;
   }
 }
-

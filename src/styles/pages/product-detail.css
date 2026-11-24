@@ -1046,39 +1046,45 @@
   }
 
   .pdp-perks-strip {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 14px !important;
   }
 
   .pdp-perk {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
-    padding: 10px 6px;
-    gap: 6px;
-    border-radius: 14px;
-    min-width: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    justify-content: center !important;
+    aspect-ratio: 1 / 1 !important;
+    padding: 10px 4px !important;
+    gap: 6px !important;
+    border-radius: 14px !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
   }
 
   .perk-gold-icon {
-    margin-top: 0;
-    flex-shrink: 0;
+    margin-top: 0 !important;
+    flex-shrink: 0 !important;
   }
 
   .pdp-perk strong {
-    font-size: 11px;
-    line-height: 1.25;
-    margin-bottom: 2px;
-    white-space: normal;
+    font-size: 10.5px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 2px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
   }
 
   .pdp-perk p {
-    font-size: 9.5px;
-    line-height: 1.25;
-    color: var(--text-muted);
+    font-size: 9px !important;
+    line-height: 1.2 !important;
+    color: var(--text-muted) !important;
+    word-break: break-word !important;
   }
 
   .pdp-size-grid,

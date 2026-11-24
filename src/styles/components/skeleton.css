@@ -1,0 +1,203 @@
+/* ==========================================================================
+   SKELETON SHIMMER SYSTEM
+   Elegant, fluid shimmer animations for loading states
+   ========================================================================== */
+
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s infinite ease-in-out;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+html.light-theme .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.09) 50%,
+    rgba(0, 0, 0, 0.04) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* 1. Menu Catalog Card Skeleton */
+.catalog-card-skeleton {
+  background: #15161b;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+html.light-theme .catalog-card-skeleton {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.04);
+}
+
+.catalog-card-skeleton .skeleton-img {
+  width: 100%;
+  height: 220px;
+  border-radius: 0;
+}
+
+.catalog-card-skeleton .skeleton-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.skeleton-line {
+  height: 14px;
+  border-radius: 6px;
+}
+
+.skeleton-line.sm {
+  height: 10px;
+  width: 45%;
+}
+
+.skeleton-line.md {
+  height: 16px;
+  width: 70%;
+}
+
+.skeleton-line.full {
+  width: 100%;
+}
+
+.skeleton-line.btn {
+  height: 32px;
+  width: 75px;
+  border-radius: 999px;
+}
+
+@media (max-width: 680px) {
+  .catalog-card-skeleton {
+    border-radius: 14px;
+  }
+  .catalog-card-skeleton .skeleton-img {
+    height: 135px;
+  }
+  .catalog-card-skeleton .skeleton-body {
+    padding: 10px;
+    gap: 8px;
+  }
+  .catalog-card-skeleton .skeleton-line.md {
+    height: 13px;
+  }
+  .catalog-card-skeleton .skeleton-line.btn {
+    height: 26px;
+    width: 55px;
+  }
+}
+
+/* 2. Product Detail Page Skeleton */
+.pdp-skeleton-container {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 48px;
+  max-width: 1280px;
+  margin: 32px auto;
+  padding: 0 24px;
+}
+
+.pdp-skeleton-visual {
+  height: 480px;
+  border-radius: 24px;
+}
+
+.pdp-skeleton-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px 0;
+}
+
+@media (max-width: 900px) {
+  .pdp-skeleton-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 16px auto;
+  }
+  .pdp-skeleton-visual {
+    height: 300px;
+  }
+}
+
+/* 3. Order History Card Skeleton */
+.order-skeleton-card {
+  background: #191a1e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+html.light-theme .order-skeleton-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.order-skeleton-items {
+  display: flex;
+  gap: 12px;
+}
+
+.order-skeleton-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+/* 4. Dashboard Overview Skeleton */
+.dashboard-skeleton-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dashboard-hero-skeleton {
+  height: 180px;
+  border-radius: 20px;
+}
+
+.dashboard-metrics-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metric-skeleton-card {
+  height: 110px;
+  border-radius: 16px;
+}

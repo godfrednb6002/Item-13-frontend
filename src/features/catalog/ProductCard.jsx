@@ -5,6 +5,39 @@ import { getSavedFavorites, toggleFavorite } from './favoritesStorage';
 export default function ProductCard({ product, onAddToCart, onQuickView, onNavigate, onToast }) {
   const hasDiscount = product.originalPrice && product.originalPrice > product.price;
   const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
+  const [isReflecting, setIsReflecting] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    let cancelActive = false;
+
+    const scheduleReflection = () => {
+      // Random delay between 4s and 10s for independent cadence
+      const delay = Math.floor(Math.random() * 6000) + 4000;
+      timeoutId = setTimeout(() => {
+        if (cancelActive) return;
+        setIsReflecting(true);
+        // Sweep duration is 2.5s
+        setTimeout(() => {
+          if (!cancelActive) {
+            setIsReflecting(false);
+            scheduleReflection();
+          }
+        }, 2600);
+      }, delay);
+    };
+
+    // Stagger initial launch using a random seed between 0.5s and 5s
+    const initialDelay = Math.floor(Math.random() * 4500) + 500;
+    timeoutId = setTimeout(() => {
+      if (!cancelActive) scheduleReflection();
+    }, initialDelay);
+
+    return () => {
+      cancelActive = true;
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     const handleFavChange = () => {
@@ -32,7 +65,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
   };
 
   return (
-    <div className="catalog-card">
+    <div className={`catalog-card ${isReflecting ? 'has-reflection' : ''}`}>
       {/* Thumbnail + Badges */}
       <div className="catalog-card-image-wrapper">
         <img

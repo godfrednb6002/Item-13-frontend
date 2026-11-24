@@ -22,7 +22,8 @@ import {
   Bean,
   Zap,
   Smartphone,
-  CreditCard
+  CreditCard,
+  ChevronDown
 } from 'lucide-react';
 import {
   PRODUCTS,
@@ -74,7 +75,54 @@ export default function ProductDetailPage({
   const [selectedButterId, setSelectedButterId] = useState('none');
   const [selectedDrinkId, setSelectedDrinkId] = useState(null); // Optional drink pairing
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('details'); // 'details' | 'allergens' | 'delivery'
+  const [activeTab, setActiveTab] = useState(null); // 'details' | 'allergens' | 'delivery' | null (collapsed)
+  const [activePerkIndex, setActivePerkIndex] = useState(0); // 0: Fresh, 1: Delivery, 2: Ingredients
+  const [isDetailLoading, setIsDetailLoading] = useState(true);
+
+  // Typewriter effect state for product description
+  const [typedDescription, setTypedDescription] = useState('');
+
+  useEffect(() => {
+    const fullText = product?.description || '';
+    setTypedDescription('');
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx += 1;
+      setTypedDescription(fullText.slice(0, idx));
+      if (idx >= fullText.length) {
+        clearInterval(interval);
+      }
+    }, 22);
+
+    return () => clearInterval(interval);
+  }, [product?.id, product?.description]);
+
+  const handleTabClick = (tabKey) => {
+    // If the clicked tab is already open, toggle it closed (collapse); otherwise open it
+    setActiveTab((prev) => (prev === tabKey ? null : tabKey));
+  };
+
+  // Expand / collapse state for options 1, 2, and 3
+  const [expandedSections, setExpandedSections] = useState({
+    size: false,
+    butter: false,
+    drink: false,
+  });
+
+  const toggleSection = (sectionKey) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey],
+    }));
+  };
+
+  useEffect(() => {
+    setIsDetailLoading(true);
+    const timer = setTimeout(() => {
+      setIsDetailLoading(false);
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [productId]);
 
   // Pricing calculations
   const currentSize = availableSizes[selectedSizeIndex] || availableSizes[0];
@@ -87,15 +135,17 @@ export default function ProductDetailPage({
   const drinkPrice = drinkPairing ? drinkPairing.price : 0;
 
   const baseUnitPrice = product.price + sizeOffset + butterPrice + drinkPrice;
-  const totalPrice = baseUnitPrice * quantity;
+  const numericQuantity = Math.max(1, Number(quantity) || 1);
+  const totalPrice = baseUnitPrice * numericQuantity;
 
   const handleAddToCart = () => {
+    const finalQty = Math.max(1, Number(quantity) || 1);
     const itemToAdd = {
       id: `${product.id}-${currentSize.id || currentSize.name}-${selectedButterId}${selectedDrinkId ? '-' + selectedDrinkId : ''}`,
       name: product.name,
       price: baseUnitPrice,
-      totalPrice: totalPrice,
-      quantity,
+      totalPrice: baseUnitPrice * finalQty,
+      quantity: finalQty,
       image: product.image,
       selectedSize: currentSize.name,
       butterDrizzle: isPopcornOrCombo && selectedButterId !== 'none' ? butterOption.name : null,
@@ -108,7 +158,7 @@ export default function ProductDetailPage({
     };
 
     if (onAddToCart) onAddToCart(itemToAdd);
-    if (onToast) onToast(`Added ${quantity}x "${product.name}" (${currentSize.name}) to your bag!`);
+    if (onToast) onToast(`Added ${finalQty}x "${product.name}" (${currentSize.name}) to your bag!`);
   };
 
   const [isFav, setIsFav] = useState(() => getSavedFavorites().includes(product.id));
@@ -130,447 +180,659 @@ export default function ProductDetailPage({
 
   return (
     <div className="pdp-page-wrapper">
-      {/* Top Sticky Header */}
-      <header className="pdp-header">
-        <div className="pdp-header-inner">
-          <a
-            href="/products"
-            className="pdp-back-button"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('menu');
-            }}
-            style={{ textDecoration: 'none' }}
-          >
-            <ArrowLeft size={18} />
-            <span>Back to Menu</span>
-          </a>
-
-          <a
-            href="/"
-            className="pdp-header-brand"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            style={{ textDecoration: 'none' }}
-          >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="pdp-brand-logo" />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
-
-          <div className="pdp-header-actions">
-            <ThemeToggle />
-            <button
-              type="button"
-              className="pdp-bag-chip"
-              onClick={() => onNavigate && onNavigate('cart')}
-              title="Open Bag"
+      {/* Top Sticky Header & Breadcrumbs Shell */}
+      <div className="pdp-top-nav-shell">
+        <header className="pdp-header">
+          <div className="pdp-header-inner">
+            <a
+              href="/"
+              className="pdp-header-brand"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ textDecoration: 'none' }}
             >
-              <ShoppingBag size={17} />
-              <span>Bag ({cartCount})</span>
-            </button>
-          </div>
-        </div>
-      </header>
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+              <span className="brand-logo-tagline">
+                THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+              </span>
+            </a>
 
-      {/* Breadcrumbs Row */}
-      <div className="pdp-breadcrumbs-bar">
-        <div className="pdp-breadcrumbs-inner">
-          <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
-          <span className="crumb-sep">/</span>
-          <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
-          <span className="crumb-sep">/</span>
-          <span className="crumb-current">{product.name}</span>
+            <div className="pdp-header-actions">
+              <a
+                href="/products"
+                className="pdp-back-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('menu');
+                }}
+                style={{ textDecoration: 'none' }}
+                title="Back to Menu"
+              >
+                <ArrowLeft size={18} />
+                <span>Back to Menu</span>
+              </a>
+
+              <ThemeToggle />
+
+              <button
+                type="button"
+                className="pdp-bag-chip"
+                onClick={() => onNavigate && onNavigate('cart')}
+                title="Open Bag"
+              >
+                <ShoppingBag size={17} />
+                <span>Bag ({cartCount})</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Breadcrumbs Row */}
+        <div className="pdp-breadcrumbs-bar">
+          <div className="pdp-breadcrumbs-inner">
+            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
+            <span className="crumb-sep">/</span>
+            <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
+            <span className="crumb-sep">/</span>
+            <span className="crumb-current">{product.name}</span>
+          </div>
         </div>
       </div>
 
       {/* Main PDP Grid Layout */}
-      <main className="pdp-stage">
-        <div className="pdp-main-grid">
-          {/* Left Column: Product Showcase Visuals */}
-          <div className="pdp-visual-column">
-            <div className="pdp-main-image-card">
-              {product.badge && <span className="pdp-badge-pill">{product.badge}</span>}
-              <div className="pdp-actions-overlay">
-                <button
-                  type="button"
-                  className={`pdp-overlay-btn ${isFav ? 'is-favorited' : ''}`}
-                  onClick={handleToggleFav}
-                  title={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
-                  aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
-                >
-                  <Heart size={16} fill={isFav ? 'currentColor' : 'none'} />
-                </button>
-                <button
-                  type="button"
-                  className="pdp-overlay-btn pdp-share-btn"
-                  onClick={() => {
-                    if (navigator.clipboard) {
-                      navigator.clipboard.writeText(window.location.href);
-                      if (onToast) onToast('Product link copied to clipboard!');
-                    }
-                  }}
-                  title="Share product link"
-                  aria-label="Share product link"
-                >
-                  <Share2 size={16} />
-                </button>
-              </div>
-
-              <img
-                src={product.image}
-                alt={product.name}
-                className="pdp-hero-image"
-                onError={(e) => {
-                  e.target.src = product.fallbackImage || '/bistro-popcorn.jpg';
-                }}
-              />
-            </div>
-
-            {/* Quality Perks Strip */}
-            <div className="pdp-perks-strip">
-              <div className="pdp-perk">
-                <Flame size={18} className="perk-gold-icon" />
-                <div>
-                  <strong>Popped Fresh to Order</strong>
-                  <p>Never sitting in plastic bags</p>
-                </div>
-              </div>
-              <div className="pdp-perk">
-                <Truck size={18} className="perk-gold-icon" />
-                <div>
-                  <strong>Fast Delivery in Ghana</strong>
-                  <p>Arrives warm &amp; crunchy</p>
-                </div>
-              </div>
-              <div className="pdp-perk">
-                <ShieldCheck size={18} className="perk-gold-icon" />
-                <div>
-                  <strong>Premium Ingredients</strong>
-                  <p>100% Non-GMO corn &amp; real butter</p>
-                </div>
-              </div>
+      {isDetailLoading ? (
+        <div className="pdp-skeleton-container">
+          <div className="pdp-skeleton-visual skeleton-shimmer" />
+          <div className="pdp-skeleton-content">
+            <div className="skeleton-line sm skeleton-shimmer" style={{ width: '30%' }} />
+            <div className="skeleton-line md skeleton-shimmer" style={{ height: '32px', width: '80%' }} />
+            <div className="skeleton-line sm skeleton-shimmer" style={{ width: '45%' }} />
+            <div className="skeleton-line full skeleton-shimmer" style={{ height: '70px', marginTop: '10px' }} />
+            <div className="skeleton-row" style={{ marginTop: '20px' }}>
+              <div className="skeleton-line sm skeleton-shimmer" style={{ width: '35%', height: '24px' }} />
+              <div className="skeleton-line btn skeleton-shimmer" style={{ width: '140px', height: '44px' }} />
             </div>
           </div>
-
-          {/* Right Column: Customizer & Ordering Panel */}
-          <div className="pdp-customizer-column">
-            {/* Title & Rating */}
-            <div className="pdp-intro">
-              <div className="pdp-rating-row">
-                <div className="pdp-stars">
-                  <Star size={15} fill="#f4b627" color="#f4b627" />
-                  <span className="pdp-score">{product.rating}</span>
-                  <span className="pdp-reviews-count">({product.reviewsCount} customer reviews)</span>
-                </div>
-                <span className="pdp-category-tag">{product.category.toUpperCase()}</span>
-              </div>
-
-              <h1 className="pdp-product-title">{product.name}</h1>
-              <p className="pdp-product-desc">{product.description}</p>
-            </div>
-
-            {/* 1. TUB SIZE SELECTOR */}
-            <section className="pdp-section pdp-size-section">
-              <div className="pdp-section-header">
-                <label className="pdp-section-title">
-                  1. Select Tub Size <span className="pdp-required">*</span>
-                </label>
-                <span className="pdp-selection-current">{currentSize.name}</span>
-              </div>
-
-              <div className="pdp-size-grid">
-                {availableSizes.map((s, idx) => {
-                  const isSelected = idx === selectedSizeIndex;
-                  return (
-                    <button
-                      key={s.id || s.name}
-                      type="button"
-                      className={`pdp-size-card ${isSelected ? 'is-selected' : ''}`}
-                      onClick={() => setSelectedSizeIndex(idx)}
-                    >
-                      <div className="size-card-radio">
-                        <span className="radio-dot" />
-                      </div>
-                      <div className="size-card-info">
-                        <div className="size-card-name">{s.name}</div>
-                        {s.volume && <div className="size-card-volume">{s.volume}</div>}
-                      </div>
-                      <div className="size-card-price">
-                        {s.priceOffset > 0 ? (
-                          `+GH₵${s.priceOffset.toFixed(2)}`
-                        ) : s.priceOffset < 0 ? (
-                          `-GH₵${Math.abs(s.priceOffset).toFixed(2)}`
-                        ) : (
-                          'Standard'
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* 2. BUTTER DRIZZLE OPTIONS (For popcorn & combos) */}
-            {isPopcornOrCombo && (
-              <section className="pdp-section pdp-butter-section">
-                <div className="pdp-section-header">
-                  <label className="pdp-section-title">
-                    <Droplet size={15} className="title-inline-icon" />
-                    2. Butter Drizzle Options
-                  </label>
-                  <span className="pdp-selection-current">{butterOption.name}</span>
+        </div>
+      ) : (
+        <main className="pdp-stage">
+          <div className="pdp-main-grid">
+            {/* Left Column: Product Showcase Visuals */}
+            <div className="pdp-visual-column">
+              {/* Title & Rating (Rendered at top of image on mobile/tablet) */}
+              <div className="pdp-intro pdp-intro-mobile-top">
+                <div className="pdp-rating-row">
+                  <div className="pdp-stars">
+                    <Star size={15} fill="#f4b627" color="#f4b627" />
+                    <span className="pdp-score">{product.rating}</span>
+                    <span className="pdp-reviews-count">({product.reviewsCount} customer reviews)</span>
+                  </div>
+                  <span className="pdp-category-tag">{product.category.toUpperCase()}</span>
                 </div>
 
-                <div className="pdp-drizzle-grid">
-                  {BUTTER_DRIZZLE_OPTIONS.map((opt) => {
-                    const isSelected = selectedButterId === opt.id;
-                    return (
-                      <div
-                        key={opt.id}
-                        className={`pdp-drizzle-card ${isSelected ? 'is-selected' : ''}`}
-                        onClick={() => setSelectedButterId(opt.id)}
-                      >
-                        <div className="drizzle-card-left">
-                          <span className={`pdp-radio-indicator ${isSelected ? 'checked' : ''}`}>
-                            {isSelected && <Check size={12} />}
-                          </span>
-                          <div>
-                            <div className="drizzle-name">{opt.name}</div>
-                            <div className="drizzle-desc">{opt.desc}</div>
-                          </div>
-                        </div>
-                        <div className="drizzle-price">
-                          {opt.price === 0 ? 'Included' : `+GH₵${opt.price.toFixed(2)}`}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+                <h1 className="pdp-product-title">{product.name}</h1>
+                <p className="pdp-product-desc">
+                  {typedDescription}
+                  {typedDescription.length < (product.description || '').length && (
+                    <span className="pdp-typewriter-cursor">|</span>
+                  )}
+                </p>
+              </div>
 
-            {/* 3. DRINK PAIRINGS SELECTOR */}
-            <section className="pdp-section pdp-drink-section">
-              <div className="pdp-section-header">
-                <label className="pdp-section-title">
-                  <Coffee size={15} className="title-inline-icon" />
-                  3. Recommended Drink Pairings <span className="pdp-optional">(Optional)</span>
-                </label>
-                {selectedDrinkId && (
+              <div className="pdp-main-image-card">
+                {product.badge && <span className="pdp-badge-pill">{product.badge}</span>}
+                <div className="pdp-actions-overlay">
                   <button
                     type="button"
-                    className="pdp-clear-pairing-btn"
-                    onClick={() => setSelectedDrinkId(null)}
+                    className={`pdp-overlay-btn ${isFav ? 'is-favorited' : ''}`}
+                    onClick={handleToggleFav}
+                    title={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
+                    aria-label={isFav ? 'Remove from favorites' : 'Add to Customer Favorites'}
                   >
-                    Remove drink
+                    <Heart size={16} fill={isFav ? 'currentColor' : 'none'} />
                   </button>
-                )}
-              </div>
-
-              <div className="pdp-drinks-grid">
-                {DRINK_PAIRINGS.map((drink) => {
-                  const isSelected = selectedDrinkId === drink.id;
-                  return (
-                    <div
-                      key={drink.id}
-                      className={`pdp-drink-card ${isSelected ? 'is-selected' : ''}`}
-                      onClick={() => setSelectedDrinkId(isSelected ? null : drink.id)}
-                    >
-                      <img src={drink.image} alt={drink.name} className="drink-card-thumb" />
-                      <div className="drink-card-content">
-                        <div className="drink-card-name">{drink.name}</div>
-                        <div className="drink-card-size">{drink.size}</div>
-                        <div className="drink-card-price">+GH₵{drink.price.toFixed(2)}</div>
-                      </div>
-                      <div className={`drink-add-tag ${isSelected ? 'added' : ''}`}>
-                        {isSelected ? 'Selected' : '+ Add'}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* 4. ALLERGEN & INGREDIENT TAGS */}
-            {product.allergens && product.allergens.length > 0 && (
-              <section className="pdp-section pdp-allergen-section">
-                <label className="pdp-section-title">
-                  <Info size={15} className="title-inline-icon" />
-                  Allergen &amp; Dietary Information
-                </label>
-                <div className="pdp-allergen-tags-row">
-                  {product.allergens.map((key) => {
-                    const info = ALLERGEN_DEFINITIONS[key];
-                    if (!info) return null;
-                    return (
-                      <div key={key} className="pdp-allergen-chip" title={info.desc}>
-                        <span className="allergen-icon">{renderAllergenIcon(info.iconKey, 14)}</span>
-                        <span className="allergen-label">{info.label}</span>
-                      </div>
-                    );
-                  })}
+                  <button
+                    type="button"
+                    className="pdp-overlay-btn pdp-share-btn"
+                    onClick={() => {
+                      if (navigator.clipboard) {
+                        navigator.clipboard.writeText(window.location.href);
+                        if (onToast) onToast('Product link copied to clipboard!');
+                      }
+                    }}
+                    title="Share product link"
+                    aria-label="Share product link"
+                  >
+                    <Share2 size={16} />
+                  </button>
                 </div>
-              </section>
-            )}
 
-            {/* 5. QUANTITY STEPPER & ADD TO CART CTA */}
-            <div className="pdp-order-action-bar">
-              <div className="pdp-qty-stepper">
-                <button
-                  type="button"
-                  className="pdp-qty-btn"
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  aria-label="Decrease quantity"
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="pdp-qty-display">{quantity}</span>
-                <button
-                  type="button"
-                  className="pdp-qty-btn"
-                  onClick={() => setQuantity(quantity + 1)}
-                  aria-label="Increase quantity"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              <button
-                type="button"
-                className="pdp-add-to-cart-cta"
-                onClick={handleAddToCart}
-              >
-                <ShoppingBag size={18} />
-                <span>Add to Bag • GH₵{totalPrice.toFixed(2)}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Product Details & Story Tabs */}
-        <div className="pdp-info-tabs-block">
-          <div className="pdp-tabs-nav">
-            <button
-              className={`pdp-tab-btn ${activeTab === 'details' ? 'active' : ''}`}
-              onClick={() => setActiveTab('details')}
-            >
-              Description &amp; Origin
-            </button>
-            <button
-              className={`pdp-tab-btn ${activeTab === 'allergens' ? 'active' : ''}`}
-              onClick={() => setActiveTab('allergens')}
-            >
-              Ingredients &amp; Nutrition
-            </button>
-            <button
-              className={`pdp-tab-btn ${activeTab === 'delivery' ? 'active' : ''}`}
-              onClick={() => setActiveTab('delivery')}
-            >
-              Fresh Dispatch Guarantee
-            </button>
-          </div>
-
-          <div className="pdp-tab-pane">
-            {activeTab === 'details' && (
-              <div className="tab-pane-content">
-                <h3>About {product.name}</h3>
-                <p>{product.longDescription || product.description}</p>
-                <p>
-                  Popped locally in Accra with non-GMO corn kernels. We don't pre-bag our popcorn weeks in advance;
-                  each order is popped and seasoned on demand so you enjoy the crunch at peak crispness.
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'allergens' && (
-              <div className="tab-pane-content">
-                <h3>Nutritional &amp; Allergen Statement</h3>
-                <p>
-                  Item13 operates dedicated popping batches for sweet, buttery, and spicy savory items.
-                  All corn is naturally 100% gluten-free and cholesterol-free before seasonings are added.
-                </p>
-                <div className="tab-allergen-grid">
-                  {product.allergens && product.allergens.map((key) => {
-                    const info = ALLERGEN_DEFINITIONS[key];
-                    if (!info) return null;
-                    return (
-                      <div key={key} className="allergen-detail-card">
-                        <span className="card-icon">{renderAllergenIcon(info.iconKey, 18)}</span>
-                        <div>
-                          <strong>{info.label}</strong>
-                          <p>{info.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'delivery' && (
-              <div className="tab-pane-content">
-                <h3>Thermal Insulated Delivery in Accra &amp; Tema</h3>
-                <p>
-                  Popcorn tubs are packaged in grease-resistant, recyclable thermal kraft buckets that lock in warmth and aromatics.
-                  Chilled drinks are packed in separate insulated ice-cooler bags to ensure ice-cold refreshment on arrival.
-                </p>
-                <ul className="pdp-delivery-list">
-                  <li>
-                    <Zap size={16} className="text-primary inline-icon" />
-                    <span><strong>Express Delivery:</strong> 25-45 minutes across East Legon, Cantonments, Osu, Airport, Dzorwulu &amp; Tema.</span>
-                  </li>
-                  <li>
-                    <Smartphone size={16} className="text-primary inline-icon" />
-                    <span><strong>Live Tracking:</strong> WhatsApp live rider tracking sent instantly upon dispatch.</span>
-                  </li>
-                  <li>
-                    <CreditCard size={16} className="text-primary inline-icon" />
-                    <span><strong>Secure Payment:</strong> Mobile money (MTN MoMo, Telecel Cash) and Card checkout accepted.</span>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* You May Also Like Shelf */}
-        {relatedProducts.length > 0 && (
-          <section className="pdp-related-shelf">
-            <div className="pdp-related-head">
-              <h2>Complete Your Crunch Experience</h2>
-              <p>Ghana's favourite popcorn combinations and pairings</p>
-            </div>
-            <div className="pdp-related-grid">
-              {relatedProducts.map((rel) => (
-                <a
-                  key={rel.id}
-                  href={`/products/${rel.id}`}
-                  className="pdp-related-card"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onNavigate && onNavigate(`product-${rel.id}`);
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="pdp-hero-image"
+                  onError={(e) => {
+                    e.target.src = product.fallbackImage || '/bistro-popcorn.jpg';
                   }}
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                />
+
+                {/* Floating Bottom Action Bar on the image */}
+                <div className="pdp-image-action-bar">
+                  <div className="pdp-qty-stepper">
+                    <button
+                      type="button"
+                      className="pdp-qty-btn"
+                      onClick={() => setQuantity(Math.max(1, (Number(quantity) || 1) - 1))}
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <input
+                      type="number"
+                      min="1"
+                      max="9999"
+                      className="pdp-qty-display pdp-qty-input"
+                      value={quantity}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === '') {
+                          setQuantity('');
+                        } else {
+                          const parsed = parseInt(val, 10);
+                          if (!isNaN(parsed)) {
+                            setQuantity(Math.max(1, Math.min(9999, parsed)));
+                          }
+                        }
+                      }}
+                      onBlur={() => {
+                        if (!quantity || isNaN(quantity) || Number(quantity) < 1) {
+                          setQuantity(1);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.target.blur();
+                        }
+                      }}
+                      aria-label="Item quantity"
+                    />
+                    <button
+                      type="button"
+                      className="pdp-qty-btn"
+                      onClick={() => setQuantity(Math.min(9999, (Number(quantity) || 1) + 1))}
+                      aria-label="Increase quantity"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="pdp-add-to-cart-cta"
+                    onClick={handleAddToCart}
+                  >
+                    <ShoppingBag size={18} />
+                    <span>Add to Bag • GH₵{totalPrice.toFixed(2)}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Quality Perks Strip - Desktop 3 items, Mobile single interactive card with icon buttons */}
+              {/* Desktop View */}
+              <div className="pdp-perks-strip pdp-perks-desktop">
+                <div className="pdp-perk">
+                  <Flame size={18} className="perk-gold-icon" />
+                  <div>
+                    <strong>Popped Fresh to Order</strong>
+                    <p>Never sitting in plastic bags</p>
+                  </div>
+                </div>
+                <div className="pdp-perk">
+                  <Truck size={18} className="perk-gold-icon" />
+                  <div>
+                    <strong>Fast Delivery in Ghana</strong>
+                    <p>Arrives warm &amp; crunchy</p>
+                  </div>
+                </div>
+                <div className="pdp-perk">
+                  <ShieldCheck size={18} className="perk-gold-icon" />
+                  <div>
+                    <strong>Premium Ingredients</strong>
+                    <p>100% Non-GMO corn &amp; real butter</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile View: Single interactive card with switchable icons on the right */}
+              <div className="pdp-perk-mobile-card">
+                <div className="pdp-perk-mobile-info">
+                  {activePerkIndex === 0 && (
+                    <>
+                      <Flame size={18} className="perk-gold-icon" />
+                      <div>
+                        <strong>Popped Fresh to Order</strong>
+                        <p>Never sitting in plastic bags</p>
+                      </div>
+                    </>
+                  )}
+                  {activePerkIndex === 1 && (
+                    <>
+                      <Truck size={18} className="perk-gold-icon" />
+                      <div>
+                        <strong>Fast Delivery in Ghana</strong>
+                        <p>Arrives warm &amp; crunchy</p>
+                      </div>
+                    </>
+                  )}
+                  {activePerkIndex === 2 && (
+                    <>
+                      <ShieldCheck size={18} className="perk-gold-icon" />
+                      <div>
+                        <strong>Premium Ingredients</strong>
+                        <p>100% Non-GMO corn &amp; real butter</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Icon selectors on the right */}
+                <div className="pdp-perk-mobile-selectors" role="tablist" aria-label="Product Highlights">
+                  <button
+                    type="button"
+                    className={`pdp-perk-icon-btn ${activePerkIndex === 0 ? 'active' : ''}`}
+                    onClick={() => setActivePerkIndex(0)}
+                    aria-label="Popped Fresh to Order"
+                    title="Popped Fresh to Order"
+                  >
+                    <Flame size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    className={`pdp-perk-icon-btn ${activePerkIndex === 1 ? 'active' : ''}`}
+                    onClick={() => setActivePerkIndex(1)}
+                    aria-label="Fast Delivery in Ghana"
+                    title="Fast Delivery in Ghana"
+                  >
+                    <Truck size={16} />
+                  </button>
+                  <button
+                    type="button"
+                    className={`pdp-perk-icon-btn ${activePerkIndex === 2 ? 'active' : ''}`}
+                    onClick={() => setActivePerkIndex(2)}
+                    aria-label="Premium Ingredients"
+                    title="Premium Ingredients"
+                  >
+                    <ShieldCheck size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Customizer & Ordering Panel */}
+            <div className="pdp-customizer-column">
+              {/* Title & Rating (Rendered in right column on desktop) */}
+              <div className="pdp-intro pdp-intro-desktop">
+                <div className="pdp-rating-row">
+                  <div className="pdp-stars">
+                    <Star size={15} fill="#f4b627" color="#f4b627" />
+                    <span className="pdp-score">{product.rating}</span>
+                    <span className="pdp-reviews-count">({product.reviewsCount} customer reviews)</span>
+                  </div>
+                  <span className="pdp-category-tag">{product.category.toUpperCase()}</span>
+                </div>
+
+                <h1 className="pdp-product-title">{product.name}</h1>
+                <p className="pdp-product-desc">
+                  {typedDescription}
+                  {typedDescription.length < (product.description || '').length && (
+                    <span className="pdp-typewriter-cursor">|</span>
+                  )}
+                </p>
+              </div>
+
+              {/* 1. TUB SIZE SELECTOR */}
+              <section className={`pdp-section pdp-size-section ${expandedSections.size ? 'is-expanded' : 'is-collapsed'}`}>
+                <div
+                  className="pdp-section-header pdp-collapsible-header"
+                  onClick={() => toggleSection('size')}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedSections.size}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleSection('size');
+                    }
+                  }}
                 >
-                  <img src={rel.image} alt={rel.name} className="rel-card-img" />
-                  <div className="rel-card-info">
-                    <span className="rel-card-tag">{rel.category}</span>
-                    <h4 className="rel-card-name">{rel.name}</h4>
-                    <div className="rel-card-bottom">
-                      <span className="rel-card-price">GH₵{rel.price.toFixed(2)}</span>
-                      <span className="rel-card-btn">
-                        Customize
-                      </span>
+                  <label className="pdp-section-title">
+                    1. Select Tub Size <span className="pdp-required">*</span>
+                  </label>
+                  <div className="pdp-section-header-right">
+                    <span className="pdp-selection-current">{currentSize.name}</span>
+                    <ChevronDown
+                      size={18}
+                      className={`pdp-expand-chevron ${expandedSections.size ? 'open' : ''}`}
+                    />
+                  </div>
+                </div>
+
+                {expandedSections.size && (
+                  <div className="pdp-size-grid pdp-section-collapsible-body">
+                    {availableSizes.map((s, idx) => {
+                      const isSelected = idx === selectedSizeIndex;
+                      return (
+                        <button
+                          key={s.id || s.name}
+                          type="button"
+                          className={`pdp-size-card ${isSelected ? 'is-selected' : ''}`}
+                          onClick={() => setSelectedSizeIndex(idx)}
+                        >
+                          <div className="size-card-radio">
+                            <span className="radio-dot" />
+                          </div>
+                          <div className="size-card-info">
+                            <div className="size-card-name">{s.name}</div>
+                            {s.volume && <div className="size-card-volume">{s.volume}</div>}
+                          </div>
+                          <div className="size-card-price">
+                            {s.priceOffset > 0 ? (
+                              `+GH₵${s.priceOffset.toFixed(2)}`
+                            ) : s.priceOffset < 0 ? (
+                              `-GH₵${Math.abs(s.priceOffset).toFixed(2)}`
+                            ) : (
+                              'Standard'
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+
+              {/* 2. BUTTER DRIZZLE OPTIONS (For popcorn & combos) */}
+              {isPopcornOrCombo && (
+                <section className={`pdp-section pdp-butter-section ${expandedSections.butter ? 'is-expanded' : 'is-collapsed'}`}>
+                  <div
+                    className="pdp-section-header pdp-collapsible-header"
+                    onClick={() => toggleSection('butter')}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={expandedSections.butter}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleSection('butter');
+                      }
+                    }}
+                  >
+                    <label className="pdp-section-title">
+                      2. Butter Drizzle Options
+                    </label>
+                    <div className="pdp-section-header-right">
+                      <span className="pdp-selection-current">{butterOption.name}</span>
+                      <ChevronDown
+                        size={18}
+                        className={`pdp-expand-chevron ${expandedSections.butter ? 'open' : ''}`}
+                      />
                     </div>
                   </div>
-                </a>
-              ))}
+
+                  {expandedSections.butter && (
+                    <div className="pdp-drizzle-grid pdp-section-collapsible-body">
+                      {BUTTER_DRIZZLE_OPTIONS.map((opt) => {
+                        const isSelected = selectedButterId === opt.id;
+                        return (
+                          <div
+                            key={opt.id}
+                            className={`pdp-drizzle-card ${isSelected ? 'is-selected' : ''}`}
+                            onClick={() => setSelectedButterId(opt.id)}
+                          >
+                            <div className="drizzle-card-left">
+                              <span className={`pdp-radio-indicator ${isSelected ? 'checked' : ''}`}>
+                                {isSelected && <Check size={12} />}
+                              </span>
+                              <div>
+                                <div className="drizzle-name">{opt.name}</div>
+                                <div className="drizzle-desc">{opt.desc}</div>
+                              </div>
+                            </div>
+                            <div className="drizzle-price">
+                              {opt.price === 0 ? 'Included' : `+GH₵${opt.price.toFixed(2)}`}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {/* 3. DRINK PAIRINGS SELECTOR */}
+              <section className={`pdp-section pdp-drink-section ${expandedSections.drink ? 'is-expanded' : 'is-collapsed'}`}>
+                <div
+                  className="pdp-section-header pdp-collapsible-header"
+                  onClick={() => toggleSection('drink')}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedSections.drink}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleSection('drink');
+                    }
+                  }}
+                >
+                  <label className="pdp-section-title">
+                    3. Recommended Drink Pairings <span className="pdp-optional">(Optional)</span>
+                  </label>
+                  <div className="pdp-section-header-right">
+                    {selectedDrinkId && (
+                      <button
+                        type="button"
+                        className="pdp-clear-pairing-btn"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedDrinkId(null);
+                        }}
+                      >
+                        Remove drink
+                      </button>
+                    )}
+                    <span className="pdp-selection-current">
+                      {selectedDrinkId ? (DRINK_PAIRINGS.find((d) => d.id === selectedDrinkId)?.name || '1 selected') : 'None'}
+                    </span>
+                    <ChevronDown
+                      size={18}
+                      className={`pdp-expand-chevron ${expandedSections.drink ? 'open' : ''}`}
+                    />
+                  </div>
+                </div>
+
+                {expandedSections.drink && (
+                  <div className="pdp-drinks-grid pdp-section-collapsible-body">
+                    {DRINK_PAIRINGS.map((drink) => {
+                      const isSelected = selectedDrinkId === drink.id;
+                      return (
+                        <div
+                          key={drink.id}
+                          className={`pdp-drink-card ${isSelected ? 'is-selected' : ''}`}
+                          onClick={() => setSelectedDrinkId(isSelected ? null : drink.id)}
+                        >
+                          <img src={drink.image} alt={drink.name} className="drink-card-thumb" />
+                          <div className="drink-card-content">
+                            <div className="drink-card-name">{drink.name}</div>
+                            <div className="drink-card-size">{drink.size}</div>
+                            <div className="drink-card-price">+GH₵{drink.price.toFixed(2)}</div>
+                          </div>
+                          <div className={`drink-add-tag ${isSelected ? 'added' : ''}`}>
+                            {isSelected ? 'Selected' : '+ Add'}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+
+              {/* 4. ALLERGEN & INGREDIENT TAGS */}
+              {product.allergens && product.allergens.length > 0 && (
+                <section className="pdp-section pdp-allergen-section">
+                  <label className="pdp-section-title">
+                    <Info size={15} className="title-inline-icon" />
+                    Allergen &amp; Dietary Information
+                  </label>
+                  <div className="pdp-allergen-tags-row">
+                    {product.allergens.map((key) => {
+                      const info = ALLERGEN_DEFINITIONS[key];
+                      if (!info) return null;
+                      return (
+                        <div key={key} className="pdp-allergen-chip" title={info.desc}>
+                          <span className="allergen-icon">{renderAllergenIcon(info.iconKey, 14)}</span>
+                          <span className="allergen-label">{info.label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
             </div>
-          </section>
-        )}
-      </main>
+          </div>
+
+          {/* Product Details & Story Tabs */}
+          <div className={`pdp-info-tabs-block ${activeTab ? 'is-expanded' : 'is-collapsed'}`}>
+            <div className="pdp-tabs-nav">
+              <button
+                className={`pdp-tab-btn ${activeTab === 'details' ? 'active' : ''}`}
+                onClick={() => handleTabClick('details')}
+                aria-expanded={activeTab === 'details'}
+              >
+                <span>Description &amp; Origin</span>
+                <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'details' ? 'open' : ''}`} />
+              </button>
+              <button
+                className={`pdp-tab-btn ${activeTab === 'allergens' ? 'active' : ''}`}
+                onClick={() => handleTabClick('allergens')}
+                aria-expanded={activeTab === 'allergens'}
+              >
+                <span>Ingredients &amp; Nutrition</span>
+                <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'allergens' ? 'open' : ''}`} />
+              </button>
+              <button
+                className={`pdp-tab-btn ${activeTab === 'delivery' ? 'active' : ''}`}
+                onClick={() => handleTabClick('delivery')}
+                aria-expanded={activeTab === 'delivery'}
+              >
+                <span>Fresh Dispatch Guarantee</span>
+                <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'delivery' ? 'open' : ''}`} />
+              </button>
+            </div>
+
+            {activeTab && (
+              <div className="pdp-tab-pane">
+                {activeTab === 'details' && (
+                  <div className="tab-pane-content">
+                    <h3>About {product.name}</h3>
+                    <p>{product.longDescription || product.description}</p>
+                    <p>
+                      Popped locally in Accra with non-GMO corn kernels. We don't pre-bag our popcorn weeks in advance;
+                      each order is popped and seasoned on demand so you enjoy the crunch at peak crispness.
+                    </p>
+                  </div>
+                )}
+
+                {activeTab === 'allergens' && (
+                  <div className="tab-pane-content">
+                    <h3>Nutritional &amp; Allergen Statement</h3>
+                    <p>
+                      Item13 operates dedicated popping batches for sweet, buttery, and spicy savory items.
+                      All corn is naturally 100% gluten-free and cholesterol-free before seasonings are added.
+                    </p>
+                    <div className="tab-allergen-grid">
+                      {product.allergens && product.allergens.map((key) => {
+                        const info = ALLERGEN_DEFINITIONS[key];
+                        if (!info) return null;
+                        return (
+                          <div key={key} className="allergen-detail-card">
+                            <span className="card-icon">{renderAllergenIcon(info.iconKey, 18)}</span>
+                            <div>
+                              <strong>{info.label}</strong>
+                              <p>{info.desc}</p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'delivery' && (
+                  <div className="tab-pane-content">
+                    <h3>Thermal Insulated Delivery in Accra &amp; Tema</h3>
+                    <p>
+                      Popcorn tubs are packaged in grease-resistant, recyclable thermal kraft buckets that lock in warmth and aromatics.
+                      Chilled drinks are packed in separate insulated ice-cooler bags to ensure ice-cold refreshment on arrival.
+                    </p>
+                    <ul className="pdp-delivery-list">
+                      <li>
+                        <Zap size={16} className="text-primary inline-icon" />
+                        <span><strong>Express Delivery:</strong> 25-45 minutes across East Legon, Cantonments, Osu, Airport, Dzorwulu &amp; Tema.</span>
+                      </li>
+                      <li>
+                        <Smartphone size={16} className="text-primary inline-icon" />
+                        <span><strong>Live Tracking:</strong> WhatsApp live rider tracking sent instantly upon dispatch.</span>
+                      </li>
+                      <li>
+                        <CreditCard size={16} className="text-primary inline-icon" />
+                        <span><strong>Secure Payment:</strong> Mobile money (MTN MoMo, Telecel Cash) and Card checkout accepted.</span>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* You May Also Like Shelf */}
+          {relatedProducts.length > 0 && (
+            <section className="pdp-related-shelf">
+              <div className="pdp-related-head">
+                <h2>Complete Your Crunch Experience</h2>
+                <p>Ghana's favourite popcorn combinations and pairings</p>
+              </div>
+              <div className="pdp-related-grid">
+                {relatedProducts.map((rel) => (
+                  <a
+                    key={rel.id}
+                    href={`/products/${rel.id}`}
+                    className="pdp-related-card"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onNavigate && onNavigate(`product-${rel.id}`);
+                    }}
+                    style={{ textDecoration: 'none', color: 'inherit' }}
+                  >
+                    <img src={rel.image} alt={rel.name} className="rel-card-img" />
+                    <div className="rel-card-info">
+                      <span className="rel-card-tag">{rel.category}</span>
+                      <h4 className="rel-card-name">{rel.name}</h4>
+                      <div className="rel-card-bottom">
+                        <span className="rel-card-price">GH₵{rel.price.toFixed(2)}</span>
+                        <span className="rel-card-btn">
+                          Customize
+                        </span>
+                      </div>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </main>
+      )}
 
       {/* Footer */}
       <Footer onNavigate={onNavigate} onToast={onToast} />

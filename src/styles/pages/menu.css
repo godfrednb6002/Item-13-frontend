@@ -8,8 +8,17 @@
   background-color: var(--bg-dark);
   color: var(--text-white);
   position: relative;
-  overflow-x: hidden;
   padding-bottom: 80px;
+}
+
+/* Ensure the top header and breadcrumb shell remains statically stuck at the top while content scrolls under it */
+.menu-page-wrapper .pdp-top-nav-shell {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: rgba(15, 16, 18, 0.94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
 }
 
 .menu-ambient-glow {
@@ -105,7 +114,7 @@
   z-index: 10;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 48px 40px 24px 40px;
+  padding: 34px 40px 18px 40px;
 }
 
 .menu-hero-content {
@@ -154,7 +163,7 @@
   z-index: 20;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 10px 40px 24px 40px;
+  padding: 24px 40px 24px 40px;
 }
 
 .menu-controls-inner {
@@ -181,7 +190,7 @@
 .menu-search-input {
   width: 100%;
   background: #17181d;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: var(--radius-full);
   padding: 14px 44px 14px 46px;
   color: #ffffff;
@@ -192,8 +201,8 @@
 }
 
 .menu-search-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(244, 182, 39, 0.15);
+  border: none;
+  box-shadow: 0 0 0 2px rgba(244, 182, 39, 0.4);
 }
 
 .search-clear-btn {
@@ -209,6 +218,148 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.search-clear-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Search Dropdown (Suggestions & Recent Searches) */
+.menu-search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background: #17181e;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: searchDropFade 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes searchDropFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-dropdown-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.search-dropdown-header span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-clear-all-btn {
+  background: transparent;
+  border: none;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s ease;
+}
+
+.search-clear-all-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.search-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.search-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  padding: 4px 6px 4px 10px;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.search-tag-chip:hover {
+  border-color: rgba(244, 182, 39, 0.3);
+  background: rgba(244, 182, 39, 0.08);
+}
+
+.search-tag-text {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.search-tag-remove {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-tag-remove:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.search-suggestion-pill {
+  background: rgba(244, 182, 39, 0.08);
+  border: 1px solid rgba(244, 182, 39, 0.2);
+  border-radius: var(--radius-full);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-suggestion-pill:hover {
+  background: var(--gold);
+  color: #0f1012;
+  border-color: var(--gold);
 }
 
 .menu-sort-wrapper {
@@ -429,6 +580,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-top: 14px;
   margin-bottom: 22px;
   font-size: 13.5px;
   color: var(--text-muted);
@@ -436,6 +588,8 @@
 
 .results-count strong {
   color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .results-badge {
@@ -465,6 +619,49 @@
   flex-direction: column;
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+}
+
+/* Light diagonal reflection sweep that triggers individually and randomly */
+.catalog-card::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -120%;
+  width: 50%;
+  height: 220%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.005) 35%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(244, 182, 39, 0.08) 55%,
+    transparent 70%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+}
+
+.catalog-card.has-reflection::after {
+  animation: cardLightReflection 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes cardLightReflection {
+  0% {
+    left: -120%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  80% {
+    opacity: 0.45;
+  }
+  100% {
+    left: 170%;
+    opacity: 0;
+  }
 }
 
 .catalog-card:hover {
@@ -547,9 +744,9 @@
   transform: translateY(22px) scale(0.85);
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.2s ease,
-              color 0.2s ease;
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 /* Show and transition smoothly upwards on card hover, or always stay visible if already favorited */
@@ -727,8 +924,8 @@
 .menu-empty-state {
   text-align: center;
   padding: 60px 20px;
-  background: #141519;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: transparent;
+  border: none;
   border-radius: 20px;
 }
 
@@ -1187,27 +1384,399 @@
 
 @media (max-width: 680px) {
 
-  .menu-header-inner,
-  .menu-hero-banner,
+  .menu-header-inner {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
   .menu-controls-bar {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 18px 14px 20px 14px;
   }
 
+  .menu-hero-banner {
+    padding: 24px 14px 16px 14px;
+  }
+
+  .menu-catalog-layout {
+    padding: 0 12px;
+  }
+
+  /* Hide theme toggle on menu page in mobile view */
+  .menu-header-actions .theme-toggle-btn {
+    display: none !important;
+  }
+
+  /* Compact Back Button in Mobile Header: Hide text and keep only the back arrow */
+  .menu-nav-home-btn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .menu-nav-home-btn span {
+    display: none;
+  }
+
+  /* Compact Back Button in Mobile Header: Hide text and keep only the back arrow */
+  .menu-nav-home-btn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    justify-content: center;
+  }
+
+  .menu-nav-home-btn span {
+    display: none;
+  }
+
+  /* Single horizontal line row: Reduced Search Box + Sort Icon + Filter Icon */
   .menu-controls-inner {
-    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    margin-bottom: 14px;
   }
 
+  .menu-search-wrapper {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .menu-search-input {
+    padding: 9px 32px 9px 36px;
+    font-size: 12.5px;
+    height: 38px;
+  }
+
+  .menu-search-wrapper .search-icon {
+    left: 12px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .search-clear-btn {
+    right: 8px;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Compact Circular Sort Trigger */
   .menu-sort-wrapper {
-    width: 100%;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #17181d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+  }
+
+  .menu-sort-wrapper .sort-icon {
+    position: static;
+    left: auto;
+    width: 16px;
+    height: 16px;
+    color: var(--gold);
+    pointer-events: none;
   }
 
   .menu-sort-select {
+    position: absolute;
+    inset: 0;
     width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    z-index: 2;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
+  /* Compact Circular Filter Trigger */
+  .mobile-filter-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .mobile-filter-trigger {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    padding: 0;
+    border-radius: 50%;
+    background: #17181d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--gold);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-filter-trigger:hover {
+    border-color: var(--gold);
+    background: rgba(244, 182, 39, 0.12);
+  }
+
+  .mobile-filter-trigger svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mobile-filter-trigger .mobile-filter-text {
+    display: none;
+  }
+
+  /* Backdrop for Small Pop-up Modal */
+  .mobile-filter-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 150;
+    animation: filterFadeIn 0.2s ease;
+  }
+
+  /* Small Compact Pop-up Menu */
+  .mobile-filter-popup {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(290px, calc(100vw - 28px));
+    background: #17181e;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    z-index: 160;
+    animation: filterPopIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .mobile-filter-popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-filter-popup-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.2px;
+  }
+
+  .mobile-filter-close-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: var(--text-muted);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .mobile-filter-close-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #ffffff;
+  }
+
+  .mobile-filter-popup-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mobile-filter-reset-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: #e2e8f0;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mobile-filter-apply-btn {
+    flex: 2;
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    color: #0f1012;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(244, 182, 39, 0.35);
+  }
+
+  @keyframes filterFadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes filterPopIn {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* Two items per row on mobile view */
   .menu-products-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .catalog-card {
+    border-radius: 14px;
+  }
+
+  .catalog-card-image-wrapper {
+    height: 135px;
+  }
+
+  .catalog-card-badge {
+    top: 8px;
+    left: 8px;
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .catalog-card-discount {
+    top: 8px;
+    right: 8px;
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .catalog-card-actions-stack {
+    bottom: 8px;
+    right: 8px;
+    gap: 6px;
+  }
+
+  .catalog-fav-btn,
+  .catalog-quickview-btn {
+    width: 28px;
+    height: 28px;
+    opacity: 0.92;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .catalog-fav-btn svg,
+  .catalog-quickview-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .catalog-card-body {
+    padding: 10px;
+  }
+
+  .catalog-card-meta {
+    margin-bottom: 4px;
+  }
+
+  .catalog-card-rating {
+    font-size: 11px;
+    gap: 3px;
+  }
+
+  .catalog-card-rating svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .rating-count {
+    font-size: 10px;
+  }
+
+  .catalog-card-tag {
+    font-size: 9px;
+    padding: 1px 5px;
+  }
+
+  .catalog-card-title {
+    font-size: 13px;
+    margin-bottom: 4px;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .catalog-card-desc {
+    display: none;
+  }
+
+  .catalog-card-footer {
+    padding-top: 8px;
+    margin-top: auto;
+  }
+
+  .catalog-currency {
+    font-size: 10.5px;
+  }
+
+  .catalog-price-val {
+    font-size: 14.5px;
+  }
+
+  .catalog-price-original {
+    font-size: 10px;
+    margin-left: 3px;
+  }
+
+  .catalog-add-btn {
+    padding: 5px 9px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .catalog-add-btn svg {
+    width: 12px;
+    height: 12px;
   }
 }
-

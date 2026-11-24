@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   MapPin,
   Phone,
@@ -14,6 +14,38 @@ import {
 
 export default function Footer({ onNavigate, onToast }) {
   const currentYear = new Date().getFullYear();
+  const [activeMobilePerk, setActiveMobilePerk] = useState(null);
+
+  const perksData = [
+    {
+      id: 'fresh',
+      icon: Flame,
+      label: 'Fresh',
+      title: 'Popped Hot to Order',
+      desc: 'Never pre-bagged or stale. Handcrafted on demand.'
+    },
+    {
+      id: 'delivery',
+      icon: Truck,
+      label: 'Speedy',
+      title: 'Speedy Local Delivery',
+      desc: 'Accra, Tema, Kumasi & beyond delivered warm and crunchy.'
+    },
+    {
+      id: 'momo',
+      icon: ShieldCheck,
+      label: 'MoMo',
+      title: 'Mobile Money Ready',
+      desc: 'Instant MTN MoMo, Telecel Cash & secure card checkout.'
+    },
+    {
+      id: 'events',
+      icon: Sparkles,
+      label: 'Events',
+      title: 'Event & Party Tubs',
+      desc: 'Custom bulk sizes for birthdays, movie nights & celebrations.'
+    }
+  ];
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -26,46 +58,77 @@ export default function Footer({ onNavigate, onToast }) {
     <footer className="site-footer">
       {/* Top Value Propositions Banner */}
       <div className="footer-perks-strip">
-        <div className="footer-perks-container">
-          <div className="footer-perk-item">
-            <div className="perk-icon-bubble">
-              <Flame size={20} />
-            </div>
-            <div className="perk-text-block">
-              <span className="perk-title">Popped Hot to Order</span>
-              <span className="perk-desc">Never pre-bagged or stale</span>
-            </div>
+        {/* Desktop grid */}
+        <div className="footer-perks-container footer-perks-desktop">
+          {perksData.map((perk) => {
+            const Icon = perk.icon;
+            return (
+              <div key={perk.id} className="footer-perk-item">
+                <div className="perk-icon-bubble">
+                  <Icon size={20} />
+                </div>
+                <div className="perk-text-block">
+                  <span className="perk-title">{perk.title}</span>
+                  <span className="perk-desc">{perk.desc}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Mobile: Row of icons with tap pop-up */}
+        <div className="footer-perks-mobile">
+          <div className="footer-perks-mobile-row">
+            {perksData.map((perk, idx) => {
+              const Icon = perk.icon;
+              const isActive = activeMobilePerk === idx;
+              return (
+                <button
+                  key={perk.id}
+                  type="button"
+                  className={`footer-perk-icon-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveMobilePerk(prev => prev === idx ? null : idx)}
+                  aria-label={perk.title}
+                >
+                  <div className="footer-perk-icon-wrapper">
+                    <Icon size={20} />
+                  </div>
+                  <span className="footer-perk-icon-label">{perk.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="footer-perk-item">
-            <div className="perk-icon-bubble">
-              <Truck size={20} />
+          {/* Pop-up dialog on tap */}
+          {activeMobilePerk !== null && (
+            <div className="footer-perk-popup" role="dialog" aria-live="polite">
+              <div className="footer-perk-popup-bubble">
+                {(() => {
+                  const perk = perksData[activeMobilePerk];
+                  const Icon = perk.icon;
+                  return (
+                    <>
+                      <div className="footer-perk-popup-icon">
+                        <Icon size={18} />
+                      </div>
+                      <div className="footer-perk-popup-text">
+                        <strong>{perk.title}</strong>
+                        <p>{perk.desc}</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="footer-perk-popup-close"
+                        onClick={() => setActiveMobilePerk(null)}
+                        aria-label="Close"
+                      >
+                        ×
+                      </button>
+                    </>
+                  );
+                })()}
+              </div>
             </div>
-            <div className="perk-text-block">
-              <span className="perk-title">Speedy Local Delivery</span>
-              <span className="perk-desc">Accra, Tema, Kumasi &amp; beyond</span>
-            </div>
-          </div>
-
-          <div className="footer-perk-item">
-            <div className="perk-icon-bubble">
-              <ShieldCheck size={20} />
-            </div>
-            <div className="perk-text-block">
-              <span className="perk-title">Mobile Money Ready</span>
-              <span className="perk-desc">Instant MTN MoMo &amp; Telecel Cash</span>
-            </div>
-          </div>
-
-          <div className="footer-perk-item">
-            <div className="perk-icon-bubble">
-              <Sparkles size={20} />
-            </div>
-            <div className="perk-text-block">
-              <span className="perk-title">Event &amp; Party Tubs</span>
-              <span className="perk-desc">Custom bulk sizes for celebrations</span>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -340,12 +403,11 @@ export default function Footer({ onNavigate, onToast }) {
         </div>
       </div>
 
-      {/* Bottom Bar: Copyright, Made in Ghana & Legal */}
+      {/* Bottom Bar: Copyright & Legal */}
       <div className="footer-bottom-bar">
         <div className="footer-bottom-container">
           <span className="footer-copy">
-            &copy; {currentYear} Item13. All rights reserved. Handcrafted with{' '}
-            <Heart size={13} fill="#f4b627" color="#f4b627" style={{ verticalAlign: 'middle' }} /> in Ghana.
+            &copy; {currentYear} Item13. All rights reserved.
           </span>
 
           <div className="footer-legal-links">

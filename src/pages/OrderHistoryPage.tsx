@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import {
   ArrowLeft,
   ArrowRight,
@@ -191,9 +191,17 @@ export default function OrderHistoryPage({
   const [statusFilter, setStatusFilter] = useState('all');
   const [visibleCount, setVisibleCount] = useState(5);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [reorderNotice, setReorderNotice] = useState('');
   const [receiptNotice, setReceiptNotice] = useState('');
   const [reorderCount, setReorderCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsInitialLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   const filteredOrders = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -320,7 +328,26 @@ export default function OrderHistoryPage({
           )}
         </div>
 
-        {visibleOrders.length ? (
+        {isInitialLoading ? (
+          <section className="history-order-list" aria-label="Loading past orders">
+            {[1, 2, 3].map((key) => (
+              <div key={key} className="order-skeleton-card">
+                <div className="skeleton-row">
+                  <div className="skeleton-line sm skeleton-shimmer" style={{ width: '30%', height: '18px' }} />
+                  <div className="skeleton-line btn skeleton-shimmer" style={{ width: '80px', height: '24px' }} />
+                </div>
+                <div className="order-skeleton-items">
+                  <div className="order-skeleton-thumb skeleton-shimmer" />
+                  <div className="order-skeleton-thumb skeleton-shimmer" />
+                </div>
+                <div className="skeleton-row" style={{ paddingTop: '10px' }}>
+                  <div className="skeleton-line sm skeleton-shimmer" style={{ width: '20%' }} />
+                  <div className="skeleton-line btn skeleton-shimmer" style={{ width: '90px' }} />
+                </div>
+              </div>
+            ))}
+          </section>
+        ) : visibleOrders.length ? (
           <section className="history-order-list" aria-label="Past orders">
             {visibleOrders.map((order) => (
               <OrderCard

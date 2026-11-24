@@ -362,12 +362,59 @@
   border-radius: 20px;
   background: #15161c;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
+}
+
+.pdp-section.is-collapsed {
+  gap: 0;
+  padding: 16px 20px;
 }
 
 .pdp-section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.pdp-collapsible-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.pdp-section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pdp-expand-chevron {
+  color: var(--text-muted);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+}
+
+.pdp-expand-chevron.open {
+  transform: rotate(180deg);
+  color: var(--gold);
+}
+
+.pdp-collapsible-header:hover .pdp-expand-chevron {
+  color: var(--gold);
+}
+
+.pdp-section-collapsible-body {
+  margin-top: 6px;
+  animation: pdpSectionFadeIn 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pdpSectionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .pdp-section-title {

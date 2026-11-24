@@ -22,7 +22,8 @@ import {
   Bean,
   Zap,
   Smartphone,
-  CreditCard
+  CreditCard,
+  ChevronDown
 } from 'lucide-react';
 import {
   PRODUCTS,
@@ -77,6 +78,20 @@ export default function ProductDetailPage({
   const [activeTab, setActiveTab] = useState('details'); // 'details' | 'allergens' | 'delivery'
   const [activePerkIndex, setActivePerkIndex] = useState(0); // 0: Fresh, 1: Delivery, 2: Ingredients
   const [isDetailLoading, setIsDetailLoading] = useState(true);
+
+  // Expand / collapse state for options 1, 2, and 3
+  const [expandedSections, setExpandedSections] = useState({
+    size: false,
+    butter: false,
+    drink: false,
+  });
+
+  const toggleSection = (sectionKey) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionKey]: !prev[sectionKey],
+    }));
+  };
 
   useEffect(() => {
     setIsDetailLoading(true);
@@ -368,125 +383,191 @@ export default function ProductDetailPage({
             </div>
 
             {/* 1. TUB SIZE SELECTOR */}
-            <section className="pdp-section pdp-size-section">
-              <div className="pdp-section-header">
+            <section className={`pdp-section pdp-size-section ${expandedSections.size ? 'is-expanded' : 'is-collapsed'}`}>
+              <div
+                className="pdp-section-header pdp-collapsible-header"
+                onClick={() => toggleSection('size')}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedSections.size}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleSection('size');
+                  }
+                }}
+              >
                 <label className="pdp-section-title">
                   1. Select Tub Size <span className="pdp-required">*</span>
                 </label>
-                <span className="pdp-selection-current">{currentSize.name}</span>
+                <div className="pdp-section-header-right">
+                  <span className="pdp-selection-current">{currentSize.name}</span>
+                  <ChevronDown
+                    size={18}
+                    className={`pdp-expand-chevron ${expandedSections.size ? 'open' : ''}`}
+                  />
+                </div>
               </div>
 
-              <div className="pdp-size-grid">
-                {availableSizes.map((s, idx) => {
-                  const isSelected = idx === selectedSizeIndex;
-                  return (
-                    <button
-                      key={s.id || s.name}
-                      type="button"
-                      className={`pdp-size-card ${isSelected ? 'is-selected' : ''}`}
-                      onClick={() => setSelectedSizeIndex(idx)}
-                    >
-                      <div className="size-card-radio">
-                        <span className="radio-dot" />
-                      </div>
-                      <div className="size-card-info">
-                        <div className="size-card-name">{s.name}</div>
-                        {s.volume && <div className="size-card-volume">{s.volume}</div>}
-                      </div>
-                      <div className="size-card-price">
-                        {s.priceOffset > 0 ? (
-                          `+GH₵${s.priceOffset.toFixed(2)}`
-                        ) : s.priceOffset < 0 ? (
-                          `-GH₵${Math.abs(s.priceOffset).toFixed(2)}`
-                        ) : (
-                          'Standard'
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+              {expandedSections.size && (
+                <div className="pdp-size-grid pdp-section-collapsible-body">
+                  {availableSizes.map((s, idx) => {
+                    const isSelected = idx === selectedSizeIndex;
+                    return (
+                      <button
+                        key={s.id || s.name}
+                        type="button"
+                        className={`pdp-size-card ${isSelected ? 'is-selected' : ''}`}
+                        onClick={() => setSelectedSizeIndex(idx)}
+                      >
+                        <div className="size-card-radio">
+                          <span className="radio-dot" />
+                        </div>
+                        <div className="size-card-info">
+                          <div className="size-card-name">{s.name}</div>
+                          {s.volume && <div className="size-card-volume">{s.volume}</div>}
+                        </div>
+                        <div className="size-card-price">
+                          {s.priceOffset > 0 ? (
+                            `+GH₵${s.priceOffset.toFixed(2)}`
+                          ) : s.priceOffset < 0 ? (
+                            `-GH₵${Math.abs(s.priceOffset).toFixed(2)}`
+                          ) : (
+                            'Standard'
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </section>
 
             {/* 2. BUTTER DRIZZLE OPTIONS (For popcorn & combos) */}
             {isPopcornOrCombo && (
-              <section className="pdp-section pdp-butter-section">
-                <div className="pdp-section-header">
+              <section className={`pdp-section pdp-butter-section ${expandedSections.butter ? 'is-expanded' : 'is-collapsed'}`}>
+                <div
+                  className="pdp-section-header pdp-collapsible-header"
+                  onClick={() => toggleSection('butter')}
+                  role="button"
+                  tabIndex={0}
+                  aria-expanded={expandedSections.butter}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleSection('butter');
+                    }
+                  }}
+                >
                   <label className="pdp-section-title">
                     <Droplet size={15} className="title-inline-icon" />
                     2. Butter Drizzle Options
                   </label>
-                  <span className="pdp-selection-current">{butterOption.name}</span>
+                  <div className="pdp-section-header-right">
+                    <span className="pdp-selection-current">{butterOption.name}</span>
+                    <ChevronDown
+                      size={18}
+                      className={`pdp-expand-chevron ${expandedSections.butter ? 'open' : ''}`}
+                    />
+                  </div>
                 </div>
 
-                <div className="pdp-drizzle-grid">
-                  {BUTTER_DRIZZLE_OPTIONS.map((opt) => {
-                    const isSelected = selectedButterId === opt.id;
-                    return (
-                      <div
-                        key={opt.id}
-                        className={`pdp-drizzle-card ${isSelected ? 'is-selected' : ''}`}
-                        onClick={() => setSelectedButterId(opt.id)}
-                      >
-                        <div className="drizzle-card-left">
-                          <span className={`pdp-radio-indicator ${isSelected ? 'checked' : ''}`}>
-                            {isSelected && <Check size={12} />}
-                          </span>
-                          <div>
-                            <div className="drizzle-name">{opt.name}</div>
-                            <div className="drizzle-desc">{opt.desc}</div>
+                {expandedSections.butter && (
+                  <div className="pdp-drizzle-grid pdp-section-collapsible-body">
+                    {BUTTER_DRIZZLE_OPTIONS.map((opt) => {
+                      const isSelected = selectedButterId === opt.id;
+                      return (
+                        <div
+                          key={opt.id}
+                          className={`pdp-drizzle-card ${isSelected ? 'is-selected' : ''}`}
+                          onClick={() => setSelectedButterId(opt.id)}
+                        >
+                          <div className="drizzle-card-left">
+                            <span className={`pdp-radio-indicator ${isSelected ? 'checked' : ''}`}>
+                              {isSelected && <Check size={12} />}
+                            </span>
+                            <div>
+                              <div className="drizzle-name">{opt.name}</div>
+                              <div className="drizzle-desc">{opt.desc}</div>
+                            </div>
+                          </div>
+                          <div className="drizzle-price">
+                            {opt.price === 0 ? 'Included' : `+GH₵${opt.price.toFixed(2)}`}
                           </div>
                         </div>
-                        <div className="drizzle-price">
-                          {opt.price === 0 ? 'Included' : `+GH₵${opt.price.toFixed(2)}`}
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* 3. DRINK PAIRINGS SELECTOR */}
+            <section className={`pdp-section pdp-drink-section ${expandedSections.drink ? 'is-expanded' : 'is-collapsed'}`}>
+              <div
+                className="pdp-section-header pdp-collapsible-header"
+                onClick={() => toggleSection('drink')}
+                role="button"
+                tabIndex={0}
+                aria-expanded={expandedSections.drink}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggleSection('drink');
+                  }
+                }}
+              >
+                <label className="pdp-section-title">
+                  <Coffee size={15} className="title-inline-icon" />
+                  3. Recommended Drink Pairings <span className="pdp-optional">(Optional)</span>
+                </label>
+                <div className="pdp-section-header-right">
+                  {selectedDrinkId && (
+                    <button
+                      type="button"
+                      className="pdp-clear-pairing-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedDrinkId(null);
+                      }}
+                    >
+                      Remove drink
+                    </button>
+                  )}
+                  <span className="pdp-selection-current">
+                    {selectedDrinkId ? (DRINK_PAIRINGS.find((d) => d.id === selectedDrinkId)?.name || '1 selected') : 'None'}
+                  </span>
+                  <ChevronDown
+                    size={18}
+                    className={`pdp-expand-chevron ${expandedSections.drink ? 'open' : ''}`}
+                  />
+                </div>
+              </div>
+
+              {expandedSections.drink && (
+                <div className="pdp-drinks-grid pdp-section-collapsible-body">
+                  {DRINK_PAIRINGS.map((drink) => {
+                    const isSelected = selectedDrinkId === drink.id;
+                    return (
+                      <div
+                        key={drink.id}
+                        className={`pdp-drink-card ${isSelected ? 'is-selected' : ''}`}
+                        onClick={() => setSelectedDrinkId(isSelected ? null : drink.id)}
+                      >
+                        <img src={drink.image} alt={drink.name} className="drink-card-thumb" />
+                        <div className="drink-card-content">
+                          <div className="drink-card-name">{drink.name}</div>
+                          <div className="drink-card-size">{drink.size}</div>
+                          <div className="drink-card-price">+GH₵{drink.price.toFixed(2)}</div>
+                        </div>
+                        <div className={`drink-add-tag ${isSelected ? 'added' : ''}`}>
+                          {isSelected ? 'Selected' : '+ Add'}
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </section>
-            )}
-
-            {/* 3. DRINK PAIRINGS SELECTOR */}
-            <section className="pdp-section pdp-drink-section">
-              <div className="pdp-section-header">
-                <label className="pdp-section-title">
-                  <Coffee size={15} className="title-inline-icon" />
-                  3. Recommended Drink Pairings <span className="pdp-optional">(Optional)</span>
-                </label>
-                {selectedDrinkId && (
-                  <button
-                    type="button"
-                    className="pdp-clear-pairing-btn"
-                    onClick={() => setSelectedDrinkId(null)}
-                  >
-                    Remove drink
-                  </button>
-                )}
-              </div>
-
-              <div className="pdp-drinks-grid">
-                {DRINK_PAIRINGS.map((drink) => {
-                  const isSelected = selectedDrinkId === drink.id;
-                  return (
-                    <div
-                      key={drink.id}
-                      className={`pdp-drink-card ${isSelected ? 'is-selected' : ''}`}
-                      onClick={() => setSelectedDrinkId(isSelected ? null : drink.id)}
-                    >
-                      <img src={drink.image} alt={drink.name} className="drink-card-thumb" />
-                      <div className="drink-card-content">
-                        <div className="drink-card-name">{drink.name}</div>
-                        <div className="drink-card-size">{drink.size}</div>
-                        <div className="drink-card-price">+GH₵{drink.price.toFixed(2)}</div>
-                      </div>
-                      <div className={`drink-add-tag ${isSelected ? 'added' : ''}`}>
-                        {isSelected ? 'Selected' : '+ Add'}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              )}
             </section>
 
             {/* 4. ALLERGEN & INGREDIENT TAGS */}

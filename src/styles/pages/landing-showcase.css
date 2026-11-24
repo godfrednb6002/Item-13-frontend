@@ -444,12 +444,42 @@ html.light-theme .inspo-drawer-link {
 
 .inspo-main-heading {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(38px, 4.4vw, 68px);
+  font-size: clamp(48px, 5.8vw, 84px);
   font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -2px;
+  letter-spacing: -2.5px;
   color: #ffffff;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
+  min-height: 2.15em;
+  display: block;
+}
+
+.inspo-main-heading-line1,
+.inspo-main-heading-accent {
+  display: inline-block;
+  min-height: 1.05em;
+  position: relative;
+}
+
+.inspo-cursor {
+  display: inline-block;
+  font-weight: 300;
+  color: var(--gold, #f4b627);
+  margin-left: 2px;
+  animation: inspoCursorBlink 0.9s infinite alternate;
+  vertical-align: baseline;
+}
+
+@keyframes inspoCursorBlink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 html.light-theme .inspo-main-heading {
@@ -479,6 +509,7 @@ html.light-theme .inspo-subtext {
 }
 
 .inspo-btn-order-now {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -490,8 +521,66 @@ html.light-theme .inspo-subtext {
   font-weight: 800;
   border: none;
   cursor: pointer;
+  overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: inspoOrderNowLoop 2.8s infinite ease-in-out;
+}
+
+/* Continuous sweeping light reflection inside button */
+.inspo-btn-order-now::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 70%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: inspoOrderBtnSheen 2.8s infinite ease-in-out;
+}
+
+/* Subtle continuous arrow nudge */
+.inspo-btn-order-now svg {
+  transition: transform 0.25s ease;
+  animation: inspoOrderArrowBounce 2.8s infinite ease-in-out;
+}
+
+@keyframes inspoOrderNowLoop {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 25px rgba(244, 182, 39, 0.25);
+  }
+  50% {
+    transform: translateY(-2.5px) scale(1.035);
+    box-shadow: 0 14px 35px rgba(244, 182, 39, 0.55);
+  }
+}
+
+@keyframes inspoOrderBtnSheen {
+  0% {
+    left: -120%;
+  }
+  38%, 100% {
+    left: 170%;
+  }
+}
+
+@keyframes inspoOrderArrowBounce {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(3.5px);
+  }
 }
 
 html.light-theme .inspo-btn-order-now {
@@ -500,11 +589,32 @@ html.light-theme .inspo-btn-order-now {
   box-shadow: 0 10px 30px rgba(43, 31, 7, 0.3);
 }
 
+@keyframes inspoOrderNowLoopLight {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 8px 20px rgba(43, 31, 7, 0.2);
+  }
+  50% {
+    transform: translateY(-2.5px) scale(1.035);
+    box-shadow: 0 14px 32px rgba(212, 155, 20, 0.45);
+  }
+}
+
+html.light-theme .inspo-btn-order-now {
+  animation: inspoOrderNowLoopLight 2.8s infinite ease-in-out;
+}
+
 .inspo-btn-order-now:hover {
-  transform: translateY(-3px) scale(1.02);
+  transform: translateY(-3px) scale(1.05) !important;
   background: #ffcc4d;
   color: #1a0f0d;
-  box-shadow: 0 16px 40px rgba(244, 182, 39, 0.45);
+  box-shadow: 0 16px 40px rgba(244, 182, 39, 0.65) !important;
+  animation-play-state: paused;
+}
+
+.inspo-btn-order-now:hover svg {
+  transform: translateX(4px) !important;
+  animation-play-state: paused;
 }
 
 html.light-theme .inspo-btn-order-now:hover {
@@ -735,8 +845,8 @@ html.light-theme .inspo-big-watermark-title {
   }
 
   .inspo-main-heading {
-    font-size: clamp(28px, 7.5vw, 38px);
-    line-height: 1.15;
+    font-size: clamp(34px, 8.8vw, 46px);
+    line-height: 1.12;
     letter-spacing: -0.02em;
     margin-bottom: 12px;
   }

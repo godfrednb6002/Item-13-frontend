@@ -139,60 +139,62 @@ export default function ProductDetailPage({
 
   return (
     <div className="pdp-page-wrapper">
-      {/* Top Sticky Header */}
-      <header className="pdp-header">
-        <div className="pdp-header-inner">
-          <a
-            href="/"
-            className="pdp-header-brand"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            style={{ textDecoration: 'none' }}
-          >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
-
-          <div className="pdp-header-actions">
+      {/* Top Sticky Header & Breadcrumbs Shell */}
+      <div className="pdp-top-nav-shell">
+        <header className="pdp-header">
+          <div className="pdp-header-inner">
             <a
-              href="/products"
-              className="pdp-back-button"
+              href="/"
+              className="pdp-header-brand"
               onClick={(e) => {
                 e.preventDefault();
-                if (onNavigate) onNavigate('menu');
+                if (onNavigate) onNavigate('home');
               }}
               style={{ textDecoration: 'none' }}
-              title="Back to Menu"
             >
-              <ArrowLeft size={18} />
-              <span>Back to Menu</span>
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+              <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
             </a>
 
-            <ThemeToggle />
+            <div className="pdp-header-actions">
+              <a
+                href="/products"
+                className="pdp-back-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('menu');
+                }}
+                style={{ textDecoration: 'none' }}
+                title="Back to Menu"
+              >
+                <ArrowLeft size={18} />
+                <span>Back to Menu</span>
+              </a>
 
-            <button
-              type="button"
-              className="pdp-bag-chip"
-              onClick={() => onNavigate && onNavigate('cart')}
-              title="Open Bag"
-            >
-              <ShoppingBag size={17} />
-              <span>Bag ({cartCount})</span>
-            </button>
+              <ThemeToggle />
+
+              <button
+                type="button"
+                className="pdp-bag-chip"
+                onClick={() => onNavigate && onNavigate('cart')}
+                title="Open Bag"
+              >
+                <ShoppingBag size={17} />
+                <span>Bag ({cartCount})</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Breadcrumbs Row */}
-      <div className="pdp-breadcrumbs-bar">
-        <div className="pdp-breadcrumbs-inner">
-          <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
-          <span className="crumb-sep">/</span>
-          <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
-          <span className="crumb-sep">/</span>
-          <span className="crumb-current">{product.name}</span>
+        {/* Breadcrumbs Row */}
+        <div className="pdp-breadcrumbs-bar">
+          <div className="pdp-breadcrumbs-inner">
+            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
+            <span className="crumb-sep">/</span>
+            <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
+            <span className="crumb-sep">/</span>
+            <span className="crumb-current">{product.name}</span>
+          </div>
         </div>
       </div>
 

@@ -39,6 +39,66 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [isCountBumping, setIsCountBumping] = useState(false);
 
+  // Dynamic Typewriter Search Placeholder with items from the menu
+  const searchPlaceholderOptions = useMemo(() => {
+    const names = PRODUCTS.map((p) => p.name);
+    // Add popular drink & flavor keywords
+    return [
+      ...names,
+      'Coca-Cola Original',
+      'Fiery Suya Popcorn',
+      'Shawarma Crunch',
+      'Double Butter Drizzle',
+      'Golden Caramel Crunch',
+      'White Cheddar Popcorn',
+      'Fanta Orange Citrus',
+    ];
+  }, []);
+
+  const [displayedPlaceholder, setDisplayedPlaceholder] = useState('');
+  const [optionIndex, setOptionIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    // If the search bar is focused or has a query, pause animation
+    if (isSearchFocused || searchQuery) return;
+
+    const currentOption = searchPlaceholderOptions[optionIndex % searchPlaceholderOptions.length];
+    const fullText = `Search "${currentOption}"...`;
+
+    let timer;
+
+    if (!isDeleting) {
+      if (charIndex < fullText.length) {
+        // Typing
+        timer = setTimeout(() => {
+          setDisplayedPlaceholder(fullText.slice(0, charIndex + 1));
+          setCharIndex((prev) => prev + 1);
+        }, 65);
+      } else {
+        // Finished typing word, pause before deleting
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1800);
+      }
+    } else {
+      if (charIndex > 8) { // Keep `Search "` prefix while deleting option name
+        timer = setTimeout(() => {
+          setDisplayedPlaceholder(fullText.slice(0, charIndex - 1));
+          setCharIndex((prev) => prev - 1);
+        }, 35);
+      } else {
+        // Finished deleting, move to next item
+        setIsDeleting(false);
+        setOptionIndex((prev) => (prev + 1) % searchPlaceholderOptions.length);
+        setCharIndex(8);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [charIndex, isDeleting, optionIndex, searchPlaceholderOptions, isSearchFocused, searchQuery]);
+
   // Close search suggestions on outside click
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -228,7 +288,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
             <input
               type="text"
               className="menu-search-input"
-              placeholder={isSearchFocused ? "Search popcorn, caramel, suya spice, drinks..." : "Search menu..."}
+              placeholder={displayedPlaceholder || 'Search menu...'}
               value={searchQuery}
               onFocus={() => setIsSearchFocused(true)}
               onChange={(e) => setSearchQuery(e.target.value)}

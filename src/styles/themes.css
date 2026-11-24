@@ -435,14 +435,14 @@ html.light-theme .menu-controls-bar {
 }
 
 html.light-theme .menu-search-wrapper {
-  background: #ffffff !important;
-  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  background: transparent !important;
+  border: none !important;
 }
 
 html.light-theme .menu-search-input {
-  background: #ffffff !important;
+  background: #f1f4f9 !important;
   color: #111418 !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+  border: none !important;
 }
 
 html.light-theme .menu-search-input::placeholder {

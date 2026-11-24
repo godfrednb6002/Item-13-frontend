@@ -181,7 +181,7 @@
 .menu-search-input {
   width: 100%;
   background: #17181d;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: none;
   border-radius: var(--radius-full);
   padding: 14px 44px 14px 46px;
   color: #ffffff;
@@ -192,8 +192,8 @@
 }
 
 .menu-search-input:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(244, 182, 39, 0.15);
+  border: none;
+  box-shadow: 0 0 0 2px rgba(244, 182, 39, 0.4);
 }
 
 .search-clear-btn {

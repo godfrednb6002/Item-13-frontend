@@ -799,11 +799,11 @@ html.light-theme .inspo-big-watermark-title {
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.15) 0%,
-      rgba(20, 20, 25, 0.28) 40%,
-      rgba(10, 10, 14, 0.38) 100%
+      rgba(20, 20, 25, 0.22) 40%,
+      rgba(10, 10, 14, 0.3) 100%
     );
-    backdrop-filter: blur(14px) saturate(180%);
-    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-top: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 999px;

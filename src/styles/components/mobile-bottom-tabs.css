@@ -22,11 +22,11 @@
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.15) 0%,
-      rgba(20, 20, 25, 0.28) 40%,
-      rgba(10, 10, 14, 0.38) 100%
+      rgba(20, 20, 25, 0.22) 40%,
+      rgba(10, 10, 14, 0.3) 100%
     );
-    backdrop-filter: blur(14px) saturate(180%);
-    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-top: 1px solid rgba(255, 255, 255, 0.45);
     border-radius: 999px;
@@ -361,11 +361,11 @@
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.45) 0%,
-      rgba(253, 246, 227, 0.3) 50%,
-      rgba(255, 255, 255, 0.35) 100%
+      rgba(253, 246, 227, 0.25) 50%,
+      rgba(255, 255, 255, 0.3) 100%
     );
-    backdrop-filter: blur(14px) saturate(180%);
-    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: blur(6px) saturate(180%);
+    -webkit-backdrop-filter: blur(6px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.65);
     border-top: 1px solid rgba(255, 255, 255, 0.95);
     box-shadow: 

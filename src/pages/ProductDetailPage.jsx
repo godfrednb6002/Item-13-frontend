@@ -236,6 +236,21 @@ export default function ProductDetailPage({
         <div className="pdp-main-grid">
           {/* Left Column: Product Showcase Visuals */}
           <div className="pdp-visual-column">
+            {/* Title & Rating (Rendered at top of image on mobile/tablet) */}
+            <div className="pdp-intro pdp-intro-mobile-top">
+              <div className="pdp-rating-row">
+                <div className="pdp-stars">
+                  <Star size={15} fill="#f4b627" color="#f4b627" />
+                  <span className="pdp-score">{product.rating}</span>
+                  <span className="pdp-reviews-count">({product.reviewsCount} customer reviews)</span>
+                </div>
+                <span className="pdp-category-tag">{product.category.toUpperCase()}</span>
+              </div>
+
+              <h1 className="pdp-product-title">{product.name}</h1>
+              <p className="pdp-product-desc">{product.description}</p>
+            </div>
+
             <div className="pdp-main-image-card">
               {product.badge && <span className="pdp-badge-pill">{product.badge}</span>}
               <div className="pdp-actions-overlay">
@@ -367,8 +382,8 @@ export default function ProductDetailPage({
 
           {/* Right Column: Customizer & Ordering Panel */}
           <div className="pdp-customizer-column">
-            {/* Title & Rating */}
-            <div className="pdp-intro">
+            {/* Title & Rating (Rendered in right column on desktop) */}
+            <div className="pdp-intro pdp-intro-desktop">
               <div className="pdp-rating-row">
                 <div className="pdp-stars">
                   <Star size={15} fill="#f4b627" color="#f4b627" />

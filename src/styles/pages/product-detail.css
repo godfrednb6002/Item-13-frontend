@@ -305,6 +305,15 @@
   gap: 10px;
 }
 
+/* On desktop, show in right customizer column, hide mobile top intro */
+.pdp-intro-mobile-top {
+  display: none;
+}
+
+.pdp-intro-desktop {
+  display: flex;
+}
+
 .pdp-rating-row {
   display: flex;
   align-items: center;
@@ -1028,7 +1037,17 @@
 @media (max-width: 992px) {
   .pdp-main-grid {
     grid-template-columns: 1fr;
-    gap: 36px;
+    gap: 24px;
+  }
+
+  /* On mobile and tablet, show intro at the top of the image */
+  .pdp-intro-mobile-top {
+    display: flex !important;
+    margin-bottom: 4px;
+  }
+
+  .pdp-intro-desktop {
+    display: none !important;
   }
 
   .pdp-related-grid {

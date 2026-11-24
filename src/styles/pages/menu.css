@@ -612,12 +612,12 @@
   position: relative;
 }
 
-/* Light diagonal reflection sweep that loops every 5 seconds */
+/* Light diagonal reflection sweep that triggers individually and randomly */
 .catalog-card::after {
   content: '';
   position: absolute;
   top: -60%;
-  left: -80%;
+  left: -120%;
   width: 50%;
   height: 220%;
   background: linear-gradient(
@@ -631,23 +631,26 @@
   transform: rotate(25deg);
   pointer-events: none;
   z-index: 5;
-  animation: cardLightReflection 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  opacity: 0;
+}
+
+.catalog-card.has-reflection::after {
+  animation: cardLightReflection 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cardLightReflection {
   0% {
-    left: -100%;
+    left: -120%;
     opacity: 0;
   }
-  15% {
+  20% {
     opacity: 1;
   }
-  35% {
-    left: 160%;
+  80% {
     opacity: 0.8;
   }
-  40%, 100% {
-    left: 160%;
+  100% {
+    left: 170%;
     opacity: 0;
   }
 }

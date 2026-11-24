@@ -982,6 +982,11 @@
 }
 
 @media (max-width: 768px) {
+  /* Hide theme toggle on product detail page in mobile view */
+  .pdp-header-actions .theme-toggle-btn {
+    display: none !important;
+  }
+
   .pdp-header-inner,
   .pdp-breadcrumbs-inner,
   .pdp-stage {

@@ -475,7 +475,6 @@ export default function ProductDetailPage({
                   }}
                 >
                   <label className="pdp-section-title">
-                    <Droplet size={15} className="title-inline-icon" />
                     2. Butter Drizzle Options
                   </label>
                   <div className="pdp-section-header-right">
@@ -533,7 +532,6 @@ export default function ProductDetailPage({
                 }}
               >
                 <label className="pdp-section-title">
-                  <Coffee size={15} className="title-inline-icon" />
                   3. Recommended Drink Pairings <span className="pdp-optional">(Optional)</span>
                 </label>
                 <div className="pdp-section-header-right">

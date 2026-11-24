@@ -444,12 +444,12 @@ html.light-theme .inspo-drawer-link {
 
 .inspo-main-heading {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(48px, 5.8vw, 84px);
+  font-size: clamp(38px, 4.4vw, 68px);
   font-weight: 900;
   line-height: 1.05;
-  letter-spacing: -2.5px;
+  letter-spacing: -2px;
   color: #ffffff;
-  margin: 0 0 14px;
+  margin: 0 0 12px;
   min-height: 2.15em;
   display: block;
 }

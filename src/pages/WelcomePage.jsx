@@ -9,6 +9,7 @@ import {
   LogOut,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   Check,
   TrendingUp,
   Clock,
@@ -111,49 +112,76 @@ export default function WelcomePage({
     <div className="welcome-layout">
       {/* ================= RIGHT MAIN STAGE ================= */}
       <main className="welcome-main">
-        {/* Top Bar inside Stage */}
-        <header className="welcome-topbar">
-          <div className="welcome-breadcrumbs">
-            <span className="crumb-root">Account</span>
-            <ChevronRight size={14} className="crumb-sep" />
-            <span className="crumb-current">
-              {navItems.find((n) => n.id === activeTab)?.label || 'Dashboard'}
-            </span>
-          </div>
-
-          <div className="welcome-topbar-actions">
-            <ThemeToggle />
-            {cartCount > 0 && (
-              <button
-                type="button"
-                className="topbar-bag-chip"
-                onClick={() => onNavigate && onNavigate('cart')}
-                style={{ cursor: 'pointer', border: 'none' }}
-                title="Open Bag"
+        {/* Top Sticky Header & Breadcrumbs Shell (static format matching Menu / PDP) */}
+        <div className="pdp-top-nav-shell welcome-top-nav-shell">
+          <header className="pdp-header">
+            <div className="pdp-header-inner">
+              <a
+                href="/"
+                className="pdp-header-brand"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('home');
+                }}
+                style={{ textDecoration: 'none' }}
+                title="Back to Item13 Home"
               >
-                Bag: {cartCount}
-              </button>
-            )}
-            <button
-              type="button"
-              className="welcome-utility-btn"
-              data-tooltip="Storefront"
-              aria-label="Storefront"
-              onClick={() => onNavigate && onNavigate('home')}
-            >
-              <Store size={23.4} />
-            </button>
-            <button
-              type="button"
-              className="welcome-utility-btn logout"
-              data-tooltip="Log out"
-              aria-label="Log out"
-              onClick={onSignOut}
-            >
-              <LogOut size={23.4} />
-            </button>
+                <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+                <span className="brand-logo-tagline">
+                  THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+                </span>
+              </a>
+
+              <div className="pdp-header-actions">
+                <ThemeToggle />
+
+                <button
+                  type="button"
+                  className="welcome-utility-btn"
+                  data-tooltip="Storefront"
+                  aria-label="Storefront"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onNavigate) onNavigate('home');
+                  }}
+                  title="Storefront"
+                >
+                  <Store size={19} />
+                </button>
+
+                <button
+                  type="button"
+                  className="welcome-utility-btn logout"
+                  data-tooltip="Log out"
+                  aria-label="Log out"
+                  onClick={onSignOut}
+                  title="Log out"
+                >
+                  <LogOut size={19} />
+                </button>
+              </div>
+            </div>
+          </header>
+
+          {/* Breadcrumbs Row */}
+          <div className="pdp-breadcrumbs-bar">
+            <div className="pdp-breadcrumbs-inner">
+              <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
+              <span className="crumb-sep">/</span>
+              {activeTab === 'dashboard' ? (
+                <span className="crumb-current">Dashboard</span>
+              ) : (
+                <>
+                  <a href="/dashboard" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Dashboard</a>
+                  <span className="crumb-sep">/</span>
+                  <span className="crumb-current">
+                    {navItems.find((n) => n.id === activeTab)?.label || 'Overview'}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
-        </header>
+        </div>
 
         {/* Dynamic Panel Content based on the Active Dashboard Tab */}
         <div className="welcome-content-scroll">

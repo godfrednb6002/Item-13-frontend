@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Home,
   UtensilsCrossed,
@@ -31,16 +31,31 @@ export default function MobileBottomTabs({
   showToast
 }) {
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
+  const debounceTimerRef = useRef(null);
 
-  // Helper to close cart when navigating to another tab
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Debounced navigation handler: immediately closes UI then navigates with debouncing
   const handleTabNavigate = (action) => {
     setIsMoreDrawerOpen(false);
     if (isCartOpen && onCloseCart) {
       onCloseCart();
     }
-    if (action) {
-      action();
+    if (!action) return;
+
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
     }
+    debounceTimerRef.current = setTimeout(() => {
+      action();
+    }, 150);
   };
 
   // Compute active tab based on isCartOpen & currentPage
@@ -84,16 +99,79 @@ export default function MobileBottomTabs({
   }
 
   const drawerNavLinks = [
-    { label: 'Dashboard', icon: LayoutDashboard, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard')) },
-    { label: 'Menu & Catalog', icon: UtensilsCrossed, action: () => handleTabNavigate(() => onNavigate && onNavigate('menu')), badge: 'Hot' },
-    { label: 'Orders & Tracking', icon: Package, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/orders')) },
-    { label: 'My Profile', icon: User, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/profile')) },
-    { label: 'Delivery Addresses', icon: MapPin, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/addresses')) },
-    { label: 'Saved Favorites', icon: Heart, action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/favorites')) },
-    { label: 'Delivery Coverage', icon: Truck, action: () => handleTabNavigate(() => onNavigate && onNavigate('delivery')), badge: 'Zones' },
-    { label: 'Party & Weddings', icon: PartyPopper, action: () => handleTabNavigate(() => onNavigate && onNavigate('events')), badge: 'Bulk' },
-    { label: 'About Item13', icon: Info, action: () => handleTabNavigate(() => onNavigate && onNavigate('about')) },
-    { label: 'Contact & Support', icon: PhoneCall, action: () => handleTabNavigate(() => onNavigate && onNavigate('contact')) },
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+      icon: LayoutDashboard,
+      isActive: currentPage === 'dashboard' || currentPage === 'welcome',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard'))
+    },
+    {
+      id: 'menu',
+      label: 'Menu & Catalog',
+      icon: UtensilsCrossed,
+      isActive: currentPage === 'menu' || currentPage === 'products' || currentPage.startsWith('product-') || currentPage === 'welcome-menu',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('menu')),
+      badge: 'Hot'
+    },
+    {
+      id: 'orders',
+      label: 'Orders & Tracking',
+      icon: Package,
+      isActive: currentPage === 'order-tracking' || currentPage === 'dashboard/orders' || currentPage === 'welcome-orders',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/orders'))
+    },
+    {
+      id: 'profile',
+      label: 'My Profile',
+      icon: User,
+      isActive: currentPage === 'profile' || currentPage === 'dashboard/profile' || currentPage === 'welcome-profile' || currentPage.startsWith('dashboard/profile'),
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/profile'))
+    },
+    {
+      id: 'addresses',
+      label: 'Delivery Addresses',
+      icon: MapPin,
+      isActive: currentPage === 'addresses' || currentPage === 'dashboard/addresses' || currentPage === 'welcome-addresses' || currentPage === 'account/addresses',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/addresses'))
+    },
+    {
+      id: 'favorites',
+      label: 'Saved Favorites',
+      icon: Heart,
+      isActive: currentPage === 'favorites' || currentPage === 'dashboard/favorites' || currentPage === 'welcome-favorites',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('dashboard/favorites'))
+    },
+    {
+      id: 'delivery',
+      label: 'Delivery Coverage',
+      icon: Truck,
+      isActive: currentPage === 'delivery' || currentPage === 'welcome-delivery',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('delivery')),
+      badge: 'Zones'
+    },
+    {
+      id: 'events',
+      label: 'Party & Weddings',
+      icon: PartyPopper,
+      isActive: currentPage === 'events' || currentPage === 'welcome-events',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('events')),
+      badge: 'Bulk'
+    },
+    {
+      id: 'about',
+      label: 'About Item13',
+      icon: Info,
+      isActive: currentPage === 'about' || currentPage === 'welcome-about',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('about'))
+    },
+    {
+      id: 'contact',
+      label: 'Contact & Support',
+      icon: PhoneCall,
+      isActive: currentPage === 'contact' || currentPage === 'welcome-contact',
+      action: () => handleTabNavigate(() => onNavigate && onNavigate('contact'))
+    },
   ];
 
   return (
@@ -226,11 +304,8 @@ export default function MobileBottomTabs({
                     <button
                       key={item.label}
                       type="button"
-                      className="mobile-drawer-nav-card"
-                      onClick={() => {
-                        setIsMoreDrawerOpen(false);
-                        item.action();
-                      }}
+                      className={`mobile-drawer-nav-card ${item.isActive ? 'is-active' : ''}`}
+                      onClick={() => item.action()}
                     >
                       <div className="drawer-nav-card-icon">
                         <Icon size={19} />

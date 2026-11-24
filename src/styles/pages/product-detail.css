@@ -181,14 +181,12 @@
   left: -110%;
   width: 50%;
   height: 220%;
-  background: linear-gradient(
-    115deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.01) 35%,
-    rgba(255, 255, 255, 0.14) 50%,
-    rgba(244, 182, 39, 0.16) 55%,
-    transparent 70%
-  );
+  background: linear-gradient(115deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.01) 35%,
+      rgba(255, 255, 255, 0.14) 50%,
+      rgba(244, 182, 39, 0.16) 55%,
+      transparent 70%);
   transform: rotate(25deg);
   pointer-events: none;
   z-index: 5;
@@ -200,17 +198,22 @@
     left: -110%;
     opacity: 0;
   }
+
   5% {
     opacity: 1;
   }
+
   28% {
     opacity: 0.9;
   }
+
   33.33% {
     left: 175%;
     opacity: 0;
   }
-  33.34%, 100% {
+
+  33.34%,
+  100% {
     left: 175%;
     opacity: 0;
   }

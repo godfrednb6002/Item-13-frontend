@@ -1046,7 +1046,39 @@
   }
 
   .pdp-perks-strip {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .pdp-perk {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    padding: 10px 6px;
+    gap: 6px;
+    border-radius: 14px;
+    min-width: 0;
+  }
+
+  .perk-gold-icon {
+    margin-top: 0;
+    flex-shrink: 0;
+  }
+
+  .pdp-perk strong {
+    font-size: 11px;
+    line-height: 1.25;
+    margin-bottom: 2px;
+    white-space: normal;
+  }
+
+  .pdp-perk p {
+    font-size: 9.5px;
+    line-height: 1.25;
+    color: var(--text-muted);
   }
 
   .pdp-size-grid,

@@ -1175,6 +1175,11 @@
 }
 
 @media (max-width: 768px) {
+  /* Extra bottom clearance so footer copyright and legal links are never obscured by floating mobile tabs */
+  .pdp-page-wrapper {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+
   /* Hide theme toggle on product detail page in mobile view */
   .pdp-header-actions .theme-toggle-btn {
     display: none !important;

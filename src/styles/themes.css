@@ -1356,7 +1356,7 @@ html.light-theme .checkout-topbar {
   border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
-html.light-theme .checkout-brand > span {
+html.light-theme .checkout-brand>span {
   color: var(--gold) !important;
 }
 
@@ -1364,11 +1364,11 @@ html.light-theme .checkout-brand small {
   color: #656d79 !important;
 }
 
-html.light-theme .checkout-progress > span {
+html.light-theme .checkout-progress>span {
   color: #656d79 !important;
 }
 
-html.light-theme .checkout-progress > span.is-current {
+html.light-theme .checkout-progress>span.is-current {
   color: #111418 !important;
 }
 
@@ -1473,19 +1473,19 @@ html.light-theme .checkout-summary-heading h2 {
   color: #111418 !important;
 }
 
-html.light-theme .checkout-summary-heading > span {
+html.light-theme .checkout-summary-heading>span {
   color: #656d79 !important;
 }
 
-html.light-theme .checkout-summary-copy > strong {
+html.light-theme .checkout-summary-copy>strong {
   color: #111418 !important;
 }
 
-html.light-theme .checkout-summary-copy > small {
+html.light-theme .checkout-summary-copy>small {
   color: #656d79 !important;
 }
 
-html.light-theme .checkout-summary-item > b {
+html.light-theme .checkout-summary-item>b {
   color: #111418 !important;
 }
 
@@ -1549,7 +1549,7 @@ html.light-theme .cart-promo-form input:focus {
   border-color: var(--gold) !important;
 }
 
-html.light-theme .cart-promo-form > label {
+html.light-theme .cart-promo-form>label {
   color: #24292f !important;
 }
 
@@ -1589,7 +1589,7 @@ html.light-theme .cart-continue-link:hover {
 }
 
 /* 8. Checkout Promo & Enter Code field in Light Mode */
-html.light-theme .checkout-promo > label {
+html.light-theme .checkout-promo>label {
   color: #24292f !important;
 }
 
@@ -2196,7 +2196,7 @@ html.light-theme .delivery-bag-chip {
 
 html.light-theme .delivery-hero-section {
   background: radial-gradient(circle at 50% 20%, rgba(244, 182, 39, 0.18) 0%, transparent 70%),
-              linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+    linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -2379,7 +2379,7 @@ html.light-theme .about-nav-menu-btn {
 html.light-theme .about-hero,
 html.light-theme .events-hero {
   background: radial-gradient(circle at 50% 10%, rgba(244, 182, 39, 0.18) 0%, transparent 65%),
-              linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+    linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
@@ -2535,7 +2535,7 @@ html.light-theme .contact-header {
 
 html.light-theme .contact-hero-section {
   background: radial-gradient(circle at 50% 15%, rgba(244, 182, 39, 0.18) 0%, transparent 70%),
-              linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
+    linear-gradient(180deg, #ffffff 0%, #f4f6fa 100%) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
 }
 

@@ -1841,6 +1841,17 @@ html.light-theme .pdp-main-image-card {
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.06) !important;
 }
 
+html.light-theme .pdp-main-image-card::after {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(244, 182, 39, 0.18) 55%,
+    transparent 70%
+  ) !important;
+}
+
 html.light-theme .pdp-overlay-btn {
   background: rgba(255, 255, 255, 0.9) !important;
   border: 1px solid rgba(0, 0, 0, 0.12) !important;

@@ -173,6 +173,46 @@
   aspect-ratio: 1 / 1;
 }
 
+/* Light diagonal reflection sweep that loops every 5 seconds */
+.pdp-main-image-card::after {
+  content: '';
+  position: absolute;
+  top: -60%;
+  left: -100%;
+  width: 50%;
+  height: 220%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.01) 35%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(244, 182, 39, 0.16) 55%,
+    transparent 70%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  z-index: 5;
+  animation: pdpCardLightReflection 5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pdpCardLightReflection {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  35% {
+    left: 170%;
+    opacity: 0.85;
+  }
+  40%, 100% {
+    left: 170%;
+    opacity: 0;
+  }
+}
+
 .pdp-hero-image {
   width: 100%;
   height: 100%;

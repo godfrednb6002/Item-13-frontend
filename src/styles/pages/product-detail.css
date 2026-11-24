@@ -876,7 +876,9 @@
 }
 
 .pdp-image-action-bar .pdp-qty-display {
-  width: 36px;
+  min-width: 38px;
+  max-width: 65px;
+  width: auto;
   text-align: center;
   font-size: 15px;
   font-weight: 800;
@@ -884,7 +886,7 @@
   background: transparent;
   border: none;
   outline: none;
-  padding: 0;
+  padding: 0 4px;
   margin: 0;
   font-family: inherit;
   cursor: text;

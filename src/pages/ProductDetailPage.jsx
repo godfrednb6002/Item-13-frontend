@@ -332,7 +332,7 @@ export default function ProductDetailPage({
                     <input
                       type="number"
                       min="1"
-                      max="99"
+                      max="9999"
                       className="pdp-qty-display pdp-qty-input"
                       value={quantity}
                       onChange={(e) => {
@@ -342,7 +342,7 @@ export default function ProductDetailPage({
                         } else {
                           const parsed = parseInt(val, 10);
                           if (!isNaN(parsed)) {
-                            setQuantity(Math.max(1, Math.min(99, parsed)));
+                            setQuantity(Math.max(1, Math.min(9999, parsed)));
                           }
                         }
                       }}
@@ -361,7 +361,7 @@ export default function ProductDetailPage({
                     <button
                       type="button"
                       className="pdp-qty-btn"
-                      onClick={() => setQuantity(Math.min(99, (Number(quantity) || 1) + 1))}
+                      onClick={() => setQuantity(Math.min(9999, (Number(quantity) || 1) + 1))}
                       aria-label="Increase quantity"
                     >
                       <Plus size={16} />

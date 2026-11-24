@@ -987,6 +987,20 @@
     display: none !important;
   }
 
+  /* Compact Back Button in Mobile Header: Hide text and keep only circular back arrow */
+  .pdp-back-button {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .pdp-back-button span {
+    display: none;
+  }
+
   .pdp-header-inner,
   .pdp-breadcrumbs-inner,
   .pdp-stage {

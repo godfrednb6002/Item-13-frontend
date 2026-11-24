@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import {
+  LayoutDashboard,
+  User,
   ShoppingBag,
   Package,
   MapPin,
+  CreditCard,
+  Settings,
+  Bell,
   Heart,
+  ChevronLeft,
   ChevronRight,
   LogOut,
   Sparkles,
@@ -19,6 +25,9 @@ import {
   Trash2,
   Zap,
   Truck,
+  Info,
+  PartyPopper,
+  PhoneCall,
   CircleHelp,
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
@@ -45,6 +54,7 @@ export default function WelcomePage({
   onPlaceOrder,
   onViewOrder,
 }) {
+  const [collapsed, setCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [activeStatPopup, setActiveStatPopup] = useState(null);
@@ -58,13 +68,17 @@ export default function WelcomePage({
       }
     };
     if (activeStatPopup) {
-      document.addEventListener('mousedown', handleOutsideClick);
-      document.addEventListener('touchstart', handleOutsideClick);
+      // Delay listener slightly to prevent the opening tap from immediately triggering closure
+      const timer = setTimeout(() => {
+        document.addEventListener('click', handleOutsideClick);
+        document.addEventListener('touchstart', handleOutsideClick);
+      }, 50);
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('click', handleOutsideClick);
+        document.removeEventListener('touchstart', handleOutsideClick);
+      };
     }
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-      document.removeEventListener('touchstart', handleOutsideClick);
-    };
   }, [activeStatPopup]);
 
   const handleTrackOrder = (orderId = 'ITM-8921') => {
@@ -111,24 +125,170 @@ export default function WelcomePage({
   const userEmail = user?.email || 'customer@item13.com';
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard' },
-    { id: 'menu', label: 'Menu & Catalog' },
-    { id: 'cart', label: 'My Bag / Cart' },
-    { id: 'checkout', label: 'Checkout' },
-    { id: 'profile', label: 'My Profile' },
-    { id: 'orders', label: 'Orders & Tracking' },
-    { id: 'addresses', label: 'Delivery Addresses' },
-    { id: 'favorites', label: 'Saved Favorites' },
-    { id: 'payments', label: 'Payments & MoMo' },
-    { id: 'settings', label: 'Settings' },
-    { id: 'delivery', label: 'Delivery Coverage' },
-    { id: 'about', label: 'About Item13' },
-    { id: 'events', label: 'Party & Weddings' },
-    { id: 'contact', label: 'Contact & Support' },
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, badge: null },
+    { id: 'menu', label: 'Menu & Catalog', icon: ShoppingBag, badge: 'Hot' },
+    { id: 'cart', label: 'My Bag / Cart', icon: ShoppingBag, badge: cartCount > 0 ? `${cartCount}` : null },
+    { id: 'checkout', label: 'Checkout', icon: CreditCard, badge: null },
+    { id: 'profile', label: 'My Profile', icon: User, badge: null },
+    { id: 'orders', label: 'Orders & Tracking', icon: Package, badge: '1 Active' },
+    { id: 'addresses', label: 'Delivery Addresses', icon: MapPin, badge: null },
+    { id: 'favorites', label: 'Saved Favorites', icon: Heart, badge: null },
+    { id: 'payments', label: 'Payments & MoMo', icon: CreditCard, badge: null },
+    { id: 'settings', label: 'Settings', icon: Settings, badge: null },
+    { id: 'delivery', label: 'Delivery Coverage', icon: Truck, badge: 'Zones' },
+    { id: 'about', label: 'About Item13', icon: Info, badge: null },
+    { id: 'events', label: 'Party & Weddings', icon: PartyPopper, badge: 'Bulk' },
+    { id: 'contact', label: 'Contact & Support', icon: PhoneCall, badge: null },
   ];
 
   return (
-    <div className="welcome-layout">
+    <div className={`welcome-layout ${collapsed ? 'sidebar-collapsed' : ''}`}>
+      {/* ================= LEFT DRAWER ================= */}
+      <aside className="welcome-sidebar">
+        {/* Brand & Toggle Header */}
+        <div className="sidebar-brand-box">
+          {!collapsed && (
+            <a
+              href="/"
+              className="sidebar-brand"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ textDecoration: 'none', cursor: 'pointer' }}
+            >
+              <img
+                src="/item13Logo-trimmed.png"
+                alt="Item13 Logo"
+                className="brand-logo-img"
+              />
+              <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+            </a>
+          )}
+          {collapsed && (
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('home');
+              }}
+              style={{ display: 'inline-block' }}
+            >
+              <img
+                src="/item13Logo-trimmed.png"
+                alt="Item13 Logo"
+                className="brand-logo-img collapsed-logo"
+              />
+            </a>
+          )}
+
+          {/* Collapse / Expand Toggle Button */}
+          <button
+            type="button"
+            className="sidebar-collapse-toggle"
+            onClick={() => setCollapsed(!collapsed)}
+            aria-label={collapsed ? 'Expand Drawer' : 'Collapse Drawer'}
+            title={collapsed ? 'Expand Drawer' : 'Collapse Drawer'}
+          >
+            {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+          </button>
+        </div>
+
+        {/* User Mini Profile Card */}
+        <a
+          href="/dashboard/profile"
+          className="sidebar-user-box"
+          style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}
+          onClick={(e) => {
+            e.preventDefault();
+            if (onNavigate) onNavigate('dashboard/profile');
+          }}
+          title="Go to Profile"
+        >
+          <div className="sidebar-user-avatar">
+            {displayName.charAt(0).toUpperCase()}
+          </div>
+          {!collapsed && (
+            <div className="sidebar-user-details">
+              <span className="user-name">{displayName}</span>
+              <span className="user-status">VIP Member • Ghana</span>
+            </div>
+          )}
+        </a>
+
+        {/* Nav Links */}
+        <nav className="sidebar-nav">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const isActive =
+              activeTab === item.id ||
+              (item.id === 'profile' && activeTab.startsWith('profile-'));
+            const itemHref =
+              item.id === 'dashboard' ? '/dashboard' : `/dashboard/${item.id}`;
+
+            return (
+              <a
+                key={item.id}
+                href={itemHref}
+                className={`sidebar-nav-item ${isActive ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (item.id === 'cart') {
+                    if (onNavigate) onNavigate('cart');
+                  } else {
+                    if (window.location.pathname !== itemHref) {
+                      window.history.pushState({}, '', itemHref);
+                    }
+                    setActiveTab(item.id);
+                  }
+                }}
+                title={collapsed ? item.label : ''}
+                style={{ textDecoration: 'none' }}
+              >
+                <Icon size={19} className="nav-icon" />
+                {!collapsed && <span className="nav-label">{item.label}</span>}
+                {!collapsed && item.badge && (
+                  <span
+                    className={`nav-badge ${
+                      item.badge === 'Hot' ? 'badge-hot' : ''
+                    }`}
+                  >
+                    {item.badge}
+                  </span>
+                )}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* Bottom Drawer Actions */}
+        <div className="sidebar-footer">
+          <a
+            href="/"
+            className="sidebar-footer-btn"
+            onClick={(e) => {
+              e.preventDefault();
+              if (onNavigate) onNavigate('home');
+            }}
+            title={collapsed ? 'Back to Storefront' : ''}
+            style={{ textDecoration: 'none' }}
+          >
+            <ExternalLink size={18} />
+            {!collapsed && <span>Storefront</span>}
+          </a>
+
+          <button
+            type="button"
+            className="sidebar-footer-btn logout-btn"
+            onClick={onSignOut}
+            title={collapsed ? 'Log out' : ''}
+          >
+            <LogOut size={18} />
+            {!collapsed && <span>Log out</span>}
+          </button>
+        </div>
+      </aside>
+
       {/* ================= RIGHT MAIN STAGE ================= */}
       <main className="welcome-main">
         {/* Top Sticky Header & Breadcrumbs Shell (static format matching Menu / PDP) */}
@@ -321,13 +481,16 @@ export default function WelcomePage({
 
                 {/* Mobile Small Pop-up Window (dismisses on tapping anywhere) */}
                 {activeStatPopup && (
-                  <>
+                  <div className="mobile-stat-popup-portal">
                     <div
                       className="mobile-stat-backdrop"
                       onClick={() => setActiveStatPopup(null)}
                       aria-hidden="true"
                     />
-                    <div className="mobile-stat-popup-card">
+                    <div
+                      className="mobile-stat-popup-card"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <button
                         type="button"
                         className="stat-popup-close-btn"
@@ -440,7 +603,7 @@ export default function WelcomePage({
                         </div>
                       )}
                     </div>
-                  </>
+                  </div>
                 )}
 
                 {/* Desktop Grid Layout (Full 4-column cards) */}

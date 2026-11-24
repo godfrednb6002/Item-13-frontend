@@ -37,6 +37,54 @@ export default function LandingShowcasePage({
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
 
+  // Dynamic Typewriter effect for Hero Heading
+  const heroPhrases = [
+    { line1: 'Welcome To', line2: 'Item13' },
+    { line1: 'Flourished', line2: 'Fantasy Crunch' },
+    { line1: 'Freshly Popped', line2: 'Pure Craving' },
+    { line1: 'Sweet Caramel', line2: 'Savory Magic' },
+    { line1: 'The Unexpected', line2: 'Snack Essential' },
+    { line1: 'Handcrafted', line2: 'Golden Kernels' }
+  ];
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [typedChars, setTypedChars] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const currentPhrase = heroPhrases[phraseIndex];
+  const fullText = `${currentPhrase.line1}\n${currentPhrase.line2}`;
+
+  useEffect(() => {
+    let timer;
+    if (!isDeleting) {
+      if (typedChars < fullText.length) {
+        timer = setTimeout(() => {
+          setTypedChars((prev) => prev + 1);
+        }, 70);
+      } else {
+        // Pause when phrase is fully typed
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 2200);
+      }
+    } else {
+      if (typedChars > 0) {
+        timer = setTimeout(() => {
+          setTypedChars((prev) => prev - 1);
+        }, 35);
+      } else {
+        setIsDeleting(false);
+        setPhraseIndex((prev) => (prev + 1) % heroPhrases.length);
+      }
+    }
+    return () => clearTimeout(timer);
+  }, [typedChars, isDeleting, phraseIndex, fullText.length]);
+
+  // Compute typed line1 and line2 based on \n split point
+  const line1Len = currentPhrase.line1.length;
+  const isTypingLine1 = typedChars <= line1Len;
+  const typedLine1 = fullText.slice(0, Math.min(typedChars, line1Len));
+  const typedLine2 = typedChars > line1Len + 1 ? fullText.slice(line1Len + 1, typedChars) : '';
+
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (navMenuRef.current && !navMenuRef.current.contains(e.target)) {
@@ -378,9 +426,16 @@ export default function LandingShowcasePage({
             <span>ESSENTIAL</span>
           </div>
 
-          <h1 className="inspo-main-heading">
-            Flourished <br />
-            <span className="inspo-main-heading-accent">Fantasy Crunch</span>
+          <h1 className="inspo-main-heading" aria-label={`${currentPhrase.line1} ${currentPhrase.line2}`}>
+            <span className="inspo-main-heading-line1">
+              {typedLine1 || '\u00A0'}
+              {isTypingLine1 && <span className="inspo-cursor" aria-hidden="true">|</span>}
+            </span>
+            <br />
+            <span className="inspo-main-heading-accent">
+              {typedLine2 || '\u00A0'}
+              {!isTypingLine1 && <span className="inspo-cursor" aria-hidden="true">|</span>}
+            </span>
           </h1>
 
           <p className="inspo-subtext">

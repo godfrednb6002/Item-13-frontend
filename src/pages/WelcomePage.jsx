@@ -196,7 +196,6 @@ export default function WelcomePage({
                       <span>Track Active Order</span>
                       <ArrowRight size={15} />
                     </button>
-                    <ThemeToggle className="hero-theme-toggle" />
                   </div>
                 </div>
 

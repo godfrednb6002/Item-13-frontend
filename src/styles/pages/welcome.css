@@ -953,12 +953,29 @@
   }
 
   .dash-hero-card {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .dash-hero-content {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .dash-hero-illustration {
+    flex: 0 0 28%;
+    max-width: 220px;
+  }
+
+  .dash-popcorn-img {
+    max-width: 100%;
+    max-height: 220px;
   }
 
   .dash-hero-buttons {
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
 
   .form-grid-2 {
@@ -982,6 +999,49 @@
     align-items: stretch;
     gap: 12px;
     padding: 14px 16px;
+  }
+
+  .welcome-content-scroll {
+    padding: 20px 12px 40px;
+  }
+
+  .dash-hero-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 14px;
+    text-align: left;
+  }
+
+  .dash-hero-content {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .dash-hero-title {
+    font-size: 22px;
+  }
+
+  .dash-hero-illustration {
+    flex: 0 0 26%;
+    max-width: 96px;
+  }
+
+  .dash-popcorn-img {
+    max-width: 100%;
+    max-height: 120px;
+  }
+
+  .dash-hero-buttons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .dash-hero-buttons .btn-dash-primary,
+  .dash-hero-buttons .btn-dash-secondary {
+    padding: 10px 12px;
+    font-size: 12px;
   }
 
   .welcome-topbar-actions {

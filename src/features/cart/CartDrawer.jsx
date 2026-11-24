@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import {
   ArrowRight,
   Check,
@@ -48,6 +48,67 @@ export default function CartDrawer({
   const [promoCode, setPromoCode] = useState('');
   const [discountApplied, setDiscountApplied] = useState(false);
   const [promoError, setPromoError] = useState('');
+
+  // Drag down to close state for mobile bottom-sheet
+  const [dragOffsetY, setDragOffsetY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const touchStartY = useRef(0);
+  const touchCurrentY = useRef(0);
+  const contentRef = useRef(null);
+  const isDraggingAllowed = useRef(false);
+
+  const handleTouchStart = (e) => {
+    // Only allow drag if target is on handle, header, or when scrolled to very top of content
+    const touch = e.touches[0];
+    touchStartY.current = touch.clientY;
+    touchCurrentY.current = touch.clientY;
+
+    const target = e.target;
+    const isHandle = target.closest('.cart-drag-handle-zone') || target.closest('.cart-header');
+    const isAtTop = contentRef.current ? contentRef.current.scrollTop <= 0 : true;
+
+    if (isHandle || isAtTop) {
+      isDraggingAllowed.current = true;
+    } else {
+      isDraggingAllowed.current = false;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDraggingAllowed.current) return;
+    const touch = e.touches[0];
+    const deltaY = touch.clientY - touchStartY.current;
+
+    // Only allow dragging downwards
+    if (deltaY > 0) {
+      // If user is touching inside content, make sure it's at top
+      if (contentRef.current && contentRef.current.scrollTop > 0) {
+        return;
+      }
+      setIsDragging(true);
+      setDragOffsetY(deltaY);
+      touchCurrentY.current = touch.clientY;
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+    } else {
+      setDragOffsetY(0);
+      setIsDragging(false);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (isDragging) {
+      const deltaY = touchCurrentY.current - touchStartY.current;
+      // If dragged down more than 100px, dismiss
+      if (deltaY > 100) {
+        onClose();
+      }
+    }
+    setIsDragging(false);
+    setDragOffsetY(0);
+    isDraggingAllowed.current = false;
+  };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -100,11 +161,18 @@ export default function CartDrawer({
       }}
     >
       <aside
-        className="cart-drawer"
+        className={`cart-drawer ${isDragging ? 'is-dragging' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="cart-title"
+        style={dragOffsetY > 0 ? { transform: `translateY(${dragOffsetY}px)`, transition: 'none' } : undefined}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
+        <div className="cart-drag-handle-zone" aria-hidden="true">
+          <div className="cart-drag-handle-bar" />
+        </div>
         <header className="cart-header">
           <div>
             <p className="cart-eyebrow">ITEM13 · YOUR ORDER</p>
@@ -115,7 +183,7 @@ export default function CartDrawer({
           </button>
         </header>
 
-        <div className="cart-content">
+        <div className="cart-content" ref={contentRef}>
           {items.length > 0 ? (
             <>
               <section className="cart-shipping-progress" aria-live="polite">

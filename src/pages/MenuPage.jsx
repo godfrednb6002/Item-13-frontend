@@ -148,7 +148,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
       <section className="menu-hero-banner">
         <div className="menu-hero-content">
           <div className="menu-badge">
-            Freshly Popped in Ghana
+            Freshly Made in Ghana
           </div>
           <h1 className="menu-hero-title">
             Our Popcorn &amp; <span className="title-gold">Refreshments Menu</span>

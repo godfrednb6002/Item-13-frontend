@@ -143,19 +143,6 @@ export default function ProductDetailPage({
       <header className="pdp-header">
         <div className="pdp-header-inner">
           <a
-            href="/products"
-            className="pdp-back-button"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('menu');
-            }}
-            style={{ textDecoration: 'none' }}
-          >
-            <ArrowLeft size={18} />
-            <span>Back to Menu</span>
-          </a>
-
-          <a
             href="/"
             className="pdp-header-brand"
             onClick={(e) => {
@@ -169,7 +156,22 @@ export default function ProductDetailPage({
           </a>
 
           <div className="pdp-header-actions">
+            <a
+              href="/products"
+              className="pdp-back-button"
+              onClick={(e) => {
+                e.preventDefault();
+                if (onNavigate) onNavigate('menu');
+              }}
+              style={{ textDecoration: 'none' }}
+              title="Back to Menu"
+            >
+              <ArrowLeft size={18} />
+              <span>Back to Menu</span>
+            </a>
+
             <ThemeToggle />
+
             <button
               type="button"
               className="pdp-bag-chip"

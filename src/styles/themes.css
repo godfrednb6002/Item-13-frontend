@@ -450,6 +450,19 @@ html.light-theme .menu-search-input {
   border: none !important;
 }
 
+html.light-theme .menu-empty-state {
+  background: transparent !important;
+  border: none !important;
+}
+
+html.light-theme .menu-empty-state h3 {
+  color: #111418 !important;
+}
+
+html.light-theme .menu-empty-state p {
+  color: #64748b !important;
+}
+
 html.light-theme .menu-search-dropdown {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.1) !important;

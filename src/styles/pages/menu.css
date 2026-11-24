@@ -436,6 +436,8 @@
 
 .results-count strong {
   color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .results-badge {

@@ -356,7 +356,7 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
           {/* Active summary */}
           <div className="menu-results-bar">
             <span className="results-count">
-              Showing <strong>{filteredProducts.length}</strong> {filteredProducts.length === 1 ? 'item' : 'items'} of {PRODUCTS.length}
+              <strong>Showing {filteredProducts.length} items</strong>
               {activeCategory !== 'all' && (
                 <span className="results-badge">
                   Category: {CATEGORIES.find((c) => c.id === activeCategory)?.label}

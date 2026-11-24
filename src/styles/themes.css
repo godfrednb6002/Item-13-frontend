@@ -260,6 +260,11 @@ html.light-theme .results-count {
   color: #5d6573;
 }
 
+html.light-theme .results-count strong {
+  color: #111418 !important;
+  font-weight: 700 !important;
+}
+
 /* Profile Page in Light Mode */
 html.light-theme .profile-page {
   background: #f5f7fa;

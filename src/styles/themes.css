@@ -1806,8 +1806,19 @@ html.light-theme .pdp-page-wrapper {
   color: #111418 !important;
 }
 
+html.light-theme .pdp-top-nav-shell {
+  background: rgba(255, 255, 255, 0.94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
 html.light-theme .pdp-header {
-  background: rgba(255, 255, 255, 0.92) !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .pdp-breadcrumbs-bar {
+  background: transparent !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 

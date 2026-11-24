@@ -8,8 +8,17 @@
   background-color: var(--bg-dark);
   color: var(--text-white);
   position: relative;
-  overflow-x: hidden;
   padding-bottom: 80px;
+}
+
+/* Ensure the top header and breadcrumb shell remains statically stuck at the top while content scrolls under it */
+.menu-page-wrapper .pdp-top-nav-shell {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: rgba(15, 16, 18, 0.94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
 }
 
 .menu-ambient-glow {

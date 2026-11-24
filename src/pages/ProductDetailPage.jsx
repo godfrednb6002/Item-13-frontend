@@ -75,6 +75,7 @@ export default function ProductDetailPage({
   const [selectedDrinkId, setSelectedDrinkId] = useState(null); // Optional drink pairing
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState('details'); // 'details' | 'allergens' | 'delivery'
+  const [activePerkIndex, setActivePerkIndex] = useState(0); // 0: Fresh, 1: Delivery, 2: Ingredients
   const [isDetailLoading, setIsDetailLoading] = useState(true);
 
   useEffect(() => {
@@ -258,8 +259,9 @@ export default function ProductDetailPage({
               />
             </div>
 
-            {/* Quality Perks Strip */}
-            <div className="pdp-perks-strip">
+            {/* Quality Perks Strip - Desktop 3 items, Mobile single interactive card with icon buttons */}
+            {/* Desktop View */}
+            <div className="pdp-perks-strip pdp-perks-desktop">
               <div className="pdp-perk">
                 <Flame size={18} className="perk-gold-icon" />
                 <div>
@@ -280,6 +282,70 @@ export default function ProductDetailPage({
                   <strong>Premium Ingredients</strong>
                   <p>100% Non-GMO corn &amp; real butter</p>
                 </div>
+              </div>
+            </div>
+
+            {/* Mobile View: Single interactive card with switchable icons on the right */}
+            <div className="pdp-perk-mobile-card">
+              <div className="pdp-perk-mobile-info">
+                {activePerkIndex === 0 && (
+                  <>
+                    <Flame size={18} className="perk-gold-icon" />
+                    <div>
+                      <strong>Popped Fresh to Order</strong>
+                      <p>Never sitting in plastic bags</p>
+                    </div>
+                  </>
+                )}
+                {activePerkIndex === 1 && (
+                  <>
+                    <Truck size={18} className="perk-gold-icon" />
+                    <div>
+                      <strong>Fast Delivery in Ghana</strong>
+                      <p>Arrives warm &amp; crunchy</p>
+                    </div>
+                  </>
+                )}
+                {activePerkIndex === 2 && (
+                  <>
+                    <ShieldCheck size={18} className="perk-gold-icon" />
+                    <div>
+                      <strong>Premium Ingredients</strong>
+                      <p>100% Non-GMO corn &amp; real butter</p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Icon selectors on the right */}
+              <div className="pdp-perk-mobile-selectors" role="tablist" aria-label="Product Highlights">
+                <button
+                  type="button"
+                  className={`pdp-perk-icon-btn ${activePerkIndex === 0 ? 'active' : ''}`}
+                  onClick={() => setActivePerkIndex(0)}
+                  aria-label="Popped Fresh to Order"
+                  title="Popped Fresh to Order"
+                >
+                  <Flame size={16} />
+                </button>
+                <button
+                  type="button"
+                  className={`pdp-perk-icon-btn ${activePerkIndex === 1 ? 'active' : ''}`}
+                  onClick={() => setActivePerkIndex(1)}
+                  aria-label="Fast Delivery in Ghana"
+                  title="Fast Delivery in Ghana"
+                >
+                  <Truck size={16} />
+                </button>
+                <button
+                  type="button"
+                  className={`pdp-perk-icon-btn ${activePerkIndex === 2 ? 'active' : ''}`}
+                  onClick={() => setActivePerkIndex(2)}
+                  aria-label="Premium Ingredients"
+                  title="Premium Ingredients"
+                >
+                  <ShieldCheck size={16} />
+                </button>
               </div>
             </div>
           </div>

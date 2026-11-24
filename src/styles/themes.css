@@ -1790,6 +1790,32 @@ html.light-theme .pdp-perk {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
 }
 
+html.light-theme .pdp-perk-mobile-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
+}
+
+html.light-theme .pdp-perk-mobile-info strong {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-perk-mobile-info p {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-perk-icon-btn {
+  background: #f1f4f9 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-perk-icon-btn.active {
+  background: var(--gold) !important;
+  color: #0f1012 !important;
+  border-color: var(--gold) !important;
+}
+
 html.light-theme .pdp-perk strong {
   color: #111418 !important;
 }

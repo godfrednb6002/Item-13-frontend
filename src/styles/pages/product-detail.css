@@ -258,6 +258,10 @@
   gap: 14px;
 }
 
+.pdp-perk-mobile-card {
+  display: none;
+}
+
 .pdp-perk {
   display: flex;
   align-items: flex-start;
@@ -984,46 +988,91 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .pdp-perks-strip {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    margin-top: 14px !important;
+  /* Hide desktop 3-strip perks on mobile/tablet */
+  .pdp-perks-desktop {
+    display: none !important;
   }
 
-  .pdp-perk {
+  /* Show single interactive card with switchable icons */
+  .pdp-perk-mobile-card {
     display: flex !important;
-    flex-direction: column !important;
     align-items: center !important;
-    text-align: center !important;
-    justify-content: center !important;
-    aspect-ratio: 1 / 1 !important;
-    padding: 10px 4px !important;
-    gap: 6px !important;
-    border-radius: 14px !important;
-    min-width: 0 !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 12px 14px !important;
+    border-radius: 16px !important;
+    background: #15161c !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  .perk-gold-icon {
-    margin-top: 0 !important;
+  .pdp-perk-mobile-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .pdp-perk-mobile-info .perk-gold-icon {
+    color: var(--gold) !important;
     flex-shrink: 0 !important;
   }
 
-  .pdp-perk strong {
-    font-size: 10.5px !important;
-    line-height: 1.2 !important;
+  .pdp-perk-mobile-info strong {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
     margin-bottom: 2px !important;
-    white-space: normal !important;
-    word-break: break-word !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
   }
 
-  .pdp-perk p {
-    font-size: 9px !important;
-    line-height: 1.2 !important;
+  .pdp-perk-mobile-info p {
+    font-size: 11.5px !important;
     color: var(--text-muted) !important;
-    word-break: break-word !important;
+    margin: 0 !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .pdp-perk-mobile-selectors {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .pdp-perk-icon-btn {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: rgba(255, 255, 255, 0.55) !important;
+    display: grid !important;
+    place-items: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .pdp-perk-icon-btn:hover {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .pdp-perk-icon-btn.active {
+    background: var(--gold) !important;
+    color: #0f1012 !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 2px 10px rgba(244, 182, 39, 0.4) !important;
+    transform: scale(1.05) !important;
   }
 }
 
@@ -1085,48 +1134,6 @@
 
   .pdp-header-brand .brand-logo-tagline .brand-tagline-space {
     display: none !important;
-  }
-
-  .pdp-perks-strip {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    margin-top: 14px !important;
-  }
-
-  .pdp-perk {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    justify-content: center !important;
-    aspect-ratio: 1 / 1 !important;
-    padding: 10px 4px !important;
-    gap: 6px !important;
-    border-radius: 14px !important;
-    min-width: 0 !important;
-    box-sizing: border-box !important;
-  }
-
-  .perk-gold-icon {
-    margin-top: 0 !important;
-    flex-shrink: 0 !important;
-  }
-
-  .pdp-perk strong {
-    font-size: 10.5px !important;
-    line-height: 1.2 !important;
-    margin-bottom: 2px !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-  }
-
-  .pdp-perk p {
-    font-size: 9px !important;
-    line-height: 1.2 !important;
-    color: var(--text-muted) !important;
-    word-break: break-word !important;
   }
 
   .pdp-size-grid,

@@ -360,7 +360,16 @@ html.light-theme .welcome-top-nav-shell .welcome-utility-btn:hover {
   color: #8c6307 !important;
 }
 
-/* Static sticky shell on dashboard matching Menu / PDP */
+/* ================= RIGHT MAIN STAGE ================= */
+.welcome-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #0f1013;
+}
+
+/* Static sticky top navigation & breadcrumbs shell */
 .welcome-top-nav-shell {
   position: sticky !important;
   top: 0 !important;
@@ -371,17 +380,28 @@ html.light-theme .welcome-top-nav-shell .welcome-utility-btn:hover {
   width: 100%;
 }
 
+.welcome-top-nav-shell .pdp-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.welcome-top-nav-shell .pdp-breadcrumbs-bar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 16, 18, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
 html.light-theme .welcome-top-nav-shell {
   background: rgba(255, 255, 255, 0.94) !important;
 }
 
-/* ================= RIGHT MAIN STAGE ================= */
-.welcome-main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background: #0f1013;
+html.light-theme .welcome-top-nav-shell .pdp-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .welcome-top-nav-shell .pdp-breadcrumbs-bar {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(245, 247, 250, 0.85);
 }
 
 .welcome-topbar {

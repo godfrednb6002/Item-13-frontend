@@ -19,17 +19,27 @@
     transform: translateX(-50%);
     width: min(92vw, 420px);
     height: 62px;
-    background: rgba(22, 15, 6, 0.90);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(244, 182, 39, 0.3);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(22, 15, 6, 0.65) 40%,
+      rgba(15, 16, 20, 0.75) 100%
+    );
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 999px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
     z-index: 1000;
-    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.65), 0 2px 10px rgba(244, 182, 39, 0.15);
+    box-shadow: 
+      0 18px 45px rgba(0, 0, 0, 0.55),
+      0 2px 14px rgba(244, 182, 39, 0.2),
+      inset 0 1px 1px rgba(255, 255, 255, 0.25),
+      inset 0 -1px 1px rgba(0, 0, 0, 0.3);
   }
 
   .mobile-tab-item {
@@ -348,9 +358,21 @@
 
   /* Light Theme Adjustments for Mobile Nav & Drawer */
   html.light-theme .mobile-bottom-tabbar {
-    background: rgba(253, 246, 227, 0.88);
-    border-color: rgba(180, 130, 20, 0.35);
-    box-shadow: 0 12px 34px rgba(120, 90, 20, 0.18), 0 2px 8px rgba(180, 130, 20, 0.1);
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.75) 0%,
+      rgba(253, 246, 227, 0.65) 50%,
+      rgba(255, 255, 255, 0.7) 100%
+    );
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 
+      0 14px 38px rgba(120, 90, 20, 0.15),
+      0 2px 10px rgba(180, 130, 20, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.8),
+      inset 0 -1px 1px rgba(180, 130, 20, 0.1);
   }
 
   html.light-theme .mobile-tab-item {

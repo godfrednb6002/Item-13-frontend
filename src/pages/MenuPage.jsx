@@ -84,55 +84,65 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
       {/* Background ambient lighting */}
       <div className="menu-ambient-glow" />
 
-      {/* Top Bar Header */}
-      <header className="menu-header">
-        <div className="menu-header-inner">
-          <a
-            href="/"
-            className="menu-brand-logo"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onNavigate) onNavigate('home');
-            }}
-            title="Back to Item13 Home"
-            style={{ textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
-          >
-            <img
-              src="/item13Logo-trimmed.png"
-              alt="Item13 Logo"
-              className="brand-logo-img"
-            />
-            <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
-          </a>
-
-          <div className="menu-header-actions">
-            <ThemeToggle />
+      {/* Top Sticky Header & Breadcrumbs Shell */}
+      <div className="pdp-top-nav-shell">
+        <header className="pdp-header">
+          <div className="pdp-header-inner">
             <a
               href="/"
-              className="menu-nav-home-btn"
+              className="pdp-header-brand"
               onClick={(e) => {
                 e.preventDefault();
                 if (onNavigate) onNavigate('home');
               }}
               style={{ textDecoration: 'none' }}
+              title="Back to Item13 Home"
             >
-              <ArrowLeft size={16} />
-              <span>Back to Store</span>
+              <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+              <span className="brand-logo-tagline">
+                THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+              </span>
             </a>
 
-            <button
-              type="button"
-              className="menu-bag-pill"
-              onClick={() => onNavigate && onNavigate('cart')}
-              style={{ border: 'none', cursor: 'pointer' }}
-              title="View Bag / Cart"
-            >
-              <ShoppingBag size={16} />
-              <span>Bag ({cartCount})</span>
-            </button>
+            <div className="pdp-header-actions">
+              <a
+                href="/"
+                className="pdp-back-button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (onNavigate) onNavigate('home');
+                }}
+                style={{ textDecoration: 'none' }}
+                title="Back to Store"
+              >
+                <ArrowLeft size={18} />
+                <span>Back to Store</span>
+              </a>
+
+              <ThemeToggle />
+
+              <button
+                type="button"
+                className="pdp-bag-chip"
+                onClick={() => onNavigate && onNavigate('cart')}
+                title="Open Bag"
+              >
+                <ShoppingBag size={17} />
+                <span>Bag ({cartCount})</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Breadcrumbs Row */}
+        <div className="pdp-breadcrumbs-bar">
+          <div className="pdp-breadcrumbs-inner">
+            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
+            <span className="crumb-sep">/</span>
+            <span className="crumb-current">Menu</span>
           </div>
         </div>
-      </header>
+      </div>
 
       {/* Hero Banner for Menu */}
       <section className="menu-hero-banner">

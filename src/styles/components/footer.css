@@ -19,6 +19,10 @@
   padding: 32px 40px;
 }
 
+.footer-perks-mobile {
+  display: none;
+}
+
 .footer-perks-container {
   max-width: 1380px;
   margin: 0 auto;
@@ -333,7 +337,156 @@
 
 @media (max-width: 680px) {
   .footer-perks-strip {
-    padding: 24px 20px;
+    padding: 16px 14px;
+  }
+
+  .footer-perks-desktop {
+    display: none !important;
+  }
+
+  .footer-perks-mobile {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 480px !important;
+    margin: 0 auto !important;
+  }
+
+  .footer-perks-mobile-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .footer-perk-icon-btn {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 6px 4px !important;
+    cursor: pointer !important;
+    border-radius: 12px !important;
+    transition: all 0.2s ease !important;
+    outline: none !important;
+  }
+
+  .footer-perk-icon-wrapper {
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 14px !important;
+    background: rgba(244, 182, 39, 0.1) !important;
+    border: 1px solid rgba(244, 182, 39, 0.25) !important;
+    color: var(--gold) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .footer-perk-icon-label {
+    font-size: 11.5px !important;
+    font-weight: 600 !important;
+    color: var(--text-muted) !important;
+    transition: color 0.2s ease !important;
+  }
+
+  .footer-perk-icon-btn:hover .footer-perk-icon-wrapper,
+  .footer-perk-icon-btn.active .footer-perk-icon-wrapper {
+    background: var(--gold) !important;
+    color: #0f1012 !important;
+    border-color: var(--gold) !important;
+    box-shadow: 0 4px 14px rgba(244, 182, 39, 0.4) !important;
+    transform: translateY(-2px) scale(1.05) !important;
+  }
+
+  .footer-perk-icon-btn.active .footer-perk-icon-label {
+    color: var(--gold) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Pop-up message on tap */
+  .footer-perk-popup {
+    animation: footerPopupFade 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    width: 100% !important;
+  }
+
+  @keyframes footerPopupFade {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .footer-perk-popup-bubble {
+    background: #181920 !important;
+    border: 1px solid rgba(244, 182, 39, 0.4) !important;
+    border-radius: 16px !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    position: relative !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .footer-perk-popup-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    background: rgba(244, 182, 39, 0.15) !important;
+    color: var(--gold) !important;
+    display: grid !important;
+    place-items: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .footer-perk-popup-text {
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding-right: 18px !important;
+  }
+
+  .footer-perk-popup-text strong {
+    display: block !important;
+    font-family: var(--font-heading) !important;
+    font-size: 13.5px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 2px !important;
+  }
+
+  .footer-perk-popup-text p {
+    font-size: 11.5px !important;
+    color: var(--text-muted) !important;
+    margin: 0 !important;
+    line-height: 1.35 !important;
+  }
+
+  .footer-perk-popup-close {
+    position: absolute !important;
+    top: 6px !important;
+    right: 8px !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-muted) !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    cursor: pointer !important;
+    padding: 4px !important;
+  }
+
+  .footer-perk-popup-close:hover {
+    color: #ffffff !important;
   }
 
   .footer-main-section {

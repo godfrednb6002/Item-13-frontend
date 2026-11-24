@@ -1208,7 +1208,27 @@
   }
 
   .pdp-tabs-nav {
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pdp-tabs-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pdp-tab-btn {
+    flex: 1 1 0px !important;
+    min-width: 0 !important;
+    padding: 14px 6px !important;
+    font-size: 11.5px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    text-align: center !important;
   }
 
   .pdp-related-grid {

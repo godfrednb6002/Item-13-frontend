@@ -239,35 +239,37 @@ export default function LandingShowcasePage({
                 {cartCount > 0 && <span className="nav-badge-dot" />}
               </button>
 
-              {/* Notification Button */}
-              <div ref={notifRef} style={{ position: 'relative' }}>
-                <button
-                  type="button"
-                  className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
-                  onClick={() => {
-                    setShowNotifications(!showNotifications);
-                    setIsNavMenuOpen(false);
-                  }}
-                  aria-label="Notifications"
-                  title="Notifications"
-                >
-                  <Bell size={18} />
-                  <span className="nav-badge-dot" />
-                </button>
+              {/* Notification Button - only shown when logged in */}
+              {user && (
+                <div ref={notifRef} style={{ position: 'relative' }}>
+                  <button
+                    type="button"
+                    className={`nav-icon-btn ${showNotifications ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setShowNotifications(!showNotifications);
+                      setIsNavMenuOpen(false);
+                    }}
+                    aria-label="Notifications"
+                    title="Notifications"
+                  >
+                    <Bell size={18} />
+                    <span className="nav-badge-dot" />
+                  </button>
 
-                {/* Notifications Popover */}
-                {showNotifications && (
-                  <div className="nav-notifications-popover">
-                    <div className="nav-notif-title">
-                      <span>Notifications</span>
-                      <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
+                  {/* Notifications Popover */}
+                  {showNotifications && (
+                    <div className="nav-notifications-popover">
+                      <div className="nav-notif-title">
+                        <span>Notifications</span>
+                        <span style={{ fontSize: '11px', color: 'var(--gold)', fontWeight: 600 }}>1 New</span>
+                      </div>
+                      <p className="nav-notif-empty">
+                        🎉 Welcome back, {user.name || 'Snack Lover'}! Fresh batches of Gourmet Popcorn are popping now.
+                      </p>
                     </div>
-                    <p className="nav-notif-empty">
-                      🎉 Welcome to Item13! Fresh batches of Gourmet Popcorn are popping now.
-                    </p>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
 
               {/* Hamburger Button that expands to modal menu */}
               <div ref={navMenuRef} style={{ position: 'relative' }}>

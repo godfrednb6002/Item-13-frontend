@@ -621,21 +621,21 @@
   position: relative;
 }
 
-/* Light diagonal reflection sweep that triggers individually and randomly */
+/* Light diagonal reflection sweep with 5s rest interval */
 .catalog-card::after {
   content: '';
   position: absolute;
-  top: -60%;
+  top: -50%;
   left: -120%;
-  width: 50%;
-  height: 220%;
+  width: 70%;
+  height: 200%;
   background: linear-gradient(
     115deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.005) 35%,
-    rgba(255, 255, 255, 0.07) 50%,
-    rgba(244, 182, 39, 0.08) 55%,
-    transparent 70%
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
   );
   transform: rotate(25deg);
   pointer-events: none;
@@ -644,23 +644,17 @@
 }
 
 .catalog-card.has-reflection::after {
-  animation: cardLightReflection 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: cardLightReflection 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes cardLightReflection {
   0% {
     left: -120%;
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.55;
-  }
-  80% {
-    opacity: 0.45;
+    opacity: 1;
   }
   100% {
     left: 170%;
-    opacity: 0;
+    opacity: 1;
   }
 }
 

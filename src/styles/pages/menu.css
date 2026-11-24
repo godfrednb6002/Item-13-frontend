@@ -154,7 +154,7 @@
   z-index: 20;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 10px 40px 24px 40px;
+  padding: 24px 40px 24px 40px;
 }
 
 .menu-controls-inner {
@@ -1189,10 +1189,13 @@
 
 @media (max-width: 680px) {
 
-  .menu-header-inner,
-  .menu-controls-bar {
+  .menu-header-inner {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  .menu-controls-bar {
+    padding: 18px 14px 20px 14px;
   }
 
   .menu-hero-banner {

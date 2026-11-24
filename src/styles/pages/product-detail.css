@@ -408,6 +408,23 @@
   line-height: 1.6;
 }
 
+.pdp-typewriter-cursor {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 700;
+  margin-left: 2px;
+  animation: pdpCursorBlink 0.75s infinite;
+}
+
+@keyframes pdpCursorBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
 /* Customizer Sections */
 .pdp-section {
   display: flex;

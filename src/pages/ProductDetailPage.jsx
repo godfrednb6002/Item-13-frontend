@@ -79,6 +79,24 @@ export default function ProductDetailPage({
   const [activePerkIndex, setActivePerkIndex] = useState(0); // 0: Fresh, 1: Delivery, 2: Ingredients
   const [isDetailLoading, setIsDetailLoading] = useState(true);
 
+  // Typewriter effect state for product description
+  const [typedDescription, setTypedDescription] = useState('');
+
+  useEffect(() => {
+    const fullText = product?.description || '';
+    setTypedDescription('');
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx += 1;
+      setTypedDescription(fullText.slice(0, idx));
+      if (idx >= fullText.length) {
+        clearInterval(interval);
+      }
+    }, 22);
+
+    return () => clearInterval(interval);
+  }, [product?.id, product?.description]);
+
   const handleTabClick = (tabKey) => {
     // If the clicked tab is already open, toggle it closed (collapse); otherwise open it
     setActiveTab((prev) => (prev === tabKey ? null : tabKey));
@@ -253,7 +271,12 @@ export default function ProductDetailPage({
                 </div>
 
                 <h1 className="pdp-product-title">{product.name}</h1>
-                <p className="pdp-product-desc">{product.description}</p>
+                <p className="pdp-product-desc">
+                  {typedDescription}
+                  {typedDescription.length < (product.description || '').length && (
+                    <span className="pdp-typewriter-cursor">|</span>
+                  )}
+                </p>
               </div>
 
               <div className="pdp-main-image-card">
@@ -399,7 +422,12 @@ export default function ProductDetailPage({
                 </div>
 
                 <h1 className="pdp-product-title">{product.name}</h1>
-                <p className="pdp-product-desc">{product.description}</p>
+                <p className="pdp-product-desc">
+                  {typedDescription}
+                  {typedDescription.length < (product.description || '').length && (
+                    <span className="pdp-typewriter-cursor">|</span>
+                  )}
+                </p>
               </div>
 
               {/* 1. TUB SIZE SELECTOR */}

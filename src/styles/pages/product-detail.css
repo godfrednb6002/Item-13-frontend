@@ -60,7 +60,7 @@
 }
 
 .pdp-brand-logo {
-  height: 40px;
+  height: 52px;
   width: auto;
   object-fit: contain;
 }
@@ -1006,6 +1006,12 @@
   .pdp-stage {
     padding-left: 14px;
     padding-right: 14px;
+  }
+
+  .pdp-brand-logo {
+    height: 32px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
   }
 
   .pdp-header-brand .brand-logo-tagline {

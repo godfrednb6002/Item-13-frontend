@@ -151,7 +151,7 @@ export default function ProductDetailPage({
             }}
             style={{ textDecoration: 'none' }}
           >
-            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="pdp-brand-logo" />
+            <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
             <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
           </a>
 

@@ -403,12 +403,11 @@ export default function Footer({ onNavigate, onToast }) {
         </div>
       </div>
 
-      {/* Bottom Bar: Copyright, Made in Ghana & Legal */}
+      {/* Bottom Bar: Copyright & Legal */}
       <div className="footer-bottom-bar">
         <div className="footer-bottom-container">
           <span className="footer-copy">
-            &copy; {currentYear} Item13. All rights reserved. Handcrafted with{' '}
-            <Heart size={13} fill="#f4b627" color="#f4b627" style={{ verticalAlign: 'middle' }} /> in Ghana.
+            &copy; {currentYear} Item13. All rights reserved.
           </span>
 
           <div className="footer-legal-links">

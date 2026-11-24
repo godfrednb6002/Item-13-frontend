@@ -413,24 +413,6 @@ export default function MenuPage({ onNavigate, onAddToCart, cartCount = 0, onToa
             )}
           </div>
         </div>
-
-        {/* Category Horizontal Tab List */}
-        <div className="menu-category-tabs-container">
-          <div className="menu-category-tabs">
-            {CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  className={`category-pill ${isActive ? 'active' : ''}`}
-                  onClick={() => setActiveCategory(cat.id)}
-                >
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </section>
 
       {/* Main Catalog Layout: Sidebar Filters + Products Grid */}

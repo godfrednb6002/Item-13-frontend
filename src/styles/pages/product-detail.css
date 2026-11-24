@@ -873,12 +873,17 @@
   color: #ffffff;
   background: transparent;
   border: none;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 0;
   outline: none;
-  padding: 0 4px;
+  padding: 2px 4px;
   margin: 0;
   font-family: inherit;
   cursor: text;
+  -webkit-appearance: textfield;
   -moz-appearance: textfield;
+  appearance: textfield;
+  transition: all 0.2s ease;
 }
 
 .pdp-image-action-bar .pdp-qty-display::-webkit-outer-spin-button,
@@ -888,8 +893,9 @@
 }
 
 .pdp-image-action-bar .pdp-qty-display:focus {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-bottom-color: var(--gold);
+  border-radius: 4px 4px 0 0;
   color: var(--gold);
 }
 

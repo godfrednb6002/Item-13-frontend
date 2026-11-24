@@ -12,8 +12,8 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
     let cancelActive = false;
 
     const scheduleReflection = () => {
-      // 5s rest interval
-      const delay = 5000;
+      // Random delay between 4s and 9s for an organic, unsynchronized cadence per card
+      const delay = Math.floor(Math.random() * 5000) + 4000;
       timeoutId = setTimeout(() => {
         if (cancelActive) return;
         setIsReflecting(true);
@@ -27,8 +27,8 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
       }, delay);
     };
 
-    // Stagger initial launch using a random seed between 0.5s and 5s
-    const initialDelay = Math.floor(Math.random() * 4500) + 500;
+    // Stagger initial launch using a wide random offset between 0.3s and 6s
+    const initialDelay = Math.floor(Math.random() * 5700) + 300;
     timeoutId = setTimeout(() => {
       if (!cancelActive) scheduleReflection();
     }, initialDelay);

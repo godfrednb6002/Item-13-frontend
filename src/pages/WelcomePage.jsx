@@ -608,7 +608,19 @@ export default function WelcomePage({
 
                 {/* Desktop Grid Layout (Full 4-column cards) */}
                 <div className="dash-stats-grid desktop-only-stats">
-                  <div className="stat-card">
+                  <div
+                    className={`stat-card stat-clickable ${activeStatPopup === 'orders' ? 'active-stat-card' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'orders' ? null : 'orders')}
+                    title="View Active Orders details"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStatPopup(activeStatPopup === 'orders' ? null : 'orders');
+                      }
+                    }}
+                  >
                     <div className="stat-icon-wrap gold">
                       <Package size={20} />
                     </div>
@@ -619,7 +631,19 @@ export default function WelcomePage({
                     </div>
                   </div>
 
-                  <div className="stat-card">
+                  <div
+                    className={`stat-card stat-clickable ${activeStatPopup === 'points' ? 'active-stat-card' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'points' ? null : 'points')}
+                    title="View Loyalty Points details"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStatPopup(activeStatPopup === 'points' ? null : 'points');
+                      }
+                    }}
+                  >
                     <div className="stat-icon-wrap green">
                       <TrendingUp size={20} />
                     </div>
@@ -631,13 +655,17 @@ export default function WelcomePage({
                   </div>
 
                   <div
-                    className="stat-card"
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => {
-                      setActiveTab('favorites');
-                      if (onNavigate) onNavigate('favorites');
+                    className={`stat-card stat-clickable ${activeStatPopup === 'favorites' ? 'active-stat-card' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'favorites' ? null : 'favorites')}
+                    title="View Saved Favorites details"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStatPopup(activeStatPopup === 'favorites' ? null : 'favorites');
+                      }
                     }}
-                    title="View Saved Favorites"
                   >
                     <div className="stat-icon-wrap purple">
                       <Heart size={20} fill="currentColor" />
@@ -649,7 +677,19 @@ export default function WelcomePage({
                     </div>
                   </div>
 
-                  <div className="stat-card">
+                  <div
+                    className={`stat-card stat-clickable ${activeStatPopup === 'zones' ? 'active-stat-card' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'zones' ? null : 'zones')}
+                    title="View Delivery Zone details"
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveStatPopup(activeStatPopup === 'zones' ? null : 'zones');
+                      }
+                    }}
+                  >
                     <div className="stat-icon-wrap blue">
                       <MapPin size={20} />
                     </div>

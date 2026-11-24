@@ -632,6 +632,7 @@ html.light-theme .welcome-top-nav-shell {
   display: none;
 }
 
+/* Stats Pop-up Portal (Responsive for Desktop and Mobile) */
 .mobile-stat-popup-portal {
   position: fixed;
   inset: 0;
@@ -640,6 +641,159 @@ html.light-theme .welcome-top-nav-shell {
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+}
+
+.mobile-stat-backdrop {
+  display: block;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  animation: statBackdropFade 0.18s ease;
+}
+
+@keyframes statBackdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mobile-stat-popup-card {
+  display: block;
+  position: relative;
+  width: min(90vw, 380px);
+  background: #181920;
+  border: 1.5px solid var(--gold, #f4b627);
+  border-radius: 20px;
+  padding: 24px 22px 22px;
+  z-index: 2;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85),
+              0 0 30px rgba(244, 182, 39, 0.25);
+  animation: statPopupScale 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+  margin: auto;
+}
+
+@keyframes statPopupScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.stat-popup-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.stat-popup-close-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.stat-popup-close-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.stat-popup-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-popup-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-right: 28px;
+}
+
+.stat-popup-title {
+  font-size: 16.5px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 3px 0 4px;
+  line-height: 1.3;
+}
+
+.stat-popup-sub {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.stat-popup-content .btn-stat-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--gold, #f4b627);
+  border: none;
+  color: #0f1012;
+  padding: 11px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-shadow: 0 6px 18px rgba(244, 182, 39, 0.35);
+}
+
+.stat-popup-content .btn-stat-action:hover {
+  background: var(--gold-hover, #ffc73b);
+  transform: translateY(-1px);
+}
+
+.stat-popup-content .btn-stat-action:active {
+  transform: scale(0.98);
+  background: #ffcc4d;
+}
+
+/* Light Theme Overrides for Stats Pop-up (Desktop & Mobile) */
+html.light-theme .mobile-stat-popup-card {
+  background: #ffffff !important;
+  border-color: #d4a017 !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2),
+              0 0 25px rgba(212, 160, 23, 0.2) !important;
+}
+
+html.light-theme .stat-popup-title {
+  color: #111418 !important;
+}
+
+html.light-theme .stat-popup-sub {
+  color: #555e6c !important;
+}
+
+html.light-theme .stat-popup-close-btn {
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #4b5563;
 }
 
 .dash-stats-grid {
@@ -659,9 +813,32 @@ html.light-theme .welcome-top-nav-shell {
   transition: all 0.2s ease;
 }
 
-.stat-card:hover {
-  border-color: rgba(255, 255, 255, 0.18);
+.stat-card.stat-clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.stat-card.stat-clickable:hover {
+  border-color: rgba(244, 182, 39, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
   transform: translateY(-2px);
+}
+
+.stat-card.active-stat-card {
+  border-color: var(--gold, #f4b627);
+  box-shadow: 0 0 18px rgba(244, 182, 39, 0.25);
+  background: #1a1b22;
+}
+
+html.light-theme .stat-card.stat-clickable:hover {
+  border-color: rgba(212, 160, 23, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+html.light-theme .stat-card.active-stat-card {
+  border-color: #d4a017;
+  box-shadow: 0 0 18px rgba(212, 160, 23, 0.25);
+  background: #fffdf5;
 }
 
 .stat-icon-wrap {
@@ -1553,148 +1730,10 @@ html.light-theme .welcome-top-nav-shell {
     color: var(--gold);
   }
 
-  /* Mobile Small Pop-up Window (dismissable when tapping anywhere on screen) */
-  .mobile-stat-backdrop {
-    display: block !important;
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 1 !important;
-    background: rgba(0, 0, 0, 0.65) !important;
-    backdrop-filter: blur(5px) !important;
-    -webkit-backdrop-filter: blur(5px) !important;
-    animation: statBackdropFade 0.18s ease;
-  }
-
-  @keyframes statBackdropFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
+  /* Mobile Small Pop-up Window adjustments */
   .mobile-stat-popup-card {
-    display: block !important;
-    position: relative !important;
-    width: min(88vw, 340px) !important;
-    background: #181920 !important;
-    border: 1.5px solid var(--gold, #f4b627) !important;
-    border-radius: 20px !important;
-    padding: 22px 20px 20px !important;
-    z-index: 2 !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85),
-                0 0 30px rgba(244, 182, 39, 0.25) !important;
-    animation: statPopupScale 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    pointer-events: auto !important;
-    margin: auto !important;
-  }
-
-  @keyframes statPopupScale {
-    from {
-      opacity: 0;
-      transform: scale(0.92);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .stat-popup-close-btn {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #d1d5db;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    z-index: 2;
-  }
-
-  .stat-popup-close-btn:active {
-    background: rgba(255, 255, 255, 0.22);
-    color: #ffffff;
-  }
-
-  .stat-popup-content {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .stat-popup-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-    padding-right: 28px;
-  }
-
-  .stat-popup-title {
-    font-size: 16.5px;
-    font-weight: 800;
-    color: #ffffff;
-    margin: 3px 0 4px;
-    line-height: 1.3;
-  }
-
-  .stat-popup-sub {
-    font-size: 12.5px;
-    color: var(--text-muted);
-    line-height: 1.45;
-    margin: 0;
-  }
-
-  .stat-popup-content .btn-stat-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: var(--gold, #f4b627);
-    border: none;
-    color: #0f1012;
-    padding: 11px 16px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    width: 100%;
-    box-shadow: 0 6px 18px rgba(244, 182, 39, 0.35);
-  }
-
-  .stat-popup-content .btn-stat-action:active {
-    transform: scale(0.98);
-    background: #ffcc4d;
-  }
-
-  /* Light Theme Overrides for Mobile Stats Pop-up */
-  html.light-theme .mobile-stat-popup-card {
-    background: #ffffff !important;
-    border-color: #d4a017 !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2),
-                0 0 25px rgba(212, 160, 23, 0.2) !important;
-  }
-
-  html.light-theme .stat-popup-title {
-    color: #111418 !important;
-  }
-
-  html.light-theme .stat-popup-sub {
-    color: #555e6c !important;
-  }
-
-  html.light-theme .stat-popup-close-btn {
-    background: rgba(0, 0, 0, 0.06);
-    border-color: rgba(0, 0, 0, 0.12);
-    color: #4b5563;
+    width: min(88vw, 340px);
+    padding: 22px 20px 20px;
   }
 
   .live-order-banner {

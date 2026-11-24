@@ -173,7 +173,7 @@
   aspect-ratio: 1 / 1;
 }
 
-/* Light diagonal reflection sweep with movement lasting 5 seconds */
+/* Light diagonal reflection: 5s movement + 10s interval = 15s total cycle */
 .pdp-main-image-card::after {
   content: '';
   position: absolute;
@@ -192,7 +192,7 @@
   transform: rotate(25deg);
   pointer-events: none;
   z-index: 5;
-  animation: pdpCardLightReflection 5s linear infinite;
+  animation: pdpCardLightReflection 15s linear infinite;
 }
 
 @keyframes pdpCardLightReflection {
@@ -200,13 +200,17 @@
     left: -110%;
     opacity: 0;
   }
-  15% {
+  5% {
     opacity: 1;
   }
-  85% {
+  28% {
     opacity: 0.9;
   }
-  100% {
+  33.33% {
+    left: 175%;
+    opacity: 0;
+  }
+  33.34%, 100% {
     left: 175%;
     opacity: 0;
   }

@@ -833,6 +833,11 @@
   background: #15161c;
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.pdp-info-tabs-block.is-collapsed .pdp-tabs-nav {
+  border-bottom: none;
 }
 
 .pdp-tabs-nav {
@@ -852,6 +857,21 @@
   cursor: pointer;
   text-align: center;
   transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.tab-btn-chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s ease;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.tab-btn-chevron.open {
+  transform: rotate(180deg);
+  color: var(--gold);
 }
 
 .pdp-tab-btn:hover {
@@ -866,6 +886,18 @@
 
 .pdp-tab-pane {
   padding: 36px 40px;
+  animation: pdpTabPaneFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pdpTabPaneFade {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .tab-pane-content h3 {

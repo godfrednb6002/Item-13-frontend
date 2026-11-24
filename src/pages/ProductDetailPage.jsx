@@ -75,9 +75,14 @@ export default function ProductDetailPage({
   const [selectedButterId, setSelectedButterId] = useState('none');
   const [selectedDrinkId, setSelectedDrinkId] = useState(null); // Optional drink pairing
   const [quantity, setQuantity] = useState(1);
-  const [activeTab, setActiveTab] = useState('details'); // 'details' | 'allergens' | 'delivery'
+  const [activeTab, setActiveTab] = useState(null); // 'details' | 'allergens' | 'delivery' | null (collapsed)
   const [activePerkIndex, setActivePerkIndex] = useState(0); // 0: Fresh, 1: Delivery, 2: Ingredients
   const [isDetailLoading, setIsDetailLoading] = useState(true);
+
+  const handleTabClick = (tabKey) => {
+    // If the clicked tab is already open, toggle it closed (collapse); otherwise open it
+    setActiveTab((prev) => (prev === tabKey ? null : tabKey));
+  };
 
   // Expand / collapse state for options 1, 2, and 3
   const [expandedSections, setExpandedSections] = useState({
@@ -640,89 +645,97 @@ export default function ProductDetailPage({
         </div>
 
         {/* Product Details & Story Tabs */}
-        <div className="pdp-info-tabs-block">
+        <div className={`pdp-info-tabs-block ${activeTab ? 'is-expanded' : 'is-collapsed'}`}>
           <div className="pdp-tabs-nav">
             <button
               className={`pdp-tab-btn ${activeTab === 'details' ? 'active' : ''}`}
-              onClick={() => setActiveTab('details')}
+              onClick={() => handleTabClick('details')}
+              aria-expanded={activeTab === 'details'}
             >
-              Description &amp; Origin
+              <span>Description &amp; Origin</span>
+              <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'details' ? 'open' : ''}`} />
             </button>
             <button
               className={`pdp-tab-btn ${activeTab === 'allergens' ? 'active' : ''}`}
-              onClick={() => setActiveTab('allergens')}
+              onClick={() => handleTabClick('allergens')}
+              aria-expanded={activeTab === 'allergens'}
             >
-              Ingredients &amp; Nutrition
+              <span>Ingredients &amp; Nutrition</span>
+              <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'allergens' ? 'open' : ''}`} />
             </button>
             <button
               className={`pdp-tab-btn ${activeTab === 'delivery' ? 'active' : ''}`}
-              onClick={() => setActiveTab('delivery')}
+              onClick={() => handleTabClick('delivery')}
+              aria-expanded={activeTab === 'delivery'}
             >
-              Fresh Dispatch Guarantee
+              <span>Fresh Dispatch Guarantee</span>
+              <ChevronDown size={14} className={`tab-btn-chevron ${activeTab === 'delivery' ? 'open' : ''}`} />
             </button>
           </div>
 
-          <div className="pdp-tab-pane">
-            {activeTab === 'details' && (
-              <div className="tab-pane-content">
-                <h3>About {product.name}</h3>
-                <p>{product.longDescription || product.description}</p>
-                <p>
-                  Popped locally in Accra with non-GMO corn kernels. We don't pre-bag our popcorn weeks in advance;
-                  each order is popped and seasoned on demand so you enjoy the crunch at peak crispness.
-                </p>
-              </div>
-            )}
-
-            {activeTab === 'allergens' && (
-              <div className="tab-pane-content">
-                <h3>Nutritional &amp; Allergen Statement</h3>
-                <p>
-                  Item13 operates dedicated popping batches for sweet, buttery, and spicy savory items.
-                  All corn is naturally 100% gluten-free and cholesterol-free before seasonings are added.
-                </p>
-                <div className="tab-allergen-grid">
-                  {product.allergens && product.allergens.map((key) => {
-                    const info = ALLERGEN_DEFINITIONS[key];
-                    if (!info) return null;
-                    return (
-                      <div key={key} className="allergen-detail-card">
-                        <span className="card-icon">{renderAllergenIcon(info.iconKey, 18)}</span>
-                        <div>
-                          <strong>{info.label}</strong>
-                          <p>{info.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
+          {activeTab && (
+            <div className="pdp-tab-pane">
+              {activeTab === 'details' && (
+                <div className="tab-pane-content">
+                  <h3>About {product.name}</h3>
+                  <p>{product.longDescription || product.description}</p>
+                  <p>
+                    Popped locally in Accra with non-GMO corn kernels. We don't pre-bag our popcorn weeks in advance;
+                    each order is popped and seasoned on demand so you enjoy the crunch at peak crispness.
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
 
-            {activeTab === 'delivery' && (
-              <div className="tab-pane-content">
-                <h3>Thermal Insulated Delivery in Accra &amp; Tema</h3>
-                <p>
-                  Popcorn tubs are packaged in grease-resistant, recyclable thermal kraft buckets that lock in warmth and aromatics.
-                  Chilled drinks are packed in separate insulated ice-cooler bags to ensure ice-cold refreshment on arrival.
-                </p>
-                <ul className="pdp-delivery-list">
-                  <li>
-                    <Zap size={16} className="text-primary inline-icon" />
-                    <span><strong>Express Delivery:</strong> 25-45 minutes across East Legon, Cantonments, Osu, Airport, Dzorwulu &amp; Tema.</span>
-                  </li>
-                  <li>
-                    <Smartphone size={16} className="text-primary inline-icon" />
-                    <span><strong>Live Tracking:</strong> WhatsApp live rider tracking sent instantly upon dispatch.</span>
-                  </li>
-                  <li>
-                    <CreditCard size={16} className="text-primary inline-icon" />
-                    <span><strong>Secure Payment:</strong> Mobile money (MTN MoMo, Telecel Cash) and Card checkout accepted.</span>
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
+              {activeTab === 'allergens' && (
+                <div className="tab-pane-content">
+                  <h3>Nutritional &amp; Allergen Statement</h3>
+                  <p>
+                    Item13 operates dedicated popping batches for sweet, buttery, and spicy savory items.
+                    All corn is naturally 100% gluten-free and cholesterol-free before seasonings are added.
+                  </p>
+                  <div className="tab-allergen-grid">
+                    {product.allergens && product.allergens.map((key) => {
+                      const info = ALLERGEN_DEFINITIONS[key];
+                      if (!info) return null;
+                      return (
+                        <div key={key} className="allergen-detail-card">
+                          <span className="card-icon">{renderAllergenIcon(info.iconKey, 18)}</span>
+                          <div>
+                            <strong>{info.label}</strong>
+                            <p>{info.desc}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'delivery' && (
+                <div className="tab-pane-content">
+                  <h3>Thermal Insulated Delivery in Accra &amp; Tema</h3>
+                  <p>
+                    Popcorn tubs are packaged in grease-resistant, recyclable thermal kraft buckets that lock in warmth and aromatics.
+                    Chilled drinks are packed in separate insulated ice-cooler bags to ensure ice-cold refreshment on arrival.
+                  </p>
+                  <ul className="pdp-delivery-list">
+                    <li>
+                      <Zap size={16} className="text-primary inline-icon" />
+                      <span><strong>Express Delivery:</strong> 25-45 minutes across East Legon, Cantonments, Osu, Airport, Dzorwulu &amp; Tema.</span>
+                    </li>
+                    <li>
+                      <Smartphone size={16} className="text-primary inline-icon" />
+                      <span><strong>Live Tracking:</strong> WhatsApp live rider tracking sent instantly upon dispatch.</span>
+                    </li>
+                    <li>
+                      <CreditCard size={16} className="text-primary inline-icon" />
+                      <span><strong>Secure Payment:</strong> Mobile money (MTN MoMo, Telecel Cash) and Card checkout accepted.</span>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* You May Also Like Shelf */}

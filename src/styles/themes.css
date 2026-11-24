@@ -1790,30 +1790,50 @@ html.light-theme .pdp-perk {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
 }
 
-html.light-theme .pdp-perk-mobile-card {
+html.light-theme .pdp-perks-icons-bar {
   background: #ffffff !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03) !important;
 }
 
-html.light-theme .pdp-perk-mobile-info strong {
+html.light-theme .pdp-perk-icon-trigger {
+  color: #64748b !important;
+}
+
+html.light-theme .pdp-perk-mini-label {
   color: #111418 !important;
 }
 
-html.light-theme .pdp-perk-mobile-info p {
+html.light-theme .pdp-perk-icon-trigger:hover,
+html.light-theme .pdp-perk-icon-trigger.active {
+  background: rgba(244, 182, 39, 0.15) !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+}
+
+html.light-theme .pdp-perk-icon-trigger.active .pdp-perk-mini-label {
+  color: #b45309 !important;
+}
+
+html.light-theme .pdp-perk-popup {
+  background: #ffffff !important;
+  border: 1px solid rgba(244, 182, 39, 0.5) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .pdp-perk-popup-text strong {
+  color: #111418 !important;
+}
+
+html.light-theme .pdp-perk-popup-text p {
   color: #64748b !important;
 }
 
-html.light-theme .pdp-perk-icon-btn {
-  background: #f1f4f9 !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
-  color: #64748b !important;
+html.light-theme .pdp-perk-popup-close {
+  color: #94a3b8 !important;
 }
 
-html.light-theme .pdp-perk-icon-btn.active {
-  background: var(--gold) !important;
-  color: #0f1012 !important;
-  border-color: var(--gold) !important;
+html.light-theme .pdp-perk-popup-close:hover {
+  color: #111418 !important;
 }
 
 html.light-theme .pdp-perk strong {

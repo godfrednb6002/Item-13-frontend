@@ -9,7 +9,7 @@
   background-color: var(--bg-dark);
   color: var(--text-white);
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* Left Sidebar / Drawer (Desktop View) */

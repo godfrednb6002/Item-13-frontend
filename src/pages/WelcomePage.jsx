@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ThemeToggle from '../components/ThemeToggle';
 import {
   ShoppingBag,
@@ -47,6 +47,25 @@ export default function WelcomePage({
 }) {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
+  const [activeStatPopup, setActiveStatPopup] = useState(null);
+  const statPopupRef = useRef(null);
+
+  // Close stat popup when tapping outside anywhere on screen
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (statPopupRef.current && !statPopupRef.current.contains(e.target)) {
+        setActiveStatPopup(null);
+      }
+    };
+    if (activeStatPopup) {
+      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener('touchstart', handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+    };
+  }, [activeStatPopup]);
 
   const handleTrackOrder = (orderId = 'ITM-8921') => {
     const cleanId = orderId.replace(/^#/, '');
@@ -239,57 +258,243 @@ export default function WelcomePage({
                 </div>
               </div>
 
-              {/* Stats Overview Grid */}
-              <div className="dash-stats-grid">
-                <div className="stat-card">
-                  <div className="stat-icon-wrap gold">
-                    <Package size={20} />
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-label">Active Orders</span>
-                    <span className="stat-value">1 In Transit</span>
-                    <span className="stat-sub">Arriving in ~25 mins</span>
-                  </div>
+              {/* Stats Overview Grid (Collapsible into single tap row on mobile with small pop-up) */}
+              <div className="dash-stats-section" ref={statPopupRef}>
+                {/* Mobile Collapsed Capsule Row */}
+                <div className="mobile-stats-row-pills">
+                  <button
+                    type="button"
+                    className={`mobile-stat-pill ${activeStatPopup === 'orders' ? 'active' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'orders' ? null : 'orders')}
+                  >
+                    <div className="stat-pill-icon gold">
+                      <Package size={16} />
+                    </div>
+                    <div className="stat-pill-text">
+                      <span className="stat-pill-label">Orders</span>
+                      <strong className="stat-pill-val">1 Active</strong>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`mobile-stat-pill ${activeStatPopup === 'points' ? 'active' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'points' ? null : 'points')}
+                  >
+                    <div className="stat-pill-icon green">
+                      <TrendingUp size={16} />
+                    </div>
+                    <div className="stat-pill-text">
+                      <span className="stat-pill-label">Points</span>
+                      <strong className="stat-pill-val">280 Pts</strong>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`mobile-stat-pill ${activeStatPopup === 'favorites' ? 'active' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'favorites' ? null : 'favorites')}
+                  >
+                    <div className="stat-pill-icon purple">
+                      <Heart size={16} fill="currentColor" />
+                    </div>
+                    <div className="stat-pill-text">
+                      <span className="stat-pill-label">Favorites</span>
+                      <strong className="stat-pill-val">{favoriteProducts.length}</strong>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    className={`mobile-stat-pill ${activeStatPopup === 'zones' ? 'active' : ''}`}
+                    onClick={() => setActiveStatPopup(activeStatPopup === 'zones' ? null : 'zones')}
+                  >
+                    <div className="stat-pill-icon blue">
+                      <MapPin size={16} />
+                    </div>
+                    <div className="stat-pill-text">
+                      <span className="stat-pill-label">Zone</span>
+                      <strong className="stat-pill-val">Accra</strong>
+                    </div>
+                  </button>
                 </div>
 
-                <div className="stat-card">
-                  <div className="stat-icon-wrap green">
-                    <TrendingUp size={20} />
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-label">Popcorn Loyalty Points</span>
-                    <span className="stat-value">280 Pts</span>
-                    <span className="stat-sub">GH₵15 voucher available</span>
-                  </div>
-                </div>
+                {/* Mobile Small Pop-up Window (dismisses on tapping anywhere) */}
+                {activeStatPopup && (
+                  <>
+                    <div
+                      className="mobile-stat-backdrop"
+                      onClick={() => setActiveStatPopup(null)}
+                      aria-hidden="true"
+                    />
+                    <div className="mobile-stat-popup-card">
+                      <button
+                        type="button"
+                        className="stat-popup-close-btn"
+                        onClick={() => setActiveStatPopup(null)}
+                        aria-label="Close"
+                      >
+                        <X size={15} />
+                      </button>
 
-                <div
-                  className="stat-card"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => {
-                    setActiveTab('favorites');
-                    if (onNavigate) onNavigate('favorites');
-                  }}
-                  title="View Saved Favorites"
-                >
-                  <div className="stat-icon-wrap purple">
-                    <Heart size={20} fill="currentColor" />
-                  </div>
-                  <div className="stat-content">
-                    <span className="stat-label">Saved Favorites</span>
-                    <span className="stat-value">{favoriteProducts.length} Snacks</span>
-                    <span className="stat-sub">1-Click Fast Re-order</span>
-                  </div>
-                </div>
+                      {activeStatPopup === 'orders' && (
+                        <div className="stat-popup-content">
+                          <div className="stat-popup-header">
+                            <div className="stat-icon-wrap gold">
+                              <Package size={18} />
+                            </div>
+                            <div>
+                              <span className="stat-label">Active Orders</span>
+                              <h4 className="stat-popup-title">1 Order In Transit</h4>
+                              <p className="stat-popup-sub">Dispatched with rider Kofi • ~25-35 mins</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-stat-action"
+                            onClick={() => {
+                              setActiveStatPopup(null);
+                              handleTrackOrder('ITM-8921');
+                            }}
+                          >
+                            Track Live Order #ITM-8921 <ArrowRight size={13} />
+                          </button>
+                        </div>
+                      )}
 
-                <div className="stat-card">
-                  <div className="stat-icon-wrap blue">
-                    <MapPin size={20} />
+                      {activeStatPopup === 'points' && (
+                        <div className="stat-popup-content">
+                          <div className="stat-popup-header">
+                            <div className="stat-icon-wrap green">
+                              <TrendingUp size={18} />
+                            </div>
+                            <div>
+                              <span className="stat-label">Popcorn Loyalty Points</span>
+                              <h4 className="stat-popup-title">280 Reward Points</h4>
+                              <p className="stat-popup-sub">You have a GH₵15 voucher ready to apply</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-stat-action"
+                            onClick={() => {
+                              setActiveStatPopup(null);
+                              setActiveTab('menu');
+                              if (onNavigate) onNavigate('menu');
+                            }}
+                          >
+                            Redeem on Menu <ArrowRight size={13} />
+                          </button>
+                        </div>
+                      )}
+
+                      {activeStatPopup === 'favorites' && (
+                        <div className="stat-popup-content">
+                          <div className="stat-popup-header">
+                            <div className="stat-icon-wrap purple">
+                              <Heart size={18} fill="currentColor" />
+                            </div>
+                            <div>
+                              <span className="stat-label">Saved Favorites</span>
+                              <h4 className="stat-popup-title">{favoriteProducts.length} Saved Snacks</h4>
+                              <p className="stat-popup-sub">Quick 1-tap re-order from your favorites list</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-stat-action"
+                            onClick={() => {
+                              setActiveStatPopup(null);
+                              setActiveTab('favorites');
+                              if (onNavigate) onNavigate('favorites');
+                            }}
+                          >
+                            Open Saved Favorites <ArrowRight size={13} />
+                          </button>
+                        </div>
+                      )}
+
+                      {activeStatPopup === 'zones' && (
+                        <div className="stat-popup-content">
+                          <div className="stat-popup-header">
+                            <div className="stat-icon-wrap blue">
+                              <MapPin size={18} />
+                            </div>
+                            <div>
+                              <span className="stat-label">Primary Delivery Zone</span>
+                              <h4 className="stat-popup-title">East Legon, Accra</h4>
+                              <p className="stat-popup-sub">Digital Code: GH-GA-182-9021</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn-stat-action"
+                            onClick={() => {
+                              setActiveStatPopup(null);
+                              setActiveTab('addresses');
+                              if (onNavigate) onNavigate('dashboard/addresses');
+                            }}
+                          >
+                            Change Saved Address <ArrowRight size={13} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {/* Desktop Grid Layout (Full 4-column cards) */}
+                <div className="dash-stats-grid desktop-only-stats">
+                  <div className="stat-card">
+                    <div className="stat-icon-wrap gold">
+                      <Package size={20} />
+                    </div>
+                    <div className="stat-content">
+                      <span className="stat-label">Active Orders</span>
+                      <span className="stat-value">1 In Transit</span>
+                      <span className="stat-sub">Arriving in ~25 mins</span>
+                    </div>
                   </div>
-                  <div className="stat-content">
-                    <span className="stat-label">Primary Zone</span>
-                    <span className="stat-value">East Legon, Accra</span>
-                    <span className="stat-sub">GH-GA-182-9021</span>
+
+                  <div className="stat-card">
+                    <div className="stat-icon-wrap green">
+                      <TrendingUp size={20} />
+                    </div>
+                    <div className="stat-content">
+                      <span className="stat-label">Popcorn Loyalty Points</span>
+                      <span className="stat-value">280 Pts</span>
+                      <span className="stat-sub">GH₵15 voucher available</span>
+                    </div>
+                  </div>
+
+                  <div
+                    className="stat-card"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      setActiveTab('favorites');
+                      if (onNavigate) onNavigate('favorites');
+                    }}
+                    title="View Saved Favorites"
+                  >
+                    <div className="stat-icon-wrap purple">
+                      <Heart size={20} fill="currentColor" />
+                    </div>
+                    <div className="stat-content">
+                      <span className="stat-label">Saved Favorites</span>
+                      <span className="stat-value">{favoriteProducts.length} Snacks</span>
+                      <span className="stat-sub">1-Click Fast Re-order</span>
+                    </div>
+                  </div>
+
+                  <div className="stat-card">
+                    <div className="stat-icon-wrap blue">
+                      <MapPin size={20} />
+                    </div>
+                    <div className="stat-content">
+                      <span className="stat-label">Primary Zone</span>
+                      <span className="stat-value">East Legon, Accra</span>
+                      <span className="stat-sub">GH-GA-182-9021</span>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -17,13 +17,13 @@ export default function ProductCard({ product, onAddToCart, onQuickView, onNavig
       timeoutId = setTimeout(() => {
         if (cancelActive) return;
         setIsReflecting(true);
-        // Sweep duration is 2.5s
+        // Sweep duration matches Order Now button timing: 2.8s
         setTimeout(() => {
           if (!cancelActive) {
             setIsReflecting(false);
             scheduleReflection();
           }
-        }, 2600);
+        }, 2800);
       }, delay);
     };
 

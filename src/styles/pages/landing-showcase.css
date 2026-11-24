@@ -953,9 +953,9 @@ html.light-theme .inspo-big-watermark-title {
   }
 
   .inspo-bg-flying-popcorn {
-    width: 100%;
-    max-width: 380px;
-    bottom: -10px;
+    width: 140%;
+    max-width: 620px;
+    bottom: -15px;
   }
 
   .inspo-package-overlay-wrap {

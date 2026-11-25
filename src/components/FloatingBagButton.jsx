@@ -25,6 +25,7 @@ export default function FloatingBagButton({
   });
 
   const [isDragging, setIsDragging] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const dragRef = useRef({
     startX: 0,
     startY: 0,
@@ -34,6 +35,35 @@ export default function FloatingBagButton({
   });
 
   const buttonRef = useRef(null);
+
+  // Periodic tooltip: shows for 3s, then repeats every 5 minutes (300,000 ms)
+  useEffect(() => {
+    let hideTimer = null;
+
+    const triggerTooltip = () => {
+      setShowTooltip(true);
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 3000);
+    };
+
+    // Initial display shortly after mount (1.5s delay)
+    const initialTimer = setTimeout(() => {
+      triggerTooltip();
+    }, 1500);
+
+    // Repeat every 5 minutes
+    const intervalTimer = setInterval(() => {
+      triggerTooltip();
+    }, 5 * 60 * 1000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      if (hideTimer) clearTimeout(hideTimer);
+      clearInterval(intervalTimer);
+    };
+  }, []);
 
   // Clamp within viewport if screen resizes
   useEffect(() => {
@@ -151,6 +181,14 @@ export default function FloatingBagButton({
           <span className="floating-bag-exponent" key={cartCount}>
             {cartCount}
           </span>
+        )}
+
+        {/* Periodic hint message popover: shows for 3s every 5 mins */}
+        {showTooltip && (
+          <div className="floating-bag-tooltip" role="tooltip">
+            <span>View your cart here</span>
+            <div className="floating-bag-tooltip-arrow" />
+          </div>
         )}
       </div>
     </div>

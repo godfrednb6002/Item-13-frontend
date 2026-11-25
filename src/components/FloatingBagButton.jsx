@@ -26,6 +26,12 @@ export default function FloatingBagButton({
 
   const [isDragging, setIsDragging] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [savedItemMsg, setSavedItemMsg] = useState(false);
+  const [isMsgExiting, setIsMsgExiting] = useState(false);
+  const prevCartCountRef = useRef(cartCount);
+  const savedMsgTimerRef = useRef(null);
+  const exitTimerRef = useRef(null);
+
   const dragRef = useRef({
     startX: 0,
     startY: 0,
@@ -35,6 +41,30 @@ export default function FloatingBagButton({
   });
 
   const buttonRef = useRef(null);
+
+  // Trigger "Your item is saved here" when adding the first item (0 -> >0)
+  useEffect(() => {
+    const prevCount = prevCartCountRef.current;
+    prevCartCountRef.current = cartCount;
+
+    if (prevCount === 0 && cartCount > 0) {
+      if (savedMsgTimerRef.current) clearTimeout(savedMsgTimerRef.current);
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
+
+      setIsMsgExiting(false);
+      setSavedItemMsg(true);
+      setShowTooltip(false); // Suppress generic tooltip
+
+      // Stay visible for 3.2s, then transition out over 0.4s
+      savedMsgTimerRef.current = setTimeout(() => {
+        setIsMsgExiting(true);
+        exitTimerRef.current = setTimeout(() => {
+          setSavedItemMsg(false);
+          setIsMsgExiting(false);
+        }, 400);
+      }, 3200);
+    }
+  }, [cartCount]);
 
   // Periodic tooltip: shows for 3s, then repeats every 5 minutes (300,000 ms)
   useEffect(() => {
@@ -62,6 +92,8 @@ export default function FloatingBagButton({
       clearTimeout(initialTimer);
       if (hideTimer) clearTimeout(hideTimer);
       clearInterval(intervalTimer);
+      if (savedMsgTimerRef.current) clearTimeout(savedMsgTimerRef.current);
+      if (exitTimerRef.current) clearTimeout(exitTimerRef.current);
     };
   }, []);
 
@@ -134,7 +166,7 @@ export default function FloatingBagButton({
         setOffset((cur) => {
           try {
             localStorage.setItem('item13_bag_offset', JSON.stringify(cur));
-          } catch {}
+          } catch { }
           return cur;
         });
       }
@@ -183,12 +215,20 @@ export default function FloatingBagButton({
           </span>
         )}
 
-        {/* Periodic hint message popover: shows for 3s every 5 mins */}
-        {showTooltip && (
-          <div className="floating-bag-tooltip" role="tooltip">
-            <span>View your cart here</span>
+        {/* Saved item notice on first add: transitions out smoothly */}
+        {savedItemMsg ? (
+          <div className={`floating-bag-tooltip saved-item-tooltip ${isMsgExiting ? 'is-exiting' : ''}`} role="status">
+            <span>Your item is saved here</span>
             <div className="floating-bag-tooltip-arrow" />
           </div>
+        ) : (
+          /* Periodic hint message popover: shows for 3s every 5 mins */
+          showTooltip && (
+            <div className="floating-bag-tooltip" role="tooltip">
+              <span>View your cart here</span>
+              <div className="floating-bag-tooltip-arrow" />
+            </div>
+          )
         )}
       </div>
     </div>

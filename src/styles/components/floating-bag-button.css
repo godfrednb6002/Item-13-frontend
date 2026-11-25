@@ -124,7 +124,52 @@
   }
 }
 
+/* Saved Item Special Tooltip */
+.floating-bag-tooltip.saved-item-tooltip {
+  background: linear-gradient(135deg, #1b1a13 0%, #121318 100%);
+  border-color: var(--gold, #f4b627);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(244, 182, 39, 0.4);
+  color: #fff9e6;
+  font-weight: 800;
+  animation: tooltipEnterSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.floating-bag-tooltip.saved-item-tooltip.is-exiting {
+  animation: tooltipExitSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tooltipEnterSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tooltipExitSlide {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.9);
+  }
+}
+
 /* Light Theme Overrides */
+html.light-theme .floating-bag-tooltip.saved-item-tooltip {
+  background: linear-gradient(135deg, #fffdf2 0%, #ffffff 100%);
+  border-color: #d4a017;
+  color: #8c5806;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15),
+    0 0 18px rgba(212, 160, 23, 0.3);
+}
+
 html.light-theme .floating-bag-tooltip {
   background: #ffffff;
   color: #111418;

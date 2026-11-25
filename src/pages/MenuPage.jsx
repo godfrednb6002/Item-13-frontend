@@ -223,8 +223,8 @@ export default function MenuPage({
                   e.preventDefault();
                   if (onNavigate) onNavigate('home');
                 }}
-                style={{ textDecoration: 'none' }}
-                title="Back to Item13 Home"
+                style={{ textDecoration: 'none', cursor: 'pointer' }}
+                title="Go to Homepage"
               >
                 <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
                 <span className="brand-logo-tagline">

@@ -299,8 +299,8 @@ export default function WelcomePage({
                   e.preventDefault();
                   if (onNavigate) onNavigate('home');
                 }}
-                style={{ textDecoration: 'none' }}
-                title="Back to Item13 Home"
+                style={{ textDecoration: 'none', cursor: 'pointer' }}
+                title="Go to Homepage"
               >
                 <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
                 <span className="brand-logo-tagline">
@@ -319,20 +319,6 @@ export default function WelcomePage({
                 >
                   <ShoppingBag size={17} />
                   <span>Bag ({cartCount})</span>
-                </button>
-
-                <button
-                  type="button"
-                  className="welcome-utility-btn"
-                  data-tooltip="Homepage"
-                  aria-label="Homepage"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (onNavigate) onNavigate('welcome');
-                  }}
-                  title="Homepage"
-                >
-                  <Home size={19} />
                 </button>
 
                 <button

@@ -1064,10 +1064,20 @@ html.light-theme .stat-card.active-stat-card {
   text-decoration: underline;
 }
 
+.dash-quick-products-wrapper {
+  width: 100%;
+  position: relative;
+}
+
 .dash-quick-products {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+}
+
+/* On desktop, hide duplicate clones used for mobile infinite loop */
+.dash-prod-mini-card.marquee-duplicate {
+  display: none;
 }
 
 .dash-prod-mini-card {
@@ -1778,14 +1788,55 @@ html.light-theme .stat-card.active-stat-card {
     justify-content: center;
   }
 
-  /* Popular items to add: 2 items per row on mobile & small displays */
-  .dash-quick-products {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 12px !important;
+  /* Popular items to add: Horizontal slow-rolling display when items exceed 1 row */
+  .dash-quick-products-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    margin-left: -12px;
+    margin-right: -12px;
+    padding: 4px 12px 14px 12px;
+    width: calc(100% + 24px);
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .dash-quick-products-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dash-quick-products.dash-quick-products-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 14px !important;
+    width: max-content !important;
+    animation: slowRollMarquee 34s linear infinite;
+    will-change: transform;
+  }
+
+  /* Pause smooth slow roll when user interacts or hovers */
+  .dash-quick-products-wrapper:hover .dash-quick-products.dash-quick-products-track,
+  .dash-quick-products-wrapper:active .dash-quick-products.dash-quick-products-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes slowRollMarquee {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  .dash-prod-mini-card.marquee-duplicate {
+    display: flex !important;
   }
 
   .dash-prod-mini-card {
     border-radius: 14px;
+    flex: 0 0 185px !important;
+    width: 185px !important;
   }
 
   .mini-prod-img {
@@ -1819,8 +1870,13 @@ html.light-theme .stat-card.active-stat-card {
 }
 
 @media (max-width: 380px) {
+  .dash-prod-mini-card {
+    flex: 0 0 165px !important;
+    width: 165px !important;
+  }
+
   .dash-quick-products {
-    gap: 8px !important;
+    gap: 10px !important;
   }
 
   .mini-prod-img {

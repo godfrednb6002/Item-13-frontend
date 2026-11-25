@@ -745,32 +745,35 @@ export default function WelcomePage({
                         </a>
                       </div>
 
-                      <div className="dash-quick-products">
-                        {PRODUCTS.slice(0, 3).map((item) => (
-                          <div key={item.id} className="dash-prod-mini-card">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="mini-prod-img"
-                              onError={(e) => {
-                                e.target.src = '/bistro-popcorn.jpg';
-                              }}
-                            />
-                            <div className="mini-prod-info">
-                              <span className="mini-prod-tag">{item.category}</span>
-                              <h4 className="mini-prod-name">{item.name}</h4>
-                              <div className="mini-prod-bottom">
-                                <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
-                                <button
-                                  className="btn-mini-add"
-                                  onClick={() => handleQuickReorder(item)}
-                                >
-                                  + Add to Bag
-                                </button>
+                      {/* Desktop Grid (< 4 items) / Mobile Horizontal Slow Rolling Carousel when items exceed 1 row */}
+                      <div className="dash-quick-products-wrapper">
+                        <div className="dash-quick-products dash-quick-products-track">
+                          {[...PRODUCTS.slice(0, 6), ...PRODUCTS.slice(0, 6)].map((item, idx) => (
+                            <div key={`${item.id}-${idx}`} className={`dash-prod-mini-card ${idx >= 6 ? 'marquee-duplicate' : ''}`}>
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="mini-prod-img"
+                                onError={(e) => {
+                                  e.target.src = '/bistro-popcorn.jpg';
+                                }}
+                              />
+                              <div className="mini-prod-info">
+                                <span className="mini-prod-tag">{item.category}</span>
+                                <h4 className="mini-prod-name">{item.name}</h4>
+                                <div className="mini-prod-bottom">
+                                  <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
+                                  <button
+                                    className="btn-mini-add"
+                                    onClick={() => handleQuickReorder(item)}
+                                  >
+                                    + Add to Bag
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

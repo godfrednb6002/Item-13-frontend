@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Clock,
   Store,
+  Home,
   Plus,
   Trash2,
   Zap,
@@ -260,17 +261,17 @@ export default function WelcomePage({
         {/* Bottom Drawer Actions */}
         <div className="sidebar-footer">
           <a
-            href="/"
+            href="/dashboard"
             className="sidebar-footer-btn"
             onClick={(e) => {
               e.preventDefault();
-              if (onNavigate) onNavigate('home');
+              if (onNavigate) onNavigate('welcome');
             }}
-            title={collapsed ? 'Back to Storefront' : ''}
+            title={collapsed ? 'Back to Homepage' : ''}
             style={{ textDecoration: 'none' }}
           >
-            <ExternalLink size={18} />
-            {!collapsed && <span>Storefront</span>}
+            <Home size={18} />
+            {!collapsed && <span>Homepage</span>}
           </a>
 
           <button
@@ -323,15 +324,15 @@ export default function WelcomePage({
                 <button
                   type="button"
                   className="welcome-utility-btn"
-                  data-tooltip="Storefront"
-                  aria-label="Storefront"
+                  data-tooltip="Homepage"
+                  aria-label="Homepage"
                   onClick={(e) => {
                     e.preventDefault();
-                    if (onNavigate) onNavigate('home');
+                    if (onNavigate) onNavigate('welcome');
                   }}
-                  title="Storefront"
+                  title="Homepage"
                 >
-                  <Store size={19} />
+                  <Home size={19} />
                 </button>
 
                 <button

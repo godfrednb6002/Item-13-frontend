@@ -1709,6 +1709,10 @@ html.light-theme .stat-card.active-stat-card {
 }
 
 @media (max-width: 768px) {
+  .welcome-top-nav-shell .pdp-bag-chip {
+    display: none !important;
+  }
+
   .welcome-sidebar {
     display: none !important;
   }

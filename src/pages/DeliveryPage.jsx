@@ -69,17 +69,17 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
         <header className="delivery-header">
           <div className="delivery-header-inner">
             <a
-              href="/"
+              href="/dashboard"
               className="delivery-back-btn"
               onClick={(e) => {
                 e.preventDefault();
-                if (onNavigate) onNavigate('home');
+                if (onNavigate) onNavigate('welcome');
               }}
-              aria-label="Back to home"
+              aria-label="Back to homepage"
               style={{ textDecoration: 'none' }}
             >
               <ArrowLeft size={18} />
-              <span>Storefront</span>
+              <span>Homepage</span>
             </a>
 
             <a

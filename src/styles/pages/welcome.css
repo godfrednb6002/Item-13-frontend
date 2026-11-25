@@ -1088,6 +1088,41 @@ html.light-theme .stat-card.active-stat-card {
   display: flex;
   flex-direction: column;
   transition: all 0.2s ease;
+  position: relative;
+}
+
+/* Light diagonal reflection sweep across mini cards */
+.dash-prod-mini-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -120%;
+  width: 70%;
+  height: 200%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 70%,
+    transparent 100%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  z-index: 5;
+  animation: miniCardLightReflection 6.5s infinite ease-in-out;
+}
+
+@keyframes miniCardLightReflection {
+  0% {
+    left: -120%;
+  }
+  23% {
+    left: 170%;
+  }
+  100% {
+    left: 170%;
+  }
 }
 
 .dash-prod-mini-card:hover {

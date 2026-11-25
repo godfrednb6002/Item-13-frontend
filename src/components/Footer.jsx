@@ -243,7 +243,7 @@ export default function Footer({ onNavigate, onToast }) {
               </li>
               <li>
                 <a
-                  href="/products"
+                  href="/menu"
                   className="footer-text-link"
                   onClick={(e) => {
                     e.preventDefault();
@@ -256,7 +256,7 @@ export default function Footer({ onNavigate, onToast }) {
               </li>
               <li>
                 <a
-                  href="/products"
+                  href="/menu"
                   className="footer-text-link"
                   onClick={(e) => {
                     e.preventDefault();

@@ -178,7 +178,7 @@ export default function AboutEventsPage({ onNavigate, onToast, initialTab = 'abo
             <div className="about-header-right">
               <ThemeToggle />
               <a
-                href="/products"
+                href="/menu"
                 className="about-nav-menu-btn"
                 onClick={(e) => {
                   e.preventDefault();

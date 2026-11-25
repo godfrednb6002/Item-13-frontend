@@ -99,7 +99,7 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
             <div className="delivery-header-actions">
               <ThemeToggle />
               <a
-                href="/products"
+                href="/menu"
                 className="delivery-nav-menu-btn"
                 onClick={(e) => {
                   e.preventDefault();

@@ -53,7 +53,7 @@ export default function App() {
     if (path.startsWith('/login')) return 'login';
     if (path.startsWith('/signup')) return 'signup';
     if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) return 'favorites';
-    if (path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
+    if (path === '/menu' || path === '/menu/' || path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
     if (path.startsWith('/products/')) {
       const id = path.replace('/products/', '');
       return 'product-' + id;
@@ -157,7 +157,7 @@ export default function App() {
         setCurrentPage('signup');
       } else if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) {
         setCurrentPage('favorites');
-      } else if (path === '/products' || path === '/products/' || path.startsWith('/menu')) {
+      } else if (path === '/menu' || path === '/menu/' || path === '/products' || path === '/products/' || path.startsWith('/menu')) {
         setCurrentPage('menu');
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
@@ -201,7 +201,7 @@ export default function App() {
     else if (page.startsWith('welcome-')) nextPath = '/dashboard/' + page.replace('welcome-', '');
     else if (page === 'favorites') nextPath = '/account/favorites';
     else if (page === 'profile') nextPath = '/dashboard/profile';
-    else if (page === 'menu' || page === 'products') nextPath = '/products';
+    else if (page === 'menu' || page === 'products') nextPath = '/menu';
     else if (page.startsWith('order-tracking/')) {
       const orderId = page.replace('order-tracking/', '');
       setTrackedOrderId(orderId);
@@ -1095,7 +1095,7 @@ export default function App() {
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
             </a>
-            <a href="/products" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
+            <a href="/menu" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
               Menu
             </a>
             <a href="/delivery" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('delivery'); }}>
@@ -1217,7 +1217,7 @@ export default function App() {
                     </a>
 
                     <a
-                      href="/products"
+                      href="/menu"
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
@@ -1314,7 +1314,7 @@ export default function App() {
                   </a>
                 </div>
                 <a
-                  href="/products"
+                  href="/menu"
                   className="btn-pill btn-pill-outline"
                   onClick={(e) => {
                     e.preventDefault();
@@ -1423,7 +1423,7 @@ export default function App() {
             <div className="widget-header">
               <span className="widget-title">New Menu Items</span>
               <a
-                href="/products"
+                href="/menu"
                 className="widget-subtitle"
                 onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}
                 style={{ cursor: 'pointer', textDecoration: 'none' }}

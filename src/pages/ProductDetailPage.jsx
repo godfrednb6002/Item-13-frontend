@@ -201,7 +201,7 @@ export default function ProductDetailPage({
 
             <div className="pdp-header-actions">
               <a
-                href="/products"
+                href="/menu"
                 className="pdp-back-button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -234,7 +234,7 @@ export default function ProductDetailPage({
           <div className="pdp-breadcrumbs-inner">
             <a href="/" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('home'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Home</a>
             <span className="crumb-sep">/</span>
-            <a href="/products" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
+            <a href="/menu" onClick={(e) => { e.preventDefault(); onNavigate && onNavigate('menu'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Menu</a>
             <span className="crumb-sep">/</span>
             <span className="crumb-current">{product.name}</span>
           </div>

@@ -272,7 +272,7 @@ export default function CheckoutPage({
           <p className="checkout-email-note">
             <Check size={16} /> A confirmation email would be sent to <strong>{confirmation.customer.email}</strong> after live checkout is connected.
           </p>
-          <a href="/products" className="checkout-place-order" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+          <a href="/menu" className="checkout-place-order" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             Back to Item13 <ArrowRight size={17} />
           </a>
           <p className="checkout-security-copy"><ShieldCheck size={15} /> Thanks for supporting a local favourite.</p>
@@ -295,7 +295,7 @@ export default function CheckoutPage({
           <h1>Your bag is empty</h1>
           <p>Add something freshly popped before heading to checkout.</p>
           <a
-            href="/products"
+            href="/menu"
             className="checkout-place-order"
             onClick={(e) => {
               e.preventDefault();
@@ -304,7 +304,7 @@ export default function CheckoutPage({
               } else if (onBack) {
                 onBack();
               } else {
-                window.location.href = '/products';
+                window.location.href = '/menu';
               }
             }}
             style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
@@ -533,7 +533,7 @@ export default function CheckoutPage({
         </aside>
       </div>
       <footer className="checkout-footer">
-        <span><ShieldCheck size={15} /> Safe checkout</span><span>Item13 · Ghana</span><a href="/products" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ color: 'inherit', textDecoration: 'underline' }}>Continue shopping</a>
+        <span><ShieldCheck size={15} /> Safe checkout</span><span>Item13 · Ghana</span><a href="/menu" onClick={(e) => { e.preventDefault(); onBack(); }} style={{ color: 'inherit', textDecoration: 'underline' }}>Continue shopping</a>
       </footer>
     </main>
   );

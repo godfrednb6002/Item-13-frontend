@@ -368,7 +368,7 @@ export default function CartDrawer({
               <h3>Your bag’s taking a breather</h3>
               <p>Freshly popped favourites are just a click away.</p>
               <a
-                href="/products"
+                href="/menu"
                 className="cart-empty-cta"
                 onClick={(e) => {
                   e.preventDefault();
@@ -378,7 +378,7 @@ export default function CartDrawer({
                   } else if (onContinueShopping) {
                     onContinueShopping();
                   } else {
-                    window.location.href = '/products';
+                    window.location.href = '/menu';
                   }
                 }}
                 style={{ textDecoration: 'none' }}

@@ -312,6 +312,16 @@ export default function WelcomePage({
 
                 <button
                   type="button"
+                  className="pdp-bag-chip"
+                  onClick={() => onNavigate && onNavigate('cart')}
+                  title="Open Bag"
+                >
+                  <ShoppingBag size={17} />
+                  <span>Bag ({cartCount})</span>
+                </button>
+
+                <button
+                  type="button"
                   className="welcome-utility-btn"
                   data-tooltip="Storefront"
                   aria-label="Storefront"
@@ -350,7 +360,9 @@ export default function WelcomePage({
                   <a href="/dashboard" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Dashboard</a>
                   <span className="crumb-sep">/</span>
                   <span className="crumb-current">
-                    {navItems.find((n) => n.id === activeTab)?.label || 'Overview'}
+                    {activeTab === 'menu' || activeTab === 'products'
+                      ? 'Menu'
+                      : (navItems.find((n) => n.id === activeTab)?.label || 'Overview')}
                   </span>
                 </>
               )}
@@ -377,7 +389,7 @@ export default function WelcomePage({
                   </p>
                   <div className="dash-hero-buttons">
                     <a
-                      href="/products"
+                      href="/menu"
                       className="btn-dash-primary"
                       onClick={(e) => {
                         e.preventDefault();
@@ -729,7 +741,7 @@ export default function WelcomePage({
                           <p className="section-desc">Ghana’s best-selling popcorn flavors and chilled sodas</p>
                         </div>
                         <a
-                          href="/products"
+                          href="/menu"
                           className="view-all-link"
                           onClick={(e) => {
                             e.preventDefault();
@@ -940,7 +952,7 @@ export default function WelcomePage({
                           <h3>Your snack wishlist is waiting!</h3>
                           <p>Browse our gourmet menu and save your favorite freshly popped corn &amp; drinks for instant 1-click re-ordering.</p>
                           <a
-                            href="/products"
+                            href="/menu"
                             className="btn-fav-explore"
                             onClick={(e) => {
                               e.preventDefault();
@@ -1143,6 +1155,7 @@ export default function WelcomePage({
                         onAddToCart={onAddToCart}
                         cartCount={cartCount}
                         onToast={onToast}
+                        isEmbedded={true}
                       />
                     </div>
                   )}

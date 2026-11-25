@@ -171,7 +171,7 @@ export default function LandingShowcasePage({
               Why Item13?
             </a>
             <a
-              href="/products"
+              href="/menu"
               className="nav-link"
               onClick={(e) => {
                 e.preventDefault();
@@ -302,7 +302,7 @@ export default function LandingShowcasePage({
                     )}
 
                     <a
-                      href="/products"
+                      href="/menu"
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
@@ -399,7 +399,7 @@ export default function LandingShowcasePage({
                   </a>
                 </div>
                 <a
-                  href="/products"
+                  href="/menu"
                   className="btn-pill btn-pill-outline"
                   onClick={(e) => {
                     e.preventDefault();

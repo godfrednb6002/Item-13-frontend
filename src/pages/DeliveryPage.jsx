@@ -69,17 +69,17 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
         <header className="delivery-header">
           <div className="delivery-header-inner">
             <a
-              href="/"
+              href="/dashboard"
               className="delivery-back-btn"
               onClick={(e) => {
                 e.preventDefault();
-                if (onNavigate) onNavigate('home');
+                if (onNavigate) onNavigate('welcome');
               }}
-              aria-label="Back to home"
+              aria-label="Back to homepage"
               style={{ textDecoration: 'none' }}
             >
               <ArrowLeft size={18} />
-              <span>Storefront</span>
+              <span>Homepage</span>
             </a>
 
             <a
@@ -99,7 +99,7 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
             <div className="delivery-header-actions">
               <ThemeToggle />
               <a
-                href="/products"
+                href="/menu"
                 className="delivery-nav-menu-btn"
                 onClick={(e) => {
                   e.preventDefault();
@@ -110,15 +110,6 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
                 <ShoppingBag size={16} />
                 <span>Browse Menu</span>
               </a>
-              {cartCount > 0 && (
-                <button
-                  type="button"
-                  className="delivery-bag-chip"
-                  onClick={() => onNavigate && onNavigate('cart')}
-                >
-                  Bag: {cartCount}
-                </button>
-              )}
             </div>
           </div>
         </header>

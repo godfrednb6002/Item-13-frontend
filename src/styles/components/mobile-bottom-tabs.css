@@ -17,8 +17,8 @@
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
-    width: min(92vw, 420px);
-    height: 62px;
+    width: min(80vw, 330px) !important;
+    height: 56px !important;
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.15) 0%,
@@ -33,7 +33,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 0 8px !important;
     z-index: 1000;
     box-shadow: 
       0 16px 38px rgba(0, 0, 0, 0.4),
@@ -54,13 +54,13 @@
     font-family: inherit;
     font-size: 10px;
     font-weight: 600;
-    padding: 6px 4px;
+    padding: 5px 3px !important;
     border-radius: 999px;
     cursor: pointer;
     transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     flex: 1;
-    max-width: 68px;
-    min-height: 48px;
+    max-width: 60px !important;
+    min-height: 46px !important;
   }
 
   .mobile-tab-item:active {

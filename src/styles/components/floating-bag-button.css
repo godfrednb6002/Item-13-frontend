@@ -1,0 +1,225 @@
+/* Floating Draggable Bag Button Styles */
+.floating-bag-wrapper {
+  position: fixed !important;
+  z-index: 999999 !important;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.floating-bag-wrapper.is-dragging {
+  cursor: grabbing;
+}
+
+.floating-bag-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1b1c23 0%, #0d0e12 100%);
+  border: 1.5px solid var(--gold, #f4b627);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 16px rgba(244, 182, 39, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold, #f4b627);
+  position: relative;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  will-change: transform, box-shadow;
+}
+
+.floating-bag-wrapper:hover .floating-bag-btn {
+  transform: scale(1.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 24px rgba(244, 182, 39, 0.5);
+  background: linear-gradient(135deg, #232530 0%, #121318 100%);
+}
+
+.floating-bag-wrapper:active .floating-bag-btn {
+  transform: scale(0.95);
+}
+
+.floating-bag-icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.floating-bag-wrapper:hover .floating-bag-icon {
+  transform: scale(1.05);
+}
+
+/* Exponent style tiny count badge on the top right */
+.floating-bag-exponent {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--gold, #f4b627);
+  color: #0d0e12;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 20px;
+  text-align: center;
+  border: 2px solid #0d0e12;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  animation: exponentPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+@keyframes exponentPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Tooltip Popover hint */
+.floating-bag-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  background: #181920;
+  color: #ffffff;
+  border: 1px solid var(--gold, #f4b627);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(244, 182, 39, 0.25);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  animation: tooltipFadePop 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+}
+
+.floating-bag-tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  right: 18px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--gold, #f4b627);
+}
+
+@keyframes tooltipFadePop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Saved Item Special Tooltip */
+.floating-bag-tooltip.saved-item-tooltip {
+  background: linear-gradient(135deg, #1b1a13 0%, #121318 100%);
+  border-color: var(--gold, #f4b627);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55),
+    0 0 20px rgba(244, 182, 39, 0.4);
+  color: #fff9e6;
+  font-weight: 800;
+  animation: tooltipEnterSlide 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.floating-bag-tooltip.saved-item-tooltip.is-exiting {
+  animation: tooltipExitSlide 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes tooltipEnterSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tooltipExitSlide {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.9);
+  }
+}
+
+/* Light Theme Overrides */
+html.light-theme .floating-bag-tooltip.saved-item-tooltip {
+  background: linear-gradient(135deg, #fffdf2 0%, #ffffff 100%);
+  border-color: #d4a017;
+  color: #8c5806;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15),
+    0 0 18px rgba(212, 160, 23, 0.3);
+}
+
+html.light-theme .floating-bag-tooltip {
+  background: #ffffff;
+  color: #111418;
+  border-color: #d4a017;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+    0 0 14px rgba(212, 160, 23, 0.2);
+}
+
+html.light-theme .floating-bag-tooltip-arrow {
+  border-top-color: #d4a017;
+}
+
+html.light-theme .floating-bag-btn {
+  background: linear-gradient(135deg, #ffffff 0%, #f6f7fb 100%);
+  border: 1.5px solid #d4a017;
+  color: #b45309;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12),
+    0 0 16px rgba(212, 160, 23, 0.22);
+}
+
+html.light-theme .floating-bag-wrapper:hover .floating-bag-btn {
+  background: #ffffff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16),
+    0 0 22px rgba(212, 160, 23, 0.35);
+}
+
+html.light-theme .floating-bag-exponent {
+  background: #d4a017;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+  .floating-bag-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .floating-bag-icon {
+    width: 19px;
+    height: 19px;
+  }
+
+  .floating-bag-exponent {
+    min-width: 18px;
+    height: 18px;
+    font-size: 10px;
+    line-height: 18px;
+    top: -3px;
+    right: -3px;
+  }
+}

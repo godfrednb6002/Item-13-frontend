@@ -61,7 +61,16 @@ export default function MobileBottomTabs({
   // Compute active tab based on isCartOpen & currentPage
   const getActiveTab = () => {
     if (isCartOpen) return 'bag';
-    if (currentPage === 'showcase' || currentPage === 'home' || currentPage === '') return 'home';
+    if (
+      currentPage === 'dashboard' ||
+      currentPage === 'welcome' ||
+      currentPage === 'welcome-dashboard' ||
+      currentPage === 'showcase' ||
+      currentPage === 'home' ||
+      currentPage === ''
+    ) {
+      return 'dashboard';
+    }
     if (
       currentPage === 'menu' ||
       currentPage === 'products' ||
@@ -180,14 +189,14 @@ export default function MobileBottomTabs({
       <nav className="mobile-bottom-tabbar" aria-label="Mobile Navigation">
         <button
           type="button"
-          className={`mobile-tab-item ${activeTab === 'home' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('home'))}
-          aria-label="Home"
+          className={`mobile-tab-item ${activeTab === 'dashboard' && !isMoreDrawerOpen ? 'active' : ''}`}
+          onClick={() => handleTabNavigate(() => onNavigate && onNavigate('dashboard'))}
+          aria-label="Dashboard"
         >
           <div className="mobile-tab-icon-wrap">
-            <Home size={21} />
+            <LayoutDashboard size={21} />
           </div>
-          <span className="mobile-tab-label">Home</span>
+          <span className="mobile-tab-label">Dashboard</span>
         </button>
 
         <button
@@ -200,26 +209,6 @@ export default function MobileBottomTabs({
             <UtensilsCrossed size={21} />
           </div>
           <span className="mobile-tab-label">Menu</span>
-        </button>
-
-        <button
-          type="button"
-          className={`mobile-tab-item ${activeTab === 'bag' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (isCartOpen && onCloseCart) {
-              onCloseCart();
-            } else if (onOpenCart) {
-              onOpenCart();
-            }
-          }}
-          aria-label="Bag"
-        >
-          <div className="mobile-tab-icon-wrap">
-            <ShoppingBag size={21} />
-            {cartCount > 0 && <span className="mobile-tab-badge">{cartCount}</span>}
-          </div>
-          <span className="mobile-tab-label">Bag</span>
         </button>
 
         <button

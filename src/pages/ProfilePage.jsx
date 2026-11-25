@@ -639,8 +639,8 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
           <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
             <ArrowLeft size={16} /> Back to dashboard
           </a>
-          <a href="/" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} style={{ textDecoration: 'none' }}>
-            Storefront
+          <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
+            Homepage
           </a>
         </div>
       </header>

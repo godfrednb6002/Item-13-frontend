@@ -21,6 +21,7 @@ import OrderHistoryPage from './pages/OrderHistoryPage';
 import SavedAddressesPage from './pages/SavedAddressesPage';
 import LandingShowcasePage from './pages/LandingShowcasePage';
 import MobileBottomTabs from './components/MobileBottomTabs';
+import FloatingBagButton from './components/FloatingBagButton';
 
 export default function App() {
   const getInitialPage = () => {
@@ -53,7 +54,7 @@ export default function App() {
     if (path.startsWith('/login')) return 'login';
     if (path.startsWith('/signup')) return 'signup';
     if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) return 'favorites';
-    if (path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
+    if (path === '/menu' || path === '/menu/' || path === '/products' || path === '/products/' || path.startsWith('/menu')) return 'menu';
     if (path.startsWith('/products/')) {
       const id = path.replace('/products/', '');
       return 'product-' + id;
@@ -157,7 +158,7 @@ export default function App() {
         setCurrentPage('signup');
       } else if (path.startsWith('/account/favorites') || path.startsWith('/favorites')) {
         setCurrentPage('favorites');
-      } else if (path === '/products' || path === '/products/' || path.startsWith('/menu')) {
+      } else if (path === '/menu' || path === '/menu/' || path === '/products' || path === '/products/' || path.startsWith('/menu')) {
         setCurrentPage('menu');
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
@@ -201,7 +202,7 @@ export default function App() {
     else if (page.startsWith('welcome-')) nextPath = '/dashboard/' + page.replace('welcome-', '');
     else if (page === 'favorites') nextPath = '/account/favorites';
     else if (page === 'profile') nextPath = '/dashboard/profile';
-    else if (page === 'menu' || page === 'products') nextPath = '/products';
+    else if (page === 'menu' || page === 'products') nextPath = '/menu';
     else if (page.startsWith('order-tracking/')) {
       const orderId = page.replace('order-tracking/', '');
       setTrackedOrderId(orderId);
@@ -606,6 +607,11 @@ export default function App() {
             showToast('Signed out of Item13.');
           }}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -661,6 +667,11 @@ export default function App() {
           cartCount={cartCount}
           onToast={showToast}
           onAddToCart={handleAddDirectItem}
+          isCartOpen={isCartOpen}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
           isCartOpen={isCartOpen}
         />
         {isCartOpen && (
@@ -740,6 +751,11 @@ export default function App() {
             showToast(`Added ${addedQty}x '${item.name}' to your bag!`);
           }}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -794,6 +810,11 @@ export default function App() {
           onNavigate={navigateTo}
           onToast={showToast}
           cartCount={cartCount}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -850,6 +871,11 @@ export default function App() {
           onNavigate={navigateTo}
           onToast={showToast}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -903,6 +929,11 @@ export default function App() {
         <ContactPage
           onNavigate={navigateTo}
           onToast={showToast}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -964,6 +995,12 @@ export default function App() {
           cartCount={cartCount}
           onAddToCart={handleAddDirectItem}
           showToast={showToast}
+        />
+        {/* Universal Floating Draggable Bag Button on Showcase */}
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -1095,7 +1132,7 @@ export default function App() {
             <a href="#why" className="nav-link" onClick={(e) => { e.preventDefault(); showToast("Item13 uses premium ingredients and delivers freshly popped popcorn across Ghana."); }}>
               Why Item13?
             </a>
-            <a href="/products" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
+            <a href="/menu" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}>
               Menu
             </a>
             <a href="/delivery" className="nav-link" onClick={(e) => { e.preventDefault(); navigateTo('delivery'); }}>
@@ -1117,18 +1154,6 @@ export default function App() {
             <div className="nav-tools-row">
               {/* Theme Toggle Button */}
               <ThemeToggle className="nav-theme-toggle" />
-
-              {/* Cart / Bag Button */}
-              <button
-                type="button"
-                className={`nav-icon-btn ${isCartOpen ? 'is-active' : ''}`}
-                onClick={() => setIsCartOpen(true)}
-                aria-label={`Open Bag (${cartCount} items)`}
-                title="Open Bag / Cart"
-              >
-                <ShoppingBag size={18} />
-                {cartCount > 0 && <span className="nav-badge-dot" />}
-              </button>
 
               {/* Notification Button */}
               <div ref={notifRef} style={{ position: 'relative' }}>
@@ -1217,7 +1242,7 @@ export default function App() {
                     </a>
 
                     <a
-                      href="/products"
+                      href="/menu"
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
@@ -1314,7 +1339,7 @@ export default function App() {
                   </a>
                 </div>
                 <a
-                  href="/products"
+                  href="/menu"
                   className="btn-pill btn-pill-outline"
                   onClick={(e) => {
                     e.preventDefault();
@@ -1423,7 +1448,7 @@ export default function App() {
             <div className="widget-header">
               <span className="widget-title">New Menu Items</span>
               <a
-                href="/products"
+                href="/menu"
                 className="widget-subtitle"
                 onClick={(e) => { e.preventDefault(); navigateTo('menu'); }}
                 style={{ cursor: 'pointer', textDecoration: 'none' }}
@@ -1689,6 +1714,13 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Universal Floating Draggable Bag Button on all pages */}
+      <FloatingBagButton
+        cartCount={cartCount}
+        onClick={() => setIsCartOpen(true)}
+        isCartOpen={isCartOpen}
+      />
+
       {/* Floating Mobile Tab Bar for Storefront / Home view (only after login) */}
       {user && (
         <MobileBottomTabs

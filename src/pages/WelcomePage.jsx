@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Clock,
   Store,
+  Home,
   Plus,
   Trash2,
   Zap,
@@ -260,17 +261,17 @@ export default function WelcomePage({
         {/* Bottom Drawer Actions */}
         <div className="sidebar-footer">
           <a
-            href="/"
+            href="/dashboard"
             className="sidebar-footer-btn"
             onClick={(e) => {
               e.preventDefault();
-              if (onNavigate) onNavigate('home');
+              if (onNavigate) onNavigate('welcome');
             }}
-            title={collapsed ? 'Back to Storefront' : ''}
+            title={collapsed ? 'Back to Homepage' : ''}
             style={{ textDecoration: 'none' }}
           >
-            <ExternalLink size={18} />
-            {!collapsed && <span>Storefront</span>}
+            <Home size={18} />
+            {!collapsed && <span>Homepage</span>}
           </a>
 
           <button
@@ -298,8 +299,8 @@ export default function WelcomePage({
                   e.preventDefault();
                   if (onNavigate) onNavigate('home');
                 }}
-                style={{ textDecoration: 'none' }}
-                title="Back to Item13 Home"
+                style={{ textDecoration: 'none', cursor: 'pointer' }}
+                title="Go to Homepage"
               >
                 <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
                 <span className="brand-logo-tagline">
@@ -309,20 +310,6 @@ export default function WelcomePage({
 
               <div className="pdp-header-actions">
                 <ThemeToggle />
-
-                <button
-                  type="button"
-                  className="welcome-utility-btn"
-                  data-tooltip="Storefront"
-                  aria-label="Storefront"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (onNavigate) onNavigate('home');
-                  }}
-                  title="Storefront"
-                >
-                  <Store size={19} />
-                </button>
 
                 <button
                   type="button"
@@ -350,7 +337,9 @@ export default function WelcomePage({
                   <a href="/dashboard" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); }} className="crumb-link" style={{ textDecoration: 'none' }}>Dashboard</a>
                   <span className="crumb-sep">/</span>
                   <span className="crumb-current">
-                    {navItems.find((n) => n.id === activeTab)?.label || 'Overview'}
+                    {activeTab === 'menu' || activeTab === 'products'
+                      ? 'Menu'
+                      : (navItems.find((n) => n.id === activeTab)?.label || 'Overview')}
                   </span>
                 </>
               )}
@@ -377,7 +366,7 @@ export default function WelcomePage({
                   </p>
                   <div className="dash-hero-buttons">
                     <a
-                      href="/products"
+                      href="/menu"
                       className="btn-dash-primary"
                       onClick={(e) => {
                         e.preventDefault();
@@ -729,7 +718,7 @@ export default function WelcomePage({
                           <p className="section-desc">Ghana’s best-selling popcorn flavors and chilled sodas</p>
                         </div>
                         <a
-                          href="/products"
+                          href="/menu"
                           className="view-all-link"
                           onClick={(e) => {
                             e.preventDefault();
@@ -745,32 +734,35 @@ export default function WelcomePage({
                         </a>
                       </div>
 
-                      <div className="dash-quick-products">
-                        {PRODUCTS.slice(0, 3).map((item) => (
-                          <div key={item.id} className="dash-prod-mini-card">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="mini-prod-img"
-                              onError={(e) => {
-                                e.target.src = '/bistro-popcorn.jpg';
-                              }}
-                            />
-                            <div className="mini-prod-info">
-                              <span className="mini-prod-tag">{item.category}</span>
-                              <h4 className="mini-prod-name">{item.name}</h4>
-                              <div className="mini-prod-bottom">
-                                <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
-                                <button
-                                  className="btn-mini-add"
-                                  onClick={() => handleQuickReorder(item)}
-                                >
-                                  + Add to Bag
-                                </button>
+                      {/* Desktop Grid (< 4 items) / Mobile Horizontal Slow Rolling Carousel when items exceed 1 row */}
+                      <div className="dash-quick-products-wrapper">
+                        <div className="dash-quick-products dash-quick-products-track">
+                          {[...PRODUCTS.slice(0, 6), ...PRODUCTS.slice(0, 6)].map((item, idx) => (
+                            <div key={`${item.id}-${idx}`} className={`dash-prod-mini-card ${idx >= 6 ? 'marquee-duplicate' : ''}`}>
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="mini-prod-img"
+                                onError={(e) => {
+                                  e.target.src = '/bistro-popcorn.jpg';
+                                }}
+                              />
+                              <div className="mini-prod-info">
+                                <span className="mini-prod-tag">{item.category}</span>
+                                <h4 className="mini-prod-name">{item.name}</h4>
+                                <div className="mini-prod-bottom">
+                                  <span className="mini-prod-price">GH₵ {item.price.toFixed(2)}</span>
+                                  <button
+                                    className="btn-mini-add"
+                                    onClick={() => handleQuickReorder(item)}
+                                  >
+                                    + Add to Bag
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -937,7 +929,7 @@ export default function WelcomePage({
                           <h3>Your snack wishlist is waiting!</h3>
                           <p>Browse our gourmet menu and save your favorite freshly popped corn &amp; drinks for instant 1-click re-ordering.</p>
                           <a
-                            href="/products"
+                            href="/menu"
                             className="btn-fav-explore"
                             onClick={(e) => {
                               e.preventDefault();
@@ -1140,6 +1132,7 @@ export default function WelcomePage({
                         onAddToCart={onAddToCart}
                         cartCount={cartCount}
                         onToast={onToast}
+                        isEmbedded={true}
                       />
                     </div>
                   )}

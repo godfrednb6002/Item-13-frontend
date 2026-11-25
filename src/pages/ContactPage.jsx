@@ -138,7 +138,7 @@ export default function ContactPage({ onNavigate, onToast, isEmbedded = false })
             <div className="contact-header-actions">
               <ThemeToggle />
               <a
-                href="/products"
+                href="/menu"
                 className="btn-header-menu"
                 onClick={(e) => {
                   e.preventDefault();

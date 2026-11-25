@@ -1067,17 +1067,43 @@ html.light-theme .stat-card.active-stat-card {
 .dash-quick-products-wrapper {
   width: 100%;
   position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 16px 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.dash-quick-products-wrapper::-webkit-scrollbar {
+  display: none;
 }
 
 .dash-quick-products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 18px;
+  width: max-content;
+  animation: slowRollMarquee 45s linear infinite;
+  will-change: transform;
 }
 
-/* On desktop, hide duplicate clones used for mobile infinite loop */
+/* Pause rolling on hover or active interaction */
+.dash-quick-products-wrapper:hover .dash-quick-products,
+.dash-quick-products-wrapper:active .dash-quick-products {
+  animation-play-state: paused;
+}
+
+@keyframes slowRollMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 .dash-prod-mini-card.marquee-duplicate {
-  display: none;
+  display: flex;
 }
 
 .dash-prod-mini-card {
@@ -1089,6 +1115,8 @@ html.light-theme .stat-card.active-stat-card {
   flex-direction: column;
   transition: all 0.2s ease;
   position: relative;
+  flex: 0 0 250px;
+  width: 250px;
 }
 
 /* Light diagonal reflection sweep across mini cards */
@@ -1823,49 +1851,17 @@ html.light-theme .stat-card.active-stat-card {
     justify-content: center;
   }
 
-  /* Popular items to add: Horizontal slow-rolling display when items exceed 1 row */
+  /* Popular items to add: Mobile overrides */
   .dash-quick-products-wrapper {
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
     margin-left: -12px;
     margin-right: -12px;
     padding: 4px 12px 14px 12px;
     width: calc(100% + 24px);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .dash-quick-products-wrapper::-webkit-scrollbar {
-    display: none;
   }
 
   .dash-quick-products.dash-quick-products-track {
-    display: flex !important;
-    flex-wrap: nowrap !important;
     gap: 14px !important;
-    width: max-content !important;
-    animation: slowRollMarquee 34s linear infinite;
-    will-change: transform;
-  }
-
-  /* Pause smooth slow roll when user interacts or hovers */
-  .dash-quick-products-wrapper:hover .dash-quick-products.dash-quick-products-track,
-  .dash-quick-products-wrapper:active .dash-quick-products.dash-quick-products-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes slowRollMarquee {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
-  .dash-prod-mini-card.marquee-duplicate {
-    display: flex !important;
+    animation-duration: 34s;
   }
 
   .dash-prod-mini-card {

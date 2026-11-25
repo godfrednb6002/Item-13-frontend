@@ -313,16 +313,6 @@ export default function WelcomePage({
 
                 <button
                   type="button"
-                  className="pdp-bag-chip"
-                  onClick={() => onNavigate && onNavigate('cart')}
-                  title="Open Bag"
-                >
-                  <ShoppingBag size={17} />
-                  <span>Bag ({cartCount})</span>
-                </button>
-
-                <button
-                  type="button"
                   className="welcome-utility-btn logout"
                   data-tooltip="Log out"
                   aria-label="Log out"

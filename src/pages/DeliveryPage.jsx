@@ -110,15 +110,6 @@ export default function DeliveryPage({ onNavigate, onToast, cartCount = 0, isEmb
                 <ShoppingBag size={16} />
                 <span>Browse Menu</span>
               </a>
-              {cartCount > 0 && (
-                <button
-                  type="button"
-                  className="delivery-bag-chip"
-                  onClick={() => onNavigate && onNavigate('cart')}
-                >
-                  Bag: {cartCount}
-                </button>
-              )}
             </div>
           </div>
         </header>

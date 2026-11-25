@@ -223,21 +223,9 @@ export default function LandingShowcasePage({
           </div>
 
           <div className="nav-buttons-group">
-            {/* Top row: Theme, Cart, Notifications, and Hamburger Menu */}
+            {/* Top row: Theme, Notifications, and Hamburger Menu */}
             <div className="nav-tools-row">
               <ThemeToggle className="nav-theme-toggle" />
-
-              {/* Cart / Bag Button */}
-              <button
-                type="button"
-                className="nav-icon-btn"
-                onClick={() => onOpenCart && onOpenCart()}
-                aria-label={`Open Bag (${cartCount} items)`}
-                title="Open Bag / Cart"
-              >
-                <ShoppingBag size={18} />
-                {cartCount > 0 && <span className="nav-badge-dot" />}
-              </button>
 
               {/* Notification Button - only shown when logged in */}
               {user && (

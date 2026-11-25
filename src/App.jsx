@@ -21,6 +21,7 @@ import OrderHistoryPage from './pages/OrderHistoryPage';
 import SavedAddressesPage from './pages/SavedAddressesPage';
 import LandingShowcasePage from './pages/LandingShowcasePage';
 import MobileBottomTabs from './components/MobileBottomTabs';
+import FloatingBagButton from './components/FloatingBagButton';
 
 export default function App() {
   const getInitialPage = () => {
@@ -606,6 +607,11 @@ export default function App() {
             showToast('Signed out of Item13.');
           }}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -661,6 +667,11 @@ export default function App() {
           cartCount={cartCount}
           onToast={showToast}
           onAddToCart={handleAddDirectItem}
+          isCartOpen={isCartOpen}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
           isCartOpen={isCartOpen}
         />
         {isCartOpen && (
@@ -740,6 +751,11 @@ export default function App() {
             showToast(`Added ${addedQty}x '${item.name}' to your bag!`);
           }}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -794,6 +810,11 @@ export default function App() {
           onNavigate={navigateTo}
           onToast={showToast}
           cartCount={cartCount}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -850,6 +871,11 @@ export default function App() {
           onNavigate={navigateTo}
           onToast={showToast}
         />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
+        />
         {isCartOpen && (
           <CartDrawer
             items={cartItems}
@@ -903,6 +929,11 @@ export default function App() {
         <ContactPage
           onNavigate={navigateTo}
           onToast={showToast}
+        />
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -964,6 +995,12 @@ export default function App() {
           cartCount={cartCount}
           onAddToCart={handleAddDirectItem}
           showToast={showToast}
+        />
+        {/* Universal Floating Draggable Bag Button on Showcase */}
+        <FloatingBagButton
+          cartCount={cartCount}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
         {isCartOpen && (
           <CartDrawer
@@ -1117,18 +1154,6 @@ export default function App() {
             <div className="nav-tools-row">
               {/* Theme Toggle Button */}
               <ThemeToggle className="nav-theme-toggle" />
-
-              {/* Cart / Bag Button */}
-              <button
-                type="button"
-                className={`nav-icon-btn ${isCartOpen ? 'is-active' : ''}`}
-                onClick={() => setIsCartOpen(true)}
-                aria-label={`Open Bag (${cartCount} items)`}
-                title="Open Bag / Cart"
-              >
-                <ShoppingBag size={18} />
-                {cartCount > 0 && <span className="nav-badge-dot" />}
-              </button>
 
               {/* Notification Button */}
               <div ref={notifRef} style={{ position: 'relative' }}>
@@ -1689,6 +1714,13 @@ export default function App() {
           </div>
         </div>
       )}
+      {/* Universal Floating Draggable Bag Button on all pages */}
+      <FloatingBagButton
+        cartCount={cartCount}
+        onClick={() => setIsCartOpen(true)}
+        isCartOpen={isCartOpen}
+      />
+
       {/* Floating Mobile Tab Bar for Storefront / Home view (only after login) */}
       {user && (
         <MobileBottomTabs

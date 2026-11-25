@@ -17,8 +17,8 @@
     bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     left: 50%;
     transform: translateX(-50%);
-    width: min(92vw, 420px);
-    height: 62px;
+    width: min(84vw, 330px);
+    height: 58px;
     background: linear-gradient(
       135deg,
       rgba(255, 255, 255, 0.15) 0%,

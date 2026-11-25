@@ -215,16 +215,6 @@ export default function ProductDetailPage({
               </a>
 
               <ThemeToggle />
-
-              <button
-                type="button"
-                className="pdp-bag-chip"
-                onClick={() => onNavigate && onNavigate('cart')}
-                title="Open Bag"
-              >
-                <ShoppingBag size={17} />
-                <span>Bag ({cartCount})</span>
-              </button>
             </div>
           </div>
         </header>

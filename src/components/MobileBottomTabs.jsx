@@ -213,26 +213,6 @@ export default function MobileBottomTabs({
 
         <button
           type="button"
-          className={`mobile-tab-item ${activeTab === 'bag' && !isMoreDrawerOpen ? 'active' : ''}`}
-          onClick={() => {
-            setIsMoreDrawerOpen(false);
-            if (isCartOpen && onCloseCart) {
-              onCloseCart();
-            } else if (onOpenCart) {
-              onOpenCart();
-            }
-          }}
-          aria-label="Bag"
-        >
-          <div className="mobile-tab-icon-wrap">
-            <ShoppingBag size={21} />
-            {cartCount > 0 && <span className="mobile-tab-badge">{cartCount}</span>}
-          </div>
-          <span className="mobile-tab-label">Bag</span>
-        </button>
-
-        <button
-          type="button"
           className={`mobile-tab-item ${activeTab === 'orders' && !isMoreDrawerOpen ? 'active' : ''}`}
           onClick={() => handleTabNavigate(() => onNavigate && onNavigate('dashboard/orders'))}
           aria-label="Orders"

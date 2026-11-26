@@ -189,6 +189,7 @@ html.light-theme .inspo-top-navbar {
 .nav-auth-pill-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   height: 40px;
   padding: 0 16px;
@@ -206,8 +207,42 @@ html.light-theme .inspo-top-navbar {
   -webkit-backdrop-filter: blur(14px) saturate(180%);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35),
               inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease,
+              box-shadow 0.25s ease;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+.nav-auth-icon {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.nav-auth-label {
+  display: inline-block;
+  max-width: 140px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Shrunk State: Circular Icon-Only Button after 5s */
+.nav-auth-pill-btn.shrunk {
+  width: 40px;
+  padding: 0;
+  gap: 0;
+}
+
+.nav-auth-pill-btn.shrunk .nav-auth-label {
+  max-width: 0;
+  opacity: 0;
+  margin: 0;
 }
 
 .nav-auth-pill-btn:hover {
@@ -216,6 +251,20 @@ html.light-theme .inspo-top-navbar {
   transform: translateY(-1px) scale(1.02);
   box-shadow: 0 6px 20px rgba(244, 182, 39, 0.35),
               inset 0 1px 2px rgba(255, 255, 255, 0.45);
+}
+
+/* When hovering over the shrunk button on desktop, softly expand back */
+@media (hover: hover) and (pointer: fine) {
+  .nav-auth-pill-btn.shrunk:hover {
+    width: auto;
+    padding: 0 16px;
+    gap: 7px;
+  }
+
+  .nav-auth-pill-btn.shrunk:hover .nav-auth-label {
+    max-width: 140px;
+    opacity: 1;
+  }
 }
 
 .nav-auth-pill-btn:active {
@@ -242,7 +291,11 @@ html.light-theme .nav-auth-pill-btn:hover {
     height: 38px;
     padding: 0 12px;
     font-size: 11.5px;
-    gap: 5px;
+  }
+
+  .nav-auth-pill-btn.shrunk {
+    width: 38px;
+    padding: 0;
   }
 }
 

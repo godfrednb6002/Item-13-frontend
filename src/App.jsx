@@ -83,8 +83,17 @@ export default function App() {
   const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isAuthBtnShrunk, setIsAuthBtnShrunk] = useState(false);
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
+
+  // Smoothly shrink Login / Sign Up button to profile icon after 5 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsAuthBtnShrunk(true);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -1170,12 +1179,13 @@ export default function App() {
               {!user ? (
                 <button
                   type="button"
-                  className="nav-auth-pill-btn"
+                  className={`nav-auth-pill-btn ${isAuthBtnShrunk ? 'shrunk' : ''}`}
                   onClick={() => navigateTo('login')}
                   title="Sign In or Create Account"
+                  aria-label="Sign In or Create Account"
                 >
-                  <User size={15} />
-                  <span>Login / Sign Up</span>
+                  <User size={16} className="nav-auth-icon" />
+                  <span className="nav-auth-label">Login / Sign Up</span>
                 </button>
               ) : null}
 

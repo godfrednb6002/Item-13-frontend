@@ -286,6 +286,23 @@ html.light-theme .hero-left {
 
 html.light-theme .hero-title {
   color: #111418 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+html.light-theme .hero-title .title-accent {
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+html.light-theme .btn-buy-now {
+  border: none !important;
+  box-shadow: 0 10px 28px -4px rgba(244, 182, 39, 0.45) !important;
+}
+
+html.light-theme .btn-buy-now:hover {
+  border: none !important;
+  box-shadow: 0 14px 34px -4px rgba(244, 182, 39, 0.6) !important;
 }
 
 html.light-theme .hero-subtitle-top {

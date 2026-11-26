@@ -655,6 +655,20 @@
     color: #2b1f07 !important;
   }
 
+  html.light-theme .hero-title {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+  }
+
+  html.light-theme .hero-title .title-accent {
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+  }
+
+  html.light-theme .btn-buy-now {
+    border: none !important;
+  }
+
   .hero-title {
     font-size: clamp(38px, 10vw, 56px) !important;
     line-height: 1.08 !important;

@@ -889,10 +889,67 @@
   border-color: rgba(244, 182, 39, 0.5) !important;
 }
 
+/* ==========================================================================
+   ANIMATED SIGNUP EXTRA FIELDS (Full Name & Phone)
+   Slide Full Name right, Phone left, then collapse height into Sign In,
+   and reverse on return to Create Account.
+   ========================================================================== */
+.signup-extra-fields-collapsible {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease,
+              margin-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 0px;
+}
+
+.signup-extra-fields-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
 .signup-grid-fields {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: 12px;
+  padding-bottom: 4px;
+}
+
+.signup-field-name,
+.signup-field-phone {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* When in Sign In mode, slide Full Name right, Phone left, and collapse height */
+.mode-login .signup-extra-fields-collapsible {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-bottom: 0 !important;
+  pointer-events: none;
+}
+
+.mode-login .signup-field-name {
+  transform: translateX(80px);
+  opacity: 0;
+}
+
+.mode-login .signup-field-phone {
+  transform: translateX(-80px);
+  opacity: 0;
+}
+
+/* Remember me and Terms of service rows transition smoothly */
+.auth-mode-terms-row {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+.auth-header-fade {
+  transition: opacity 0.25s ease;
 }
 
 @media (max-width: 640px) {

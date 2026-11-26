@@ -425,208 +425,78 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
               </div>
 
               <div className="auth-form-animated-body">
-                {isLogin ? (
-                  /* ================= LOGIN FORM ================= */
-                  <div className="form-pane-fade">
-                    <div className="login-form-header">
-                      <h1 className="login-form-title">Welcome Back</h1>
-                      <p className="login-form-subtitle">
-                        Enter your credentials to access your Item13 account
-                      </p>
-                    </div>
+                <div className="login-form-header auth-header-fade">
+                  <h1 className="login-form-title">
+                    {isLogin ? 'Welcome Back' : 'Create Account'}
+                  </h1>
+                  <p className="login-form-subtitle">
+                    {isLogin
+                      ? 'Enter your credentials to access your Item13 account'
+                      : 'Unlock perks, order tracking & member discounts'}
+                  </p>
+                </div>
 
-                    {error && (
-                      <div className="login-error-alert" role="alert">
-                        <span>{error}</span>
-                      </div>
-                    )}
-
-                    {/* Social Authentication */}
-                    <div className="login-social-buttons">
-                      <button
-                        type="button"
-                        className="btn-social"
-                        onClick={() => handleSocialAuth('Google')}
-                      >
-                        <img
-                          src="/googleLogo-trimmed.png"
-                          alt="Google logo"
-                          className="btn-social-img"
-                        />
-                        <span>Continue with Google</span>
-                      </button>
-                    </div>
-
-                    <div className="login-divider">
-                      <span>or sign in with email</span>
-                    </div>
-
-                    <form onSubmit={handleLoginSubmit} className="login-form">
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="login-email">
-                          Email Address
-                        </label>
-                        <div className="input-container">
-                          <Mail size={18} className="input-icon" />
-                          <input
-                            id="login-email"
-                            type="email"
-                            className="styled-input"
-                            placeholder={loginEmailPlaceholder}
-                            value={loginEmail}
-                            onChange={(e) => setLoginEmail(e.target.value)}
-                            required
-                            autoComplete="email"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="input-field-group">
-                        <div className="label-with-action">
-                          <label className="input-label" htmlFor="login-password">
-                            Password
-                          </label>
-                          <button
-                            type="button"
-                            className="forgot-password-link"
-                            onClick={() => alert("Password reset instructions have been sent.")}
-                          >
-                            Forgot password?
-                          </button>
-                        </div>
-                        <div className="input-container">
-                          <Lock size={18} className="input-icon" />
-                          <input
-                            id="login-password"
-                            type={showLoginPassword ? 'text' : 'password'}
-                            className="styled-input"
-                            placeholder={loginPasswordPlaceholder}
-                            value={loginPassword}
-                            onChange={(e) => setLoginPassword(e.target.value)}
-                            required
-                            autoComplete="current-password"
-                          />
-                          <button
-                            type="button"
-                            className="password-toggle-btn"
-                            onClick={() => setShowLoginPassword(!showLoginPassword)}
-                            aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
-                          >
-                            {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="remember-row">
-                        <label className="checkbox-container">
-                          <input
-                            type="checkbox"
-                            checked={rememberMe}
-                            onChange={(e) => setRememberMe(e.target.checked)}
-                          />
-                          <span className="checkbox-custom" />
-                          <span className="checkbox-label-text">Keep me logged in for 30 days</span>
-                        </label>
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="btn-login-submit"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <span className="btn-spinner-content">
-                            <span className="login-spinner" />
-                            Authenticating...
-                          </span>
-                        ) : (
-                          <>
-                            <span>Sign In to Item13</span>
-                            <ArrowRight size={18} />
-                          </>
-                        )}
-                      </button>
-                    </form>
-
-                    <div className="login-footer-callout">
-                      <span>Don't have an account yet?</span>
-                      <a
-                        href="/signup"
-                        className="signup-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          switchMode('signup');
-                        }}
-                      >
-                        Create Account
-                      </a>
-                    </div>
+                {error && (
+                  <div className="login-error-alert" role="alert">
+                    <span>{error}</span>
                   </div>
-                ) : (
-                  /* ================= SIGN UP FORM ================= */
-                  <div className="form-pane-fade">
-                    <div className="login-form-header">
-                      <h1 className="login-form-title">Create Account</h1>
-                      <p className="login-form-subtitle">
-                        Unlock perks, order tracking & member discounts
-                      </p>
-                    </div>
+                )}
 
-                    {error && (
-                      <div className="login-error-alert" role="alert">
-                        <span>{error}</span>
-                      </div>
-                    )}
+                {/* Social Authentication */}
+                <div className="login-social-buttons">
+                  <button
+                    type="button"
+                    className="btn-social"
+                    onClick={() => handleSocialAuth('Google')}
+                  >
+                    <img
+                      src="/googleLogo-trimmed.png"
+                      alt="Google logo"
+                      className="btn-social-img"
+                    />
+                    <span>{isLogin ? 'Continue with Google' : 'Sign up with Google'}</span>
+                  </button>
+                </div>
 
-                    {/* Social Quick Signup */}
-                    <div className="login-social-buttons">
-                      <button
-                        type="button"
-                        className="btn-social"
-                        onClick={() => handleSocialAuth('Google')}
-                      >
-                        <img
-                          src="/googleLogo-trimmed.png"
-                          alt="Google logo"
-                          className="btn-social-img"
-                        />
-                        <span>Sign up with Google</span>
-                      </button>
-                    </div>
+                <div className="login-divider">
+                  <span>{isLogin ? 'or sign in with email' : 'or register with email'}</span>
+                </div>
 
-                    <div className="login-divider">
-                      <span>or register with email</span>
-                    </div>
-
-                    <form onSubmit={handleSignupSubmit} className="login-form">
+                <form
+                  onSubmit={isLogin ? handleLoginSubmit : handleSignupSubmit}
+                  className="login-form"
+                >
+                  {/* Sliding & Shrinking Full Name and Phone Fields */}
+                  <div className="signup-extra-fields-collapsible">
+                    <div className="signup-extra-fields-inner">
                       <div className="signup-grid-fields">
-                        <div className="input-field-group">
-                          <label className="input-label" htmlFor="signup-name">
+                        <div className="input-field-group signup-field-name">
+                          <label className="input-label" htmlFor="auth-name">
                             Full Name
                           </label>
                           <div className="input-container">
                             <User size={18} className="input-icon" />
                             <input
-                              id="signup-name"
+                              id="auth-name"
                               type="text"
                               className="styled-input"
                               placeholder={signupNamePlaceholder}
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
-                              required
+                              required={!isLogin}
                               autoComplete="name"
                             />
                           </div>
                         </div>
 
-                        <div className="input-field-group">
-                          <label className="input-label" htmlFor="signup-phone">
+                        <div className="input-field-group signup-field-phone">
+                          <label className="input-label" htmlFor="auth-phone">
                             Phone (Optional)
                           </label>
                           <div className="input-container">
                             <Phone size={18} className="input-icon" />
                             <input
-                              id="signup-phone"
+                              id="auth-phone"
                               type="tel"
                               className="styled-input"
                               placeholder={signupPhonePlaceholder}
@@ -637,101 +507,146 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                           </div>
                         </div>
                       </div>
-
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="signup-email">
-                          Email Address
-                        </label>
-                        <div className="input-container">
-                          <Mail size={18} className="input-icon" />
-                          <input
-                            id="signup-email"
-                            type="email"
-                            className="styled-input"
-                            placeholder={signupEmailPlaceholder}
-                            value={signupEmail}
-                            onChange={(e) => setSignupEmail(e.target.value)}
-                            required
-                            autoComplete="email"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="signup-password">
-                          Password
-                        </label>
-                        <div className="input-container">
-                          <Lock size={18} className="input-icon" />
-                          <input
-                            id="signup-password"
-                            type={showSignupPassword ? 'text' : 'password'}
-                            className="styled-input"
-                            placeholder={signupPasswordPlaceholder}
-                            value={signupPassword}
-                            onChange={(e) => setSignupPassword(e.target.value)}
-                            required
-                            autoComplete="new-password"
-                          />
-                          <button
-                            type="button"
-                            className="password-toggle-btn"
-                            onClick={() => setShowSignupPassword(!showSignupPassword)}
-                            aria-label={showSignupPassword ? 'Hide password' : 'Show password'}
-                          >
-                            {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="remember-row">
-                        <label className="checkbox-container">
-                          <input
-                            type="checkbox"
-                            checked={agreeTerms}
-                            onChange={(e) => setAgreeTerms(e.target.checked)}
-                          />
-                          <span className="checkbox-custom" />
-                          <span className="checkbox-label-text">
-                            I agree to Item13's Terms of Service & Privacy Policy
-                          </span>
-                        </label>
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="btn-login-submit"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <span className="btn-spinner-content">
-                            <span className="login-spinner" />
-                            Creating Account...
-                          </span>
-                        ) : (
-                          <>
-                            <span>Join Item13 Club</span>
-                            <ArrowRight size={18} />
-                          </>
-                        )}
-                      </button>
-                    </form>
-
-                    <div className="login-footer-callout">
-                      <span>Already have an account?</span>
-                      <a
-                        href="/login"
-                        className="signup-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          switchMode('login');
-                        }}
-                      >
-                        Sign In
-                      </a>
                     </div>
                   </div>
-                )}
+
+                  {/* Email Field */}
+                  <div className="input-field-group">
+                    <label className="input-label" htmlFor="auth-email">
+                      Email Address
+                    </label>
+                    <div className="input-container">
+                      <Mail size={18} className="input-icon" />
+                      <input
+                        id="auth-email"
+                        type="email"
+                        className="styled-input"
+                        placeholder={isLogin ? loginEmailPlaceholder : signupEmailPlaceholder}
+                        value={isLogin ? loginEmail : signupEmail}
+                        onChange={(e) => {
+                          if (isLogin) setLoginEmail(e.target.value);
+                          else setSignupEmail(e.target.value);
+                        }}
+                        required
+                        autoComplete="email"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="input-field-group">
+                    <div className="label-with-action">
+                      <label className="input-label" htmlFor="auth-password">
+                        Password
+                      </label>
+                      {isLogin && (
+                        <button
+                          type="button"
+                          className="forgot-password-link"
+                          onClick={() => alert("Password reset instructions have been sent.")}
+                        >
+                          Forgot password?
+                        </button>
+                      )}
+                    </div>
+                    <div className="input-container">
+                      <Lock size={18} className="input-icon" />
+                      <input
+                        id="auth-password"
+                        type={isLogin ? (showLoginPassword ? 'text' : 'password') : (showSignupPassword ? 'text' : 'password')}
+                        className="styled-input"
+                        placeholder={isLogin ? loginPasswordPlaceholder : signupPasswordPlaceholder}
+                        value={isLogin ? loginPassword : signupPassword}
+                        onChange={(e) => {
+                          if (isLogin) setLoginPassword(e.target.value);
+                          else setSignupPassword(e.target.value);
+                        }}
+                        required
+                        autoComplete={isLogin ? 'current-password' : 'new-password'}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => {
+                          if (isLogin) setShowLoginPassword(!showLoginPassword);
+                          else setShowSignupPassword(!showSignupPassword);
+                        }}
+                        aria-label={
+                          (isLogin ? showLoginPassword : showSignupPassword)
+                            ? 'Hide password'
+                            : 'Show password'
+                        }
+                      >
+                        {(isLogin ? showLoginPassword : showSignupPassword) ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember Me / Terms & Conditions */}
+                  {isLogin ? (
+                    <div className="remember-row">
+                      <label className="checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <span className="checkbox-custom" />
+                        <span className="checkbox-label-text">Keep me logged in for 30 days</span>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="remember-row">
+                      <label className="checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={agreeTerms}
+                          onChange={(e) => setAgreeTerms(e.target.checked)}
+                        />
+                        <span className="checkbox-custom" />
+                        <span className="checkbox-label-text">
+                          I agree to Item13's Terms of Service & Privacy Policy
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="btn-login-submit"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="btn-spinner-content">
+                        <span className="login-spinner" />
+                        {isLogin ? 'Authenticating...' : 'Creating Account...'}
+                      </span>
+                    ) : (
+                      <>
+                        <span>{isLogin ? 'Sign In to Item13' : 'Join Item13 Club'}</span>
+                        <ArrowRight size={18} />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <div className="login-footer-callout">
+                  <span>{isLogin ? "Don't have an account yet?" : 'Already have an account?'}</span>
+                  <a
+                    href={isLogin ? '/signup' : '/login'}
+                    className="signup-link-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      switchMode(isLogin ? 'signup' : 'login');
+                    }}
+                  >
+                    {isLogin ? 'Create Account' : 'Sign In'}
+                  </a>
+                </div>
               </div>
             </div>
 

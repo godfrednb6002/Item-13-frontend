@@ -11,7 +11,7 @@ export default function NotFoundPage({ user, onNavigate }) {
     if (user) {
       onNavigate('home');
     } else {
-      onNavigate('showcase');
+      onNavigate('landing');
     }
   };
 

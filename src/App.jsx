@@ -61,8 +61,12 @@ export default function App() {
       const id = path.replace('/products/', '');
       return 'product-' + id;
     }
-    if (path === '/showcase' || path === '/landing') return 'showcase';
-    if (path === '/' || path === '') return 'showcase';
+    if (path === '/home') return 'home';
+    if (path === '/' || path === '') return 'landing';
+    if (path === '/showcase') {
+      window.history.replaceState({}, '', '/');
+      return 'landing';
+    }
     if (path === '/404' || path === '/not-found') return 'not-found';
     return 'not-found';
   };
@@ -205,10 +209,13 @@ export default function App() {
       } else if (path.startsWith('/products/')) {
         const id = path.replace('/products/', '');
         setCurrentPage('product-' + id);
-      } else if (path === '/showcase' || path === '/landing') {
-        setCurrentPage('showcase');
+      } else if (path === '/home') {
+        setCurrentPage('home');
       } else if (path === '/' || path === '') {
-        setCurrentPage(user ? 'home' : 'showcase');
+        setCurrentPage('landing');
+      } else if (path === '/showcase') {
+        window.history.replaceState({}, '', '/');
+        setCurrentPage('landing');
       } else if (path === '/404' || path === '/not-found') {
         setCurrentPage('not-found');
       } else {
@@ -272,11 +279,13 @@ export default function App() {
     else if (page.startsWith('product-')) {
       const prodId = page.replace('product-', '');
       nextPath = '/products/' + prodId;
-    } else if (page === 'showcase' || page === 'landing') {
-      nextPath = '/showcase';
+    } else if (page === 'landing' || page === 'showcase') {
+      nextPath = '/';
+    } else if (page === 'home') {
+      nextPath = user ? '/home' : '/';
     } else if (page === '404' || page === 'not-found') {
       nextPath = '/404';
-    } else if (page === 'home') nextPath = '/';
+    }
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
@@ -1043,7 +1052,7 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'showcase' || (!user && currentPage === 'home')) {
+  if (currentPage === 'landing' || (!user && currentPage === 'home')) {
     return (
       <>
         {toastMessage && (

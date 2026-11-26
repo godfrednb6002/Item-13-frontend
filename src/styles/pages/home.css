@@ -145,13 +145,28 @@
   border-radius: 50%;
 }
 
-/* Customer favorites in bottom left */
+/* Customer favorites (now under menu-widget) */
 .customer-favorites {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-top: 14px;
+  padding: 10px 14px;
+  margin-top: 14px;
   position: relative;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 500px;
+  width: 100%;
+  margin-left: auto;
+  transition: all 0.25s ease;
+}
+
+.customer-favorites:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(244, 182, 39, 0.4);
 }
 
 .avatar-stack-ring {
@@ -312,7 +327,7 @@
 .widget-title {
   font-size: 14px;
   font-weight: 700;
-  color: #2b220d;
+  color: #ffffff;
 }
 
 .widget-subtitle {
@@ -700,7 +715,8 @@
 
   .customer-favorites {
     justify-content: center;
-    margin: 0 auto;
+    margin: 14px auto 0;
+    max-width: 100%;
   }
 
   .hero-main-img {

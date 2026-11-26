@@ -494,8 +494,21 @@
   }
 
   .footer-main-container {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 20px;
+  }
+
+  .footer-col-brand,
+  .footer-col:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .footer-col-menu {
+    grid-column: 1 / 2;
+  }
+
+  .footer-col-help {
+    grid-column: 2 / 3;
   }
 
   .footer-bottom-bar {

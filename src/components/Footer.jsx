@@ -199,7 +199,7 @@ export default function Footer({ onNavigate, onToast }) {
           </div>
 
           {/* Column 2: Quick Links */}
-          <div className="footer-col">
+          <div className="footer-col footer-col-menu">
             <h4 className="footer-heading">Menu &amp; Combos</h4>
             <ul className="footer-link-list">
               <li>
@@ -271,7 +271,7 @@ export default function Footer({ onNavigate, onToast }) {
           </div>
 
           {/* Column 3: Customer Care */}
-          <div className="footer-col">
+          <div className="footer-col footer-col-help">
             <h4 className="footer-heading">Help &amp; Delivery</h4>
             <ul className="footer-link-list">
               <li>

@@ -1179,6 +1179,47 @@ html.light-theme .order-status-tabs-bar {
   border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
+html.light-theme .order-tool-btn {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .order-tool-btn:hover,
+html.light-theme .order-tool-btn.active {
+  background: rgba(244, 182, 39, 0.15) !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .order-sort-menu {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .sort-option-btn {
+  color: #111418 !important;
+}
+
+html.light-theme .sort-option-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .sort-option-btn.selected {
+  background: rgba(244, 182, 39, 0.15) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .order-search-expandable {
+  background: #ffffff !important;
+  border-color: rgba(244, 182, 39, 0.5) !important;
+}
+
+html.light-theme .order-search-input {
+  color: #111418 !important;
+}
+
 html.light-theme .order-status-tab-btn {
   color: #64748b !important;
 }

@@ -28,6 +28,8 @@ import {
   PhoneCall,
   ExternalLink,
   X,
+  Search,
+  ArrowUpDown,
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
@@ -59,7 +61,12 @@ export default function WelcomePage({
   const [activeStatPopup, setActiveStatPopup] = useState(null);
   const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
   const [orderStatusTab, setOrderStatusTab] = useState('all');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [isOrderSearchOpen, setIsOrderSearchOpen] = useState(false);
+  const [orderSortBy, setOrderSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-high' | 'price-low'
+  const [isOrderSortOpen, setIsOrderSortOpen] = useState(false);
   const statPopupRef = useRef(null);
+  const orderSortMenuRef = useRef(null);
 
   if (initialTab !== prevInitialTab) {
     setPrevInitialTab(initialTab);
@@ -779,48 +786,138 @@ export default function WelcomePage({
                         <p>Track live deliveries and view past popcorn cravings</p>
                       </div>
 
-                      {/* Order Status Tabs Bar */}
-                      <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={orderStatusTab === 'all'}
-                          className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
-                          onClick={() => setOrderStatusTab('all')}
-                        >
-                          All
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={orderStatusTab === 'in-transit'}
-                          className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
-                          onClick={() => setOrderStatusTab('in-transit')}
-                        >
-                          <span className="status-tab-dot in-transit" />
-                          In Transit
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={orderStatusTab === 'delivered'}
-                          className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
-                          onClick={() => setOrderStatusTab('delivered')}
-                        >
-                          <span className="status-tab-dot delivered" />
-                          Delivered
-                        </button>
-                        <button
-                          type="button"
-                          role="tab"
-                          aria-selected={orderStatusTab === 'canceled'}
-                          className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
-                          onClick={() => setOrderStatusTab('canceled')}
-                        >
-                          <span className="status-tab-dot canceled" />
-                          Canceled
-                        </button>
+                      {/* Order Controls Bar: Status Tabs + Search & Sort Actions */}
+                      <div className="order-controls-row">
+                        <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={orderStatusTab === 'all'}
+                            className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
+                            onClick={() => setOrderStatusTab('all')}
+                          >
+                            All
+                          </button>
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={orderStatusTab === 'in-transit'}
+                            className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
+                            onClick={() => setOrderStatusTab('in-transit')}
+                          >
+                            <span className="status-tab-dot in-transit" />
+                            In Transit
+                          </button>
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={orderStatusTab === 'delivered'}
+                            className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
+                            onClick={() => setOrderStatusTab('delivered')}
+                          >
+                            <span className="status-tab-dot delivered" />
+                            Delivered
+                          </button>
+                          <button
+                            type="button"
+                            role="tab"
+                            aria-selected={orderStatusTab === 'canceled'}
+                            className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
+                            onClick={() => setOrderStatusTab('canceled')}
+                          >
+                            <span className="status-tab-dot canceled" />
+                            Canceled
+                          </button>
+                        </div>
+
+                        {/* Search and Sort Toolbar */}
+                        <div className="order-tools-cluster">
+                          <button
+                            type="button"
+                            className={`order-tool-btn ${isOrderSearchOpen || orderSearchQuery ? 'active' : ''}`}
+                            onClick={() => setIsOrderSearchOpen((prev) => !prev)}
+                            aria-label="Search orders"
+                            title="Search orders"
+                          >
+                            <Search size={15} />
+                          </button>
+
+                          <div className="order-sort-wrap" ref={orderSortMenuRef}>
+                            <button
+                              type="button"
+                              className={`order-tool-btn ${isOrderSortOpen ? 'active' : ''}`}
+                              onClick={() => setIsOrderSortOpen((prev) => !prev)}
+                              aria-label="Sort orders"
+                              title="Sort orders"
+                            >
+                              <ArrowUpDown size={15} />
+                            </button>
+
+                            {isOrderSortOpen && (
+                              <div className="order-sort-menu" role="menu">
+                                <span className="sort-menu-header">Sort orders by</span>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'newest' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('newest'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Newest first</span>
+                                  {orderSortBy === 'newest' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'oldest' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('oldest'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Oldest first</span>
+                                  {orderSortBy === 'oldest' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'price-high' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('price-high'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Price: High to Low</span>
+                                  {orderSortBy === 'price-high' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'price-low' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('price-low'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Price: Low to High</span>
+                                  {orderSortBy === 'price-low' && <Check size={13} />}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       </div>
+
+                      {/* Expandable Order Search Input */}
+                      {isOrderSearchOpen && (
+                        <div className="order-search-expandable">
+                          <Search size={15} className="order-search-icon" />
+                          <input
+                            type="search"
+                            value={orderSearchQuery}
+                            onChange={(e) => setOrderSearchQuery(e.target.value)}
+                            placeholder="Search by order ID or item..."
+                            autoFocus
+                            className="order-search-input"
+                          />
+                          {orderSearchQuery && (
+                            <button
+                              type="button"
+                              className="order-search-clear"
+                              onClick={() => setOrderSearchQuery('')}
+                              aria-label="Clear search"
+                            >
+                              <X size={14} />
+                            </button>
+                          )}
+                        </div>
+                      )}
 
                       <div className="order-history-list">
                         {/* Active Order Card */}

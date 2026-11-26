@@ -738,10 +738,30 @@ html.light-theme .widget-subtitle {
     border-color: rgba(244, 182, 39, 0.4);
   }
 
+  .hero-product-showcase {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow: visible !important;
+    margin: 10px 0 24px 0 !important;
+  }
+
   .hero-main-img {
-    width: 100%;
-    max-width: 540px;
-    transform: scale(1.18);
+    width: 130% !important;
+    max-width: 580px !important;
+    min-width: 380px !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto !important;
+    animation: floatSubtleMobile 6s ease-in-out infinite !important;
+  }
+
+  @keyframes floatSubtleMobile {
+    0%, 100% {
+      transform: translateY(0) scale(1.15);
+    }
+    50% {
+      transform: translateY(-8px) scale(1.15);
+    }
   }
 
   .navbar {

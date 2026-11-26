@@ -1391,6 +1391,44 @@ export default function App() {
               <span>Buy Now</span>
             </button>
           </div>
+
+          {/* Customer Favorites in Bottom Left Corner (Desktop only) */}
+          <a
+            href="/account/favorites"
+            className="customer-favorites customer-favorites-desktop"
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveModal('favorites');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
+          >
+            <div className="avatar-stack-ring">
+              <div className="avatar-group">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 1"
+                  className="avatar avatar-1"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 2"
+                  className="avatar avatar-2"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 3"
+                  className="avatar avatar-3"
+                />
+              </div>
+            </div>
+
+            <div className="favorites-text">
+              <span className="favorites-title">Customer Favorites</span>
+              <span className="favorites-link">
+                See top rated dishes <ChevronRight size={14} />
+              </span>
+            </div>
+          </a>
         </section>
 
         {/* Right Side (Yellow Background) */}
@@ -1472,10 +1510,10 @@ export default function App() {
             </div>
           </div>
 
-          {/* Customer Favorites placed under New Menu Items section */}
+          {/* Customer Favorites under New Menu Items section (Mobile only) */}
           <a
             href="/account/favorites"
-            className="customer-favorites"
+            className="customer-favorites customer-favorites-mobile"
             onClick={(e) => {
               e.preventDefault();
               setActiveModal('favorites');

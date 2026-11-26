@@ -84,15 +84,35 @@ export default function App() {
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isAuthBtnShrunk, setIsAuthBtnShrunk] = useState(false);
+  const [isThemeExpanded, setIsThemeExpanded] = useState(false);
+  const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
 
-  // Smoothly shrink Login / Sign Up button to profile icon after 5 seconds
+  // Sequential button animations:
+  // 1. At 5s: Login/Sign Up button shrinks to profile icon
+  // 2. Immediately after: Theme icon expands to show "Theme", stays 2s, then shrinks
+  // 3. Immediately after: Hamburger menu icon expands to show "More", stays 2s, then shrinks
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const authTimer = setTimeout(() => {
       setIsAuthBtnShrunk(true);
+      setIsThemeExpanded(true);
     }, 5000);
-    return () => clearTimeout(timer);
+
+    const themeTimer = setTimeout(() => {
+      setIsThemeExpanded(false);
+      setIsMenuExpanded(true);
+    }, 7000);
+
+    const menuTimer = setTimeout(() => {
+      setIsMenuExpanded(false);
+    }, 9000);
+
+    return () => {
+      clearTimeout(authTimer);
+      clearTimeout(themeTimer);
+      clearTimeout(menuTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -1190,7 +1210,7 @@ export default function App() {
               ) : null}
 
               {/* Theme Toggle Button */}
-              <ThemeToggle className="nav-theme-toggle" />
+              <ThemeToggle className={`nav-theme-toggle ${isThemeExpanded ? 'expanded' : ''}`} customLabel="Theme" />
 
               {/* Notification Button */}
               <div ref={notifRef} style={{ position: 'relative' }}>
@@ -1226,7 +1246,7 @@ export default function App() {
               <div ref={navMenuRef} style={{ position: 'relative' }}>
                 <button
                   type="button"
-                  className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                  className={`nav-icon-btn nav-menu-expand-btn ${isMenuExpanded ? 'expanded' : ''} ${isNavMenuOpen ? 'is-active' : ''}`}
                   onClick={() => {
                     setIsNavMenuOpen(!isNavMenuOpen);
                     setShowNotifications(false);
@@ -1234,7 +1254,10 @@ export default function App() {
                   aria-label={isNavMenuOpen ? 'Close Menu' : 'Open Navigation Menu'}
                   title={isNavMenuOpen ? 'Close Menu' : 'Account & Navigation Menu'}
                 >
-                  {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  <span className="nav-btn-icon-wrap">
+                    {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  </span>
+                  <span className="nav-btn-animated-label">More</span>
                 </button>
 
                 {/* Hamburger Modal Popover */}

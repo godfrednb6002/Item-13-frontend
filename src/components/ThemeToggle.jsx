@@ -2,7 +2,7 @@ import React from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
-export default function ThemeToggle({ className = '', style = {}, showLabel = false }) {
+export default function ThemeToggle({ className = '', style = {}, showLabel = false, customLabel = null }) {
   const { theme, toggleTheme, isDark } = useTheme();
 
   const handleToggle = (e) => {
@@ -21,10 +21,14 @@ export default function ThemeToggle({ className = '', style = {}, showLabel = fa
       <span className="theme-toggle-icon">
         {isDark ? <Sun size={17} /> : <Moon size={17} />}
       </span>
-      {showLabel && (
-        <span className="theme-toggle-label">
-          {isDark ? 'Light mode' : 'Dark mode'}
-        </span>
+      {customLabel ? (
+        <span className="theme-toggle-animated-label">{customLabel}</span>
+      ) : (
+        showLabel && (
+          <span className="theme-toggle-label">
+            {isDark ? 'Light mode' : 'Dark mode'}
+          </span>
+        )
       )}
     </button>
   );

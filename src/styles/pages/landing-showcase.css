@@ -245,6 +245,143 @@ html.light-theme .inspo-top-navbar {
   margin: 0;
 }
 
+/* ==========================================================================
+   DYNAMIC THEME & HAMBURGER SEQUENTIAL EXPAND & SHRINK ANIMATION
+   ========================================================================== */
+.inspo-top-navbar .nav-tools-row .theme-toggle-btn,
+.nav-tools-row .theme-toggle-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 !important;
+  border-radius: var(--radius-full, 9999px) !important;
+  overflow: hidden !important;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease,
+              box-shadow 0.25s ease !important;
+  white-space: nowrap !important;
+}
+
+.theme-toggle-animated-label {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-left: 0;
+  font-family: var(--font-heading, inherit);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: inherit;
+  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Expanded Theme Toggle State */
+.inspo-top-navbar .nav-tools-row .theme-toggle-btn.expanded,
+.nav-tools-row .theme-toggle-btn.expanded {
+  width: auto !important;
+  padding: 0 14px 0 12px !important;
+  gap: 6px;
+}
+
+.inspo-top-navbar .nav-tools-row .theme-toggle-btn.expanded .theme-toggle-animated-label,
+.nav-tools-row .theme-toggle-btn.expanded .theme-toggle-animated-label {
+  max-width: 80px;
+  opacity: 1;
+  margin-left: 2px;
+}
+
+/* Expanded Hamburger Menu State */
+.inspo-top-navbar .nav-tools-row .nav-menu-expand-btn,
+.nav-tools-row .nav-menu-expand-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 !important;
+  border-radius: var(--radius-full, 9999px) !important;
+  overflow: hidden !important;
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              transform 0.25s ease,
+              box-shadow 0.25s ease !important;
+  white-space: nowrap !important;
+}
+
+.nav-btn-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-btn-animated-label {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin-left: 0;
+  font-family: var(--font-heading, inherit);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: inherit;
+  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.inspo-top-navbar .nav-tools-row .nav-menu-expand-btn.expanded,
+.nav-tools-row .nav-menu-expand-btn.expanded {
+  width: auto !important;
+  padding: 0 14px 0 12px !important;
+  gap: 6px;
+}
+
+.inspo-top-navbar .nav-tools-row .nav-menu-expand-btn.expanded .nav-btn-animated-label,
+.nav-tools-row .nav-menu-expand-btn.expanded .nav-btn-animated-label {
+  max-width: 80px;
+  opacity: 1;
+  margin-left: 2px;
+}
+
+/* Hover re-expansion on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .inspo-top-navbar .nav-tools-row .theme-toggle-btn:hover {
+    width: auto !important;
+    padding: 0 14px 0 12px !important;
+    gap: 6px;
+  }
+  .inspo-top-navbar .nav-tools-row .theme-toggle-btn:hover .theme-toggle-animated-label {
+    max-width: 80px;
+    opacity: 1;
+    margin-left: 2px;
+  }
+
+  .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn:hover {
+    width: auto !important;
+    padding: 0 14px 0 12px !important;
+    gap: 6px;
+  }
+  .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn:hover .nav-btn-animated-label {
+    max-width: 80px;
+    opacity: 1;
+    margin-left: 2px;
+  }
+}
+
 .nav-auth-pill-btn:hover {
   background: rgba(244, 182, 39, 0.22);
   border-color: var(--gold, #f4b627);

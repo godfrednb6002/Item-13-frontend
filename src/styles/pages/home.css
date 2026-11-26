@@ -46,11 +46,27 @@
   letter-spacing: -3px;
   color: var(--gold);
   margin-bottom: 22px;
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+  text-shadow: 
+    -1.5px -1.5px 0 #000000,
+     1.5px -1.5px 0 #000000,
+    -1.5px  1.5px 0 #000000,
+     1.5px  1.5px 0 #000000,
+     0px 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .hero-title .title-accent {
   color: #fcff48;
   font-size: 100px;
+  -webkit-text-stroke: 1.5px #000000;
+  paint-order: stroke fill;
+  text-shadow: 
+    -1.5px -1.5px 0 #000000,
+     1.5px -1.5px 0 #000000,
+    -1.5px  1.5px 0 #000000,
+     1.5px  1.5px 0 #000000,
+     0px 2px 8px rgba(0, 0, 0, 0.45);
 }
 
 .hero-desc {
@@ -102,14 +118,16 @@
   font-weight: 700;
   padding: 16px 36px;
   border-radius: var(--radius-full);
-  box-shadow: 0 10px 28px -4px rgba(244, 182, 39, 0.45);
+  border: 1.5px solid #000000;
+  box-shadow: 0 10px 28px -4px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(244, 182, 39, 0.3);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-buy-now:hover {
   background-color: #ffc233;
+  border-color: #000000;
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 14px 34px -4px rgba(244, 182, 39, 0.6);
+  box-shadow: 0 14px 34px -4px rgba(0, 0, 0, 0.55), 0 6px 16px rgba(244, 182, 39, 0.4);
 }
 
 .btn-buy-now:active {
@@ -644,11 +662,13 @@
     margin: 0 auto 16px !important;
     text-align: center !important;
     max-width: 95%;
+    -webkit-text-stroke: 1.2px #000000;
   }
 
   .hero-title .title-accent {
     font-size: clamp(36px, 9.5vw, 54px) !important;
     display: inline-block !important;
+    -webkit-text-stroke: 1.2px #000000;
   }
 
   .hero-desc {

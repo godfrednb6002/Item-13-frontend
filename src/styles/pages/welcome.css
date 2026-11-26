@@ -1282,6 +1282,23 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
   gap: 24px;
 }
 
+.pane-header {
+  margin-bottom: 24px;
+}
+
+.pane-header-with-tools {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.pane-header-titles {
+  flex: 1;
+  min-width: 0;
+}
+
 .pane-header h2 {
   font-family: var(--font-heading);
   font-size: 26px;

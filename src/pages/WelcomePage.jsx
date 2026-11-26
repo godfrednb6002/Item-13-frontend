@@ -781,56 +781,13 @@ export default function WelcomePage({
                   {/* 3. ORDERS TAB */}
                   {activeTab === 'orders' && (
                     <div className="welcome-tab-pane">
-                      <div className="pane-header">
-                        <h2>Orders &amp; Tracking</h2>
-                        <p>Track live deliveries and view past popcorn cravings</p>
-                      </div>
-
-                      {/* Order Controls Bar: Status Tabs + Search & Sort Actions */}
-                      <div className="order-controls-row">
-                        <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={orderStatusTab === 'all'}
-                            className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
-                            onClick={() => setOrderStatusTab('all')}
-                          >
-                            All
-                          </button>
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={orderStatusTab === 'in-transit'}
-                            className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
-                            onClick={() => setOrderStatusTab('in-transit')}
-                          >
-                            <span className="status-tab-dot in-transit" />
-                            In Transit
-                          </button>
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={orderStatusTab === 'delivered'}
-                            className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
-                            onClick={() => setOrderStatusTab('delivered')}
-                          >
-                            <span className="status-tab-dot delivered" />
-                            Delivered
-                          </button>
-                          <button
-                            type="button"
-                            role="tab"
-                            aria-selected={orderStatusTab === 'canceled'}
-                            className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
-                            onClick={() => setOrderStatusTab('canceled')}
-                          >
-                            <span className="status-tab-dot canceled" />
-                            Canceled
-                          </button>
+                      <div className="pane-header pane-header-with-tools">
+                        <div className="pane-header-titles">
+                          <h2>Orders &amp; Tracking</h2>
+                          <p>Track live deliveries and view past popcorn cravings</p>
                         </div>
 
-                        {/* Search and Sort Toolbar */}
+                        {/* Search and Sort Toolbar aligned on same row as heading */}
                         <div className="order-tools-cluster">
                           <button
                             type="button"
@@ -918,6 +875,49 @@ export default function WelcomePage({
                           )}
                         </div>
                       )}
+
+                      {/* Order Status Tabs Bar */}
+                      <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'all'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('all')}
+                        >
+                          All
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'in-transit'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('in-transit')}
+                        >
+                          <span className="status-tab-dot in-transit" />
+                          In Transit
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'delivered'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('delivered')}
+                        >
+                          <span className="status-tab-dot delivered" />
+                          Delivered
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'canceled'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('canceled')}
+                        >
+                          <span className="status-tab-dot canceled" />
+                          Canceled
+                        </button>
+                      </div>
 
                       <div className="order-history-list">
                         {/* Active Order Card */}

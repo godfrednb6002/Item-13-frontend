@@ -252,65 +252,73 @@
 /* ==========================================================================
    MOBILE & TABLET RESPONSIVENESS
    Matches the vertical layout of dark404PageMobile.jpg & light404PageMobile.jpg
+   Completely static & locked to 100vh / 100dvh (zero scroll)
    ========================================================================== */
 @media (max-width: 960px) {
   .not-found-page-wrapper {
     height: 100vh;
     height: 100dvh;
-    overflow: hidden;
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow: hidden !important;
+    position: fixed;
+    inset: 0;
   }
 
   .not-found-stage {
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
-    padding-top: 48px;
-    overflow: hidden;
+    height: 100%;
+    max-height: 100%;
+    padding-top: clamp(44px, 7vh, 60px);
+    overflow: hidden !important;
   }
 
   .not-found-header {
-    padding: 14px 18px;
+    padding: 12px 18px;
   }
 
   .not-found-content-side {
     flex: 0 0 auto;
     width: 100%;
     max-width: 100%;
-    padding: 16px 20px 10px 20px;
+    padding: 10px 22px 12px 22px;
     box-sizing: border-box;
     align-items: flex-start;
+    z-index: 10;
   }
 
   .not-found-badge-num {
-    font-size: clamp(52px, 14vw, 76px);
+    font-size: clamp(64px, 14vh, 88px);
     margin-bottom: 6px;
+    line-height: 0.9;
   }
 
   .not-found-headline {
-    font-size: clamp(22px, 6vw, 28px);
-    line-height: 1.15;
+    font-size: clamp(24px, 3.8vh, 32px);
+    line-height: 1.14;
     margin-bottom: 8px;
   }
 
   .not-found-subtext {
-    font-size: 13.5px;
-    line-height: 1.45;
-    margin-bottom: 16px;
+    font-size: clamp(13px, 1.8vh, 15px);
+    line-height: 1.42;
+    margin-bottom: clamp(14px, 2.4vh, 22px);
     max-width: 100%;
   }
 
   .not-found-actions-group {
     width: 100%;
-    flex-direction: row;
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
 
   .not-found-primary-cta,
   .not-found-secondary-cta {
-    flex: 1;
+    width: 100%;
     justify-content: center;
-    padding: 11px 14px;
-    font-size: 13.5px;
+    padding: clamp(10px, 1.6vh, 13px) 18px;
+    font-size: 14px;
   }
 
   .not-found-graphic-side {
@@ -318,32 +326,37 @@
     min-height: 0;
     width: 100%;
     overflow: hidden;
+    position: relative;
   }
 
   /* Angle shifts to mobile diagonal cut matching mobile reference */
   .not-found-diagonal-backdrop {
-    clip-path: polygon(0 35%, 100% 0, 100% 100%, 0% 100%);
+    clip-path: polygon(0 40%, 100% 0, 100% 100%, 0% 100%);
   }
 
   .not-found-bag-container {
     padding: 0 10px 10px;
-    align-items: center;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
     justify-content: center;
   }
 
   .not-found-spilled-bag-img {
-    max-width: 100%;
-    max-height: 42vh;
+    max-width: 110%;
+    max-height: 100%;
     width: auto;
-    transform: translate(0, -10px) scale(1.08) rotate(0deg);
+    height: auto;
+    object-fit: contain;
+    transform: translate(0, 0) scale(1.1) rotate(0deg);
   }
 
   @keyframes bagFloat {
     0% {
-      transform: translate(0, -10px) scale(1.08) rotate(0deg);
+      transform: translate(0, 0) scale(1.1) rotate(0deg);
     }
     100% {
-      transform: translate(0, -18px) scale(1.08) rotate(1deg);
+      transform: translate(0, -10px) scale(1.1) rotate(1deg);
     }
   }
 }

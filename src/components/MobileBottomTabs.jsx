@@ -30,6 +30,11 @@ export default function MobileBottomTabs({
   setUser,
   showToast
 }) {
+  // If user is not logged in, do not display the mobile bottom navigation bar
+  if (!user) {
+    return null;
+  }
+
   const [isMoreDrawerOpen, setIsMoreDrawerOpen] = useState(false);
   const debounceTimerRef = useRef(null);
 

@@ -57,7 +57,7 @@
 }
 
 .hero-title .title-accent {
-  color: #fcff48;
+  color: var(--gold);
   font-size: 100px;
   -webkit-text-stroke: 1.5px #000000;
   paint-order: stroke fill;
@@ -666,7 +666,7 @@
   }
 
   html.light-theme .btn-buy-now {
-    border: none !important;
+    border: 1.5px solid #ffffff !important;
   }
 
   .hero-title {

@@ -296,12 +296,12 @@ html.light-theme .hero-title .title-accent {
 }
 
 html.light-theme .btn-buy-now {
-  border: none !important;
+  border: 1.5px solid #ffffff !important;
   box-shadow: 0 10px 28px -4px rgba(244, 182, 39, 0.45) !important;
 }
 
 html.light-theme .btn-buy-now:hover {
-  border: none !important;
+  border: 1.5px solid #ffffff !important;
   box-shadow: 0 14px 34px -4px rgba(244, 182, 39, 0.6) !important;
 }
 

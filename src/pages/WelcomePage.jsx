@@ -854,16 +854,15 @@ export default function WelcomePage({
                           title="Click to view order delivery details"
                         >
                           <div className="order-card-header">
-                            <div>
+                            <div className="order-header-primary">
                               <span className="order-badge completed">Delivered</span>
                               <span className="order-id">#ITM-8104</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div className="order-header-actions">
                               <span className="order-date">October 24, 2026</span>
                               <button
                                 type="button"
-                                className="btn-track-order"
-                                style={{ padding: '4px 12px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.14)', color: '#ffffff' }}
+                                className="btn-track-order btn-track-delivered"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTrackOrder('ITM-8104');

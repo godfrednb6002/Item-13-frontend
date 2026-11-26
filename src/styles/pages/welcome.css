@@ -1063,9 +1063,26 @@ html.light-theme .stat-card.active-stat-card {
   transition: all 0.2s ease;
 }
 
-.btn-track-order:hover {
-  background: var(--gold);
-  color: #0f1012;
+.btn-track-order.btn-track-delivered {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.btn-track-order.btn-track-delivered:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+html.light-theme .btn-track-order.btn-track-delivered {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .btn-track-order.btn-track-delivered:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+  color: #111418 !important;
 }
 
 /* Quick Products */

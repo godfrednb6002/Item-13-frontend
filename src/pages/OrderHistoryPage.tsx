@@ -275,16 +275,30 @@ export default function OrderHistoryPage({
   return (
     <main className="history-page">
       <header className="history-topbar">
-        <button className="history-back-link" type="button" onClick={onBack}>
-          <ArrowLeft size={17} aria-hidden="true" /> Storefront
-        </button>
-        <a className="history-brand" href="/" aria-label="Item13 home" onClick={(e) => { e.preventDefault(); onNavigate ? onNavigate('home') : onBack(); }}>
-          <img src="/item13Logo-trimmed.png" alt="" />
-          <span>ITEM13 <small>{user ? 'YOUR ACCOUNT' : 'STOREFRONT'}</small></span>
+        <a
+          className="history-brand pdp-header-brand"
+          href="/"
+          aria-label="Item13 home"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate ? onNavigate('home') : onBack();
+          }}
+          title="Go to Homepage"
+        >
+          <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+          <span className="brand-logo-tagline">
+            THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+          </span>
         </a>
-        <button className="history-cart-link" type="button" onClick={onViewCart} aria-label={`Open cart, ${reorderCount} recently added`}>
-          <ShoppingBag size={18} aria-hidden="true" /><span>Bag</span>
-        </button>
+        <div className="history-topbar-actions">
+          <button className="history-back-link" type="button" onClick={onBack} title="Back to Store">
+            <ArrowLeft size={17} aria-hidden="true" />
+            <span>Back to Store</span>
+          </button>
+          <button className="history-cart-link" type="button" onClick={onViewCart} aria-label={`Open cart, ${reorderCount} recently added`}>
+            <ShoppingBag size={18} aria-hidden="true" /><span>Bag</span>
+          </button>
+        </div>
       </header>
 
       {/* Breadcrumbs Row matching Welcome / PDP */}

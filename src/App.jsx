@@ -463,36 +463,23 @@ export default function App() {
     };
 
     return (
-      <>
-        <OrderHistoryPage
-          user={user}
-          onNavigate={navigateTo}
-          onBack={() => navigateTo('home')}
-          onViewOrder={(orderId) => {
-            setTrackedOrderId(orderId);
-            setCurrentPage('order-tracking');
-            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
-          }}
-          onReorder={addOrderToCart}
-          onViewCart={() => {
-            navigateTo('home');
-            setIsCartOpen(true);
-          }}
-          onCheckout={() => navigateTo('checkout')}
-          onExplore={() => navigateTo('menu')}
-        />
-        <MobileBottomTabs
-          currentPage={currentPage}
-          onNavigate={navigateTo}
-          onOpenCart={() => setIsCartOpen(true)}
-          isCartOpen={isCartOpen}
-          onCloseCart={() => setIsCartOpen(false)}
-          cartCount={cartCount}
-          user={user}
-          setUser={setUser}
-          showToast={showToast}
-        />
-      </>
+      <OrderHistoryPage
+        user={user}
+        onNavigate={navigateTo}
+        onBack={() => navigateTo('home')}
+        onViewOrder={(orderId) => {
+          setTrackedOrderId(orderId);
+          setCurrentPage('order-tracking');
+          window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+        }}
+        onReorder={addOrderToCart}
+        onViewCart={() => {
+          navigateTo('home');
+          setIsCartOpen(true);
+        }}
+        onCheckout={() => navigateTo('checkout')}
+        onExplore={() => navigateTo('menu')}
+      />
     );
   }
 

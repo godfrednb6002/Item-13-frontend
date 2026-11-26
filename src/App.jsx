@@ -20,6 +20,7 @@ import OrderTrackingPage, { mockOrder } from './pages/OrderTrackingPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
 import SavedAddressesPage from './pages/SavedAddressesPage';
 import LandingShowcasePage from './pages/LandingShowcasePage';
+import NotFoundPage from './pages/NotFoundPage';
 import MobileBottomTabs from './components/MobileBottomTabs';
 import FloatingBagButton from './components/FloatingBagButton';
 
@@ -62,7 +63,8 @@ export default function App() {
     }
     if (path === '/showcase' || path === '/landing') return 'showcase';
     if (path === '/' || path === '') return 'showcase';
-    return 'home';
+    if (path === '/404' || path === '/not-found') return 'not-found';
+    return 'not-found';
   };
 
   const [currentPage, setCurrentPage] = useState(getInitialPage);
@@ -207,8 +209,10 @@ export default function App() {
         setCurrentPage('showcase');
       } else if (path === '/' || path === '') {
         setCurrentPage(user ? 'home' : 'showcase');
+      } else if (path === '/404' || path === '/not-found') {
+        setCurrentPage('not-found');
       } else {
-        setCurrentPage('home');
+        setCurrentPage('not-found');
       }
     };
     window.addEventListener('popstate', handlePopState);
@@ -270,6 +274,8 @@ export default function App() {
       nextPath = '/products/' + prodId;
     } else if (page === 'showcase' || page === 'landing') {
       nextPath = '/showcase';
+    } else if (page === '404' || page === 'not-found') {
+      nextPath = '/404';
     } else if (page === 'home') nextPath = '/';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
@@ -1025,6 +1031,15 @@ export default function App() {
           showToast={showToast}
         />
       </>
+    );
+  }
+
+  if (currentPage === 'not-found') {
+    return (
+      <NotFoundPage
+        user={user}
+        onNavigate={navigateTo}
+      />
     );
   }
 

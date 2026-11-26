@@ -1,0 +1,402 @@
+/* ==========================================================================
+   404 NOT FOUND PAGE STYLES
+   Playful, glassmorphic, interactive with floating popcorn elements
+   ========================================================================== */
+
+.not-found-wrapper {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 20%, rgba(244, 182, 39, 0.08) 0%, rgba(10, 10, 14, 0.98) 75%), #0a0b0e;
+  box-sizing: border-box;
+}
+
+html.light-theme .not-found-wrapper {
+  background: radial-gradient(circle at 50% 20%, rgba(244, 182, 39, 0.15) 0%, rgba(248, 249, 251, 0.98) 75%), #f8f9fb;
+}
+
+/* Background ambient blur orbs */
+.not-found-glow-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.not-found-glow-circle.circle-1 {
+  width: 360px;
+  height: 360px;
+  top: 10%;
+  left: 15%;
+  background: radial-gradient(circle, rgba(244, 182, 39, 0.25) 0%, transparent 70%);
+}
+
+.not-found-glow-circle.circle-2 {
+  width: 380px;
+  height: 380px;
+  bottom: 12%;
+  right: 15%;
+  background: radial-gradient(circle, rgba(255, 140, 0, 0.2) 0%, transparent 70%);
+}
+
+/* Floating Playful Snack Emojis */
+.not-found-floating-item {
+  position: absolute;
+  font-size: 32px;
+  pointer-events: none;
+  user-select: none;
+  animation: floatPopcorn 6s ease-in-out infinite alternate;
+  z-index: 1;
+}
+
+.not-found-floating-item.item-1 {
+  top: 18%;
+  left: 10%;
+  animation-duration: 5s;
+  animation-delay: 0s;
+}
+
+.not-found-floating-item.item-2 {
+  top: 25%;
+  right: 12%;
+  font-size: 24px;
+  animation-duration: 4.5s;
+  animation-delay: 1s;
+}
+
+.not-found-floating-item.item-3 {
+  bottom: 22%;
+  left: 14%;
+  font-size: 28px;
+  animation-duration: 6.5s;
+  animation-delay: 0.5s;
+}
+
+.not-found-floating-item.item-4 {
+  bottom: 16%;
+  right: 14%;
+  font-size: 30px;
+  animation-duration: 5.8s;
+  animation-delay: 1.5s;
+}
+
+@keyframes floatPopcorn {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translateY(-22px) rotate(12deg) scale(1.08);
+  }
+  100% {
+    transform: translateY(-8px) rotate(-8deg) scale(0.98);
+  }
+}
+
+/* Main Content Card */
+.not-found-card {
+  position: relative;
+  z-index: 10;
+  max-width: 580px;
+  width: 100%;
+  text-align: center;
+  padding: 48px 36px;
+  border-radius: 28px;
+  background: rgba(22, 24, 30, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(244, 182, 39, 0.28);
+  border-top-color: rgba(255, 235, 170, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+              inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+html.light-theme .not-found-card {
+  background: rgba(255, 255, 255, 0.88);
+  border-color: rgba(244, 182, 39, 0.4);
+  border-top-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 20px 60px rgba(180, 140, 40, 0.15),
+              0 4px 16px rgba(0, 0, 0, 0.05),
+              inset 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+/* 404 Number Row with animated Popcorn Kernel badge */
+.not-found-number-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.not-found-digit {
+  font-family: var(--font-heading, inherit);
+  font-size: clamp(74px, 15vw, 110px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: #ffffff;
+  text-shadow: 0 4px 24px rgba(244, 182, 39, 0.4);
+}
+
+html.light-theme .not-found-digit {
+  color: #1a1814;
+  text-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
+}
+
+.not-found-popcorn-badge {
+  position: relative;
+  width: clamp(70px, 14vw, 100px);
+  height: clamp(70px, 14vw, 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 182, 39, 0.2) 0%, rgba(244, 182, 39, 0.05) 70%);
+  border: 2px dashed rgba(244, 182, 39, 0.6);
+  animation: rotateBadge 16s linear infinite;
+}
+
+@keyframes rotateBadge {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.not-found-emoji {
+  font-size: clamp(38px, 8vw, 54px);
+  animation: bouncePopcorn 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  display: inline-block;
+}
+
+@keyframes bouncePopcorn {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.15) rotate(10deg);
+  }
+}
+
+.not-found-pop-effect {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 20px;
+  animation: sparkPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes sparkPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Tag Pill */
+.not-found-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(244, 182, 39, 0.15);
+  border: 1px solid rgba(244, 182, 39, 0.45);
+  color: var(--gold, #f4b627);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+html.light-theme .not-found-tag {
+  background: rgba(244, 182, 39, 0.18);
+  color: #8c6307;
+  border-color: rgba(180, 130, 20, 0.35);
+}
+
+.sparkle-icon {
+  color: var(--gold, #f4b627);
+  animation: sparkleTwinkle 1.6s ease-in-out infinite;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+  50% { transform: scale(1.25) rotate(25deg); opacity: 1; }
+}
+
+/* Heading & Paragraph */
+.not-found-title {
+  font-family: var(--font-heading, inherit);
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px;
+  line-height: 1.35;
+}
+
+html.light-theme .not-found-title {
+  color: #121316;
+}
+
+.not-found-description {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #a1a1aa;
+  margin: 0 0 32px;
+  max-width: 460px;
+}
+
+html.light-theme .not-found-description {
+  color: #52525b;
+}
+
+/* Action Buttons */
+.not-found-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.not-found-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 26px;
+  border-radius: 9999px;
+  font-family: var(--font-heading, inherit);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+.not-found-primary-btn {
+  background: linear-gradient(135deg, #f4b627 0%, #e09e13 100%);
+  color: #0b0c10;
+  border: 1px solid rgba(255, 235, 170, 0.7);
+  box-shadow: 0 8px 24px rgba(244, 182, 39, 0.35),
+              inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.not-found-primary-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 32px rgba(244, 182, 39, 0.5),
+              inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.not-found-secondary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f3f4f6;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+}
+
+html.light-theme .not-found-secondary-btn {
+  background: rgba(0, 0, 0, 0.04);
+  color: #27272a;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.not-found-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(244, 182, 39, 0.45);
+  color: var(--gold, #f4b627);
+  transform: translateY(-2px) scale(1.02);
+}
+
+html.light-theme .not-found-secondary-btn:hover {
+  background: #ffffff;
+  color: #8c6307;
+}
+
+/* Quick links pill row */
+.not-found-quick-links {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 22px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+html.light-theme .not-found-quick-links {
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+.not-found-quick-links > span {
+  font-size: 12.5px;
+  color: #71717a;
+  font-weight: 500;
+}
+
+.quick-links-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.quick-links-pills button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+  color: #d4d4d8;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+html.light-theme .quick-links-pills button {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #52525b;
+}
+
+.quick-links-pills button:hover {
+  background: rgba(244, 182, 39, 0.12);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+}
+
+html.light-theme .quick-links-pills button:hover {
+  background: rgba(244, 182, 39, 0.15);
+  color: #8c6307;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 600px) {
+  .not-found-card {
+    padding: 36px 20px;
+    border-radius: 22px;
+  }
+
+  .not-found-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .not-found-btn {
+    width: 100%;
+  }
+
+  .not-found-floating-item {
+    font-size: 22px;
+  }
+}

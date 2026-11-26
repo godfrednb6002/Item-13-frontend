@@ -30,6 +30,7 @@ export default function App() {
     if (path.startsWith('/checkout')) return 'checkout';
     if (path.startsWith('/payment')) return 'payment';
     if (path.startsWith('/orders/')) return 'order-tracking';
+    if (path === '/orders' || path === '/order-tracking') return 'account-orders';
     if (path === '/account/orders') return 'account-orders';
     if (path === '/account/addresses' || path === '/dashboard/addresses') return 'welcome-addresses';
     if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
@@ -82,8 +83,45 @@ export default function App() {
   const [modalFavorites, setModalFavorites] = useState(getSavedFavorites);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isAuthBtnShrunk, setIsAuthBtnShrunk] = useState(false);
+  const [isThemeExpanded, setIsThemeExpanded] = useState(false);
+  const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
+
+  // Sequential button animations:
+  // 1. At 5s: Login/Sign Up button shrinks to profile icon
+  // 2. At 5.4s: Theme icon expands to show "Theme", stays 2.4s, then smoothly shrinks
+  // 3. At 8.5s: Hamburger menu icon expands to show "More", stays 2.4s, then smoothly shrinks
+  useEffect(() => {
+    const authTimer = setTimeout(() => {
+      setIsAuthBtnShrunk(true);
+    }, 5000);
+
+    const themeExpandTimer = setTimeout(() => {
+      setIsThemeExpanded(true);
+    }, 5400);
+
+    const themeCollapseTimer = setTimeout(() => {
+      setIsThemeExpanded(false);
+    }, 7800);
+
+    const menuExpandTimer = setTimeout(() => {
+      setIsMenuExpanded(true);
+    }, 8500);
+
+    const menuCollapseTimer = setTimeout(() => {
+      setIsMenuExpanded(false);
+    }, 10900);
+
+    return () => {
+      clearTimeout(authTimer);
+      clearTimeout(themeExpandTimer);
+      clearTimeout(themeCollapseTimer);
+      clearTimeout(menuExpandTimer);
+      clearTimeout(menuCollapseTimer);
+    };
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -124,6 +162,8 @@ export default function App() {
       } else if (path.startsWith('/orders/')) {
         setCurrentPage('order-tracking');
         setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
+      } else if (path === '/orders' || path === '/order-tracking') {
+        setCurrentPage('account-orders');
       } else if (path === '/account/orders') {
         setCurrentPage('account-orders');
       } else if (path === '/account/addresses' || path === '/dashboard/addresses') {
@@ -187,6 +227,19 @@ export default function App() {
     }
     else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
     else if (page === 'payment') nextPath = '/payment';
+    else if (page === 'orders' || page === 'track-order' || page === 'order-tracking') {
+      nextPath = user ? '/dashboard/orders' : '/orders';
+      if (user) {
+        setCurrentPage('welcome-orders');
+      } else {
+        setCurrentPage('account-orders');
+      }
+      if (window.location.pathname !== nextPath) {
+        window.history.pushState({}, '', nextPath);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     else if (page === 'account-orders') nextPath = '/account/orders';
     else if (page === 'account-addresses' || page === 'addresses') nextPath = '/account/addresses';
     else if (page === 'delivery') nextPath = '/delivery';
@@ -224,7 +277,11 @@ export default function App() {
 
     if (page.startsWith('dashboard/')) {
       const sub = page.replace('dashboard/', '');
-      setCurrentPage(`welcome-${sub}`);
+      if (sub === 'orders' && !user) {
+        setCurrentPage('account-orders');
+      } else {
+        setCurrentPage(`welcome-${sub}`);
+      }
     } else {
       setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : (page === 'profile' ? 'welcome-profile' : page)));
     }
@@ -445,6 +502,8 @@ export default function App() {
     return (
       <>
         <OrderHistoryPage
+          user={user}
+          onNavigate={navigateTo}
           onBack={() => navigateTo('home')}
           onViewOrder={(orderId) => {
             setTrackedOrderId(orderId);
@@ -453,22 +512,15 @@ export default function App() {
           }}
           onReorder={addOrderToCart}
           onViewCart={() => {
-            navigateTo('home');
             setIsCartOpen(true);
           }}
           onCheckout={() => navigateTo('checkout')}
           onExplore={() => navigateTo('menu')}
         />
-        <MobileBottomTabs
-          currentPage={currentPage}
-          onNavigate={navigateTo}
-          onOpenCart={() => setIsCartOpen(true)}
-          isCartOpen={isCartOpen}
-          onCloseCart={() => setIsCartOpen(false)}
+        <FloatingBagButton
           cartCount={cartCount}
-          user={user}
-          setUser={setUser}
-          showToast={showToast}
+          onClick={() => setIsCartOpen(true)}
+          isCartOpen={isCartOpen}
         />
       </>
     );
@@ -1150,10 +1202,23 @@ export default function App() {
           </div>
 
           <div className="nav-buttons-group">
-            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            {/* Top row: Auth button, Theme, Notifications, and Hamburger Menu */}
             <div className="nav-tools-row">
+              {!user ? (
+                <button
+                  type="button"
+                  className={`nav-auth-pill-btn ${isAuthBtnShrunk ? 'shrunk' : ''}`}
+                  onClick={() => navigateTo('login')}
+                  title="Sign In or Create Account"
+                  aria-label="Sign In or Create Account"
+                >
+                  <User size={16} className="nav-auth-icon" />
+                  <span className="nav-auth-label">Login / Sign Up</span>
+                </button>
+              ) : null}
+
               {/* Theme Toggle Button */}
-              <ThemeToggle className="nav-theme-toggle" />
+              <ThemeToggle className={`nav-theme-toggle ${isThemeExpanded ? 'expanded' : ''}`} customLabel="Theme" />
 
               {/* Notification Button */}
               <div ref={notifRef} style={{ position: 'relative' }}>
@@ -1189,7 +1254,7 @@ export default function App() {
               <div ref={navMenuRef} style={{ position: 'relative' }}>
                 <button
                   type="button"
-                  className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                  className={`nav-icon-btn nav-menu-expand-btn ${isMenuExpanded ? 'expanded' : ''} ${isNavMenuOpen ? 'is-active' : ''}`}
                   onClick={() => {
                     setIsNavMenuOpen(!isNavMenuOpen);
                     setShowNotifications(false);
@@ -1197,7 +1262,10 @@ export default function App() {
                   aria-label={isNavMenuOpen ? 'Close Menu' : 'Open Navigation Menu'}
                   title={isNavMenuOpen ? 'Close Menu' : 'Account & Navigation Menu'}
                 >
-                  {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  <span className="nav-btn-icon-wrap">
+                    {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  </span>
+                  <span className="nav-btn-animated-label">More</span>
                 </button>
 
                 {/* Hamburger Modal Popover */}
@@ -1267,12 +1335,12 @@ export default function App() {
                     </button>
 
                     <a
-                      href="/dashboard/orders"
+                      href={user ? "/dashboard/orders" : "/orders"}
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
                         setIsNavMenuOpen(false);
-                        navigateTo('dashboard/orders');
+                        navigateTo(user ? 'dashboard/orders' : 'orders');
                       }}
                     >
                       <Package size={16} />
@@ -1392,10 +1460,10 @@ export default function App() {
             </button>
           </div>
 
-          {/* Customer Favorites in Bottom Left Corner */}
+          {/* Customer Favorites in Bottom Left Corner (Desktop only) */}
           <a
             href="/account/favorites"
-            className="customer-favorites"
+            className="customer-favorites customer-favorites-desktop"
             onClick={(e) => {
               e.preventDefault();
               setActiveModal('favorites');
@@ -1509,6 +1577,44 @@ export default function App() {
               </a>
             </div>
           </div>
+
+          {/* Customer Favorites under New Menu Items section (Mobile only) */}
+          <a
+            href="/account/favorites"
+            className="customer-favorites customer-favorites-mobile"
+            onClick={(e) => {
+              e.preventDefault();
+              setActiveModal('favorites');
+            }}
+            style={{ cursor: 'pointer', textDecoration: 'none' }}
+          >
+            <div className="avatar-stack-ring">
+              <div className="avatar-group">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 1"
+                  className="avatar avatar-1"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 2"
+                  className="avatar avatar-2"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+                  alt="Customer avatar 3"
+                  className="avatar avatar-3"
+                />
+              </div>
+            </div>
+
+            <div className="favorites-text">
+              <span className="favorites-title">Customer Favorites</span>
+              <span className="favorites-link">
+                See top rated dishes <ChevronRight size={14} />
+              </span>
+            </div>
+          </a>
         </section>
       </main>
 

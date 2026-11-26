@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowLeft, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
 
 export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSuccess }) {
   const [mode, setMode] = useState(initialMode); // 'login' | 'signup'
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     setMode(initialMode);
@@ -23,27 +22,195 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
 
+  // Dynamic Typewriter Placeholders
+  const [loginEmailPlaceholder, setLoginEmailPlaceholder] = useState('');
+  const [loginPasswordPlaceholder, setLoginPasswordPlaceholder] = useState('');
+  const [signupNamePlaceholder, setSignupNamePlaceholder] = useState('');
+  const [signupPhonePlaceholder, setSignupPhonePlaceholder] = useState('');
+  const [signupEmailPlaceholder, setSignupEmailPlaceholder] = useState('');
+  const [signupPasswordPlaceholder, setSignupPasswordPlaceholder] = useState('');
+
   // Shared States
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const loopTimerRef = useRef(null);
 
-  // Slow, elegant modern transition between Login and Sign Up with URL synchronization
+  // Diverse datasets for looping placeholders starting with descriptive instructions
+  const loginProfiles = [
+    { email: 'Enter your email address', pass: 'Enter your password' },
+    { email: 'alex.morgan@gmail.com', pass: '••••••••••••' },
+    { email: 'kwame.asante@outlook.com', pass: '••••••••••' },
+    { email: 'sarah.mensah@yahoo.com', pass: '••••••••••••••' },
+    { email: 'kofi.adjei@proton.me', pass: '••••••••' },
+    { email: 'amara.diallo@icloud.com', pass: '•••••••••••••' },
+  ];
+
+  const signupProfiles = [
+    { name: 'Enter your full name', phone: 'Enter phone number', email: 'Enter your email address', pass: 'Create your password' },
+    { name: 'Alex Morgan', phone: '+233 50 123 4567', email: 'alex.morgan@gmail.com', pass: 'At least 8 characters' },
+    { name: 'Kwame Asante', phone: '+233 24 987 6543', email: 'kwame.asante@outlook.com', pass: '••••••••••••' },
+    { name: 'Sarah Mensah', phone: '+233 20 456 7890', email: 'sarah.mensah@yahoo.com', pass: 'Create strong password' },
+    { name: 'Kofi Adjei', phone: '+233 55 321 0987', email: 'kofi.adjei@proton.me', pass: '••••••••••' },
+    { name: 'Amara Diallo', phone: '+233 27 654 3210', email: 'amara.diallo@icloud.com', pass: 'Min 8 characters & symbols' },
+  ];
+
+  // Helper to run smooth typing and backspacing animation loop
+  const startPlaceholderLoop = (currentMode) => {
+    if (loopTimerRef.current) clearTimeout(loopTimerRef.current);
+
+    let profileIdx = 0;
+    let step = 'typing'; // 'typing' | 'pausing' | 'deleting'
+    let charIdx = 0;
+
+    const tick = () => {
+      if (currentMode === 'login') {
+        const profile = loginProfiles[profileIdx % loginProfiles.length];
+        const emailLen = profile.email.length;
+        const passLen = profile.pass.length;
+        const total = emailLen + passLen;
+
+        if (step === 'typing') {
+          charIdx += 1;
+          if (charIdx <= emailLen) {
+            setLoginEmailPlaceholder(profile.email.slice(0, charIdx));
+            setLoginPasswordPlaceholder('');
+          } else {
+            setLoginEmailPlaceholder(profile.email);
+            setLoginPasswordPlaceholder(profile.pass.slice(0, charIdx - emailLen));
+          }
+
+          if (charIdx >= total) {
+            step = 'pausing';
+            loopTimerRef.current = setTimeout(tick, 2200); // pause to show complete placeholder
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 30);
+        } else if (step === 'pausing') {
+          step = 'deleting';
+          loopTimerRef.current = setTimeout(tick, 100);
+        } else if (step === 'deleting') {
+          charIdx -= 2;
+          if (charIdx > emailLen) {
+            setLoginPasswordPlaceholder(profile.pass.slice(0, charIdx - emailLen));
+          } else if (charIdx > 0) {
+            setLoginPasswordPlaceholder('');
+            setLoginEmailPlaceholder(profile.email.slice(0, charIdx));
+          } else {
+            setLoginEmailPlaceholder('');
+            setLoginPasswordPlaceholder('');
+            step = 'typing';
+            charIdx = 0;
+            profileIdx += 1;
+            loopTimerRef.current = setTimeout(tick, 350);
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 16);
+        }
+      } else {
+        // Signup loop
+        const profile = signupProfiles[profileIdx % signupProfiles.length];
+        const nameLen = profile.name.length;
+        const phoneLen = profile.phone.length;
+        const emailLen = profile.email.length;
+        const passLen = profile.pass.length;
+        const total = nameLen + phoneLen + emailLen + passLen;
+
+        if (step === 'typing') {
+          charIdx += 1;
+          if (charIdx <= nameLen) {
+            setSignupNamePlaceholder(profile.name.slice(0, charIdx));
+            setSignupPhonePlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+          } else if (charIdx <= nameLen + phoneLen) {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone.slice(0, charIdx - nameLen));
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+          } else if (charIdx <= nameLen + phoneLen + emailLen) {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone);
+            setSignupEmailPlaceholder(profile.email.slice(0, charIdx - nameLen - phoneLen));
+            setSignupPasswordPlaceholder('');
+          } else {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone);
+            setSignupEmailPlaceholder(profile.email);
+            setSignupPasswordPlaceholder(profile.pass.slice(0, charIdx - nameLen - phoneLen - emailLen));
+          }
+
+          if (charIdx >= total) {
+            step = 'pausing';
+            loopTimerRef.current = setTimeout(tick, 2400); // pause to show complete placeholder
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 22);
+        } else if (step === 'pausing') {
+          step = 'deleting';
+          loopTimerRef.current = setTimeout(tick, 100);
+        } else if (step === 'deleting') {
+          charIdx -= 3;
+          if (charIdx > nameLen + phoneLen + emailLen) {
+            setSignupPasswordPlaceholder(profile.pass.slice(0, charIdx - nameLen - phoneLen - emailLen));
+          } else if (charIdx > nameLen + phoneLen) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder(profile.email.slice(0, charIdx - nameLen - phoneLen));
+          } else if (charIdx > nameLen) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPhonePlaceholder(profile.phone.slice(0, charIdx - nameLen));
+          } else if (charIdx > 0) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPhonePlaceholder('');
+            setSignupNamePlaceholder(profile.name.slice(0, charIdx));
+          } else {
+            setSignupNamePlaceholder('');
+            setSignupPhonePlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+            step = 'typing';
+            charIdx = 0;
+            profileIdx += 1;
+            loopTimerRef.current = setTimeout(tick, 400);
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 14);
+        }
+      }
+    };
+
+    tick();
+  };
+
+  // Start loop on mount and whenever mode changes
+  useEffect(() => {
+    startPlaceholderLoop(mode);
+    return () => {
+      if (loopTimerRef.current) clearTimeout(loopTimerRef.current);
+    };
+  }, [mode]);
+
+  // Smooth tab slide and switching between Sign In and Create Account
   const switchMode = (newMode) => {
-    if (newMode === mode || isTransitioning) return;
+    if (newMode === mode) return;
     setError('');
-    setIsTransitioning(true);
+
+    // Clear current user inputs immediately
+    setLoginEmail('');
+    setLoginPassword('');
+    setFullName('');
+    setSignupEmail('');
+    setPhone('');
+    setSignupPassword('');
+
+    // Switch mode immediately so the yellow tab slides smoothly via CSS transition
+    setMode(newMode);
 
     const nextPath = newMode === 'signup' ? '/signup' : '/login';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
-
-    setTimeout(() => {
-      setMode(newMode);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 50);
-    }, 450); // Matches halfway point of the smooth fade/slide curve
   };
 
   const handleLoginSubmit = (e) => {
@@ -114,7 +281,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
       <header className="login-header">
         <a
           href="/"
-          className="login-brand-logo"
+          className="login-brand-logo pdp-header-brand"
           onClick={(e) => {
             e.preventDefault();
             if (onNavigate) onNavigate('home');
@@ -125,9 +292,11 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
           <img
             src="/item13Logo-trimmed.png"
             alt="Item13 Logo"
-            className="brand-logo-img"
+            className="brand-logo-img pdp-brand-logo"
           />
-          <span className="brand-logo-tagline">THE UNEXPECTED ESSENTIAL</span>
+          <span className="brand-logo-tagline">
+            THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+          </span>
         </a>
 
         <a
@@ -137,15 +306,17 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
             e.preventDefault();
             if (onNavigate) onNavigate('home');
           }}
+          title="Back to home"
+          aria-label="Back to home"
           style={{ textDecoration: 'none' }}
         >
-          ← Go Back
+          <ArrowLeft size={18} aria-hidden="true" />
         </a>
       </header>
 
       {/* Main Authentication Card */}
       <main className="login-stage">
-        <div className={`auth-card-shell ${isTransitioning ? 'auth-card-transitioning' : ''}`}>
+        <div className="auth-card-shell">
           <div className={`login-card-container ${isLogin ? 'mode-login' : 'mode-signup'}`}>
 
             {/* Left Visual Banner with dynamic content based on Mode */}
@@ -254,211 +425,81 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
               </div>
 
               <div className="auth-form-animated-body">
-                {isLogin ? (
-                  /* ================= LOGIN FORM ================= */
-                  <div className="form-pane-fade">
-                    <div className="login-form-header">
-                      <h1 className="login-form-title">Welcome Back</h1>
-                      <p className="login-form-subtitle">
-                        Enter your credentials to access your Item13 account
-                      </p>
-                    </div>
+                <div className="login-form-header auth-header-fade">
+                  <h1 className="login-form-title">
+                    {isLogin ? 'Welcome Back' : 'Create Account'}
+                  </h1>
+                  <p className="login-form-subtitle">
+                    {isLogin
+                      ? 'Enter your credentials to access your Item13 account'
+                      : 'Unlock perks, order tracking & member discounts'}
+                  </p>
+                </div>
 
-                    {error && (
-                      <div className="login-error-alert" role="alert">
-                        <span>{error}</span>
-                      </div>
-                    )}
-
-                    {/* Social Authentication */}
-                    <div className="login-social-buttons">
-                      <button
-                        type="button"
-                        className="btn-social"
-                        onClick={() => handleSocialAuth('Google')}
-                      >
-                        <img
-                          src="/googleLogo-trimmed.png"
-                          alt="Google logo"
-                          className="btn-social-img"
-                        />
-                        <span>Continue with Google</span>
-                      </button>
-                    </div>
-
-                    <div className="login-divider">
-                      <span>or sign in with email</span>
-                    </div>
-
-                    <form onSubmit={handleLoginSubmit} className="login-form">
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="login-email">
-                          Email Address
-                        </label>
-                        <div className="input-container">
-                          <Mail size={18} className="input-icon" />
-                          <input
-                            id="login-email"
-                            type="email"
-                            className="styled-input"
-                            placeholder="name@example.com"
-                            value={loginEmail}
-                            onChange={(e) => setLoginEmail(e.target.value)}
-                            required
-                            autoComplete="email"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="input-field-group">
-                        <div className="label-with-action">
-                          <label className="input-label" htmlFor="login-password">
-                            Password
-                          </label>
-                          <button
-                            type="button"
-                            className="forgot-password-link"
-                            onClick={() => alert("Password reset instructions have been sent.")}
-                          >
-                            Forgot password?
-                          </button>
-                        </div>
-                        <div className="input-container">
-                          <Lock size={18} className="input-icon" />
-                          <input
-                            id="login-password"
-                            type={showLoginPassword ? 'text' : 'password'}
-                            className="styled-input"
-                            placeholder="Enter your password"
-                            value={loginPassword}
-                            onChange={(e) => setLoginPassword(e.target.value)}
-                            required
-                            autoComplete="current-password"
-                          />
-                          <button
-                            type="button"
-                            className="password-toggle-btn"
-                            onClick={() => setShowLoginPassword(!showLoginPassword)}
-                            aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
-                          >
-                            {showLoginPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="remember-row">
-                        <label className="checkbox-container">
-                          <input
-                            type="checkbox"
-                            checked={rememberMe}
-                            onChange={(e) => setRememberMe(e.target.checked)}
-                          />
-                          <span className="checkbox-custom" />
-                          <span className="checkbox-label-text">Keep me logged in for 30 days</span>
-                        </label>
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="btn-login-submit"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <span className="btn-spinner-content">
-                            <span className="login-spinner" />
-                            Authenticating...
-                          </span>
-                        ) : (
-                          <>
-                            <span>Sign In to Item13</span>
-                            <ArrowRight size={18} />
-                          </>
-                        )}
-                      </button>
-                    </form>
-
-                    <div className="login-footer-callout">
-                      <span>Don't have an account yet?</span>
-                      <a
-                        href="/signup"
-                        className="signup-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          switchMode('signup');
-                        }}
-                      >
-                        Create Account
-                      </a>
-                    </div>
+                {error && (
+                  <div className="login-error-alert" role="alert">
+                    <span>{error}</span>
                   </div>
-                ) : (
-                  /* ================= SIGN UP FORM ================= */
-                  <div className="form-pane-fade">
-                    <div className="login-form-header">
-                      <h1 className="login-form-title">Create Account</h1>
-                      <p className="login-form-subtitle">
-                        Unlock perks, order tracking & member discounts
-                      </p>
-                    </div>
+                )}
 
-                    {error && (
-                      <div className="login-error-alert" role="alert">
-                        <span>{error}</span>
-                      </div>
-                    )}
+                {/* Social Authentication */}
+                <div className="login-social-buttons">
+                  <button
+                    type="button"
+                    className="btn-social"
+                    onClick={() => handleSocialAuth('Google')}
+                  >
+                    <img
+                      src="/googleLogo-trimmed.png"
+                      alt="Google logo"
+                      className="btn-social-img"
+                    />
+                    <span>{isLogin ? 'Continue with Google' : 'Sign up with Google'}</span>
+                  </button>
+                </div>
 
-                    {/* Social Quick Signup */}
-                    <div className="login-social-buttons">
-                      <button
-                        type="button"
-                        className="btn-social"
-                        onClick={() => handleSocialAuth('Google')}
-                      >
-                        <img
-                          src="/googleLogo-trimmed.png"
-                          alt="Google logo"
-                          className="btn-social-img"
-                        />
-                        <span>Sign up with Google</span>
-                      </button>
-                    </div>
+                <div className="login-divider">
+                  <span>{isLogin ? 'or sign in with email' : 'or register with email'}</span>
+                </div>
 
-                    <div className="login-divider">
-                      <span>or register with email</span>
-                    </div>
-
-                    <form onSubmit={handleSignupSubmit} className="login-form">
+                <form
+                  onSubmit={isLogin ? handleLoginSubmit : handleSignupSubmit}
+                  className="login-form"
+                >
+                  {/* Sliding & Shrinking Full Name and Phone Fields */}
+                  <div className="signup-extra-fields-collapsible">
+                    <div className="signup-extra-fields-inner">
                       <div className="signup-grid-fields">
-                        <div className="input-field-group">
-                          <label className="input-label" htmlFor="signup-name">
+                        <div className="input-field-group signup-field-name">
+                          <label className="input-label" htmlFor="auth-name">
                             Full Name
                           </label>
                           <div className="input-container">
                             <User size={18} className="input-icon" />
                             <input
-                              id="signup-name"
+                              id="auth-name"
                               type="text"
                               className="styled-input"
-                              placeholder="Alex Morgan"
+                              placeholder={signupNamePlaceholder}
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
-                              required
+                              required={!isLogin}
                               autoComplete="name"
                             />
                           </div>
                         </div>
 
-                        <div className="input-field-group">
-                          <label className="input-label" htmlFor="signup-phone">
+                        <div className="input-field-group signup-field-phone">
+                          <label className="input-label" htmlFor="auth-phone">
                             Phone (Optional)
                           </label>
                           <div className="input-container">
                             <Phone size={18} className="input-icon" />
                             <input
-                              id="signup-phone"
+                              id="auth-phone"
                               type="tel"
                               className="styled-input"
-                              placeholder="+233 00 000 0000"
+                              placeholder={signupPhonePlaceholder}
                               value={phone}
                               onChange={(e) => setPhone(e.target.value)}
                               autoComplete="tel"
@@ -466,101 +507,146 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                           </div>
                         </div>
                       </div>
-
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="signup-email">
-                          Email Address
-                        </label>
-                        <div className="input-container">
-                          <Mail size={18} className="input-icon" />
-                          <input
-                            id="signup-email"
-                            type="email"
-                            className="styled-input"
-                            placeholder="name@example.com"
-                            value={signupEmail}
-                            onChange={(e) => setSignupEmail(e.target.value)}
-                            required
-                            autoComplete="email"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="input-field-group">
-                        <label className="input-label" htmlFor="signup-password">
-                          Password
-                        </label>
-                        <div className="input-container">
-                          <Lock size={18} className="input-icon" />
-                          <input
-                            id="signup-password"
-                            type={showSignupPassword ? 'text' : 'password'}
-                            className="styled-input"
-                            placeholder="At least 6 characters"
-                            value={signupPassword}
-                            onChange={(e) => setSignupPassword(e.target.value)}
-                            required
-                            autoComplete="new-password"
-                          />
-                          <button
-                            type="button"
-                            className="password-toggle-btn"
-                            onClick={() => setShowSignupPassword(!showSignupPassword)}
-                            aria-label={showSignupPassword ? 'Hide password' : 'Show password'}
-                          >
-                            {showSignupPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="remember-row">
-                        <label className="checkbox-container">
-                          <input
-                            type="checkbox"
-                            checked={agreeTerms}
-                            onChange={(e) => setAgreeTerms(e.target.checked)}
-                          />
-                          <span className="checkbox-custom" />
-                          <span className="checkbox-label-text">
-                            I agree to Item13's Terms of Service & Privacy Policy
-                          </span>
-                        </label>
-                      </div>
-
-                      <button
-                        type="submit"
-                        className="btn-login-submit"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <span className="btn-spinner-content">
-                            <span className="login-spinner" />
-                            Creating Account...
-                          </span>
-                        ) : (
-                          <>
-                            <span>Join Item13 Club</span>
-                            <ArrowRight size={18} />
-                          </>
-                        )}
-                      </button>
-                    </form>
-
-                    <div className="login-footer-callout">
-                      <span>Already have an account?</span>
-                      <a
-                        href="/login"
-                        className="signup-link-btn"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          switchMode('login');
-                        }}
-                      >
-                        Sign In
-                      </a>
                     </div>
                   </div>
-                )}
+
+                  {/* Email Field */}
+                  <div className="input-field-group">
+                    <label className="input-label" htmlFor="auth-email">
+                      Email Address
+                    </label>
+                    <div className="input-container">
+                      <Mail size={18} className="input-icon" />
+                      <input
+                        id="auth-email"
+                        type="email"
+                        className="styled-input"
+                        placeholder={isLogin ? loginEmailPlaceholder : signupEmailPlaceholder}
+                        value={isLogin ? loginEmail : signupEmail}
+                        onChange={(e) => {
+                          if (isLogin) setLoginEmail(e.target.value);
+                          else setSignupEmail(e.target.value);
+                        }}
+                        required
+                        autoComplete="email"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="input-field-group">
+                    <div className="label-with-action">
+                      <label className="input-label" htmlFor="auth-password">
+                        Password
+                      </label>
+                      {isLogin && (
+                        <button
+                          type="button"
+                          className="forgot-password-link"
+                          onClick={() => alert("Password reset instructions have been sent.")}
+                        >
+                          Forgot password?
+                        </button>
+                      )}
+                    </div>
+                    <div className="input-container">
+                      <Lock size={18} className="input-icon" />
+                      <input
+                        id="auth-password"
+                        type={isLogin ? (showLoginPassword ? 'text' : 'password') : (showSignupPassword ? 'text' : 'password')}
+                        className="styled-input"
+                        placeholder={isLogin ? loginPasswordPlaceholder : signupPasswordPlaceholder}
+                        value={isLogin ? loginPassword : signupPassword}
+                        onChange={(e) => {
+                          if (isLogin) setLoginPassword(e.target.value);
+                          else setSignupPassword(e.target.value);
+                        }}
+                        required
+                        autoComplete={isLogin ? 'current-password' : 'new-password'}
+                      />
+                      <button
+                        type="button"
+                        className="password-toggle-btn"
+                        onClick={() => {
+                          if (isLogin) setShowLoginPassword(!showLoginPassword);
+                          else setShowSignupPassword(!showSignupPassword);
+                        }}
+                        aria-label={
+                          (isLogin ? showLoginPassword : showSignupPassword)
+                            ? 'Hide password'
+                            : 'Show password'
+                        }
+                      >
+                        {(isLogin ? showLoginPassword : showSignupPassword) ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Remember Me / Terms & Conditions */}
+                  {isLogin ? (
+                    <div className="remember-row">
+                      <label className="checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                        />
+                        <span className="checkbox-custom" />
+                        <span className="checkbox-label-text">Keep me logged in for 30 days</span>
+                      </label>
+                    </div>
+                  ) : (
+                    <div className="remember-row">
+                      <label className="checkbox-container">
+                        <input
+                          type="checkbox"
+                          checked={agreeTerms}
+                          onChange={(e) => setAgreeTerms(e.target.checked)}
+                        />
+                        <span className="checkbox-custom" />
+                        <span className="checkbox-label-text">
+                          I agree to Item13's Terms of Service & Privacy Policy
+                        </span>
+                      </label>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="btn-login-submit"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <span className="btn-spinner-content">
+                        <span className="login-spinner" />
+                        {isLogin ? 'Authenticating...' : 'Creating Account...'}
+                      </span>
+                    ) : (
+                      <>
+                        <span>{isLogin ? 'Sign In to Item13' : 'Join Item13 Club'}</span>
+                        <ArrowRight size={18} />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <div className="login-footer-callout">
+                  <span>{isLogin ? "Don't have an account yet?" : 'Already have an account?'}</span>
+                  <a
+                    href={isLogin ? '/signup' : '/login'}
+                    className="signup-link-btn"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      switchMode(isLogin ? 'signup' : 'login');
+                    }}
+                  >
+                    {isLogin ? 'Create Account' : 'Sign In'}
+                  </a>
+                </div>
               </div>
             </div>
 

@@ -74,18 +74,22 @@
 }
 
 .login-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-white);
-  padding: 10px 20px;
-  border-radius: var(--radius-full);
-  font-size: 14px;
-  font-weight: 600;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
 .login-back-btn:hover {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--gold);
+  border-color: rgba(244, 182, 39, 0.35);
   transform: translateX(-2px);
 }
 
@@ -519,7 +523,40 @@
   }
 
   .login-header {
-    padding: 24px 24px 16px 24px;
+    padding: 16px 20px 14px 20px;
+  }
+
+  .login-brand-logo.pdp-header-brand {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .login-brand-logo.pdp-header-brand .brand-logo-img {
+    height: 32px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+  }
+
+  .login-brand-logo.pdp-header-brand .brand-logo-tagline {
+    display: inline-block !important;
+    font-size: 8px !important;
+    letter-spacing: 0.8px !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+    padding-left: 6px !important;
+    flex-shrink: 1 !important;
+  }
+
+  .login-brand-logo.pdp-header-brand .brand-logo-tagline .brand-tagline-break {
+    display: inline !important;
+  }
+
+  .login-brand-logo.pdp-header-brand .brand-logo-tagline .brand-tagline-space {
+    display: none !important;
   }
 }
 
@@ -747,12 +784,13 @@
 }
 
 .auth-card-transitioning {
-  opacity: 0.85;
-  transform: scale(0.985) translateY(4px);
+  /* Removed scale/fade card transition so the card stays steady while tab and inputs animate */
+  opacity: 1;
+  transform: none;
 }
 
 .login-card-container {
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Kept steady */
 }
 
 .auth-tab-switcher {
@@ -779,7 +817,7 @@
   padding: 8px 16px;
   border-radius: var(--radius-full);
   text-align: center;
-  transition: color 0.4s ease;
+  transition: color 0.3s ease;
 }
 
 .auth-tab-btn.active {
@@ -794,7 +832,7 @@
   background: var(--gold);
   border-radius: var(--radius-full);
   box-shadow: 0 4px 15px rgba(244, 182, 39, 0.35);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
 }
 
@@ -828,7 +866,8 @@
 
 .visual-pane-fade,
 .form-pane-fade {
-  animation: authPaneSlideFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Immediate clear appearance without blurring/sliding the whole card */
+  animation: none;
 }
 
 @keyframes authPaneSlideFade {
@@ -850,10 +889,67 @@
   border-color: rgba(244, 182, 39, 0.5) !important;
 }
 
+/* ==========================================================================
+   ANIMATED SIGNUP EXTRA FIELDS (Full Name & Phone)
+   Slide Full Name right, Phone left, then collapse height into Sign In,
+   and reverse on return to Create Account.
+   ========================================================================== */
+.signup-extra-fields-collapsible {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease,
+              margin-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 0px;
+}
+
+.signup-extra-fields-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
 .signup-grid-fields {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: 12px;
+  padding-bottom: 4px;
+}
+
+.signup-field-name,
+.signup-field-phone {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.35s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* When in Sign In mode, slide Full Name right, Phone left, and collapse height */
+.mode-login .signup-extra-fields-collapsible {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-bottom: 0 !important;
+  pointer-events: none;
+}
+
+.mode-login .signup-field-name {
+  transform: translateX(80px);
+  opacity: 0;
+}
+
+.mode-login .signup-field-phone {
+  transform: translateX(-80px);
+  opacity: 0;
+}
+
+/* Remember me and Terms of service rows transition smoothly */
+.auth-mode-terms-row {
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+.auth-header-fade {
+  transition: opacity 0.25s ease;
 }
 
 @media (max-width: 640px) {

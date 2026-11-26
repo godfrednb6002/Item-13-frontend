@@ -286,6 +286,23 @@ html.light-theme .hero-left {
 
 html.light-theme .hero-title {
   color: #111418 !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+html.light-theme .hero-title .title-accent {
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+
+html.light-theme .btn-buy-now {
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 10px 28px -4px rgba(244, 182, 39, 0.45) !important;
+}
+
+html.light-theme .btn-buy-now:hover {
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 14px 34px -4px rgba(244, 182, 39, 0.6) !important;
 }
 
 html.light-theme .hero-subtitle-top {
@@ -865,6 +882,13 @@ html.light-theme .login-screen-wrapper {
   color: #111418;
 }
 
+html.light-theme .login-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
 html.light-theme .login-card-container {
   background: #ffffff;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.09);
@@ -1155,6 +1179,76 @@ html.light-theme .order-tracker-timeline {
   padding: 16px;
   border-radius: 14px;
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html.light-theme .order-status-tabs-bar {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .order-tool-btn {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #64748b !important;
+}
+
+html.light-theme .order-tool-btn:hover,
+html.light-theme .order-tool-btn.active {
+  background: rgba(244, 182, 39, 0.15) !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .order-sort-menu {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.light-theme .sort-option-btn {
+  color: #111418 !important;
+}
+
+html.light-theme .sort-option-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light-theme .sort-option-btn.selected {
+  background: rgba(244, 182, 39, 0.15) !important;
+  color: #8c6307 !important;
+}
+
+html.light-theme .order-search-expandable {
+  background: #ffffff !important;
+  border-color: rgba(244, 182, 39, 0.5) !important;
+}
+
+html.light-theme .order-search-input {
+  color: #111418 !important;
+}
+
+html.light-theme .order-status-tab-btn {
+  color: #64748b !important;
+}
+
+html.light-theme .order-status-tab-btn:hover {
+  color: #111418 !important;
+}
+
+html.light-theme .order-status-tab-btn.active {
+  background: #ffffff !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  color: #8c6307 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .order-status-empty {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .order-status-empty h4 {
+  color: #111418 !important;
 }
 
 html.light-theme .track-step {
@@ -1666,6 +1760,20 @@ html.light-theme .contact-item {
 html.light-theme .footer-newsletter-box {
   background: #f8fafc !important;
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .newsletter-collapse-header:hover .newsletter-title {
+  color: #8c6307 !important;
+}
+
+html.light-theme .newsletter-toggle-icon {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-toggle-icon.open {
+  background: rgba(244, 182, 39, 0.25) !important;
+  color: #8c6307 !important;
 }
 
 html.light-theme .newsletter-title {

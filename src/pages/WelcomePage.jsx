@@ -11,6 +11,7 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   LogOut,
   ArrowRight,
   Check,
@@ -27,6 +28,8 @@ import {
   PhoneCall,
   ExternalLink,
   X,
+  Search,
+  ArrowUpDown,
 } from 'lucide-react';
 import { PRODUCTS } from '../features/catalog/productsData';
 import { getSavedFavorites, toggleFavorite } from '../features/catalog/favoritesStorage';
@@ -56,7 +59,14 @@ export default function WelcomePage({
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [activeStatPopup, setActiveStatPopup] = useState(null);
+  const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
+  const [orderStatusTab, setOrderStatusTab] = useState('all');
+  const [orderSearchQuery, setOrderSearchQuery] = useState('');
+  const [isOrderSearchOpen, setIsOrderSearchOpen] = useState(false);
+  const [orderSortBy, setOrderSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-high' | 'price-low'
+  const [isOrderSortOpen, setIsOrderSortOpen] = useState(false);
   const statPopupRef = useRef(null);
+  const orderSortMenuRef = useRef(null);
 
   if (initialTab !== prevInitialTab) {
     setPrevInitialTab(initialTab);
@@ -771,13 +781,147 @@ export default function WelcomePage({
                   {/* 3. ORDERS TAB */}
                   {activeTab === 'orders' && (
                     <div className="welcome-tab-pane">
-                      <div className="pane-header">
-                        <h2>Orders &amp; Tracking</h2>
-                        <p>Track live deliveries and view past popcorn cravings</p>
+                      <div className="pane-header pane-header-with-tools">
+                        <div className="pane-header-titles">
+                          <h2>Orders &amp; Tracking</h2>
+                          <p>Track live deliveries and view past popcorn cravings</p>
+                        </div>
+
+                        {/* Search and Sort Toolbar aligned on same row as heading */}
+                        <div className="order-tools-cluster">
+                          <button
+                            type="button"
+                            className={`order-tool-btn ${isOrderSearchOpen || orderSearchQuery ? 'active' : ''}`}
+                            onClick={() => setIsOrderSearchOpen((prev) => !prev)}
+                            aria-label="Search orders"
+                            title="Search orders"
+                          >
+                            <Search size={15} />
+                          </button>
+
+                          <div className="order-sort-wrap" ref={orderSortMenuRef}>
+                            <button
+                              type="button"
+                              className={`order-tool-btn ${isOrderSortOpen ? 'active' : ''}`}
+                              onClick={() => setIsOrderSortOpen((prev) => !prev)}
+                              aria-label="Sort orders"
+                              title="Sort orders"
+                            >
+                              <ArrowUpDown size={15} />
+                            </button>
+
+                            {isOrderSortOpen && (
+                              <div className="order-sort-menu" role="menu">
+                                <span className="sort-menu-header">Sort orders by</span>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'newest' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('newest'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Newest first</span>
+                                  {orderSortBy === 'newest' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'oldest' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('oldest'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Oldest first</span>
+                                  {orderSortBy === 'oldest' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'price-high' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('price-high'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Price: High to Low</span>
+                                  {orderSortBy === 'price-high' && <Check size={13} />}
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`sort-option-btn ${orderSortBy === 'price-low' ? 'selected' : ''}`}
+                                  onClick={() => { setOrderSortBy('price-low'); setIsOrderSortOpen(false); }}
+                                >
+                                  <span>Price: Low to High</span>
+                                  {orderSortBy === 'price-low' && <Check size={13} />}
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Expandable Order Search Input */}
+                      {isOrderSearchOpen && (
+                        <div className="order-search-expandable">
+                          <Search size={15} className="order-search-icon" />
+                          <input
+                            type="search"
+                            value={orderSearchQuery}
+                            onChange={(e) => setOrderSearchQuery(e.target.value)}
+                            placeholder="Search by order ID or item..."
+                            autoFocus
+                            className="order-search-input"
+                          />
+                          {orderSearchQuery && (
+                            <button
+                              type="button"
+                              className="order-search-clear"
+                              onClick={() => setOrderSearchQuery('')}
+                              aria-label="Clear search"
+                            >
+                              <X size={14} />
+                            </button>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Order Status Tabs Bar */}
+                      <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'all'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('all')}
+                        >
+                          All
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'in-transit'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('in-transit')}
+                        >
+                          <span className="status-tab-dot in-transit" />
+                          In Transit
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'delivered'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('delivered')}
+                        >
+                          <span className="status-tab-dot delivered" />
+                          Delivered
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'canceled'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('canceled')}
+                        >
+                          <span className="status-tab-dot canceled" />
+                          Canceled
+                        </button>
                       </div>
 
                       <div className="order-history-list">
                         {/* Active Order Card */}
+                        {(orderStatusTab === 'all' || orderStatusTab === 'in-transit') && (
                         <div
                           className="order-card active-order"
                           style={{ cursor: 'pointer' }}
@@ -785,16 +929,15 @@ export default function WelcomePage({
                           title="Click to view live order tracking"
                         >
                           <div className="order-card-header">
-                            <div>
+                            <div className="order-header-primary">
                               <span className="order-badge in-progress">In Transit</span>
                               <span className="order-id">#ITM-8921</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div className="order-header-actions">
                               <span className="order-date">Today, 4:15 PM</span>
                               <button
                                 type="button"
                                 className="btn-track-order"
-                                style={{ padding: '4px 12px', fontSize: '12px' }}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTrackOrder('ITM-8921');
@@ -812,9 +955,20 @@ export default function WelcomePage({
                               <span className="item-name">Classic Popcorn &amp; Soda Duo (Large Tub, Extra Butter)</span>
                               <span className="item-price">GH₵ 51.00</span>
                             </div>
+                            <button
+                              type="button"
+                              className="btn-toggle-timeline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsTimelineExpanded((prev) => !prev);
+                              }}
+                            >
+                              <span>{isTimelineExpanded ? 'Hide progress steps' : 'View progress steps'}</span>
+                              <ChevronDown size={14} className={`timeline-toggle-chevron ${isTimelineExpanded ? 'open' : ''}`} />
+                            </button>
                           </div>
 
-                          <div className="order-tracker-timeline">
+                          <div className={`order-tracker-timeline ${isTimelineExpanded ? 'is-visible' : 'is-collapsed-mobile'}`}>
                             <div className="track-step done">
                               <div className="step-bullet"><Check size={12} /></div>
                               <span>Order Placed</span>
@@ -833,8 +987,10 @@ export default function WelcomePage({
                             </div>
                           </div>
                         </div>
+                        )}
 
                         {/* Past Order Card */}
+                        {(orderStatusTab === 'all' || orderStatusTab === 'delivered') && (
                         <div
                           className="order-card"
                           style={{ cursor: 'pointer' }}
@@ -842,16 +998,15 @@ export default function WelcomePage({
                           title="Click to view order delivery details"
                         >
                           <div className="order-card-header">
-                            <div>
+                            <div className="order-header-primary">
                               <span className="order-badge completed">Delivered</span>
                               <span className="order-id">#ITM-8104</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div className="order-header-actions">
                               <span className="order-date">October 24, 2026</span>
                               <button
                                 type="button"
-                                className="btn-track-order"
-                                style={{ padding: '4px 12px', fontSize: '12px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.14)', color: '#ffffff' }}
+                                className="btn-track-order btn-track-delivered"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTrackOrder('ITM-8104');
@@ -881,6 +1036,16 @@ export default function WelcomePage({
                             <span className="order-total-label">Total: <strong>GH₵ 90.00</strong></span>
                           </div>
                         </div>
+                        )}
+
+                        {/* Empty state for Canceled */}
+                        {orderStatusTab === 'canceled' && (
+                          <div className="order-status-empty">
+                            <Package size={36} className="empty-icon" />
+                            <h4>No Canceled Orders</h4>
+                            <p>You do not have any canceled orders at this time.</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

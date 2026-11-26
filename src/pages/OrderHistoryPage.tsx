@@ -171,6 +171,8 @@ function OrderCard({
 
 export default function OrderHistoryPage({
   orders = mockOrders,
+  user,
+  onNavigate,
   onBack,
   onViewOrder,
   onReorder,
@@ -179,6 +181,8 @@ export default function OrderHistoryPage({
   onExplore,
 }: {
   orders?: HistoryOrder[];
+  user?: any;
+  onNavigate?: (page: string) => void;
   onBack: () => void;
   onViewOrder: (id: string) => void;
   onReorder: (order: HistoryOrder) => void;
@@ -195,6 +199,8 @@ export default function OrderHistoryPage({
   const [reorderNotice, setReorderNotice] = useState('');
   const [receiptNotice, setReceiptNotice] = useState('');
   const [reorderCount, setReorderCount] = useState(0);
+  const [guestOrderId, setGuestOrderId] = useState('');
+  const [guestError, setGuestError] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -255,30 +261,143 @@ export default function OrderHistoryPage({
     }, 250);
   };
 
+  const handleGuestTrack = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = guestOrderId.trim();
+    if (!trimmed) {
+      setGuestError('Please enter a valid Order ID (e.g. #ITM-8921 or ITM-8921)');
+      return;
+    }
+    setGuestError('');
+    onViewOrder(trimmed);
+  };
+
   return (
     <main className="history-page">
       <header className="history-topbar">
-        <button className="history-back-link" type="button" onClick={onBack}>
-          <ArrowLeft size={17} aria-hidden="true" /> Storefront
-        </button>
-        <a className="history-brand" href="/" aria-label="Item13 home">
-          <img src="/item13Logo-trimmed.png" alt="" />
-          <span>ITEM13 <small>YOUR ACCOUNT</small></span>
+        <a
+          className="history-brand pdp-header-brand"
+          href="/"
+          aria-label="Item13 home"
+          onClick={(e) => {
+            e.preventDefault();
+            onNavigate ? onNavigate('home') : onBack();
+          }}
+          title="Go to Homepage"
+        >
+          <img src="/item13Logo-trimmed.png" alt="Item13 Logo" className="brand-logo-img pdp-brand-logo" />
+          <span className="brand-logo-tagline">
+            THE UNEXPECTED<span className="brand-tagline-space"> </span><br className="brand-tagline-break" />ESSENTIAL
+          </span>
         </a>
-        <button className="history-cart-link" type="button" onClick={onViewCart} aria-label={`Open cart, ${reorderCount} recently added`}>
-          <ShoppingBag size={18} aria-hidden="true" /><span>Bag</span>
-        </button>
+        <div className="history-topbar-actions">
+          <button className="history-back-link history-back-circle" type="button" onClick={onBack} title="Back to Store" aria-label="Back to Store">
+            <ArrowLeft size={18} aria-hidden="true" />
+          </button>
+        </div>
       </header>
 
+      {/* Breadcrumbs Row matching Welcome / PDP */}
+      <div className="pdp-breadcrumbs-bar">
+        <div className="pdp-breadcrumbs-inner">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate ? onNavigate('home') : onBack();
+            }}
+            className="crumb-link"
+            style={{ textDecoration: 'none' }}
+          >
+            Home
+          </a>
+          <span className="crumb-sep">/</span>
+          {user ? (
+            <>
+              <a
+                href="/dashboard"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate && onNavigate('dashboard');
+                }}
+                className="crumb-link"
+                style={{ textDecoration: 'none' }}
+              >
+                Dashboard
+              </a>
+              <span className="crumb-sep">/</span>
+            </>
+          ) : null}
+          <span className="crumb-current">Orders</span>
+        </div>
+      </div>
+
       <div className="history-layout">
-        <section className="history-heading" aria-labelledby="history-title">
-          <div>
-            <span className="history-eyebrow">YOUR ITEM13 ACCOUNT</span>
-            <h1 id="history-title">Order History</h1>
-            <p>Every good snack run, all in one place.</p>
+        {!user ? (
+          /* Guest View: Enter Order ID to track */
+          <div className="guest-order-lookup-card">
+            <div className="guest-lookup-header">
+              <div className="guest-lookup-icon-wrap">
+                <Package size={28} />
+              </div>
+              <span className="guest-lookup-eyebrow">ORDER LOOKUP</span>
+              <h1>Track Your Order</h1>
+              <p>
+                Enter your Order ID below to track your delivery status and live progress.
+              </p>
+            </div>
+
+            <form onSubmit={handleGuestTrack} className="guest-lookup-form">
+              <div className="guest-input-wrap">
+                <Search size={18} className="guest-input-icon" />
+                <input
+                  type="text"
+                  value={guestOrderId}
+                  onChange={(e) => {
+                    setGuestOrderId(e.target.value);
+                    if (guestError) setGuestError('');
+                  }}
+                  placeholder="e.g. #ITM-8921 or ITM-8104"
+                  className="guest-order-input"
+                  autoFocus
+                />
+              </div>
+
+              {guestError && <p className="guest-lookup-error">{guestError}</p>}
+
+              <button type="submit" className="btn-guest-track">
+                <Truck size={17} />
+                <span>Track Order</span>
+                <ArrowRight size={16} />
+              </button>
+            </form>
+
+            <div className="guest-lookup-footer">
+              <p>
+                Have an Item13 account?{' '}
+                <a
+                  href="/login"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('login');
+                  }}
+                >
+                  Log in to see all your orders
+                </a>
+              </p>
+            </div>
           </div>
-          <span className="history-count">{orders.length} orders</span>
-        </section>
+        ) : (
+          /* Logged In View: Full Order History */
+          <>
+            <section className="history-heading" aria-labelledby="history-title">
+              <div>
+                <span className="history-eyebrow">YOUR ITEM13 ACCOUNT</span>
+                <h1 id="history-title">Order History</h1>
+                <p>Every good snack run, all in one place.</p>
+              </div>
+              <span className="history-count">{orders.length} orders</span>
+            </section>
 
         <section className="history-controls" aria-label="Search and filter orders">
           <label className="history-search">
@@ -377,7 +496,9 @@ export default function OrderHistoryPage({
             </button>
           </section>
         )}
-        <p className="history-footer-note"><Truck size={14} aria-hidden="true" /> Need a hand with an order? <a href="mailto:support@item13.com">Our team is here to help.</a></p>
+            <p className="history-footer-note"><Truck size={14} aria-hidden="true" /> Need a hand with an order? <a href="mailto:support@item13.com">Our team is here to help.</a></p>
+          </>
+        )}
       </div>
 
       {(reorderNotice || receiptNotice) && (

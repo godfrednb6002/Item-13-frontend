@@ -34,8 +34,50 @@ export default function LandingShowcasePage({
 }) {
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isAuthBtnShrunk, setIsAuthBtnShrunk] = useState(false);
+  const [isThemeExpanded, setIsThemeExpanded] = useState(false);
+  const [isMenuExpanded, setIsMenuExpanded] = useState(false);
   const navMenuRef = useRef(null);
   const notifRef = useRef(null);
+
+  // Sequential button animations:
+  // 1. At 5s: Login/Sign Up button shrinks to profile icon
+  // 2. At 5.4s: Theme icon expands to show "Theme", stays 2.4s, then smoothly shrinks
+  // 3. At 8.5s: Hamburger menu icon expands to show "More", stays 2.4s, then smoothly shrinks
+  useEffect(() => {
+    // 5s: shrink auth button
+    const authTimer = setTimeout(() => {
+      setIsAuthBtnShrunk(true);
+    }, 5000);
+
+    // 5.4s: expand theme button
+    const themeExpandTimer = setTimeout(() => {
+      setIsThemeExpanded(true);
+    }, 5400);
+
+    // 7.8s: collapse theme button
+    const themeCollapseTimer = setTimeout(() => {
+      setIsThemeExpanded(false);
+    }, 7800);
+
+    // 8.5s: expand hamburger menu button
+    const menuExpandTimer = setTimeout(() => {
+      setIsMenuExpanded(true);
+    }, 8500);
+
+    // 10.9s: collapse hamburger menu button
+    const menuCollapseTimer = setTimeout(() => {
+      setIsMenuExpanded(false);
+    }, 10900);
+
+    return () => {
+      clearTimeout(authTimer);
+      clearTimeout(themeExpandTimer);
+      clearTimeout(themeCollapseTimer);
+      clearTimeout(menuExpandTimer);
+      clearTimeout(menuCollapseTimer);
+    };
+  }, []);
 
   // Dynamic Typewriter effect for Hero Heading
   const heroPhrases = [
@@ -223,9 +265,22 @@ export default function LandingShowcasePage({
           </div>
 
           <div className="nav-buttons-group">
-            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            {/* Top row: Auth button, Theme, Notifications, and Hamburger Menu */}
             <div className="nav-tools-row">
-              <ThemeToggle className="nav-theme-toggle" />
+              {!user ? (
+                <button
+                  type="button"
+                  className={`nav-auth-pill-btn ${isAuthBtnShrunk ? 'shrunk' : ''}`}
+                  onClick={() => onNavigate && onNavigate('login')}
+                  title="Sign In or Create Account"
+                  aria-label="Sign In or Create Account"
+                >
+                  <User size={16} className="nav-auth-icon" />
+                  <span className="nav-auth-label">Login / Sign Up</span>
+                </button>
+              ) : null}
+
+              <ThemeToggle className={`nav-theme-toggle ${isThemeExpanded ? 'expanded' : ''}`} customLabel="Theme" />
 
               {/* Notification Button - only shown when logged in */}
               {user && (
@@ -263,7 +318,7 @@ export default function LandingShowcasePage({
               <div ref={navMenuRef} style={{ position: 'relative' }}>
                 <button
                   type="button"
-                  className={`nav-icon-btn ${isNavMenuOpen ? 'is-active' : ''}`}
+                  className={`nav-icon-btn nav-menu-expand-btn ${isMenuExpanded ? 'expanded' : ''} ${isNavMenuOpen ? 'is-active' : ''}`}
                   onClick={() => {
                     setIsNavMenuOpen(!isNavMenuOpen);
                     setShowNotifications(false);
@@ -271,7 +326,10 @@ export default function LandingShowcasePage({
                   aria-label={isNavMenuOpen ? 'Close Menu' : 'Open Navigation Menu'}
                   title={isNavMenuOpen ? 'Close Menu' : 'Account & Navigation Menu'}
                 >
-                  {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  <span className="nav-btn-icon-wrap">
+                    {isNavMenuOpen ? <X size={18} /> : <Menu size={18} />}
+                  </span>
+                  <span className="nav-btn-animated-label">More</span>
                 </button>
 
                 {/* Hamburger Modal Popover */}
@@ -315,12 +373,12 @@ export default function LandingShowcasePage({
                     </button>
 
                     <a
-                      href="/dashboard/orders"
+                      href={user ? "/dashboard/orders" : "/orders"}
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
                         setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard/orders');
+                        if (onNavigate) onNavigate(user ? 'dashboard/orders' : 'orders');
                       }}
                     >
                       <Package size={16} />

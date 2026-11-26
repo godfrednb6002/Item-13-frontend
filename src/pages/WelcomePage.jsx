@@ -11,6 +11,7 @@ import {
   Heart,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   LogOut,
   ArrowRight,
   Check,
@@ -56,6 +57,7 @@ export default function WelcomePage({
   const [prevInitialTab, setPrevInitialTab] = useState(initialTab);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [activeStatPopup, setActiveStatPopup] = useState(null);
+  const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
   const statPopupRef = useRef(null);
 
   if (initialTab !== prevInitialTab) {
@@ -811,9 +813,20 @@ export default function WelcomePage({
                               <span className="item-name">Classic Popcorn &amp; Soda Duo (Large Tub, Extra Butter)</span>
                               <span className="item-price">GH₵ 51.00</span>
                             </div>
+                            <button
+                              type="button"
+                              className="btn-toggle-timeline"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setIsTimelineExpanded((prev) => !prev);
+                              }}
+                            >
+                              <span>{isTimelineExpanded ? 'Hide progress steps' : 'View progress steps'}</span>
+                              <ChevronDown size={14} className={`timeline-toggle-chevron ${isTimelineExpanded ? 'open' : ''}`} />
+                            </button>
                           </div>
 
-                          <div className="order-tracker-timeline">
+                          <div className={`order-tracker-timeline ${isTimelineExpanded ? 'is-visible' : 'is-collapsed-mobile'}`}>
                             <div className="track-step done">
                               <div className="step-bullet"><Check size={12} /></div>
                               <span>Order Placed</span>

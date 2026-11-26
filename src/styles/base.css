@@ -59,6 +59,84 @@ a {
   mix-blend-mode: multiply;
 }
 
+/* ==========================================================================
+   GLOBAL BRAND LOGO INTERACTION & ANIMATION (All Pages)
+   Matches the landing showcase header logo hover: rotate(-3deg) and scale(1.06)
+   ========================================================================== */
+.brand-logo,
+.pdp-header-brand,
+.history-brand,
+.login-brand-logo,
+.checkout-brand,
+.momo-brand,
+.order-brand,
+.addresses-brand,
+.profile-brand,
+.about-brand-logo,
+.contact-brand-logo,
+.delivery-brand-logo,
+.footer-brand-logo,
+.sidebar-brand {
+  transition: transform 0.2s ease;
+  user-select: none;
+}
+
+.brand-logo:hover,
+.pdp-header-brand:hover,
+.history-brand:hover,
+.login-brand-logo:hover,
+.checkout-brand:hover,
+.momo-brand:hover,
+.order-brand:hover,
+.addresses-brand:hover,
+.profile-brand:hover,
+.about-brand-logo:hover,
+.contact-brand-logo:hover,
+.delivery-brand-logo:hover,
+.footer-brand-logo:hover,
+.sidebar-brand:hover {
+  transform: scale(1.02);
+}
+
+.brand-logo img,
+.brand-logo-img,
+.pdp-brand-logo,
+.pdp-header-brand img,
+.history-brand img,
+.login-brand-logo img,
+.checkout-brand img,
+.momo-brand img,
+.order-brand img,
+.addresses-brand img,
+.profile-brand img,
+.about-brand-logo img,
+.contact-brand-logo img,
+.delivery-brand-logo img,
+.footer-brand-logo img,
+.sidebar-brand img {
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-logo:hover img,
+.brand-logo:hover .brand-logo-img,
+.pdp-header-brand:hover img,
+.pdp-header-brand:hover .pdp-brand-logo,
+.history-brand:hover img,
+.login-brand-logo:hover img,
+.checkout-brand:hover img,
+.momo-brand:hover img,
+.order-brand:hover img,
+.addresses-brand:hover img,
+.profile-brand:hover img,
+.about-brand-logo:hover img,
+.contact-brand-logo:hover img,
+.delivery-brand-logo:hover img,
+.footer-brand-logo:hover img,
+.sidebar-brand:hover img {
+  transform: rotate(-3deg) scale(1.06);
+}
+
 /* Hide scrollbars across mobile view while maintaining smooth touch scrolling */
 @media (max-width: 768px) {
   html,

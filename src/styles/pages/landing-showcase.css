@@ -187,7 +187,7 @@ html.light-theme .inspo-top-navbar {
    (Login / Sign Up, Theme Toggle, Cart / Bag, Notifications, Hamburger Menu)
    ========================================================================== */
 .nav-auth-pill-btn {
-  display: inline-flex;
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 7px;
@@ -215,6 +215,12 @@ html.light-theme .inspo-top-navbar {
               box-shadow 0.25s ease;
   white-space: nowrap;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .nav-auth-pill-btn {
+    display: inline-flex;
+  }
 }
 
 .nav-auth-icon {

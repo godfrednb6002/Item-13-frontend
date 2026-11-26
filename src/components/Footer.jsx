@@ -9,12 +9,14 @@ import {
   ShieldCheck,
   Truck,
   Flame,
-  Sparkles
+  Sparkles,
+  ChevronDown
 } from 'lucide-react';
 
 export default function Footer({ onNavigate, onToast }) {
   const currentYear = new Date().getFullYear();
   const [activeMobilePerk, setActiveMobilePerk] = useState(null);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
 
   const perksData = [
     {
@@ -382,22 +384,42 @@ export default function Footer({ onNavigate, onToast }) {
               </div>
             </div>
 
-            <div className="footer-newsletter-box">
-              <span className="newsletter-title">Weekend Drops &amp; Discounts</span>
-              <p className="newsletter-desc">
-                Subscribe for exclusive discounts &amp; free tub upgrade alerts.
-              </p>
-              <form onSubmit={handleSubscribe} className="footer-newsletter-form">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  required
-                  className="newsletter-input"
-                />
-                <button type="submit" className="newsletter-btn" aria-label="Subscribe">
-                  <ArrowRight size={16} />
-                </button>
-              </form>
+            <div className={`footer-newsletter-box ${isNewsletterOpen ? 'is-expanded' : 'is-collapsed'}`}>
+              <button
+                type="button"
+                className="newsletter-collapse-header"
+                onClick={() => setIsNewsletterOpen((prev) => !prev)}
+                aria-expanded={isNewsletterOpen}
+                aria-controls="footer-newsletter-content"
+              >
+                <span className="newsletter-title">Weekend Drops &amp; Discounts</span>
+                <span className={`newsletter-toggle-icon ${isNewsletterOpen ? 'open' : ''}`}>
+                  <ChevronDown size={16} />
+                </span>
+              </button>
+
+              <div
+                id="footer-newsletter-content"
+                className="newsletter-collapsible-body"
+                style={{
+                  display: isNewsletterOpen ? 'block' : 'none'
+                }}
+              >
+                <p className="newsletter-desc">
+                  Subscribe for exclusive discounts &amp; free tub upgrade alerts.
+                </p>
+                <form onSubmit={handleSubscribe} className="footer-newsletter-form">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    required
+                    className="newsletter-input"
+                  />
+                  <button type="submit" className="newsletter-btn" aria-label="Subscribe">
+                    <ArrowRight size={16} />
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

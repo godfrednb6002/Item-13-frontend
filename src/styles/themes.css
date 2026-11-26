@@ -1685,6 +1685,20 @@ html.light-theme .footer-newsletter-box {
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
 }
 
+html.light-theme .newsletter-collapse-header:hover .newsletter-title {
+  color: #8c6307 !important;
+}
+
+html.light-theme .newsletter-toggle-icon {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: #111418 !important;
+}
+
+html.light-theme .newsletter-toggle-icon.open {
+  background: rgba(244, 182, 39, 0.25) !important;
+  color: #8c6307 !important;
+}
+
 html.light-theme .newsletter-title {
   color: #111418 !important;
 }

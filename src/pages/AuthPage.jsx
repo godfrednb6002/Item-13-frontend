@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowLeft, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
 
 export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSuccess }) {
   const [mode, setMode] = useState(initialMode); // 'login' | 'signup'
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     setMode(initialMode);
@@ -26,24 +25,76 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   // Shared States
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const typeTimerRef = useRef(null);
 
-  // Slow, elegant modern transition between Login and Sign Up with URL synchronization
+  // Clear type timer on unmount
+  useEffect(() => {
+    return () => {
+      if (typeTimerRef.current) clearInterval(typeTimerRef.current);
+    };
+  }, []);
+
+  // Smooth tab slide and typing effect when switching between Sign In and Create Account
   const switchMode = (newMode) => {
-    if (newMode === mode || isTransitioning) return;
+    if (newMode === mode) return;
     setError('');
-    setIsTransitioning(true);
+
+    // Cancel any ongoing typing timer
+    if (typeTimerRef.current) clearInterval(typeTimerRef.current);
+
+    // Clear current form inputs immediately
+    setLoginEmail('');
+    setLoginPassword('');
+    setFullName('');
+    setSignupEmail('');
+    setPhone('');
+    setSignupPassword('');
+
+    // Switch mode immediately so the yellow tab slides smoothly via CSS transition
+    setMode(newMode);
 
     const nextPath = newMode === 'signup' ? '/signup' : '/login';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
 
-    setTimeout(() => {
-      setMode(newMode);
-      setTimeout(() => {
-        setIsTransitioning(false);
-      }, 50);
-    }, 450); // Matches halfway point of the smooth fade/slide curve
+    // Type out the placeholder/example text for the new form
+    if (newMode === 'login') {
+      const targetEmail = 'alex.morgan@example.com';
+      const targetPass = '••••••••••••';
+      let charIndex = 0;
+      typeTimerRef.current = setInterval(() => {
+        charIndex += 1;
+        if (charIndex <= targetEmail.length) {
+          setLoginEmail(targetEmail.slice(0, charIndex));
+        } else if (charIndex <= targetEmail.length + targetPass.length) {
+          setLoginPassword(targetPass.slice(0, charIndex - targetEmail.length));
+        } else {
+          clearInterval(typeTimerRef.current);
+        }
+      }, 35);
+    } else {
+      const targetName = 'Alex Morgan';
+      const targetEmail = 'alex.morgan@example.com';
+      const targetPhone = '+233 50 123 4567';
+      const targetPass = '••••••••••••';
+      let charIndex = 0;
+      const totalLen = targetName.length + targetEmail.length + targetPhone.length + targetPass.length;
+      typeTimerRef.current = setInterval(() => {
+        charIndex += 1;
+        if (charIndex <= targetName.length) {
+          setFullName(targetName.slice(0, charIndex));
+        } else if (charIndex <= targetName.length + targetEmail.length) {
+          setSignupEmail(targetEmail.slice(0, charIndex - targetName.length));
+        } else if (charIndex <= targetName.length + targetEmail.length + targetPhone.length) {
+          setPhone(targetPhone.slice(0, charIndex - targetName.length - targetEmail.length));
+        } else if (charIndex <= totalLen) {
+          setSignupPassword(targetPass.slice(0, charIndex - targetName.length - targetEmail.length - targetPhone.length));
+        } else {
+          clearInterval(typeTimerRef.current);
+        }
+      }, 25);
+    }
   };
 
   const handleLoginSubmit = (e) => {
@@ -149,7 +200,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
 
       {/* Main Authentication Card */}
       <main className="login-stage">
-        <div className={`auth-card-shell ${isTransitioning ? 'auth-card-transitioning' : ''}`}>
+        <div className="auth-card-shell">
           <div className={`login-card-container ${isLogin ? 'mode-login' : 'mode-signup'}`}>
 
             {/* Left Visual Banner with dynamic content based on Mode */}

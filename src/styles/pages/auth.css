@@ -784,12 +784,13 @@
 }
 
 .auth-card-transitioning {
-  opacity: 0.85;
-  transform: scale(0.985) translateY(4px);
+  /* Removed scale/fade card transition so the card stays steady while tab and inputs animate */
+  opacity: 1;
+  transform: none;
 }
 
 .login-card-container {
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Kept steady */
 }
 
 .auth-tab-switcher {
@@ -816,7 +817,7 @@
   padding: 8px 16px;
   border-radius: var(--radius-full);
   text-align: center;
-  transition: color 0.4s ease;
+  transition: color 0.3s ease;
 }
 
 .auth-tab-btn.active {
@@ -831,7 +832,7 @@
   background: var(--gold);
   border-radius: var(--radius-full);
   box-shadow: 0 4px 15px rgba(244, 182, 39, 0.35);
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 1;
 }
 
@@ -865,7 +866,8 @@
 
 .visual-pane-fade,
 .form-pane-fade {
-  animation: authPaneSlideFade 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Immediate clear appearance without blurring/sliding the whole card */
+  animation: none;
 }
 
 @keyframes authPaneSlideFade {

@@ -199,6 +199,8 @@ export default function OrderHistoryPage({
   const [reorderNotice, setReorderNotice] = useState('');
   const [receiptNotice, setReceiptNotice] = useState('');
   const [reorderCount, setReorderCount] = useState(0);
+  const [guestOrderId, setGuestOrderId] = useState('');
+  const [guestError, setGuestError] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -259,6 +261,17 @@ export default function OrderHistoryPage({
     }, 250);
   };
 
+  const handleGuestTrack = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = guestOrderId.trim();
+    if (!trimmed) {
+      setGuestError('Please enter a valid Order ID (e.g. #ITM-8921 or ITM-8921)');
+      return;
+    }
+    setGuestError('');
+    onViewOrder(trimmed);
+  };
+
   return (
     <main className="history-page">
       <header className="history-topbar">
@@ -310,14 +323,71 @@ export default function OrderHistoryPage({
       </div>
 
       <div className="history-layout">
-        <section className="history-heading" aria-labelledby="history-title">
-          <div>
-            <span className="history-eyebrow">{user ? 'YOUR ITEM13 ACCOUNT' : 'ITEM13 ORDERS'}</span>
-            <h1 id="history-title">Order History</h1>
-            <p>Every good snack run, all in one place.</p>
+        {!user ? (
+          /* Guest View: Enter Order ID to track */
+          <div className="guest-order-lookup-card">
+            <div className="guest-lookup-header">
+              <div className="guest-lookup-icon-wrap">
+                <Package size={28} />
+              </div>
+              <span className="guest-lookup-eyebrow">ORDER LOOKUP</span>
+              <h1>Track Your Order</h1>
+              <p>
+                Enter your Order ID below to track your delivery status and live progress.
+              </p>
+            </div>
+
+            <form onSubmit={handleGuestTrack} className="guest-lookup-form">
+              <div className="guest-input-wrap">
+                <Search size={18} className="guest-input-icon" />
+                <input
+                  type="text"
+                  value={guestOrderId}
+                  onChange={(e) => {
+                    setGuestOrderId(e.target.value);
+                    if (guestError) setGuestError('');
+                  }}
+                  placeholder="e.g. #ITM-8921 or ITM-8104"
+                  className="guest-order-input"
+                  autoFocus
+                />
+              </div>
+
+              {guestError && <p className="guest-lookup-error">{guestError}</p>}
+
+              <button type="submit" className="btn-guest-track">
+                <Truck size={17} />
+                <span>Track Order</span>
+                <ArrowRight size={16} />
+              </button>
+            </form>
+
+            <div className="guest-lookup-footer">
+              <p>
+                Have an Item13 account?{' '}
+                <a
+                  href="/account"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onNavigate && onNavigate('dashboard');
+                  }}
+                >
+                  Log in to see all your orders
+                </a>
+              </p>
+            </div>
           </div>
-          <span className="history-count">{orders.length} orders</span>
-        </section>
+        ) : (
+          /* Logged In View: Full Order History */
+          <>
+            <section className="history-heading" aria-labelledby="history-title">
+              <div>
+                <span className="history-eyebrow">YOUR ITEM13 ACCOUNT</span>
+                <h1 id="history-title">Order History</h1>
+                <p>Every good snack run, all in one place.</p>
+              </div>
+              <span className="history-count">{orders.length} orders</span>
+            </section>
 
         <section className="history-controls" aria-label="Search and filter orders">
           <label className="history-search">
@@ -416,7 +486,9 @@ export default function OrderHistoryPage({
             </button>
           </section>
         )}
-        <p className="history-footer-note"><Truck size={14} aria-hidden="true" /> Need a hand with an order? <a href="mailto:support@item13.com">Our team is here to help.</a></p>
+            <p className="history-footer-note"><Truck size={14} aria-hidden="true" /> Need a hand with an order? <a href="mailto:support@item13.com">Our team is here to help.</a></p>
+          </>
+        )}
       </div>
 
       {(reorderNotice || receiptNotice) && (

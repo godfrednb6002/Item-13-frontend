@@ -315,12 +315,12 @@ export default function LandingShowcasePage({
                     </button>
 
                     <a
-                      href="/dashboard/orders"
+                      href={user ? "/dashboard/orders" : "/orders"}
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
                         setIsNavMenuOpen(false);
-                        if (onNavigate) onNavigate('dashboard/orders');
+                        if (onNavigate) onNavigate(user ? 'dashboard/orders' : 'orders');
                       }}
                     >
                       <Package size={16} />

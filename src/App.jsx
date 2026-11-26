@@ -30,6 +30,7 @@ export default function App() {
     if (path.startsWith('/checkout')) return 'checkout';
     if (path.startsWith('/payment')) return 'payment';
     if (path.startsWith('/orders/')) return 'order-tracking';
+    if (path === '/orders' || path === '/order-tracking') return 'account-orders';
     if (path === '/account/orders') return 'account-orders';
     if (path === '/account/addresses' || path === '/dashboard/addresses') return 'welcome-addresses';
     if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
@@ -124,6 +125,8 @@ export default function App() {
       } else if (path.startsWith('/orders/')) {
         setCurrentPage('order-tracking');
         setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
+      } else if (path === '/orders' || path === '/order-tracking') {
+        setCurrentPage('account-orders');
       } else if (path === '/account/orders') {
         setCurrentPage('account-orders');
       } else if (path === '/account/addresses' || path === '/dashboard/addresses') {
@@ -187,6 +190,19 @@ export default function App() {
     }
     else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
     else if (page === 'payment') nextPath = '/payment';
+    else if (page === 'orders' || page === 'track-order' || page === 'order-tracking') {
+      nextPath = user ? '/dashboard/orders' : '/orders';
+      if (user) {
+        setCurrentPage('welcome-orders');
+      } else {
+        setCurrentPage('account-orders');
+      }
+      if (window.location.pathname !== nextPath) {
+        window.history.pushState({}, '', nextPath);
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     else if (page === 'account-orders') nextPath = '/account/orders';
     else if (page === 'account-addresses' || page === 'addresses') nextPath = '/account/addresses';
     else if (page === 'delivery') nextPath = '/delivery';
@@ -224,7 +240,11 @@ export default function App() {
 
     if (page.startsWith('dashboard/')) {
       const sub = page.replace('dashboard/', '');
-      setCurrentPage(`welcome-${sub}`);
+      if (sub === 'orders' && !user) {
+        setCurrentPage('account-orders');
+      } else {
+        setCurrentPage(`welcome-${sub}`);
+      }
     } else {
       setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : (page === 'profile' ? 'welcome-profile' : page)));
     }
@@ -1269,12 +1289,12 @@ export default function App() {
                     </button>
 
                     <a
-                      href="/dashboard/orders"
+                      href={user ? "/dashboard/orders" : "/orders"}
                       className="nav-menu-item"
                       onClick={(e) => {
                         e.preventDefault();
                         setIsNavMenuOpen(false);
-                        navigateTo('dashboard/orders');
+                        navigateTo(user ? 'dashboard/orders' : 'orders');
                       }}
                     >
                       <Package size={16} />

@@ -223,8 +223,20 @@ export default function LandingShowcasePage({
           </div>
 
           <div className="nav-buttons-group">
-            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            {/* Top row: Auth button, Theme, Notifications, and Hamburger Menu */}
             <div className="nav-tools-row">
+              {!user ? (
+                <button
+                  type="button"
+                  className="nav-auth-pill-btn"
+                  onClick={() => onNavigate && onNavigate('login')}
+                  title="Sign In or Create Account"
+                >
+                  <User size={15} />
+                  <span>Login / Sign Up</span>
+                </button>
+              ) : null}
+
               <ThemeToggle className="nav-theme-toggle" />
 
               {/* Notification Button - only shown when logged in */}

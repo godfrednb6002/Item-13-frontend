@@ -1165,8 +1165,20 @@ export default function App() {
           </div>
 
           <div className="nav-buttons-group">
-            {/* Top row: Theme, Notifications, and Hamburger Menu */}
+            {/* Top row: Auth button, Theme, Notifications, and Hamburger Menu */}
             <div className="nav-tools-row">
+              {!user ? (
+                <button
+                  type="button"
+                  className="nav-auth-pill-btn"
+                  onClick={() => navigateTo('login')}
+                  title="Sign In or Create Account"
+                >
+                  <User size={15} />
+                  <span>Login / Sign Up</span>
+                </button>
+              ) : null}
+
               {/* Theme Toggle Button */}
               <ThemeToggle className="nav-theme-toggle" />
 

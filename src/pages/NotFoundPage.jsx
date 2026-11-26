@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Compass, ArrowLeft } from 'lucide-react';
+import { Home, Compass } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
 import '../styles/pages/not-found.css';
@@ -19,16 +19,6 @@ export default function NotFoundPage({ user, onNavigate }) {
     <div className={`not-found-page-wrapper ${isDark ? 'dark-mode' : 'light-mode'}`}>
       {/* Top Floating Controls Bar */}
       <header className="not-found-header">
-        <button
-          type="button"
-          className="not-found-header-back-btn"
-          onClick={handleHomeClick}
-          aria-label="Back"
-        >
-          <ArrowLeft size={18} />
-          <span>{user ? 'Home' : 'Item 13'}</span>
-        </button>
-
         <div className="not-found-header-right">
           <ThemeToggle className="not-found-theme-toggle" />
         </div>
@@ -44,7 +34,7 @@ export default function NotFoundPage({ user, onNavigate }) {
             Bag is Empty.
           </h1>
           <p className="not-found-subtext">
-            Looks like the page you are looking for got popped away or doesn't exist.
+            Looks like the page you are looking doesn't exist.
           </p>
 
           <div className="not-found-actions-group">

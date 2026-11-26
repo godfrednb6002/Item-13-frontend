@@ -1,8 +1,12 @@
 import React from 'react';
-import { Home, Sparkles, Compass, ArrowLeft, Search, Popcorn } from 'lucide-react';
+import { Home, Compass, ArrowLeft } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import ThemeToggle from '../components/ThemeToggle';
 import '../styles/pages/not-found.css';
 
 export default function NotFoundPage({ user, onNavigate }) {
+  const { isDark } = useTheme();
+
   const handleHomeClick = () => {
     if (user) {
       onNavigate('home');
@@ -12,69 +16,106 @@ export default function NotFoundPage({ user, onNavigate }) {
   };
 
   return (
-    <div className="not-found-wrapper">
-      <div className="not-found-glow-circle circle-1" />
-      <div className="not-found-glow-circle circle-2" />
+    <div className={`not-found-page-wrapper ${isDark ? 'dark-mode' : 'light-mode'}`}>
+      {/* Top Floating Controls Bar */}
+      <header className="not-found-header">
+        <button
+          type="button"
+          className="not-found-header-back-btn"
+          onClick={handleHomeClick}
+          aria-label="Back"
+        >
+          <ArrowLeft size={18} />
+          <span>{user ? 'Home' : 'Item 13'}</span>
+        </button>
 
-      {/* Floating playful popcorn / kernels */}
-      <div className="not-found-floating-item item-1">🍿</div>
-      <div className="not-found-floating-item item-2">✨</div>
-      <div className="not-found-floating-item item-3">🌽</div>
-      <div className="not-found-floating-item item-4">🥤</div>
+        <div className="not-found-header-right">
+          <ThemeToggle className="not-found-theme-toggle" />
+        </div>
+      </header>
 
-      <div className="not-found-card glassmorphic">
-        {/* Animated 404 Header with popping kernel */}
-        <div className="not-found-number-row">
-          <span className="not-found-digit">4</span>
-          <div className="not-found-popcorn-badge" title="Popped into thin air!">
-            <span className="not-found-emoji">🍿</span>
-            <span className="not-found-pop-effect">💥</span>
+      {/* Main split composition replicating the design exactly */}
+      <main className="not-found-stage">
+        {/* Left Side: Text and Actions */}
+        <section className="not-found-content-side">
+          <div className="not-found-badge-num">404</div>
+          <h1 className="not-found-headline">
+            Oops! This Popcorn<br />
+            Bag is Empty.
+          </h1>
+          <p className="not-found-subtext">
+            Looks like the page you are looking for got popped away or doesn't exist.
+          </p>
+
+          <div className="not-found-actions-group">
+            <button
+              type="button"
+              className="not-found-primary-cta"
+              onClick={handleHomeClick}
+            >
+              <Home size={18} />
+              <span>{user ? 'Return to Home' : 'Back to Item 13'}</span>
+            </button>
+
+            <button
+              type="button"
+              className="not-found-secondary-cta"
+              onClick={() => onNavigate('menu')}
+            >
+              <Compass size={18} />
+              <span>Explore the Menu</span>
+            </button>
           </div>
-          <span className="not-found-digit">4</span>
-        </div>
+        </section>
 
-        <div className="not-found-tag">
-          <Sparkles size={14} className="sparkle-icon" />
-          <span>Page Popped Out of Existence</span>
-        </div>
+        {/* Right Side: Popcorn Bag with Gold Diagonal & watermark icons */}
+        <section className="not-found-graphic-side">
+          {/* Yellow angled background block with subtle food patterns */}
+          <div className="not-found-diagonal-backdrop">
+            <svg className="not-found-svg-pattern" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+              <defs>
+                <pattern id="foodIconsPattern" width="140" height="140" patternUnits="userSpaceOnUse">
+                  {/* Drink cup */}
+                  <path d="M25 25 L45 25 L41 62 L29 62 Z" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <line x1="35" y1="14" x2="35" y2="25" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="23" y1="32" x2="47" y2="32" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="1.5" />
+                  
+                  {/* Burger */}
+                  <path d="M80 34 Q96 20 112 34 Z" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" />
+                  <rect x="78" y="37" width="36" height="4" rx="2" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="1.8" />
+                  <path d="M78 44 Q96 52 114 44 Z" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" />
+                  <circle cx="88" cy="27" r="1" fill="rgba(0, 0, 0, 0.1)" />
+                  <circle cx="96" cy="25" r="1" fill="rgba(0, 0, 0, 0.1)" />
+                  <circle cx="104" cy="28" r="1" fill="rgba(0, 0, 0, 0.1)" />
 
-        <h1 className="not-found-title">Whoops! Even Our Kernels Couldn't Find This Page</h1>
+                  {/* Fries */}
+                  <path d="M30 92 L36 122 L54 122 L60 92 Z" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <line x1="38" y1="80" x2="40" y2="92" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="45" y1="74" x2="45" y2="92" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2.2" strokeLinecap="round" />
+                  <line x1="52" y1="82" x2="50" y2="92" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" />
 
-        <p className="not-found-description">
-          Looks like you wandered into unchartered snacking territory. Don't worry, the crunch hasn't stopped — let's get you back on track!
-        </p>
-
-        {/* Action Buttons */}
-        <div className="not-found-actions">
-          <button
-            type="button"
-            className="not-found-btn not-found-primary-btn"
-            onClick={handleHomeClick}
-          >
-            <Home size={18} />
-            <span>{user ? 'Return to Home' : 'Back to Item 13'}</span>
-          </button>
-
-          <button
-            type="button"
-            className="not-found-btn not-found-secondary-btn"
-            onClick={() => onNavigate('menu')}
-          >
-            <Compass size={18} />
-            <span>Explore the Menu</span>
-          </button>
-        </div>
-
-        {/* Quick links footer */}
-        <div className="not-found-quick-links">
-          <span>Looking for something specific?</span>
-          <div className="quick-links-pills">
-            <button type="button" onClick={() => onNavigate('menu')}>Fresh Drops</button>
-            <button type="button" onClick={() => onNavigate('events')}>Events & Catering</button>
-            <button type="button" onClick={() => onNavigate('contact')}>Get in Touch</button>
+                  {/* Popcorn container icon */}
+                  <path d="M92 98 L97 124 L113 124 L118 98 Z" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="98" cy="92" r="3.5" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="1.5" />
+                  <circle cx="105" cy="89" r="4" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="1.5" />
+                  <circle cx="112" cy="93" r="3.5" fill="none" stroke="rgba(0, 0, 0, 0.1)" strokeWidth="1.5" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#foodIconsPattern)" />
+            </svg>
           </div>
-        </div>
-      </div>
+
+          {/* The high-res spilled popcorn bag png */}
+          <div className="not-found-bag-container">
+            <img
+              src="/spilledPopcorn.png"
+              alt="Item 13 Popcorn Bag Spilled and Empty"
+              className="not-found-spilled-bag-img"
+              loading="eager"
+            />
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

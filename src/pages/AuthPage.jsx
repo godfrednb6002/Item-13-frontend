@@ -41,7 +41,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
     { email: 'alex.morgan@gmail.com', pass: '••••••••••••' },
     { email: 'kwame.asante@outlook.com', pass: '••••••••••' },
     { email: 'sarah.mensah@yahoo.com', pass: '••••••••••••••' },
-    { email: 'kofi.adjei@item13.com', pass: '••••••••' },
+    { email: 'kofi.adjei@proton.me', pass: '••••••••' },
     { email: 'amara.diallo@icloud.com', pass: '•••••••••••••' },
   ];
 
@@ -50,7 +50,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
     { name: 'Alex Morgan', phone: '+233 50 123 4567', email: 'alex.morgan@gmail.com', pass: 'At least 8 characters' },
     { name: 'Kwame Asante', phone: '+233 24 987 6543', email: 'kwame.asante@outlook.com', pass: '••••••••••••' },
     { name: 'Sarah Mensah', phone: '+233 20 456 7890', email: 'sarah.mensah@yahoo.com', pass: 'Create strong password' },
-    { name: 'Kofi Adjei', phone: '+233 55 321 0987', email: 'kofi.adjei@item13.com', pass: '••••••••••' },
+    { name: 'Kofi Adjei', phone: '+233 55 321 0987', email: 'kofi.adjei@proton.me', pass: '••••••••••' },
     { name: 'Amara Diallo', phone: '+233 27 654 3210', email: 'amara.diallo@icloud.com', pass: 'Min 8 characters & symbols' },
   ];
 

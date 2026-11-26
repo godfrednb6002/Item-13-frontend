@@ -22,27 +22,179 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(true);
 
+  // Dynamic Typewriter Placeholders
+  const [loginEmailPlaceholder, setLoginEmailPlaceholder] = useState('');
+  const [loginPasswordPlaceholder, setLoginPasswordPlaceholder] = useState('');
+  const [signupNamePlaceholder, setSignupNamePlaceholder] = useState('');
+  const [signupPhonePlaceholder, setSignupPhonePlaceholder] = useState('');
+  const [signupEmailPlaceholder, setSignupEmailPlaceholder] = useState('');
+  const [signupPasswordPlaceholder, setSignupPasswordPlaceholder] = useState('');
+
   // Shared States
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const typeTimerRef = useRef(null);
+  const loopTimerRef = useRef(null);
 
-  // Clear type timer on unmount
-  useEffect(() => {
-    return () => {
-      if (typeTimerRef.current) clearInterval(typeTimerRef.current);
+  // Diverse datasets for looping placeholders
+  const loginProfiles = [
+    { email: 'alex.morgan@gmail.com', pass: '••••••••••••' },
+    { email: 'kwame.asante@outlook.com', pass: '••••••••••' },
+    { email: 'sarah.mensah@yahoo.com', pass: '••••••••••••••' },
+    { email: 'kofi.adjei@item13.com', pass: '••••••••' },
+    { email: 'amara.diallo@icloud.com', pass: '•••••••••••••' },
+  ];
+
+  const signupProfiles = [
+    { name: 'Alex Morgan', phone: '+233 50 123 4567', email: 'alex.morgan@gmail.com', pass: 'At least 8 characters' },
+    { name: 'Kwame Asante', phone: '+233 24 987 6543', email: 'kwame.asante@outlook.com', pass: '••••••••••••' },
+    { name: 'Sarah Mensah', phone: '+233 20 456 7890', email: 'sarah.mensah@yahoo.com', pass: 'Create strong password' },
+    { name: 'Kofi Adjei', phone: '+233 55 321 0987', email: 'kofi.adjei@item13.com', pass: '••••••••••' },
+    { name: 'Amara Diallo', phone: '+233 27 654 3210', email: 'amara.diallo@icloud.com', pass: 'Min 8 characters & symbols' },
+  ];
+
+  // Helper to run smooth typing and backspacing animation loop
+  const startPlaceholderLoop = (currentMode) => {
+    if (loopTimerRef.current) clearTimeout(loopTimerRef.current);
+
+    let profileIdx = 0;
+    let step = 'typing'; // 'typing' | 'pausing' | 'deleting'
+    let charIdx = 0;
+
+    const tick = () => {
+      if (currentMode === 'login') {
+        const profile = loginProfiles[profileIdx % loginProfiles.length];
+        const emailLen = profile.email.length;
+        const passLen = profile.pass.length;
+        const total = emailLen + passLen;
+
+        if (step === 'typing') {
+          charIdx += 1;
+          if (charIdx <= emailLen) {
+            setLoginEmailPlaceholder(profile.email.slice(0, charIdx));
+            setLoginPasswordPlaceholder('');
+          } else {
+            setLoginEmailPlaceholder(profile.email);
+            setLoginPasswordPlaceholder(profile.pass.slice(0, charIdx - emailLen));
+          }
+
+          if (charIdx >= total) {
+            step = 'pausing';
+            loopTimerRef.current = setTimeout(tick, 2200); // pause to show complete placeholder
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 30);
+        } else if (step === 'pausing') {
+          step = 'deleting';
+          loopTimerRef.current = setTimeout(tick, 100);
+        } else if (step === 'deleting') {
+          charIdx -= 2;
+          if (charIdx > emailLen) {
+            setLoginPasswordPlaceholder(profile.pass.slice(0, charIdx - emailLen));
+          } else if (charIdx > 0) {
+            setLoginPasswordPlaceholder('');
+            setLoginEmailPlaceholder(profile.email.slice(0, charIdx));
+          } else {
+            setLoginEmailPlaceholder('');
+            setLoginPasswordPlaceholder('');
+            step = 'typing';
+            charIdx = 0;
+            profileIdx += 1;
+            loopTimerRef.current = setTimeout(tick, 350);
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 16);
+        }
+      } else {
+        // Signup loop
+        const profile = signupProfiles[profileIdx % signupProfiles.length];
+        const nameLen = profile.name.length;
+        const phoneLen = profile.phone.length;
+        const emailLen = profile.email.length;
+        const passLen = profile.pass.length;
+        const total = nameLen + phoneLen + emailLen + passLen;
+
+        if (step === 'typing') {
+          charIdx += 1;
+          if (charIdx <= nameLen) {
+            setSignupNamePlaceholder(profile.name.slice(0, charIdx));
+            setSignupPhonePlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+          } else if (charIdx <= nameLen + phoneLen) {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone.slice(0, charIdx - nameLen));
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+          } else if (charIdx <= nameLen + phoneLen + emailLen) {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone);
+            setSignupEmailPlaceholder(profile.email.slice(0, charIdx - nameLen - phoneLen));
+            setSignupPasswordPlaceholder('');
+          } else {
+            setSignupNamePlaceholder(profile.name);
+            setSignupPhonePlaceholder(profile.phone);
+            setSignupEmailPlaceholder(profile.email);
+            setSignupPasswordPlaceholder(profile.pass.slice(0, charIdx - nameLen - phoneLen - emailLen));
+          }
+
+          if (charIdx >= total) {
+            step = 'pausing';
+            loopTimerRef.current = setTimeout(tick, 2400); // pause to show complete placeholder
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 22);
+        } else if (step === 'pausing') {
+          step = 'deleting';
+          loopTimerRef.current = setTimeout(tick, 100);
+        } else if (step === 'deleting') {
+          charIdx -= 3;
+          if (charIdx > nameLen + phoneLen + emailLen) {
+            setSignupPasswordPlaceholder(profile.pass.slice(0, charIdx - nameLen - phoneLen - emailLen));
+          } else if (charIdx > nameLen + phoneLen) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder(profile.email.slice(0, charIdx - nameLen - phoneLen));
+          } else if (charIdx > nameLen) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPhonePlaceholder(profile.phone.slice(0, charIdx - nameLen));
+          } else if (charIdx > 0) {
+            setSignupPasswordPlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPhonePlaceholder('');
+            setSignupNamePlaceholder(profile.name.slice(0, charIdx));
+          } else {
+            setSignupNamePlaceholder('');
+            setSignupPhonePlaceholder('');
+            setSignupEmailPlaceholder('');
+            setSignupPasswordPlaceholder('');
+            step = 'typing';
+            charIdx = 0;
+            profileIdx += 1;
+            loopTimerRef.current = setTimeout(tick, 400);
+            return;
+          }
+          loopTimerRef.current = setTimeout(tick, 14);
+        }
+      }
     };
-  }, []);
 
-  // Smooth tab slide and typing effect when switching between Sign In and Create Account
+    tick();
+  };
+
+  // Start loop on mount and whenever mode changes
+  useEffect(() => {
+    startPlaceholderLoop(mode);
+    return () => {
+      if (loopTimerRef.current) clearTimeout(loopTimerRef.current);
+    };
+  }, [mode]);
+
+  // Smooth tab slide and switching between Sign In and Create Account
   const switchMode = (newMode) => {
     if (newMode === mode) return;
     setError('');
 
-    // Cancel any ongoing typing timer
-    if (typeTimerRef.current) clearInterval(typeTimerRef.current);
-
-    // Clear current form inputs immediately
+    // Clear current user inputs immediately
     setLoginEmail('');
     setLoginPassword('');
     setFullName('');
@@ -56,44 +208,6 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
     const nextPath = newMode === 'signup' ? '/signup' : '/login';
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
-    }
-
-    // Type out the placeholder/example text for the new form
-    if (newMode === 'login') {
-      const targetEmail = 'alex.morgan@example.com';
-      const targetPass = '••••••••••••';
-      let charIndex = 0;
-      typeTimerRef.current = setInterval(() => {
-        charIndex += 1;
-        if (charIndex <= targetEmail.length) {
-          setLoginEmail(targetEmail.slice(0, charIndex));
-        } else if (charIndex <= targetEmail.length + targetPass.length) {
-          setLoginPassword(targetPass.slice(0, charIndex - targetEmail.length));
-        } else {
-          clearInterval(typeTimerRef.current);
-        }
-      }, 35);
-    } else {
-      const targetName = 'Alex Morgan';
-      const targetEmail = 'alex.morgan@example.com';
-      const targetPhone = '+233 50 123 4567';
-      const targetPass = '••••••••••••';
-      let charIndex = 0;
-      const totalLen = targetName.length + targetEmail.length + targetPhone.length + targetPass.length;
-      typeTimerRef.current = setInterval(() => {
-        charIndex += 1;
-        if (charIndex <= targetName.length) {
-          setFullName(targetName.slice(0, charIndex));
-        } else if (charIndex <= targetName.length + targetEmail.length) {
-          setSignupEmail(targetEmail.slice(0, charIndex - targetName.length));
-        } else if (charIndex <= targetName.length + targetEmail.length + targetPhone.length) {
-          setPhone(targetPhone.slice(0, charIndex - targetName.length - targetEmail.length));
-        } else if (charIndex <= totalLen) {
-          setSignupPassword(targetPass.slice(0, charIndex - targetName.length - targetEmail.length - targetPhone.length));
-        } else {
-          clearInterval(typeTimerRef.current);
-        }
-      }, 25);
     }
   };
 
@@ -356,7 +470,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                             id="login-email"
                             type="email"
                             className="styled-input"
-                            placeholder="name@example.com"
+                            placeholder={loginEmailPlaceholder}
                             value={loginEmail}
                             onChange={(e) => setLoginEmail(e.target.value)}
                             required
@@ -384,7 +498,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                             id="login-password"
                             type={showLoginPassword ? 'text' : 'password'}
                             className="styled-input"
-                            placeholder="Enter your password"
+                            placeholder={loginPasswordPlaceholder}
                             value={loginPassword}
                             onChange={(e) => setLoginPassword(e.target.value)}
                             required
@@ -494,7 +608,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                               id="signup-name"
                               type="text"
                               className="styled-input"
-                              placeholder="Alex Morgan"
+                              placeholder={signupNamePlaceholder}
                               value={fullName}
                               onChange={(e) => setFullName(e.target.value)}
                               required
@@ -513,7 +627,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                               id="signup-phone"
                               type="tel"
                               className="styled-input"
-                              placeholder="+233 00 000 0000"
+                              placeholder={signupPhonePlaceholder}
                               value={phone}
                               onChange={(e) => setPhone(e.target.value)}
                               autoComplete="tel"
@@ -532,7 +646,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                             id="signup-email"
                             type="email"
                             className="styled-input"
-                            placeholder="name@example.com"
+                            placeholder={signupEmailPlaceholder}
                             value={signupEmail}
                             onChange={(e) => setSignupEmail(e.target.value)}
                             required
@@ -551,7 +665,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
                             id="signup-password"
                             type={showSignupPassword ? 'text' : 'password'}
                             className="styled-input"
-                            placeholder="At least 6 characters"
+                            placeholder={signupPasswordPlaceholder}
                             value={signupPassword}
                             onChange={(e) => setSignupPassword(e.target.value)}
                             required

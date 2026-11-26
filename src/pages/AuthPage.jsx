@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowLeft, ArrowRight, ShieldCheck, Check, Sparkles, Gift } from 'lucide-react';
 
 export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSuccess }) {
   const [mode, setMode] = useState(initialMode); // 'login' | 'signup'
@@ -137,9 +137,11 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
             e.preventDefault();
             if (onNavigate) onNavigate('home');
           }}
+          title="Back to home"
+          aria-label="Back to home"
           style={{ textDecoration: 'none' }}
         >
-          ← Go Back
+          <ArrowLeft size={18} aria-hidden="true" />
         </a>
       </header>
 

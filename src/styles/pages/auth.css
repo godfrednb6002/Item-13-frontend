@@ -74,18 +74,22 @@
 }
 
 .login-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text-white);
-  padding: 10px 20px;
-  border-radius: var(--radius-full);
-  font-size: 14px;
-  font-weight: 600;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  transition: all 0.2s ease;
 }
 
 .login-back-btn:hover {
   background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--gold);
+  border-color: rgba(244, 182, 39, 0.35);
   transform: translateX(-2px);
 }
 

@@ -291,12 +291,8 @@ export default function OrderHistoryPage({
           </span>
         </a>
         <div className="history-topbar-actions">
-          <button className="history-back-link" type="button" onClick={onBack} title="Back to Store">
-            <ArrowLeft size={17} aria-hidden="true" />
-            <span>Back to Store</span>
-          </button>
-          <button className="history-cart-link" type="button" onClick={onViewCart} aria-label={`Open cart, ${reorderCount} recently added`}>
-            <ShoppingBag size={18} aria-hidden="true" /><span>Bag</span>
+          <button className="history-back-link history-back-circle" type="button" onClick={onBack} title="Back to Store" aria-label="Back to Store">
+            <ArrowLeft size={18} aria-hidden="true" />
           </button>
         </div>
       </header>

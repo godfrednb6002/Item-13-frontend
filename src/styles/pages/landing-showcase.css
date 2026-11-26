@@ -260,13 +260,29 @@ html.light-theme .inspo-top-navbar {
   padding: 0 !important;
   border-radius: var(--radius-full, 9999px) !important;
   overflow: hidden !important;
+  gap: 0 !important;
   transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1),
               padding 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+              gap 0.7s cubic-bezier(0.25, 1, 0.5, 1),
               background 0.3s ease,
               border-color 0.3s ease,
               transform 0.3s ease,
               box-shadow 0.3s ease !important;
   white-space: nowrap !important;
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 19px;
+  height: 19px;
+  line-height: 0;
+}
+
+.theme-toggle-icon svg {
+  display: block;
 }
 
 .theme-toggle-animated-label {
@@ -290,7 +306,7 @@ html.light-theme .inspo-top-navbar {
 .nav-tools-row .theme-toggle-btn.expanded {
   width: 96px !important;
   padding: 0 14px 0 12px !important;
-  gap: 6px;
+  gap: 6px !important;
 }
 
 .inspo-top-navbar .nav-tools-row .theme-toggle-btn.expanded .theme-toggle-animated-label,

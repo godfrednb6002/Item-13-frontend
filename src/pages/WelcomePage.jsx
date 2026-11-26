@@ -58,6 +58,7 @@ export default function WelcomePage({
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [activeStatPopup, setActiveStatPopup] = useState(null);
   const [isTimelineExpanded, setIsTimelineExpanded] = useState(false);
+  const [orderStatusTab, setOrderStatusTab] = useState('all');
   const statPopupRef = useRef(null);
 
   if (initialTab !== prevInitialTab) {
@@ -778,8 +779,52 @@ export default function WelcomePage({
                         <p>Track live deliveries and view past popcorn cravings</p>
                       </div>
 
+                      {/* Order Status Tabs Bar */}
+                      <div className="order-status-tabs-bar" role="tablist" aria-label="Filter orders by status">
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'all'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'all' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('all')}
+                        >
+                          All
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'in-transit'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'in-transit' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('in-transit')}
+                        >
+                          <span className="status-tab-dot in-transit" />
+                          In Transit
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'delivered'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'delivered' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('delivered')}
+                        >
+                          <span className="status-tab-dot delivered" />
+                          Delivered
+                        </button>
+                        <button
+                          type="button"
+                          role="tab"
+                          aria-selected={orderStatusTab === 'canceled'}
+                          className={`order-status-tab-btn ${orderStatusTab === 'canceled' ? 'active' : ''}`}
+                          onClick={() => setOrderStatusTab('canceled')}
+                        >
+                          <span className="status-tab-dot canceled" />
+                          Canceled
+                        </button>
+                      </div>
+
                       <div className="order-history-list">
                         {/* Active Order Card */}
+                        {(orderStatusTab === 'all' || orderStatusTab === 'in-transit') && (
                         <div
                           className="order-card active-order"
                           style={{ cursor: 'pointer' }}
@@ -845,8 +890,10 @@ export default function WelcomePage({
                             </div>
                           </div>
                         </div>
+                        )}
 
                         {/* Past Order Card */}
+                        {(orderStatusTab === 'all' || orderStatusTab === 'delivered') && (
                         <div
                           className="order-card"
                           style={{ cursor: 'pointer' }}
@@ -892,6 +939,16 @@ export default function WelcomePage({
                             <span className="order-total-label">Total: <strong>GH₵ 90.00</strong></span>
                           </div>
                         </div>
+                        )}
+
+                        {/* Empty state for Canceled */}
+                        {orderStatusTab === 'canceled' && (
+                          <div className="order-status-empty">
+                            <Package size={36} className="empty-icon" />
+                            <h4>No Canceled Orders</h4>
+                            <p>You do not have any canceled orders at this time.</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

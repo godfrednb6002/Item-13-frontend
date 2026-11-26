@@ -1174,6 +1174,35 @@ html.light-theme .order-tracker-timeline {
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+html.light-theme .order-status-tabs-bar {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .order-status-tab-btn {
+  color: #64748b !important;
+}
+
+html.light-theme .order-status-tab-btn:hover {
+  color: #111418 !important;
+}
+
+html.light-theme .order-status-tab-btn.active {
+  background: #ffffff !important;
+  border-color: rgba(244, 182, 39, 0.4) !important;
+  color: #8c6307 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.light-theme .order-status-empty {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.light-theme .order-status-empty h4 {
+  color: #111418 !important;
+}
+
 html.light-theme .track-step {
   color: #64748b;
 }

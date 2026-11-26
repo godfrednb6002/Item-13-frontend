@@ -35,8 +35,9 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   const [error, setError] = useState('');
   const loopTimerRef = useRef(null);
 
-  // Diverse datasets for looping placeholders
+  // Diverse datasets for looping placeholders starting with descriptive instructions
   const loginProfiles = [
+    { email: 'Enter your email address', pass: 'Enter your password' },
     { email: 'alex.morgan@gmail.com', pass: '••••••••••••' },
     { email: 'kwame.asante@outlook.com', pass: '••••••••••' },
     { email: 'sarah.mensah@yahoo.com', pass: '••••••••••••••' },
@@ -45,6 +46,7 @@ export default function AuthPage({ initialMode = 'login', onNavigate, onAuthSucc
   ];
 
   const signupProfiles = [
+    { name: 'Enter your full name', phone: 'Enter phone number', email: 'Enter your email address', pass: 'Create your password' },
     { name: 'Alex Morgan', phone: '+233 50 123 4567', email: 'alex.morgan@gmail.com', pass: 'At least 8 characters' },
     { name: 'Kwame Asante', phone: '+233 24 987 6543', email: 'kwame.asante@outlook.com', pass: '••••••••••••' },
     { name: 'Sarah Mensah', phone: '+233 20 456 7890', email: 'sarah.mensah@yahoo.com', pass: 'Create strong password' },

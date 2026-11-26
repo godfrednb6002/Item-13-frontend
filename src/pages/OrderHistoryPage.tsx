@@ -376,10 +376,10 @@ export default function OrderHistoryPage({
               <p>
                 Have an Item13 account?{' '}
                 <a
-                  href="/account"
+                  href="/login"
                   onClick={(e) => {
                     e.preventDefault();
-                    onNavigate && onNavigate('dashboard');
+                    onNavigate && onNavigate('login');
                   }}
                 >
                   Log in to see all your orders

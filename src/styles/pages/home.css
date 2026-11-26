@@ -742,7 +742,7 @@ html.light-theme .widget-subtitle {
     width: 100% !important;
     max-width: 100vw !important;
     overflow: visible !important;
-    margin: 10px 0 24px 0 !important;
+    margin: -18px 0 16px 0 !important;
   }
 
   .hero-main-img {
@@ -757,10 +757,10 @@ html.light-theme .widget-subtitle {
 
   @keyframes floatSubtleMobile {
     0%, 100% {
-      transform: translateY(0) scale(1.15);
+      transform: translateY(-8px) scale(1.15);
     }
     50% {
-      transform: translateY(-8px) scale(1.15);
+      transform: translateY(-16px) scale(1.15);
     }
   }
 

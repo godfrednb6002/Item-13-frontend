@@ -445,6 +445,8 @@ export default function App() {
     return (
       <>
         <OrderHistoryPage
+          user={user}
+          onNavigate={navigateTo}
           onBack={() => navigateTo('home')}
           onViewOrder={(orderId) => {
             setTrackedOrderId(orderId);

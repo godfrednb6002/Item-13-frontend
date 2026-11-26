@@ -171,6 +171,8 @@ function OrderCard({
 
 export default function OrderHistoryPage({
   orders = mockOrders,
+  user,
+  onNavigate,
   onBack,
   onViewOrder,
   onReorder,
@@ -179,6 +181,8 @@ export default function OrderHistoryPage({
   onExplore,
 }: {
   orders?: HistoryOrder[];
+  user?: any;
+  onNavigate?: (page: string) => void;
   onBack: () => void;
   onViewOrder: (id: string) => void;
   onReorder: (order: HistoryOrder) => void;
@@ -261,19 +265,54 @@ export default function OrderHistoryPage({
         <button className="history-back-link" type="button" onClick={onBack}>
           <ArrowLeft size={17} aria-hidden="true" /> Storefront
         </button>
-        <a className="history-brand" href="/" aria-label="Item13 home">
+        <a className="history-brand" href="/" aria-label="Item13 home" onClick={(e) => { e.preventDefault(); onNavigate ? onNavigate('home') : onBack(); }}>
           <img src="/item13Logo-trimmed.png" alt="" />
-          <span>ITEM13 <small>YOUR ACCOUNT</small></span>
+          <span>ITEM13 <small>{user ? 'YOUR ACCOUNT' : 'STOREFRONT'}</small></span>
         </a>
         <button className="history-cart-link" type="button" onClick={onViewCart} aria-label={`Open cart, ${reorderCount} recently added`}>
           <ShoppingBag size={18} aria-hidden="true" /><span>Bag</span>
         </button>
       </header>
 
+      {/* Breadcrumbs Row matching Welcome / PDP */}
+      <div className="pdp-breadcrumbs-bar">
+        <div className="pdp-breadcrumbs-inner">
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate ? onNavigate('home') : onBack();
+            }}
+            className="crumb-link"
+            style={{ textDecoration: 'none' }}
+          >
+            Home
+          </a>
+          <span className="crumb-sep">/</span>
+          {user ? (
+            <>
+              <a
+                href="/dashboard"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onNavigate && onNavigate('dashboard');
+                }}
+                className="crumb-link"
+                style={{ textDecoration: 'none' }}
+              >
+                Dashboard
+              </a>
+              <span className="crumb-sep">/</span>
+            </>
+          ) : null}
+          <span className="crumb-current">Orders</span>
+        </div>
+      </div>
+
       <div className="history-layout">
         <section className="history-heading" aria-labelledby="history-title">
           <div>
-            <span className="history-eyebrow">YOUR ITEM13 ACCOUNT</span>
+            <span className="history-eyebrow">{user ? 'YOUR ITEM13 ACCOUNT' : 'ITEM13 ORDERS'}</span>
             <h1 id="history-title">Order History</h1>
             <p>Every good snack run, all in one place.</p>
           </div>

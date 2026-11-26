@@ -785,16 +785,15 @@ export default function WelcomePage({
                           title="Click to view live order tracking"
                         >
                           <div className="order-card-header">
-                            <div>
+                            <div className="order-header-primary">
                               <span className="order-badge in-progress">In Transit</span>
                               <span className="order-id">#ITM-8921</span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div className="order-header-actions">
                               <span className="order-date">Today, 4:15 PM</span>
                               <button
                                 type="button"
                                 className="btn-track-order"
-                                style={{ padding: '4px 12px', fontSize: '12px' }}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleTrackOrder('ITM-8921');

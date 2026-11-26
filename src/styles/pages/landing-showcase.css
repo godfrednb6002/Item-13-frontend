@@ -207,8 +207,8 @@ html.light-theme .inspo-top-navbar {
   -webkit-backdrop-filter: blur(14px) saturate(180%);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35),
               inset 0 1px 1px rgba(255, 255, 255, 0.25);
-  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.5s,
+              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.5s,
               background 0.25s ease,
               border-color 0.25s ease,
               transform 0.25s ease,
@@ -227,9 +227,9 @@ html.light-theme .inspo-top-navbar {
   max-width: 140px;
   opacity: 1;
   overflow: hidden;
-  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.3s ease,
-              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.5s,
+              opacity 0.3s ease 0.5s,
+              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1) 0.5s;
 }
 
 /* Shrunk State: Circular Icon-Only Button after 5s */
@@ -247,6 +247,7 @@ html.light-theme .inspo-top-navbar {
 
 /* ==========================================================================
    DYNAMIC THEME & HAMBURGER SEQUENTIAL EXPAND & SHRINK ANIMATION
+   Ultra-smooth, gentle easing with matching timings for expanding and collapsing
    ========================================================================== */
 .inspo-top-navbar .nav-tools-row .theme-toggle-btn,
 .nav-tools-row .theme-toggle-btn {
@@ -259,12 +260,12 @@ html.light-theme .inspo-top-navbar {
   padding: 0 !important;
   border-radius: var(--radius-full, 9999px) !important;
   overflow: hidden !important;
-  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.25s ease,
-              border-color 0.25s ease,
-              transform 0.25s ease,
-              box-shadow 0.25s ease !important;
+  transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+              padding 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              transform 0.3s ease,
+              box-shadow 0.3s ease !important;
   white-space: nowrap !important;
 }
 
@@ -279,22 +280,22 @@ html.light-theme .inspo-top-navbar {
   font-weight: 700;
   letter-spacing: 0.3px;
   color: inherit;
-  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.3s ease,
-              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-width 0.65s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              margin 0.65s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* Expanded Theme Toggle State */
 .inspo-top-navbar .nav-tools-row .theme-toggle-btn.expanded,
 .nav-tools-row .theme-toggle-btn.expanded {
-  width: auto !important;
+  width: 96px !important;
   padding: 0 14px 0 12px !important;
   gap: 6px;
 }
 
 .inspo-top-navbar .nav-tools-row .theme-toggle-btn.expanded .theme-toggle-animated-label,
 .nav-tools-row .theme-toggle-btn.expanded .theme-toggle-animated-label {
-  max-width: 80px;
+  max-width: 60px;
   opacity: 1;
   margin-left: 2px;
 }
@@ -311,12 +312,12 @@ html.light-theme .inspo-top-navbar {
   padding: 0 !important;
   border-radius: var(--radius-full, 9999px) !important;
   overflow: hidden !important;
-  transition: width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              padding 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              background 0.25s ease,
-              border-color 0.25s ease,
-              transform 0.25s ease,
-              box-shadow 0.25s ease !important;
+  transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+              padding 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+              background 0.3s ease,
+              border-color 0.3s ease,
+              transform 0.3s ease,
+              box-shadow 0.3s ease !important;
   white-space: nowrap !important;
 }
 
@@ -338,21 +339,21 @@ html.light-theme .inspo-top-navbar {
   font-weight: 700;
   letter-spacing: 0.3px;
   color: inherit;
-  transition: max-width 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.3s ease,
-              margin 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: max-width 0.65s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+              margin 0.65s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn.expanded,
 .nav-tools-row .nav-menu-expand-btn.expanded {
-  width: auto !important;
+  width: 90px !important;
   padding: 0 14px 0 12px !important;
   gap: 6px;
 }
 
 .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn.expanded .nav-btn-animated-label,
 .nav-tools-row .nav-menu-expand-btn.expanded .nav-btn-animated-label {
-  max-width: 80px;
+  max-width: 50px;
   opacity: 1;
   margin-left: 2px;
 }
@@ -360,23 +361,23 @@ html.light-theme .inspo-top-navbar {
 /* Hover re-expansion on desktop */
 @media (hover: hover) and (pointer: fine) {
   .inspo-top-navbar .nav-tools-row .theme-toggle-btn:hover {
-    width: auto !important;
+    width: 96px !important;
     padding: 0 14px 0 12px !important;
     gap: 6px;
   }
   .inspo-top-navbar .nav-tools-row .theme-toggle-btn:hover .theme-toggle-animated-label {
-    max-width: 80px;
+    max-width: 60px;
     opacity: 1;
     margin-left: 2px;
   }
 
   .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn:hover {
-    width: auto !important;
+    width: 90px !important;
     padding: 0 14px 0 12px !important;
     gap: 6px;
   }
   .inspo-top-navbar .nav-tools-row .nav-menu-expand-btn:hover .nav-btn-animated-label {
-    max-width: 80px;
+    max-width: 50px;
     opacity: 1;
     margin-left: 2px;
   }
@@ -390,17 +391,26 @@ html.light-theme .inspo-top-navbar {
               inset 0 1px 2px rgba(255, 255, 255, 0.45);
 }
 
-/* When hovering over the shrunk button on desktop, softly expand back */
+/* When hovering over the shrunk button on desktop, softly expand immediately; upon leaving hover, wait 0.5s before shrinking */
 @media (hover: hover) and (pointer: fine) {
   .nav-auth-pill-btn.shrunk:hover {
     width: auto;
     padding: 0 16px;
     gap: 7px;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0s,
+                padding 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0s,
+                background 0.25s ease,
+                border-color 0.25s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
   }
 
   .nav-auth-pill-btn.shrunk:hover .nav-auth-label {
     max-width: 140px;
     opacity: 1;
+    transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0s,
+                opacity 0.25s ease 0s,
+                margin 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0s;
   }
 }
 

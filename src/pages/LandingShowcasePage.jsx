@@ -42,30 +42,40 @@ export default function LandingShowcasePage({
 
   // Sequential button animations:
   // 1. At 5s: Login/Sign Up button shrinks to profile icon
-  // 2. Immediately after: Theme icon expands to show "Theme", stays 2s, then shrinks
-  // 3. Immediately after: Hamburger menu icon expands to show "More", stays 2s, then shrinks
+  // 2. At 5.4s: Theme icon expands to show "Theme", stays 2.4s, then smoothly shrinks
+  // 3. At 8.5s: Hamburger menu icon expands to show "More", stays 2.4s, then smoothly shrinks
   useEffect(() => {
-    // 5s: shrink auth button and expand theme button
+    // 5s: shrink auth button
     const authTimer = setTimeout(() => {
       setIsAuthBtnShrunk(true);
-      setIsThemeExpanded(true);
     }, 5000);
 
-    // 7s (5s + 2s): shrink theme button and expand hamburger menu button
-    const themeTimer = setTimeout(() => {
-      setIsThemeExpanded(false);
-      setIsMenuExpanded(true);
-    }, 7000);
+    // 5.4s: expand theme button
+    const themeExpandTimer = setTimeout(() => {
+      setIsThemeExpanded(true);
+    }, 5400);
 
-    // 9s (7s + 2s): shrink hamburger menu button
-    const menuTimer = setTimeout(() => {
+    // 7.8s: collapse theme button
+    const themeCollapseTimer = setTimeout(() => {
+      setIsThemeExpanded(false);
+    }, 7800);
+
+    // 8.5s: expand hamburger menu button
+    const menuExpandTimer = setTimeout(() => {
+      setIsMenuExpanded(true);
+    }, 8500);
+
+    // 10.9s: collapse hamburger menu button
+    const menuCollapseTimer = setTimeout(() => {
       setIsMenuExpanded(false);
-    }, 9000);
+    }, 10900);
 
     return () => {
       clearTimeout(authTimer);
-      clearTimeout(themeTimer);
-      clearTimeout(menuTimer);
+      clearTimeout(themeExpandTimer);
+      clearTimeout(themeCollapseTimer);
+      clearTimeout(menuExpandTimer);
+      clearTimeout(menuCollapseTimer);
     };
   }, []);
 

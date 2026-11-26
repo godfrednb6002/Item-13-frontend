@@ -91,27 +91,35 @@ export default function App() {
 
   // Sequential button animations:
   // 1. At 5s: Login/Sign Up button shrinks to profile icon
-  // 2. Immediately after: Theme icon expands to show "Theme", stays 2s, then shrinks
-  // 3. Immediately after: Hamburger menu icon expands to show "More", stays 2s, then shrinks
+  // 2. At 5.4s: Theme icon expands to show "Theme", stays 2.4s, then smoothly shrinks
+  // 3. At 8.5s: Hamburger menu icon expands to show "More", stays 2.4s, then smoothly shrinks
   useEffect(() => {
     const authTimer = setTimeout(() => {
       setIsAuthBtnShrunk(true);
-      setIsThemeExpanded(true);
     }, 5000);
 
-    const themeTimer = setTimeout(() => {
-      setIsThemeExpanded(false);
-      setIsMenuExpanded(true);
-    }, 7000);
+    const themeExpandTimer = setTimeout(() => {
+      setIsThemeExpanded(true);
+    }, 5400);
 
-    const menuTimer = setTimeout(() => {
+    const themeCollapseTimer = setTimeout(() => {
+      setIsThemeExpanded(false);
+    }, 7800);
+
+    const menuExpandTimer = setTimeout(() => {
+      setIsMenuExpanded(true);
+    }, 8500);
+
+    const menuCollapseTimer = setTimeout(() => {
       setIsMenuExpanded(false);
-    }, 9000);
+    }, 10900);
 
     return () => {
       clearTimeout(authTimer);
-      clearTimeout(themeTimer);
-      clearTimeout(menuTimer);
+      clearTimeout(themeExpandTimer);
+      clearTimeout(themeCollapseTimer);
+      clearTimeout(menuExpandTimer);
+      clearTimeout(menuCollapseTimer);
     };
   }, []);
 

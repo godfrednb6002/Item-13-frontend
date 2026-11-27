@@ -2709,6 +2709,51 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
   transform: rotate(180deg);
 }
 
+/* Minimal arrow down V button at the top-right corner of order instances */
+.order-arrow-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c9cacf;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.order-arrow-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.18);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+  transform: scale(1.06);
+}
+
+.order-arrow-collapse-btn .arrow-collapse-icon {
+  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.order-arrow-collapse-btn .arrow-collapse-icon.rotated,
+.order-arrow-collapse-btn.is-collapsed .arrow-collapse-icon {
+  transform: rotate(180deg);
+}
+
+html.light-theme .order-arrow-collapse-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #475569;
+}
+
+html.light-theme .order-arrow-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: #8c6307;
+}
+
 html.light-theme .order-collapsed-prod-name {
   color: #1e293b;
 }

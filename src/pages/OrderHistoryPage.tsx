@@ -143,13 +143,12 @@ function OrderCard({
           {onToggleCollapse && (
             <button
               type="button"
-              className="history-collapse-btn"
+              className="history-arrow-collapse-btn"
               onClick={onToggleCollapse}
               aria-label={isCollapsed ? `Expand order ${order.id}` : `Collapse order ${order.id}`}
-              title={isCollapsed ? 'Expand details' : 'Collapse to summary'}
+              title={isCollapsed ? 'Expand details' : 'Collapse details'}
             >
-              <span>{isCollapsed ? 'Expand' : 'Collapse'}</span>
-              <ChevronDown className={`history-collapse-chevron ${isCollapsed ? 'is-rotated' : ''}`} size={15} />
+              <ChevronDown className={`history-collapse-chevron ${isCollapsed ? 'is-rotated' : ''}`} size={18} />
             </button>
           )}
         </div>

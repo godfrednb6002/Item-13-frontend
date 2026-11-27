@@ -183,12 +183,12 @@ export default function OrderTrackingPage({
             </div>
             <button
               type="button"
-              className="collapsed-summary-expand-btn"
+              className="order-arrow-collapse-btn"
               onClick={() => setIsOverviewCollapsed(false)}
               aria-label="Expand order overview"
+              title="Expand order overview"
             >
-              <span>Expand</span>
-              <ChevronDown className="is-rotated" size={15} />
+              <ChevronDown className="arrow-collapse-icon rotated" size={18} />
             </button>
           </div>
         ) : (
@@ -197,12 +197,12 @@ export default function OrderTrackingPage({
               <div className="order-confirmation-icon"><CheckCircle2 size={26} aria-hidden="true" /></div>
               <button
                 type="button"
-                className="order-collapse-toggle-pill"
+                className="order-arrow-collapse-btn"
                 onClick={() => setIsOverviewCollapsed(true)}
-                title="Collapse to in-transit, product name and order id"
+                title="Collapse details"
+                aria-label="Collapse details"
               >
-                <span>Collapse</span>
-                <ChevronDown size={14} />
+                <ChevronDown size={18} className="arrow-collapse-icon" />
               </button>
             </div>
             <p className="order-eyebrow">ORDER CONFIRMED</p>

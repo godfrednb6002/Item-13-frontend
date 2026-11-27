@@ -633,6 +633,42 @@ html.light-theme .history-footer-note { color: #696c73; }
   transition: all 0.2s ease;
 }
 
+/* Minimal arrow down button for history order cards */
+.history-arrow-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #c9cacf;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.history-arrow-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.18);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+  transform: scale(1.06);
+}
+
+html.light-theme .history-arrow-collapse-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #555963;
+}
+
+html.light-theme .history-arrow-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: #8c6307;
+}
+
 .history-collapse-btn:hover {
   background: rgba(244, 182, 39, 0.15);
   border-color: var(--gold, #f4b627);

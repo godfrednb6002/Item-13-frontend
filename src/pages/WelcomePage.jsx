@@ -950,34 +950,33 @@ export default function WelcomePage({
                             </div>
                             <div className="order-header-actions">
                               {!collapsedOrders['ITM-8921'] && (
-                                <span className="order-date">Today, 4:15 PM</span>
+                                <>
+                                  <span className="order-date">Today, 4:15 PM</span>
+                                  <button
+                                    type="button"
+                                    className="btn-track-order"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleTrackOrder('ITM-8921');
+                                    }}
+                                  >
+                                    <Truck size={14} />
+                                    <span>Track Live</span>
+                                  </button>
+                                </>
                               )}
                               <button
                                 type="button"
-                                className="order-instance-collapse-btn"
+                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8921'] ? 'is-collapsed' : ''}`}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   toggleOrderCollapse('ITM-8921');
                                 }}
-                                aria-label={collapsedOrders['ITM-8921'] ? "Expand order ITM-8921" : "Collapse order ITM-8921"}
-                                title={collapsedOrders['ITM-8921'] ? "Expand details" : "Collapse to summary"}
+                                aria-label={collapsedOrders['ITM-8921'] ? "Expand order details" : "Collapse order details"}
+                                title={collapsedOrders['ITM-8921'] ? "Expand details" : "Collapse details"}
                               >
-                                <span>{collapsedOrders['ITM-8921'] ? 'Expand' : 'Collapse'}</span>
-                                <ChevronDown size={14} className={`collapse-chevron-icon ${collapsedOrders['ITM-8921'] ? 'rotated' : ''}`} />
+                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8921'] ? 'rotated' : ''}`} />
                               </button>
-                              {!collapsedOrders['ITM-8921'] && (
-                                <button
-                                  type="button"
-                                  className="btn-track-order"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleTrackOrder('ITM-8921');
-                                  }}
-                                >
-                                  <Truck size={14} />
-                                  <span>Track Live</span>
-                                </button>
-                              )}
                             </div>
                           </div>
 
@@ -1047,34 +1046,33 @@ export default function WelcomePage({
                             </div>
                             <div className="order-header-actions">
                               {!collapsedOrders['ITM-8104'] && (
-                                <span className="order-date">October 24, 2026</span>
+                                <>
+                                  <span className="order-date">October 24, 2026</span>
+                                  <button
+                                    type="button"
+                                    className="btn-track-order btn-track-delivered"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleTrackOrder('ITM-8104');
+                                    }}
+                                  >
+                                    <Package size={14} />
+                                    <span>View Details</span>
+                                  </button>
+                                </>
                               )}
                               <button
                                 type="button"
-                                className="order-instance-collapse-btn"
+                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8104'] ? 'is-collapsed' : ''}`}
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   toggleOrderCollapse('ITM-8104');
                                 }}
-                                aria-label={collapsedOrders['ITM-8104'] ? "Expand order ITM-8104" : "Collapse order ITM-8104"}
-                                title={collapsedOrders['ITM-8104'] ? "Expand details" : "Collapse to summary"}
+                                aria-label={collapsedOrders['ITM-8104'] ? "Expand order details" : "Collapse order details"}
+                                title={collapsedOrders['ITM-8104'] ? "Expand details" : "Collapse details"}
                               >
-                                <span>{collapsedOrders['ITM-8104'] ? 'Expand' : 'Collapse'}</span>
-                                <ChevronDown size={14} className={`collapse-chevron-icon ${collapsedOrders['ITM-8104'] ? 'rotated' : ''}`} />
+                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8104'] ? 'rotated' : ''}`} />
                               </button>
-                              {!collapsedOrders['ITM-8104'] && (
-                                <button
-                                  type="button"
-                                  className="btn-track-order btn-track-delivered"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleTrackOrder('ITM-8104');
-                                  }}
-                                >
-                                  <Package size={14} />
-                                  <span>View Details</span>
-                                </button>
-                              )}
                             </div>
                           </div>
 

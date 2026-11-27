@@ -653,7 +653,6 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
             <span className="profile-eyebrow">VIP SNACK CLUB MEMBER</span>
             <h1>My account</h1>
           </div>
-          <button className="profile-logout-button" onClick={onSignOut}>Sign out</button>
         </div>
 
         <div className="profile-dashboard">

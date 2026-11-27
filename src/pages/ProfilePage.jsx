@@ -69,7 +69,7 @@ function SectionHeading({ eyebrow, title, description, action, onAction }) {
   );
 }
 
-function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initialSection = 'overview' }) {
+function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initialSection = 'overview', isEmbedded = false }) {
   const [activeSection, setActiveSection] = useState(initialSection);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
@@ -628,22 +628,24 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
   }[activeSection];
 
   return (
-    <div className="profile-page">
-      <header className="profile-topbar">
-        <a href="/" className="profile-brand" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} aria-label="Item13 home" style={{ textDecoration: 'none' }}>
-          <img src="/item13Logo-trimmed.png" alt="Item13" />
-          <span>THE UNEXPECTED ESSENTIAL</span>
-        </a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <ThemeToggle />
-          <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
-            <ArrowLeft size={16} /> Back to dashboard
+    <div className={`profile-page${isEmbedded ? ' profile-page-embedded' : ''}`}>
+      {!isEmbedded && (
+        <header className="profile-topbar">
+          <a href="/" className="profile-brand" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} aria-label="Item13 home" style={{ textDecoration: 'none' }}>
+            <img src="/item13Logo-trimmed.png" alt="Item13" />
+            <span>THE UNEXPECTED ESSENTIAL</span>
           </a>
-          <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
-            Homepage
-          </a>
-        </div>
-      </header>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <ThemeToggle />
+            <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
+              <ArrowLeft size={16} /> Back to dashboard
+            </a>
+            <a href="/dashboard" className="profile-back-link" onClick={(e) => { e.preventDefault(); onNavigate('welcome'); }} style={{ textDecoration: 'none' }}>
+              Homepage
+            </a>
+          </div>
+        </header>
+      )}
 
       <main className="profile-layout">
         <div className="profile-page-intro">

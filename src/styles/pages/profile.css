@@ -11,6 +11,20 @@
   padding-bottom: 36px;
 }
 
+.profile-page.profile-page-embedded {
+  min-height: auto;
+  background: transparent;
+  padding-bottom: 24px;
+}
+
+.profile-page.profile-page-embedded .profile-layout {
+  width: 100%;
+}
+
+.profile-page.profile-page-embedded .profile-page-intro {
+  padding-top: 18px;
+}
+
 .profile-topbar {
   min-height: 86px;
   padding: 18px max(5vw, 24px);

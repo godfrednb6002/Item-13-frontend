@@ -1453,6 +1453,7 @@ export default function WelcomePage({
                         onAddToCart={onAddToCart}
                         initialSection={activeTab.startsWith('profile-') ? activeTab.replace('profile-', '') : 'overview'}
                         onSignOut={onSignOut}
+                        isEmbedded={true}
                       />
                     </div>
                   )}

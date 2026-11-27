@@ -70,7 +70,7 @@ export default function App() {
     if (path.startsWith('/a/')) {
       path = path.slice(2); // '/a/menu' -> '/menu', '/a/dashboard' -> '/dashboard'
     } else if (path === '/a') {
-      path = '/home'; // /a is the authenticated home page
+      return 'home'; // /a is the authenticated home page
     }
 
     if (path.startsWith('/checkout/confirmation')) return 'order-confirmation';
@@ -250,7 +250,8 @@ export default function App() {
       if (path.startsWith('/a/')) {
         path = path.slice(2);
       } else if (path === '/a') {
-        path = '/home';
+        setCurrentPage('home');
+        return;
       }
 
       if (path.startsWith('/checkout/confirmation')) {
@@ -404,7 +405,9 @@ export default function App() {
       } else {
         setCurrentPage(`welcome-${sub}`);
       }
-    } else if (page === 'home' || page === 'landing') {
+    } else if (page === 'home') {
+      setCurrentPage('home');
+    } else if (page === 'landing' || page === 'showcase') {
       setCurrentPage('landing');
     } else {
       setCurrentPage(page === 'dashboard' ? 'welcome' : (page === 'products' ? 'menu' : (page === 'profile' ? 'welcome-profile' : page)));
@@ -1177,7 +1180,7 @@ export default function App() {
     );
   }
 
-  if (currentPage === 'landing' || currentPage === 'home') {
+  if (currentPage === 'landing' || (!user && currentPage === 'home')) {
     return (
       <>
         {toastMessage && (

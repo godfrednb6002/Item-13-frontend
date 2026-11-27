@@ -199,7 +199,7 @@ export default function OrderTrackingPage({
                 type="button"
                 className="order-collapse-toggle-pill"
                 onClick={() => setIsOverviewCollapsed(true)}
-                title="Collapse to summary bar"
+                title="Collapse to in-transit, product name and order id"
               >
                 <span>Collapse</span>
                 <ChevronDown size={14} />
@@ -219,7 +219,7 @@ export default function OrderTrackingPage({
                 <span>YOUR ESTIMATED DELIVERY</span>
                 <strong>{order.expectedDelivery}</strong>
               </div>
-              <span className="order-delivery-status"><span aria-hidden="true" /> {status === 'Cancelled' ? 'Cancelled' : 'On the way'}</span>
+              <span className="order-delivery-status"><span aria-hidden="true" /> {status === 'Cancelled' ? 'Cancelled' : 'In Transit'}</span>
             </div>
           </section>
         )}

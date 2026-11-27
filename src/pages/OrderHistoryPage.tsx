@@ -119,15 +119,19 @@ function OrderCard({
           <span className={`history-status ${statusClass[order.status]}`}>
             <span aria-hidden="true" />{order.status}
           </span>
-          {isCollapsed && (
-            <span className="history-order-collapsed-name" title={primaryItemName}>
-              {primaryItemName}
-            </span>
+          {isCollapsed ? (
+            <div className="history-collapsed-inline-summary">
+              <span className="history-order-collapsed-name" title={primaryItemName}>
+                {primaryItemName}
+              </span>
+              <span className="history-order-collapsed-id">#{order.id}</span>
+            </div>
+          ) : (
+            <div className="history-order-id">
+              <span>ORDER</span>
+              <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
+            </div>
           )}
-          <div className="history-order-id">
-            {!isCollapsed && <span>ORDER</span>}
-            <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
-          </div>
         </div>
         <div className="history-order-facts">
           {!isCollapsed && (

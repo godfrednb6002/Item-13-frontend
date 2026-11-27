@@ -602,6 +602,22 @@ html.light-theme .history-footer-note { color: #696c73; }
   white-space: nowrap;
 }
 
+.history-collapsed-inline-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.history-order-collapsed-id {
+  color: var(--gold, #f4b627);
+  font-family: var(--font-heading, inherit);
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
 .history-collapse-btn {
   display: inline-flex;
   align-items: center;

@@ -2649,3 +2649,78 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
 .welcome-tab-pane.embedded-pane .contact-hero-section {
   padding-top: 24px;
 }
+
+/* Collapsible Orders on Welcome Dashboard */
+.order-card.is-collapsed {
+  padding: 14px 20px;
+  border-color: rgba(244, 182, 39, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.order-card.is-collapsed .order-card-header {
+  margin-bottom: 0;
+}
+
+.order-collapsed-summary-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 6px;
+  min-width: 0;
+}
+
+.order-collapsed-prod-name {
+  color: #ededec;
+  font-size: 13.5px;
+  font-weight: 600;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.order-instance-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  color: #c9cacf;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.order-instance-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+}
+
+.order-instance-collapse-btn .collapse-chevron-icon {
+  transition: transform 0.2s ease;
+}
+
+.order-instance-collapse-btn .collapse-chevron-icon.rotated {
+  transform: rotate(180deg);
+}
+
+html.light-theme .order-collapsed-prod-name {
+  color: #1e293b;
+}
+
+html.light-theme .order-instance-collapse-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #475569;
+}
+
+html.light-theme .order-instance-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  color: #8c6307;
+  border-color: var(--gold, #f4b627);
+}

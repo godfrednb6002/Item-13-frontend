@@ -65,6 +65,14 @@ export default function WelcomePage({
   const [isOrderSearchOpen, setIsOrderSearchOpen] = useState(false);
   const [orderSortBy, setOrderSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-high' | 'price-low'
   const [isOrderSortOpen, setIsOrderSortOpen] = useState(false);
+  const [collapsedOrders, setCollapsedOrders] = useState({ 'ITM-8921': false, 'ITM-8104': false });
+
+  const toggleOrderCollapse = (orderId) => {
+    setCollapsedOrders((prev) => ({
+      ...prev,
+      [orderId]: !prev[orderId],
+    }));
+  };
   const statPopupRef = useRef(null);
   const orderSortMenuRef = useRef(null);
 
@@ -923,7 +931,7 @@ export default function WelcomePage({
                         {/* Active Order Card */}
                         {(orderStatusTab === 'all' || orderStatusTab === 'in-transit') && (
                         <div
-                          className="order-card active-order"
+                          className={`order-card active-order ${collapsedOrders['ITM-8921'] ? 'is-collapsed' : ''}`}
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleTrackOrder('ITM-8921')}
                           title="Click to view live order tracking"
@@ -931,68 +939,96 @@ export default function WelcomePage({
                           <div className="order-card-header">
                             <div className="order-header-primary">
                               <span className="order-badge in-progress">In Transit</span>
-                              <span className="order-id">#ITM-8921</span>
+                              {collapsedOrders['ITM-8921'] ? (
+                                <div className="order-collapsed-summary-inline">
+                                  <span className="order-collapsed-prod-name">Classic Popcorn &amp; Soda Duo</span>
+                                  <span className="order-id">#ITM-8921</span>
+                                </div>
+                              ) : (
+                                <span className="order-id">#ITM-8921</span>
+                              )}
                             </div>
                             <div className="order-header-actions">
-                              <span className="order-date">Today, 4:15 PM</span>
+                              {!collapsedOrders['ITM-8921'] && (
+                                <span className="order-date">Today, 4:15 PM</span>
+                              )}
                               <button
                                 type="button"
-                                className="btn-track-order"
+                                className="order-instance-collapse-btn"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleTrackOrder('ITM-8921');
+                                  toggleOrderCollapse('ITM-8921');
                                 }}
+                                aria-label={collapsedOrders['ITM-8921'] ? "Expand order ITM-8921" : "Collapse order ITM-8921"}
+                                title={collapsedOrders['ITM-8921'] ? "Expand details" : "Collapse to summary"}
                               >
-                                <Truck size={14} />
-                                <span>Track Live</span>
+                                <span>{collapsedOrders['ITM-8921'] ? 'Expand' : 'Collapse'}</span>
+                                <ChevronDown size={14} className={`collapse-chevron-icon ${collapsedOrders['ITM-8921'] ? 'rotated' : ''}`} />
                               </button>
+                              {!collapsedOrders['ITM-8921'] && (
+                                <button
+                                  type="button"
+                                  className="btn-track-order"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleTrackOrder('ITM-8921');
+                                  }}
+                                >
+                                  <Truck size={14} />
+                                  <span>Track Live</span>
+                                </button>
+                              )}
                             </div>
                           </div>
 
-                          <div className="order-items-summary">
-                            <div className="order-item-line">
-                              <span className="item-qty">1x</span>
-                              <span className="item-name">Classic Popcorn &amp; Soda Duo (Large Tub, Extra Butter)</span>
-                              <span className="item-price">GH₵ 51.00</span>
-                            </div>
-                            <button
-                              type="button"
-                              className="btn-toggle-timeline"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setIsTimelineExpanded((prev) => !prev);
-                              }}
-                            >
-                              <span>{isTimelineExpanded ? 'Hide progress steps' : 'View progress steps'}</span>
-                              <ChevronDown size={14} className={`timeline-toggle-chevron ${isTimelineExpanded ? 'open' : ''}`} />
-                            </button>
-                          </div>
+                          {!collapsedOrders['ITM-8921'] && (
+                            <>
+                              <div className="order-items-summary">
+                                <div className="order-item-line">
+                                  <span className="item-qty">1x</span>
+                                  <span className="item-name">Classic Popcorn &amp; Soda Duo (Large Tub, Extra Butter)</span>
+                                  <span className="item-price">GH₵ 51.00</span>
+                                </div>
+                                <button
+                                  type="button"
+                                  className="btn-toggle-timeline"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsTimelineExpanded((prev) => !prev);
+                                  }}
+                                >
+                                  <span>{isTimelineExpanded ? 'Hide progress steps' : 'View progress steps'}</span>
+                                  <ChevronDown size={14} className={`timeline-toggle-chevron ${isTimelineExpanded ? 'open' : ''}`} />
+                                </button>
+                              </div>
 
-                          <div className={`order-tracker-timeline ${isTimelineExpanded ? 'is-visible' : 'is-collapsed-mobile'}`}>
-                            <div className="track-step done">
-                              <div className="step-bullet"><Check size={12} /></div>
-                              <span>Order Placed</span>
-                            </div>
-                            <div className="track-step done">
-                              <div className="step-bullet"><Check size={12} /></div>
-                              <span>Popping Fresh</span>
-                            </div>
-                            <div className="track-step current">
-                              <div className="step-bullet"><Clock size={12} /></div>
-                              <span>With Dispatch Rider</span>
-                            </div>
-                            <div className="track-step">
-                              <div className="step-bullet" />
-                              <span>Delivered</span>
-                            </div>
-                          </div>
+                              <div className={`order-tracker-timeline ${isTimelineExpanded ? 'is-visible' : 'is-collapsed-mobile'}`}>
+                                <div className="track-step done">
+                                  <div className="step-bullet"><Check size={12} /></div>
+                                  <span>Order Placed</span>
+                                </div>
+                                <div className="track-step done">
+                                  <div className="step-bullet"><Check size={12} /></div>
+                                  <span>Popping Fresh</span>
+                                </div>
+                                <div className="track-step current">
+                                  <div className="step-bullet"><Clock size={12} /></div>
+                                  <span>With Dispatch Rider</span>
+                                </div>
+                                <div className="track-step">
+                                  <div className="step-bullet" />
+                                  <span>Delivered</span>
+                                </div>
+                              </div>
+                            </>
+                          )}
                         </div>
                         )}
 
                         {/* Past Order Card */}
                         {(orderStatusTab === 'all' || orderStatusTab === 'delivered') && (
                         <div
-                          className="order-card"
+                          className={`order-card ${collapsedOrders['ITM-8104'] ? 'is-collapsed' : ''}`}
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleTrackOrder('ITM-8104')}
                           title="Click to view order delivery details"
@@ -1000,41 +1036,72 @@ export default function WelcomePage({
                           <div className="order-card-header">
                             <div className="order-header-primary">
                               <span className="order-badge completed">Delivered</span>
-                              <span className="order-id">#ITM-8104</span>
+                              {collapsedOrders['ITM-8104'] ? (
+                                <div className="order-collapsed-summary-inline">
+                                  <span className="order-collapsed-prod-name">Artisan Golden Caramel Crunch</span>
+                                  <span className="order-id">#ITM-8104</span>
+                                </div>
+                              ) : (
+                                <span className="order-id">#ITM-8104</span>
+                              )}
                             </div>
                             <div className="order-header-actions">
-                              <span className="order-date">October 24, 2026</span>
+                              {!collapsedOrders['ITM-8104'] && (
+                                <span className="order-date">October 24, 2026</span>
+                              )}
                               <button
                                 type="button"
-                                className="btn-track-order btn-track-delivered"
+                                className="order-instance-collapse-btn"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleTrackOrder('ITM-8104');
+                                  toggleOrderCollapse('ITM-8104');
                                 }}
+                                aria-label={collapsedOrders['ITM-8104'] ? "Expand order ITM-8104" : "Collapse order ITM-8104"}
+                                title={collapsedOrders['ITM-8104'] ? "Expand details" : "Collapse to summary"}
                               >
-                                <Package size={14} />
-                                <span>View Details</span>
+                                <span>{collapsedOrders['ITM-8104'] ? 'Expand' : 'Collapse'}</span>
+                                <ChevronDown size={14} className={`collapse-chevron-icon ${collapsedOrders['ITM-8104'] ? 'rotated' : ''}`} />
                               </button>
+                              {!collapsedOrders['ITM-8104'] && (
+                                <button
+                                  type="button"
+                                  className="btn-track-order btn-track-delivered"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleTrackOrder('ITM-8104');
+                                  }}
+                                >
+                                  <Package size={14} />
+                                  <span>View Details</span>
+                                </button>
+                              )}
                             </div>
                           </div>
 
-                          <div className="order-items-summary">
-                            <div className="order-item-line">
-                              <span className="item-qty">2x</span>
-                              <span className="item-name">Artisan Golden Caramel Crunch (Jumbo Tubs)</span>
-                              <span className="item-price">GH₵ 90.00</span>
-                            </div>
-                          </div>
+                          {!collapsedOrders['ITM-8104'] && (
+                            <>
+                              <div className="order-items-summary">
+                                <div className="order-item-line">
+                                  <span className="item-qty">2x</span>
+                                  <span className="item-name">Artisan Golden Caramel Crunch (Jumbo Tubs)</span>
+                                  <span className="item-price">GH₵ 90.00</span>
+                                </div>
+                              </div>
 
-                          <div className="order-card-actions">
-                            <button
-                              className="btn-reorder"
-                              onClick={() => onNavigate && onNavigate('menu')}
-                            >
-                              Re-order in 1-Click
-                            </button>
-                            <span className="order-total-label">Total: <strong>GH₵ 90.00</strong></span>
-                          </div>
+                              <div className="order-card-actions">
+                                <button
+                                  className="btn-reorder"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (onNavigate) onNavigate('menu');
+                                  }}
+                                >
+                                  Re-order in 1-Click
+                                </button>
+                                <span className="order-total-label">Total: <strong>GH₵ 90.00</strong></span>
+                              </div>
+                            </>
+                          )}
                         </div>
                         )}
 

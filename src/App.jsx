@@ -24,16 +24,35 @@ import NotFoundPage from './pages/NotFoundPage';
 import MobileBottomTabs from './components/MobileBottomTabs';
 import FloatingBagButton from './components/FloatingBagButton';
 
+// Helper to get stored user session across page reloads
+const getStoredUser = () => {
+  try {
+    const raw = localStorage.getItem('item13_user');
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
 export default function App() {
   const getInitialPage = () => {
-    const path = window.location.pathname;
+    let path = window.location.pathname;
+    const hasUser = !!getStoredUser();
+
+    // Strip leading /a/ or /a for authenticated paths
+    if (path.startsWith('/a/')) {
+      path = path.slice(2); // '/a/menu' -> '/menu'
+    } else if (path === '/a') {
+      path = '/dashboard';
+    }
+
     if (path.startsWith('/checkout/confirmation')) return 'order-confirmation';
     if (path.startsWith('/checkout')) return 'checkout';
     if (path.startsWith('/payment')) return 'payment';
     if (path.startsWith('/orders/')) return 'order-tracking';
-    if (path === '/orders' || path === '/order-tracking') return 'account-orders';
-    if (path === '/account/orders') return 'account-orders';
-    if (path === '/account/addresses' || path === '/dashboard/addresses') return 'welcome-addresses';
+    if (path === '/orders' || path === '/order-tracking') return hasUser ? 'welcome-orders' : 'account-orders';
+    if (path === '/account/orders') return hasUser ? 'welcome-orders' : 'account-orders';
+    if (path === '/account/addresses' || path === '/dashboard/addresses') return hasUser ? 'welcome-addresses' : 'welcome-addresses';
     if (path.startsWith('/cart') || path.startsWith('/bag')) return 'cart';
     if (path.startsWith('/dashboard/profile/')) {
       const section = path.replace('/dashboard/profile/', '');
@@ -41,8 +60,7 @@ export default function App() {
     }
     if (path === '/dashboard/profile') return 'welcome-profile';
     if (path.startsWith('/profile') || path.startsWith('/account')) {
-      window.history.replaceState({}, '', '/dashboard/profile');
-      return 'welcome-profile';
+      return hasUser ? 'welcome-profile' : 'welcome-profile';
     }
     if (path.startsWith('/dashboard/')) {
       const sub = path.replace('/dashboard/', '');
@@ -61,23 +79,29 @@ export default function App() {
       const id = path.replace('/products/', '');
       return 'product-' + id;
     }
-    if (path === '/home') return 'home';
-    if (path === '/' || path === '') return 'landing';
+    if (path === '/home') return hasUser ? 'home' : 'landing';
+    if (path === '/' || path === '') return hasUser ? 'home' : 'landing';
     if (path === '/showcase') {
-      window.history.replaceState({}, '', '/');
       return 'landing';
     }
     if (path === '/404' || path === '/not-found') return 'not-found';
     return 'not-found';
   };
 
-  const [currentPage, setCurrentPage] = useState(getInitialPage);
-  const [trackedOrderId, setTrackedOrderId] = useState(
-    window.location.pathname.startsWith('/orders/')
-      ? decodeURIComponent(window.location.pathname.split('/')[2] || mockOrder.id)
-      : mockOrder.id,
-  );
-  const [user, setUser] = useState(null);
+  const [user, setUserState] = useState(getStoredUser);
+
+  const setUser = (newUser) => {
+    setUserState(newUser);
+    try {
+      if (newUser) {
+        localStorage.setItem('item13_user', JSON.stringify(newUser));
+      } else {
+        localStorage.removeItem('item13_user');
+      }
+    } catch (e) {
+      console.error('Failed to update user session in storage', e);
+    }
+  };
   const [toastMessage, setToastMessage] = useState(null);
   const [activeModal, setActiveModal] = useState(null); // 'signin' | 'login' | 'guest' | 'item' | 'favorites'
   const [cartItems, setCartItems] = useState([]);
@@ -158,7 +182,15 @@ export default function App() {
 
   useEffect(() => {
     const handlePopState = () => {
-      const path = window.location.pathname;
+      let path = window.location.pathname;
+      const hasUser = !!getStoredUser();
+
+      if (path.startsWith('/a/')) {
+        path = path.slice(2);
+      } else if (path === '/a') {
+        path = '/dashboard';
+      }
+
       if (path.startsWith('/checkout/confirmation')) {
         setCurrentPage('order-confirmation');
       } else if (path.startsWith('/checkout')) {
@@ -169,9 +201,9 @@ export default function App() {
         setCurrentPage('order-tracking');
         setTrackedOrderId(decodeURIComponent(path.split('/')[2] || mockOrder.id));
       } else if (path === '/orders' || path === '/order-tracking') {
-        setCurrentPage('account-orders');
+        setCurrentPage(hasUser ? 'welcome-orders' : 'account-orders');
       } else if (path === '/account/orders') {
-        setCurrentPage('account-orders');
+        setCurrentPage(hasUser ? 'welcome-orders' : 'account-orders');
       } else if (path === '/account/addresses' || path === '/dashboard/addresses') {
         setCurrentPage('welcome-addresses');
       } else if (path.startsWith('/cart') || path.startsWith('/bag')) {
@@ -183,7 +215,6 @@ export default function App() {
       } else if (path === '/dashboard/profile') {
         setCurrentPage('welcome-profile');
       } else if (path.startsWith('/profile') || path.startsWith('/account')) {
-        window.history.replaceState({}, '', '/dashboard/profile');
         setCurrentPage('welcome-profile');
       } else if (path.startsWith('/dashboard/')) {
         const sub = path.replace('/dashboard/', '');
@@ -210,12 +241,12 @@ export default function App() {
         const id = path.replace('/products/', '');
         setCurrentPage('product-' + id);
       } else if (path === '/home') {
-        setCurrentPage('home');
+        setCurrentPage(hasUser ? 'home' : 'landing');
       } else if (path === '/' || path === '') {
-        setCurrentPage('landing');
+        setCurrentPage(hasUser ? 'home' : 'landing');
       } else if (path === '/showcase') {
-        window.history.replaceState({}, '', '/');
-        setCurrentPage('landing');
+        window.history.replaceState({}, '', hasUser ? '/a/dashboard' : '/');
+        setCurrentPage(hasUser ? 'home' : 'landing');
       } else if (path === '/404' || path === '/not-found') {
         setCurrentPage('not-found');
       } else {
@@ -227,65 +258,80 @@ export default function App() {
   }, []);
 
   const navigateTo = (page) => {
-    let nextPath = '/';
+    let rawPath = '/';
     if (page === 'cart' || page === 'bag') {
       setIsCartOpen(true);
       return;
     }
     if (page === 'checkout') {
-      nextPath = '/checkout';
+      rawPath = '/checkout';
       setOrderConfirmation(null);
     }
-    else if (page === 'order-confirmation') nextPath = '/checkout/confirmation';
-    else if (page === 'payment') nextPath = '/payment';
+    else if (page === 'order-confirmation') rawPath = '/checkout/confirmation';
+    else if (page === 'payment') rawPath = '/payment';
     else if (page === 'orders' || page === 'track-order' || page === 'order-tracking') {
-      nextPath = user ? '/dashboard/orders' : '/orders';
+      rawPath = user ? '/dashboard/orders' : '/orders';
       if (user) {
         setCurrentPage('welcome-orders');
       } else {
         setCurrentPage('account-orders');
       }
-      if (window.location.pathname !== nextPath) {
-        window.history.pushState({}, '', nextPath);
+      const fullPath = user ? `/a${rawPath}` : rawPath;
+      if (window.location.pathname !== fullPath) {
+        window.history.pushState({}, '', fullPath);
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    else if (page === 'account-orders') nextPath = '/account/orders';
-    else if (page === 'account-addresses' || page === 'addresses') nextPath = '/account/addresses';
-    else if (page === 'delivery') nextPath = '/delivery';
-    else if (page === 'about') nextPath = '/about';
-    else if (page === 'events') nextPath = '/events';
-    else if (page === 'contact') nextPath = '/contact';
-    else if (page === 'login') nextPath = '/login';
-    else if (page === 'signup') nextPath = '/signup';
-    else if (page === 'dashboard' || page === 'welcome') nextPath = '/dashboard';
-    else if (page.startsWith('dashboard/profile/')) nextPath = '/' + page;
-    else if (page.startsWith('dashboard/')) nextPath = '/' + page;
-    else if (page.startsWith('welcome-profile-')) nextPath = '/dashboard/profile/' + page.replace('welcome-profile-', '');
-    else if (page.startsWith('welcome-')) nextPath = '/dashboard/' + page.replace('welcome-', '');
-    else if (page === 'favorites') nextPath = '/account/favorites';
-    else if (page === 'profile') nextPath = '/dashboard/profile';
-    else if (page === 'menu' || page === 'products') nextPath = '/menu';
+    else if (page === 'account-orders') rawPath = user ? '/dashboard/orders' : '/account/orders';
+    else if (page === 'account-addresses' || page === 'addresses') rawPath = '/account/addresses';
+    else if (page === 'delivery') rawPath = '/delivery';
+    else if (page === 'about') rawPath = '/about';
+    else if (page === 'events') rawPath = '/events';
+    else if (page === 'contact') rawPath = '/contact';
+    else if (page === 'login') rawPath = '/login';
+    else if (page === 'signup') rawPath = '/signup';
+    else if (page === 'dashboard' || page === 'welcome') rawPath = '/dashboard';
+    else if (page.startsWith('dashboard/profile/')) rawPath = '/' + page;
+    else if (page.startsWith('dashboard/')) rawPath = '/' + page;
+    else if (page.startsWith('welcome-profile-')) rawPath = '/dashboard/profile/' + page.replace('welcome-profile-', '');
+    else if (page.startsWith('welcome-')) rawPath = '/dashboard/' + page.replace('welcome-', '');
+    else if (page === 'favorites') rawPath = '/account/favorites';
+    else if (page === 'profile') rawPath = '/dashboard/profile';
+    else if (page === 'menu' || page === 'products') rawPath = '/menu';
     else if (page.startsWith('order-tracking/')) {
       const orderId = page.replace('order-tracking/', '');
       setTrackedOrderId(orderId);
-      nextPath = '/orders/' + encodeURIComponent(orderId);
+      rawPath = '/orders/' + encodeURIComponent(orderId);
       setCurrentPage('order-tracking');
-      window.history.pushState({}, '', nextPath);
+      const fullPath = user ? `/a${rawPath}` : rawPath;
+      window.history.pushState({}, '', fullPath);
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     else if (page.startsWith('product-')) {
       const prodId = page.replace('product-', '');
-      nextPath = '/products/' + prodId;
+      rawPath = '/products/' + prodId;
     } else if (page === 'landing' || page === 'showcase') {
-      nextPath = '/';
+      rawPath = user ? '/home' : '/';
     } else if (page === 'home') {
-      nextPath = user ? '/home' : '/';
+      rawPath = user ? '/home' : '/';
     } else if (page === '404' || page === 'not-found') {
-      nextPath = '/404';
+      rawPath = '/404';
     }
+
+    // Prefix with /a when logged in (unless on public-only routes like 404, or landing when logged out)
+    let nextPath = rawPath;
+    if (user) {
+      if (rawPath === '/404') {
+        nextPath = '/a/404';
+      } else {
+        nextPath = `/a${rawPath}`;
+      }
+    } else {
+      nextPath = rawPath;
+    }
+
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
@@ -523,7 +569,8 @@ export default function App() {
           onViewOrder={(orderId) => {
             setTrackedOrderId(orderId);
             setCurrentPage('order-tracking');
-            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+            const fullPath = user ? `/a/orders/${encodeURIComponent(orderId)}` : `/orders/${encodeURIComponent(orderId)}`;
+            window.history.pushState({}, '', fullPath);
           }}
           onReorder={addOrderToCart}
           onViewCart={() => {
@@ -657,7 +704,8 @@ export default function App() {
           onViewOrder={(orderId) => {
             setTrackedOrderId(orderId);
             setCurrentPage('order-tracking');
-            window.history.pushState({}, '', '/orders/' + encodeURIComponent(orderId));
+            const fullPath = user ? `/a/orders/${encodeURIComponent(orderId)}` : `/orders/${encodeURIComponent(orderId)}`;
+            window.history.pushState({}, '', fullPath);
           }}
           onPlaceOrder={(order) => {
             setOrderConfirmation({
@@ -666,11 +714,12 @@ export default function App() {
             });
             setCartItems([]);
             setCurrentPage('order-confirmation');
-            window.history.pushState({}, '', '/checkout/confirmation');
+            const fullPath = user ? '/a/checkout/confirmation' : '/checkout/confirmation';
+            window.history.pushState({}, '', fullPath);
           }}
           onSignOut={() => {
             setUser(null);
-            navigateTo('home');
+            navigateTo('landing');
             showToast('Signed out of Item13.');
           }}
         />

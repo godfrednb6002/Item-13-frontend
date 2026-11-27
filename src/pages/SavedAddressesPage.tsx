@@ -5,7 +5,10 @@ import {
   Building2,
   Check,
   ChevronDown,
+  Grid3X3,
   Home,
+  LayoutGrid,
+  List,
   Loader2,
   MapPin,
   Pencil,
@@ -16,6 +19,7 @@ import {
 import '../styles/pages/saved-addresses.css';
 
 type AddressType = 'Home' | 'Hostel' | 'Office' | 'Other';
+type ViewLayout = 'grid' | 'list' | 'tile';
 
 export type SavedAddress = {
   id: string;
@@ -439,6 +443,7 @@ export default function SavedAddressesPage({
   const [notice, setNotice] = useState('');
   const [noticeVisible, setNoticeVisible] = useState(false);
   const [collapsedAddresses, setCollapsedAddresses] = useState<Record<string, boolean>>({});
+  const [viewLayout, setViewLayout] = useState<ViewLayout>('grid');
 
   useEffect(() => {
     if (!notice) {
@@ -518,13 +523,47 @@ export default function SavedAddressesPage({
             <h1 id="addresses-title">Saved Addresses</h1>
             <p>Manage your delivery locations for instant, one-click checkouts.</p>
           </div>
-          <button className="addresses-add-button" type="button" onClick={() => { setEditingAddress(null); setIsAdding(true); }}>
-            <Plus size={18} aria-hidden="true" /> Add new address
-          </button>
+          <div className="addresses-heading-actions">
+            <div className="addresses-layout-switcher" role="radiogroup" aria-label="Address layout options">
+              <button
+                type="button"
+                className={`addresses-layout-btn${viewLayout === 'grid' ? ' is-active' : ''}`}
+                onClick={() => setViewLayout('grid')}
+                aria-label="Grid layout"
+                title="Grid layout"
+              >
+                <LayoutGrid size={16} aria-hidden="true" />
+                <span>Grid</span>
+              </button>
+              <button
+                type="button"
+                className={`addresses-layout-btn${viewLayout === 'list' ? ' is-active' : ''}`}
+                onClick={() => setViewLayout('list')}
+                aria-label="List layout"
+                title="List layout"
+              >
+                <List size={16} aria-hidden="true" />
+                <span>List</span>
+              </button>
+              <button
+                type="button"
+                className={`addresses-layout-btn${viewLayout === 'tile' ? ' is-active' : ''}`}
+                onClick={() => setViewLayout('tile')}
+                aria-label="Tile layout"
+                title="Tile layout"
+              >
+                <Grid3X3 size={16} aria-hidden="true" />
+                <span>Tile</span>
+              </button>
+            </div>
+            <button className="addresses-add-button" type="button" onClick={() => { setEditingAddress(null); setIsAdding(true); }}>
+              <Plus size={18} aria-hidden="true" /> Add new address
+            </button>
+          </div>
         </section>
 
         {savedAddresses.length ? (
-          <section className="addresses-grid" aria-label="Your saved delivery addresses">
+          <section className={`addresses-container addresses-layout-${viewLayout}`} aria-label="Your saved delivery addresses">
             {savedAddresses.map((address) => {
               const Icon = typeIcons[address.type];
               const isCollapsed = isAddressCollapsed(address.id);

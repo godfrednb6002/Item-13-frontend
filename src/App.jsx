@@ -402,7 +402,15 @@ export default function App() {
         nextPath = `/a${clean}`;
       }
     } else {
-      nextPath = rawPath || '/';
+      // Unauthenticated customer must never be on /a routes
+      if (rawPath.startsWith('/a/') || rawPath === '/a') {
+        const clean = rawPath.replace(/^\/a(\/|$)/, '/');
+        const returnUrl = encodeURIComponent(rawPath);
+        nextPath = `/login?redirect=${returnUrl}`;
+        setCurrentPage('login');
+      } else {
+        nextPath = rawPath || '/';
+      }
     }
 
     if (window.location.pathname !== nextPath) {
@@ -749,7 +757,9 @@ export default function App() {
               // Trigger popstate/re-routing
               window.dispatchEvent(new PopStateEvent('popstate'));
             } else {
-              navigateTo('dashboard');
+              // Direct login defaults directly to the authenticated home page /a
+              window.history.pushState({}, '', '/a');
+              setCurrentPage('home');
             }
             showToast(`Welcome, ${userData.name || userData.email.split('@')[0]}!`);
           }}

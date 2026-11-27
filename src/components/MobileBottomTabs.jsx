@@ -69,12 +69,17 @@ export default function MobileBottomTabs({
     if (
       currentPage === 'dashboard' ||
       currentPage === 'welcome' ||
-      currentPage === 'welcome-dashboard' ||
-      currentPage === 'showcase' ||
-      currentPage === 'home' ||
-      currentPage === ''
+      currentPage === 'welcome-dashboard'
     ) {
       return 'dashboard';
+    }
+    if (
+      currentPage === 'home' ||
+      currentPage === 'landing' ||
+      currentPage === 'showcase' ||
+      currentPage === ''
+    ) {
+      return 'home';
     }
     if (
       currentPage === 'menu' ||

@@ -15,6 +15,7 @@ import {
   Heart,
   Lock,
   MapPin,
+  Menu,
   Package,
   Pencil,
   Plus,
@@ -71,6 +72,7 @@ function SectionHeading({ eyebrow, title, description, action, onAction }) {
 
 function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initialSection = 'overview', isEmbedded = false }) {
   const [activeSection, setActiveSection] = useState(initialSection);
+  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false);
   const [favoriteIds, setFavoriteIds] = useState(getSavedFavorites);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [emailUpdates, setEmailUpdates] = useState(true);
@@ -652,27 +654,79 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
           <div>
             <h1>My account</h1>
           </div>
+          <button
+            type="button"
+            className="profile-nav-hamburger"
+            onClick={() => setIsNavDrawerOpen(true)}
+            aria-label="Open account navigation"
+            title="Account navigation"
+          >
+            <Menu size={22} />
+          </button>
         </div>
 
-        <div className="profile-dashboard">
-          <aside className="profile-sidebar">
-            <div className="profile-member-card">
-              <div className="profile-avatar">{initials}</div>
-              <div className="profile-member-copy">
-                <strong>{fullName}</strong>
-                <span>{email}</span>
-              </div>
-              <span className="profile-member-badge"><Sparkles size={12} /> VIP MEMBER</span>
-            </div>
-            <nav className="profile-nav" aria-label="Account sections">
-              {navigation.map(({ id, label, icon: Icon }) => (
-                <button key={id} className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`} onClick={() => setActiveSection(id)}>
-                  <Icon size={17} /><span>{label}</span>{activeSection === id && <ChevronRight size={15} />}
+        {/* Slide-over / Dropdown Drawer for Profile Navigation */}
+        {isNavDrawerOpen && (
+          <div
+            className="profile-drawer-backdrop"
+            onClick={() => setIsNavDrawerOpen(false)}
+          >
+            <aside
+              className="profile-drawer-panel"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="profile-drawer-header">
+                <div className="profile-drawer-member">
+                  <div className="profile-avatar">{initials}</div>
+                  <div className="profile-member-copy">
+                    <strong>{fullName}</strong>
+                    <span>{email}</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="profile-drawer-close"
+                  onClick={() => setIsNavDrawerOpen(false)}
+                  aria-label="Close navigation"
+                >
+                  <X size={20} />
                 </button>
-              ))}
-            </nav>
-          </aside>
+              </div>
 
+              <nav className="profile-nav" aria-label="Account sections">
+                {navigation.map(({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    className={`profile-nav-item ${activeSection === id ? 'is-active' : ''}`}
+                    onClick={() => {
+                      setActiveSection(id);
+                      setIsNavDrawerOpen(false);
+                    }}
+                  >
+                    <Icon size={18} />
+                    <span>{label}</span>
+                    {activeSection === id && <ChevronRight size={15} />}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="profile-drawer-footer">
+                <button
+                  type="button"
+                  className="profile-drawer-logout"
+                  onClick={() => {
+                    setIsNavDrawerOpen(false);
+                    onSignOut && onSignOut();
+                  }}
+                >
+                  Sign out
+                </button>
+              </div>
+            </aside>
+          </div>
+        )}
+
+        <div className="profile-dashboard profile-dashboard-single">
           <div className="profile-content" key={activeSection}>
             {content()}
           </div>

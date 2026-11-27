@@ -650,7 +650,6 @@ function ProfilePage({ user, onNavigate, onSignOut, onToast, onAddToCart, initia
       <main className="profile-layout">
         <div className="profile-page-intro">
           <div>
-            <span className="profile-eyebrow">VIP SNACK CLUB MEMBER</span>
             <h1>My account</h1>
           </div>
         </div>

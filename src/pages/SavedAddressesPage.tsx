@@ -4,6 +4,7 @@ import {
   BriefcaseBusiness,
   Building2,
   Check,
+  ChevronDown,
   Home,
   MapPin,
   Pencil,
@@ -240,6 +241,19 @@ export default function SavedAddressesPage({
   const [editingAddress, setEditingAddress] = useState<SavedAddress | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [notice, setNotice] = useState('');
+  const [collapsedAddresses, setCollapsedAddresses] = useState<Record<string, boolean>>({});
+
+  const isAddressCollapsed = (id: string) => {
+    // Default to true (collapsed)
+    return collapsedAddresses[id] === undefined ? true : collapsedAddresses[id];
+  };
+
+  const toggleAddressCollapse = (id: string) => {
+    setCollapsedAddresses((prev) => ({
+      ...prev,
+      [id]: !isAddressCollapsed(id),
+    }));
+  };
 
   const setDefault = (id: string) => {
     setAddresses((current) => current.map((address) => ({ ...address, isDefault: address.id === id })));
@@ -303,9 +317,25 @@ export default function SavedAddressesPage({
           <section className="addresses-grid" aria-label="Your saved delivery addresses">
             {savedAddresses.map((address) => {
               const Icon = typeIcons[address.type];
+              const isCollapsed = isAddressCollapsed(address.id);
               return (
-                <article className={`address-card${address.isDefault ? ' is-default' : ''}`} key={address.id}>
-                  <header className="address-card-header">
+                <article
+                  className={`address-card${address.isDefault ? ' is-default' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
+                  key={address.id}
+                >
+                  <header
+                    className="address-card-header address-card-header-clickable"
+                    onClick={() => toggleAddressCollapse(address.id)}
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={!isCollapsed}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleAddressCollapse(address.id);
+                      }
+                    }}
+                  >
                     <div className={`address-category-icon address-category-${address.type.toLowerCase()}`}>
                       <Icon size={19} aria-hidden="true" />
                     </div>
@@ -313,44 +343,75 @@ export default function SavedAddressesPage({
                       <span>DELIVERY LOCATION</span>
                       <h2>{address.type}</h2>
                     </div>
-                    {address.isDefault && <span className="address-default-badge"><Check size={12} aria-hidden="true" /> Default address</span>}
+                    {address.isDefault && (
+                      <span className="address-default-badge">
+                        <Check size={12} aria-hidden="true" /> Default address
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      className={`address-collapse-btn ${isCollapsed ? 'is-collapsed' : 'is-expanded'}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleAddressCollapse(address.id);
+                      }}
+                      aria-label={isCollapsed ? `Expand ${address.type} address` : `Collapse ${address.type} address`}
+                    >
+                      <ChevronDown size={18} className={`address-collapse-icon ${isCollapsed ? '' : 'rotated'}`} />
+                    </button>
                   </header>
 
-                  <div className="address-card-recipient">
-                    <strong>{address.name}</strong>
-                    <a href={`tel:${address.phone.replace(/\s/g, '')}`}>{address.phone}</a>
-                  </div>
-                  <address className="address-card-lines">
-                    <span>{address.street}</span>
-                    {address.details && <span>{address.details}</span>}
-                    <span>{address.city}, {address.region}</span>
-                    <span>{address.country}</span>
-                  </address>
-                  {address.gps_location && (
-                    <a
-                      className="address-gps-link"
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address.gps_location)}`}
-                      target="_blank"
-                      rel="noreferrer"
+                  {/* Summary preview row shown when collapsed */}
+                  {isCollapsed && (
+                    <div
+                      className="address-collapsed-summary"
+                      onClick={() => toggleAddressCollapse(address.id)}
                     >
-                      <MapPin size={15} aria-hidden="true" />
-                      <span>GPS / Digital Address <strong>{address.gps_location}</strong></span>
-                    </a>
+                      <span className="address-summary-name">{address.name}</span>
+                      <span className="address-summary-separator">•</span>
+                      <span className="address-summary-street">{address.street}, {address.city}</span>
+                    </div>
                   )}
 
-                  <footer className="address-card-actions">
-                    <button type="button" onClick={() => { setEditingAddress(address); setIsAdding(true); }}>
-                      <Pencil size={14} aria-hidden="true" /> Edit
-                    </button>
-                    <button className="address-delete-action" type="button" onClick={() => deleteAddress(address)}>
-                      <Trash2 size={14} aria-hidden="true" /> Delete
-                    </button>
-                    {!address.isDefault && (
-                      <button className="address-set-default-action" type="button" onClick={() => setDefault(address.id)}>
-                        Set as default
-                      </button>
-                    )}
-                  </footer>
+                  {!isCollapsed && (
+                    <div className="address-card-body">
+                      <div className="address-card-recipient">
+                        <strong>{address.name}</strong>
+                        <a href={`tel:${address.phone.replace(/\s/g, '')}`}>{address.phone}</a>
+                      </div>
+                      <address className="address-card-lines">
+                        <span>{address.street}</span>
+                        {address.details && <span>{address.details}</span>}
+                        <span>{address.city}, {address.region}</span>
+                        <span>{address.country}</span>
+                      </address>
+                      {address.gps_location && (
+                        <a
+                          className="address-gps-link"
+                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address.gps_location)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <MapPin size={15} aria-hidden="true" />
+                          <span>GPS / Digital Address <strong>{address.gps_location}</strong></span>
+                        </a>
+                      )}
+
+                      <footer className="address-card-actions">
+                        <button type="button" onClick={() => { setEditingAddress(address); setIsAdding(true); }}>
+                          <Pencil size={14} aria-hidden="true" /> Edit
+                        </button>
+                        <button className="address-delete-action" type="button" onClick={() => deleteAddress(address)}>
+                          <Trash2 size={14} aria-hidden="true" /> Delete
+                        </button>
+                        {!address.isDefault && (
+                          <button className="address-set-default-action" type="button" onClick={() => setDefault(address.id)}>
+                            Set as default
+                          </button>
+                        )}
+                      </footer>
+                    </div>
+                  )}
                 </article>
               );
             })}

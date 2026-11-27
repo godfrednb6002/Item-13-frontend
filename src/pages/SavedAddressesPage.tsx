@@ -148,34 +148,116 @@ function AddressForm({
         }));
 
         try {
-          // Attempt reverse geocoding to auto-populate street, city, region if available
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-          );
-          if (response.ok) {
-            const data = await response.json();
-            const addr = data.address || {};
-            const city = addr.city || addr.town || addr.suburb || addr.village || addr.county || '';
-            const road = addr.road || addr.pedestrian || addr.footway || '';
-            const houseNumber = addr.house_number ? `${addr.house_number} ` : '';
-            const state = addr.state || '';
+          // Reverse geocoding with fallback to reliably auto-fill street, city, and region
+          let resolved = false;
 
-            setValues((current) => ({
-              ...current,
-              gps_location: coordsFormatted,
-              city: current.city || city,
-              street: current.street || (road ? `${houseNumber}${road}` : ''),
-              region: regions.find((r) => state.toLowerCase().includes(r.toLowerCase())) || current.region,
-            }));
-            setLocationStatus('Current location captured!');
-          } else {
-            setLocationStatus('Location captured!');
+          // 1. Primary reverse geocode via Nominatim
+          try {
+            const response = await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&addressdetails=1`,
+              {
+                headers: {
+                  'Accept-Language': 'en',
+                },
+              }
+            );
+
+            if (response.ok) {
+              const data = await response.json();
+              const addr = data.address || {};
+
+              // Extract best street address
+              const houseNumber = addr.house_number ? `${addr.house_number} ` : '';
+              const road =
+                addr.road ||
+                addr.pedestrian ||
+                addr.street ||
+                addr.footway ||
+                addr.residential ||
+                addr.neighbourhood ||
+                addr.suburb ||
+                '';
+              const streetAddress = road ? `${houseNumber}${road}`.trim() : '';
+
+              // Extract city / town
+              const cityTown =
+                addr.city ||
+                addr.town ||
+                addr.municipality ||
+                addr.district ||
+                addr.suburb ||
+                addr.village ||
+                addr.county ||
+                '';
+
+              // Extract region matching Ghana's 16 regions
+              const stateCandidate = (addr.state || addr.region || addr.province || addr.county || '').toLowerCase();
+              const matchedRegion = regions.find((r) =>
+                stateCandidate.includes(r.toLowerCase()) || r.toLowerCase().includes(stateCandidate)
+              );
+
+              // Extract digital address / postal code if present
+              const postcode = addr.postcode || '';
+
+              // Landmark or suburb details
+              const landmarkDetails =
+                addr.suburb && addr.road && addr.suburb !== addr.road
+                  ? addr.suburb
+                  : addr.neighbourhood || addr.amenity || '';
+
+              setValues((current) => ({
+                ...current,
+                gps_location: postcode || coordsFormatted,
+                street: streetAddress || current.street || `Near ${coordsFormatted}`,
+                city: cityTown || current.city,
+                region: matchedRegion || current.region,
+                details: landmarkDetails ? (current.details ? current.details : landmarkDetails) : current.details,
+              }));
+              resolved = true;
+            }
+          } catch {
+            // Network or CORS issue on primary; will try fallback
           }
+
+          // 2. Fallback reverse geocode via BigDataCloud client API if Nominatim fails
+          if (!resolved) {
+            try {
+              const bdcRes = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+              );
+              if (bdcRes.ok) {
+                const bdcData = await bdcRes.json();
+                const streetAddress = bdcData.locality || bdcData.principalSubdivision || '';
+                const cityTown = bdcData.city || bdcData.locality || '';
+                const stateCandidate = (bdcData.principalSubdivision || '').toLowerCase();
+                const matchedRegion = regions.find((r) =>
+                  stateCandidate.includes(r.toLowerCase()) || r.toLowerCase().includes(stateCandidate)
+                );
+
+                setValues((current) => ({
+                  ...current,
+                  gps_location: coordsFormatted,
+                  street: streetAddress || current.street || `GPS: ${coordsFormatted}`,
+                  city: cityTown || current.city,
+                  region: matchedRegion || current.region,
+                }));
+                resolved = true;
+              }
+            } catch {
+              // Ignore fallback network error
+            }
+          }
+
+          setLocationStatus(
+            resolved
+              ? 'Street, city, and region filled from your location!'
+              : 'Coordinates captured! You can fine-tune street details.'
+          );
         } catch {
-          setLocationStatus('Location captured!');
+          setLocationStatus('Coordinates captured!');
         } finally {
           setIsLocating(false);
-          setTimeout(() => setLocationStatus(''), 4000);
+          setTimeout(() => setLocationStatus(''), 5000);
         }
       },
       (error) => {

@@ -1,6 +1,6 @@
 .addresses-page {
   min-height: 100vh;
-  padding-bottom: 48px;
+  padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
   background:
     radial-gradient(ellipse at 85% 0, rgba(244, 182, 39, 0.09), transparent 34rem),
     #101114;
@@ -169,8 +169,32 @@
 .addresses-empty h2 { margin: 0; font-family: var(--font-heading); font-size: 20px; }
 .addresses-empty p { max-width: 380px; margin: 8px 0 17px; color: #9c9ea5; font-size: 12px; line-height: 1.6; }
 .addresses-empty button { min-height: 42px; display: inline-flex; align-items: center; gap: 8px; padding: 0 15px; border: 1px solid var(--gold); border-radius: 9px; background: var(--gold); color: #201a0e; font: inherit; font-size: 11px; font-weight: 800; cursor: pointer; }
-.addresses-live-notice { position: fixed; right: 20px; bottom: 20px; z-index: 20; padding: 0; border-radius: 10px; background: #222329; color: #e5e5e3; font-size: 12px; }
-.addresses-live-notice:not(:empty) { padding: 12px 16px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+.addresses-live-notice {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 1100;
+  padding: 12px 18px;
+  border: 1px solid rgba(244, 182, 39, 0.35);
+  border-radius: 12px;
+  background: rgba(25, 26, 30, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f7f7f5;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.addresses-live-notice.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
 
 .address-modal-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow-y: auto; padding: 20px; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(5px); }
 .address-modal { width: min(620px, 100%); max-height: min(92vh, 850px); overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 17px; background: #191a1e; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5); }
@@ -267,10 +291,16 @@
 
 .addresses-page button:focus-visible, .addresses-page a:focus-visible, .addresses-page input:focus-visible, .addresses-page select:focus-visible { outline: 2px solid #f7d47b; outline-offset: 3px; }
 
-@media (max-width: 720px) {
-  .addresses-layout { width: min(600px, calc(100% - 32px)); }
-  .addresses-grid { grid-template-columns: 1fr; }
-  .address-card { padding: 17px; }
+@media (max-width: 768px) {
+  .addresses-live-notice {
+    right: 16px;
+    bottom: calc(100px + env(safe-area-inset-bottom, 0px));
+    left: 16px;
+    text-align: center;
+    max-width: 380px;
+    margin: 0 auto;
+    z-index: 1200;
+  }
 }
 
 @media (max-width: 480px) {
@@ -297,7 +327,6 @@
   .address-form-grid { grid-template-columns: 1fr; gap: 11px; }
   .address-field-wide { grid-column: auto; }
   .address-gps-control button { font-size: 8px; }
-  .addresses-live-notice { right: 12px; bottom: 12px; left: 12px; text-align: center; }
 }
 
 html.light-theme .addresses-page { background: radial-gradient(ellipse at 85% 0, rgba(244, 182, 39, 0.11), transparent 34rem), #f7f7f5; color: #18191c; }

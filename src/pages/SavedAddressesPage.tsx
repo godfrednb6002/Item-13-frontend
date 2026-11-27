@@ -437,7 +437,21 @@ export default function SavedAddressesPage({
   const [editingAddress, setEditingAddress] = useState<SavedAddress | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [notice, setNotice] = useState('');
+  const [noticeVisible, setNoticeVisible] = useState(false);
   const [collapsedAddresses, setCollapsedAddresses] = useState<Record<string, boolean>>({});
+
+  useEffect(() => {
+    if (!notice) {
+      setNoticeVisible(false);
+      return;
+    }
+    setNoticeVisible(true);
+    const timer = setTimeout(() => {
+      setNoticeVisible(false);
+      setTimeout(() => setNotice(''), 300); // clear text after fade out
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [notice]);
 
   const isAddressCollapsed = (id: string) => {
     // Default to true (collapsed)
@@ -625,7 +639,13 @@ export default function SavedAddressesPage({
         <p className="addresses-footnote"><MapPin size={15} aria-hidden="true" /> Your digital address helps our delivery team find you faster.</p>
       </div>
 
-      <div className="addresses-live-notice" role="status" aria-live="polite">{notice}</div>
+      <div
+        className={`addresses-live-notice${noticeVisible ? ' is-visible' : ''}`}
+        role="status"
+        aria-live="polite"
+      >
+        {notice}
+      </div>
       {isAdding && (
         <AddressForm
           address={editingAddress}

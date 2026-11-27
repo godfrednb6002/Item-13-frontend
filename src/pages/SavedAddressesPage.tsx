@@ -20,6 +20,7 @@ type AddressType = 'Home' | 'Hostel' | 'Office' | 'Other';
 export type SavedAddress = {
   id: string;
   type: AddressType;
+  customLabel?: string;
   name: string;
   phone: string;
   street: string;
@@ -75,6 +76,7 @@ const mockAddresses: SavedAddress[] = [
 
 const emptyAddress: Omit<SavedAddress, 'id'> = {
   type: 'Home',
+  customLabel: '',
   name: '',
   phone: '',
   street: '',
@@ -329,6 +331,18 @@ function AddressForm({
                 );
               })}
             </div>
+            {values.type === 'Other' && (
+              <label className="address-field address-custom-label-field">
+                <span>Location name</span>
+                <input
+                  name="customLabel"
+                  value={values.customLabel || ''}
+                  onChange={(event) => update('customLabel', event.target.value)}
+                  placeholder="e.g. Gym, Mom's House, Studio, Church"
+                  required
+                />
+              </label>
+            )}
           </fieldset>
 
           <div className="address-form-grid">
@@ -500,6 +514,7 @@ export default function SavedAddressesPage({
             {savedAddresses.map((address) => {
               const Icon = typeIcons[address.type];
               const isCollapsed = isAddressCollapsed(address.id);
+              const displayTitle = address.type === 'Other' && address.customLabel ? address.customLabel : address.type;
               return (
                 <article
                   className={`address-card${address.isDefault ? ' is-default' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
@@ -523,7 +538,7 @@ export default function SavedAddressesPage({
                     </div>
                     <div className="address-card-label">
                       <span>DELIVERY LOCATION</span>
-                      <h2>{address.type}</h2>
+                      <h2>{displayTitle}</h2>
                     </div>
                     {address.isDefault && (
                       <span className="address-default-badge">

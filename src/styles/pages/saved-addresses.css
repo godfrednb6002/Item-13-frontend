@@ -188,6 +188,7 @@
 .address-type-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
 .address-type-option:has(input:checked) { border-color: rgba(244, 182, 39, 0.55); background: rgba(244, 182, 39, 0.08); color: var(--gold); }
 .address-type-option:has(input:focus-visible) { outline: 2px solid #f7d47b; outline-offset: 3px; }
+.address-custom-label-field { margin-top: 12px; animation: addressFadeIn 180ms ease; }
 .address-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px 12px; }
 .address-field { min-width: 0; display: grid; align-content: start; gap: 6px; color: #d7d8d6; font-size: 10px; font-weight: 700; }
 .address-field > span small { margin-left: 5px; color: #92949b; font-size: 9px; font-weight: 400; }

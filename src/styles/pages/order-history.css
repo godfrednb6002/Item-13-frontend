@@ -583,6 +583,70 @@ html.light-theme .history-order-actions .history-secondary-actions > .history-re
 html.light-theme .history-empty h2 { color: #25272c; }
 html.light-theme .history-footer-note { color: #696c73; }
 
+.history-order-card.is-collapsed {
+  border-color: rgba(244, 182, 39, 0.2);
+}
+
+.history-order-card.is-collapsed .history-order-header {
+  border-bottom: none;
+  padding: 13px 18px;
+}
+
+.history-order-collapsed-name {
+  color: #e6e7e4;
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 380px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #c9cacf;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.history-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+}
+
+.history-collapse-chevron {
+  transition: transform 0.2s ease;
+}
+
+.history-collapse-chevron.is-rotated {
+  transform: rotate(180deg);
+}
+
+html.light-theme .history-order-collapsed-name {
+  color: #25272c;
+}
+
+html.light-theme .history-collapse-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #555963;
+}
+
+html.light-theme .history-collapse-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  color: #8c6307;
+  border-color: rgba(244, 182, 39, 0.45);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .history-page *, .history-page *::before, .history-page *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }

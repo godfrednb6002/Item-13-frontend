@@ -124,6 +124,7 @@ export default function OrderTrackingPage({
   const [whatsappAlerts, setWhatsappAlerts] = useState(false);
   const [status, setStatus] = useState<OrderStatus>(order.status);
   const [notice, setNotice] = useState('');
+  const [isOverviewCollapsed, setIsOverviewCollapsed] = useState(false);
   const purchaseEventSent = useRef(false);
 
   useEffect(() => {
@@ -167,25 +168,61 @@ export default function OrderTrackingPage({
       </header>
 
       <div className="order-layout">
-        <section className="order-intro" aria-labelledby="order-heading">
-          <div className="order-confirmation-icon"><CheckCircle2 size={26} aria-hidden="true" /></div>
-          <p className="order-eyebrow">ORDER CONFIRMED</p>
-          <h1 id="order-heading">Thank you, {firstName}!</h1>
-          <p className="order-intro-copy">We’ve got your order and we’ll keep you posted every step of the way.</p>
-          <div className="order-meta">
-            <span>Order <strong>#{order.id}</strong></span>
-            <span className="order-meta-dot" aria-hidden="true" />
-            <span>Placed {order.orderDate}</span>
-          </div>
-          <div className="order-delivery-banner">
-            <div className="order-delivery-icon"><Truck size={21} aria-hidden="true" /></div>
-            <div>
-              <span>YOUR ESTIMATED DELIVERY</span>
-              <strong>{order.expectedDelivery}</strong>
+        {/* Collapsible Overview Bar */}
+        {isOverviewCollapsed ? (
+          <div className="order-collapsed-summary-bar">
+            <div className="collapsed-summary-left">
+              <span className="order-badge in-transit">
+                <Truck size={14} />
+                <span>{status === 'Cancelled' ? 'Cancelled' : (status === 'Delivered' ? 'Delivered' : 'In Transit')}</span>
+              </span>
+              <span className="collapsed-summary-name" title={order.items.map((i) => i.name).join(', ')}>
+                {order.items.map((i) => i.name).join(', ')}
+              </span>
+              <span className="collapsed-summary-id">#{order.id}</span>
             </div>
-            <span className="order-delivery-status"><span aria-hidden="true" /> {status === 'Cancelled' ? 'Cancelled' : 'On the way'}</span>
+            <button
+              type="button"
+              className="collapsed-summary-expand-btn"
+              onClick={() => setIsOverviewCollapsed(false)}
+              aria-label="Expand order overview"
+            >
+              <span>Expand</span>
+              <ChevronDown className="is-rotated" size={15} />
+            </button>
           </div>
-        </section>
+        ) : (
+          <section className="order-intro" aria-labelledby="order-heading">
+            <div className="order-intro-top-row">
+              <div className="order-confirmation-icon"><CheckCircle2 size={26} aria-hidden="true" /></div>
+              <button
+                type="button"
+                className="order-collapse-toggle-pill"
+                onClick={() => setIsOverviewCollapsed(true)}
+                title="Collapse to summary bar"
+              >
+                <span>Collapse</span>
+                <ChevronDown size={14} />
+              </button>
+            </div>
+            <p className="order-eyebrow">ORDER CONFIRMED</p>
+            <h1 id="order-heading">Thank you, {firstName}!</h1>
+            <p className="order-intro-copy">We’ve got your order and we’ll keep you posted every step of the way.</p>
+            <div className="order-meta">
+              <span>Order <strong>#{order.id}</strong></span>
+              <span className="order-meta-dot" aria-hidden="true" />
+              <span>Placed {order.orderDate}</span>
+            </div>
+            <div className="order-delivery-banner">
+              <div className="order-delivery-icon"><Truck size={21} aria-hidden="true" /></div>
+              <div>
+                <span>YOUR ESTIMATED DELIVERY</span>
+                <strong>{order.expectedDelivery}</strong>
+              </div>
+              <span className="order-delivery-status"><span aria-hidden="true" /> {status === 'Cancelled' ? 'Cancelled' : 'On the way'}</span>
+            </div>
+          </section>
+        )}
 
         <div className="order-content-grid">
           <div className="order-primary-column">

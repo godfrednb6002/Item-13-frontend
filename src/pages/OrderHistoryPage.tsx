@@ -4,6 +4,7 @@ import {
   ArrowRight,
   CalendarDays,
   Check,
+  ChevronDown,
   ChevronRight,
   Clock3,
   Download,
@@ -97,74 +98,104 @@ function OrderCard({
   onViewOrder,
   onReorder,
   onReceipt,
+  isCollapsed = false,
+  onToggleCollapse,
 }: {
   order: HistoryOrder;
   onViewOrder: (id: string) => void;
   onReorder: (order: HistoryOrder) => void;
   onReceipt: (order: HistoryOrder) => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }) {
   const visibleItems = order.items.slice(0, 3);
   const hiddenCount = Math.max(0, order.items.length - visibleItems.length);
+  const primaryItemName = order.items.map((i) => i.name).join(', ');
 
   return (
-    <article className="history-order-card" aria-labelledby={`order-title-${order.id}`}>
+    <article className={`history-order-card ${isCollapsed ? 'is-collapsed' : ''}`} aria-labelledby={`order-title-${order.id}`}>
       <header className="history-order-header">
         <div className="history-order-primary">
-          <div className="history-order-id">
-            <span>ORDER</span>
-            <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
-          </div>
           <span className={`history-status ${statusClass[order.status]}`}>
             <span aria-hidden="true" />{order.status}
           </span>
+          {isCollapsed && (
+            <span className="history-order-collapsed-name" title={primaryItemName}>
+              {primaryItemName}
+            </span>
+          )}
+          <div className="history-order-id">
+            {!isCollapsed && <span>ORDER</span>}
+            <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
+          </div>
         </div>
         <div className="history-order-facts">
-          <div><span>ORDER DATE</span><strong>{formatDate(order.date)}</strong></div>
-          <div><span>TOTAL</span><strong>{formatPrice(order.total)}</strong></div>
+          {!isCollapsed && (
+            <>
+              <div><span>ORDER DATE</span><strong>{formatDate(order.date)}</strong></div>
+              <div><span>TOTAL</span><strong>{formatPrice(order.total)}</strong></div>
+            </>
+          )}
+          {onToggleCollapse && (
+            <button
+              type="button"
+              className="history-collapse-btn"
+              onClick={onToggleCollapse}
+              aria-label={isCollapsed ? `Expand order ${order.id}` : `Collapse order ${order.id}`}
+              title={isCollapsed ? 'Expand details' : 'Collapse to summary'}
+            >
+              <span>{isCollapsed ? 'Expand' : 'Collapse'}</span>
+              <ChevronDown className={`history-collapse-chevron ${isCollapsed ? 'is-rotated' : ''}`} size={15} />
+            </button>
+          )}
         </div>
       </header>
 
-      <ul className="history-products" aria-label={`Items in order ${order.id}`}>
-        {visibleItems.map((item) => (
-          <li className="history-product" key={item.id}>
-            <div className="history-product-image">
-              <img src={item.image} alt="" />
-              {item.quantity > 1 && <span className="history-quantity">×{item.quantity}</span>}
-            </div>
-            <div className="history-product-info">
-              <strong>{item.name}</strong>
-              <span>{item.variant}</span>
-              <small>{item.category} · Qty {item.quantity}</small>
-            </div>
-          </li>
-        ))}
-        {hiddenCount > 0 && (
-          <li className="history-more-items" aria-label={`${hiddenCount} more items`}>
-            +{hiddenCount}<span>more</span>
-          </li>
-        )}
-      </ul>
+      {!isCollapsed && (
+        <>
+          <ul className="history-products" aria-label={`Items in order ${order.id}`}>
+            {visibleItems.map((item) => (
+              <li className="history-product" key={item.id}>
+                <div className="history-product-image">
+                  <img src={item.image} alt="" />
+                  {item.quantity > 1 && <span className="history-quantity">×{item.quantity}</span>}
+                </div>
+                <div className="history-product-info">
+                  <strong>{item.name}</strong>
+                  <span>{item.variant}</span>
+                  <small>{item.category} · Qty {item.quantity}</small>
+                </div>
+              </li>
+            ))}
+            {hiddenCount > 0 && (
+              <li className="history-more-items" aria-label={`${hiddenCount} more items`}>
+                +{hiddenCount}<span>more</span>
+              </li>
+            )}
+          </ul>
 
-      <footer className="history-order-actions">
-        <a
-          className="history-details-link"
-          href={`/orders/${encodeURIComponent(order.id)}`}
-          onClick={(event) => {
-            event.preventDefault();
-            onViewOrder(order.id);
-          }}
-        >
-          View order details <ChevronRight size={16} aria-hidden="true" />
-        </a>
-        <div className="history-secondary-actions">
-          <button type="button" onClick={() => onReceipt(order)}>
-            <Download size={15} aria-hidden="true" /> Receipt
-          </button>
-          <button className="history-reorder-button" type="button" onClick={() => onReorder(order)}>
-            <RotateCcw size={15} aria-hidden="true" /> Buy it again
-          </button>
-        </div>
-      </footer>
+          <footer className="history-order-actions">
+            <a
+              className="history-details-link"
+              href={`/orders/${encodeURIComponent(order.id)}`}
+              onClick={(event) => {
+                event.preventDefault();
+                onViewOrder(order.id);
+              }}
+            >
+              View order details <ChevronRight size={16} aria-hidden="true" />
+            </a>
+            <div className="history-secondary-actions">
+              <button type="button" onClick={() => onReceipt(order)}>
+                <Download size={15} aria-hidden="true" /> Receipt
+              </button>
+              <button className="history-reorder-button" type="button" onClick={() => onReorder(order)}>
+                <RotateCcw size={15} aria-hidden="true" /> Buy it again
+              </button>
+            </div>
+          </footer>
+        </>
+      )}
     </article>
   );
 }
@@ -201,6 +232,14 @@ export default function OrderHistoryPage({
   const [reorderCount, setReorderCount] = useState(0);
   const [guestOrderId, setGuestOrderId] = useState('');
   const [guestError, setGuestError] = useState('');
+  const [collapsedOrders, setCollapsedOrders] = useState<Record<string, boolean>>({});
+
+  const toggleOrderCollapse = (id: string) => {
+    setCollapsedOrders((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -475,6 +514,8 @@ export default function OrderHistoryPage({
                 onViewOrder={onViewOrder}
                 onReorder={handleReorder}
                 onReceipt={handleReceipt}
+                isCollapsed={!!collapsedOrders[order.id]}
+                onToggleCollapse={() => toggleOrderCollapse(order.id)}
               />
             ))}
             {visibleCount < filteredOrders.length && (

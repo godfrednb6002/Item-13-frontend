@@ -650,6 +650,32 @@ html.light-theme .history-footer-note { color: #696c73; }
   flex-shrink: 0;
 }
 
+@media (min-width: 769px) {
+  .history-order-header {
+    position: relative;
+    padding-right: 48px;
+  }
+
+  .history-order-primary .history-arrow-collapse-btn {
+    position: absolute;
+    top: 50%;
+    right: 18px;
+    transform: translateY(-50%);
+  }
+
+  .history-order-primary .history-arrow-collapse-btn:hover {
+    transform: translateY(-50%) scale(1.06);
+  }
+}
+
+@media (max-width: 768px) {
+  .history-order-primary .history-arrow-collapse-btn {
+    position: static;
+    transform: none;
+    margin-left: auto;
+  }
+}
+
 .history-arrow-collapse-btn:hover {
   background: rgba(244, 182, 39, 0.18);
   border-color: var(--gold, #f4b627);

@@ -132,14 +132,6 @@ function OrderCard({
               <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
             </div>
           )}
-        </div>
-        <div className="history-order-facts">
-          {!isCollapsed && (
-            <>
-              <div><span>ORDER DATE</span><strong>{formatDate(order.date)}</strong></div>
-              <div><span>TOTAL</span><strong>{formatPrice(order.total)}</strong></div>
-            </>
-          )}
           {onToggleCollapse && (
             <button
               type="button"
@@ -150,6 +142,14 @@ function OrderCard({
             >
               <ChevronDown className={`history-collapse-chevron ${isCollapsed ? 'is-rotated' : ''}`} size={18} />
             </button>
+          )}
+        </div>
+        <div className="history-order-facts">
+          {!isCollapsed && (
+            <>
+              <div><span>ORDER DATE</span><strong>{formatDate(order.date)}</strong></div>
+              <div><span>TOTAL</span><strong>{formatPrice(order.total)}</strong></div>
+            </>
           )}
         </div>
       </header>

@@ -947,6 +947,18 @@ export default function WelcomePage({
                               ) : (
                                 <span className="order-id">#ITM-8921</span>
                               )}
+                              <button
+                                type="button"
+                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8921'] ? 'is-collapsed' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleOrderCollapse('ITM-8921');
+                                }}
+                                aria-label={collapsedOrders['ITM-8921'] ? "Expand order details" : "Collapse order details"}
+                                title={collapsedOrders['ITM-8921'] ? "Expand details" : "Collapse details"}
+                              >
+                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8921'] ? 'rotated' : ''}`} />
+                              </button>
                             </div>
                             <div className="order-header-actions">
                               {!collapsedOrders['ITM-8921'] && (
@@ -965,18 +977,6 @@ export default function WelcomePage({
                                   </button>
                                 </>
                               )}
-                              <button
-                                type="button"
-                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8921'] ? 'is-collapsed' : ''}`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleOrderCollapse('ITM-8921');
-                                }}
-                                aria-label={collapsedOrders['ITM-8921'] ? "Expand order details" : "Collapse order details"}
-                                title={collapsedOrders['ITM-8921'] ? "Expand details" : "Collapse details"}
-                              >
-                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8921'] ? 'rotated' : ''}`} />
-                              </button>
                             </div>
                           </div>
 
@@ -1043,6 +1043,18 @@ export default function WelcomePage({
                               ) : (
                                 <span className="order-id">#ITM-8104</span>
                               )}
+                              <button
+                                type="button"
+                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8104'] ? 'is-collapsed' : ''}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggleOrderCollapse('ITM-8104');
+                                }}
+                                aria-label={collapsedOrders['ITM-8104'] ? "Expand order details" : "Collapse order details"}
+                                title={collapsedOrders['ITM-8104'] ? "Expand details" : "Collapse details"}
+                              >
+                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8104'] ? 'rotated' : ''}`} />
+                              </button>
                             </div>
                             <div className="order-header-actions">
                               {!collapsedOrders['ITM-8104'] && (
@@ -1061,18 +1073,6 @@ export default function WelcomePage({
                                   </button>
                                 </>
                               )}
-                              <button
-                                type="button"
-                                className={`order-arrow-collapse-btn ${collapsedOrders['ITM-8104'] ? 'is-collapsed' : ''}`}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleOrderCollapse('ITM-8104');
-                                }}
-                                aria-label={collapsedOrders['ITM-8104'] ? "Expand order details" : "Collapse order details"}
-                                title={collapsedOrders['ITM-8104'] ? "Expand details" : "Collapse details"}
-                              >
-                                <ChevronDown size={18} className={`arrow-collapse-icon ${collapsedOrders['ITM-8104'] ? 'rotated' : ''}`} />
-                              </button>
                             </div>
                           </div>
 

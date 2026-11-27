@@ -1662,6 +1662,7 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
 .order-header-primary {
   display: flex;
   align-items: center;
+  gap: 10px;
 }
 
 .order-header-actions {
@@ -2709,7 +2710,7 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
   transform: rotate(180deg);
 }
 
-/* Minimal arrow down V button at the top-right corner of order instances */
+/* Minimal arrow down V button on order instances */
 .order-arrow-collapse-btn {
   display: inline-flex;
   align-items: center;
@@ -2724,6 +2725,34 @@ html.light-theme .btn-track-order.btn-track-delivered:hover {
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   padding: 0;
   flex-shrink: 0;
+}
+
+/* On desktop, keep the arrow button in the top-right corner of the order card */
+@media (min-width: 769px) {
+  .order-card-header {
+    position: relative;
+    padding-right: 44px; /* Give room for top-right button */
+  }
+
+  .order-header-primary .order-arrow-collapse-btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+
+  .order-header-primary .order-arrow-collapse-btn:hover {
+    transform: translateY(-50%) scale(1.06);
+  }
+}
+
+/* On mobile, keep the arrow button side-by-side with Order ID on the same row */
+@media (max-width: 768px) {
+  .order-header-primary .order-arrow-collapse-btn {
+    position: static;
+    transform: none;
+    margin-left: auto; /* Push to the end of the primary row */
+  }
 }
 
 .order-arrow-collapse-btn:hover {

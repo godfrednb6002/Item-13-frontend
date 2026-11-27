@@ -6,6 +6,7 @@ import {
   Check,
   ChevronDown,
   Home,
+  Loader2,
   MapPin,
   Pencil,
   Plus,
@@ -111,6 +112,8 @@ function AddressForm({
     address ? { ...address } : { ...emptyAddress },
   );
   const [phoneError, setPhoneError] = useState('');
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationStatus, setLocationStatus] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -122,6 +125,78 @@ function AddressForm({
 
   const update = (field: keyof Omit<SavedAddress, 'id'>, value: string | boolean) => {
     setValues((current) => ({ ...current, [field]: value }));
+  };
+
+  const handleGetCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus('Geolocation is not supported by your browser.');
+      return;
+    }
+
+    setIsLocating(true);
+    setLocationStatus('Locating...');
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        const coordsFormatted = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+
+        // Update GPS coordinates immediately
+        setValues((current) => ({
+          ...current,
+          gps_location: coordsFormatted,
+        }));
+
+        try {
+          // Attempt reverse geocoding to auto-populate street, city, region if available
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const addr = data.address || {};
+            const city = addr.city || addr.town || addr.suburb || addr.village || addr.county || '';
+            const road = addr.road || addr.pedestrian || addr.footway || '';
+            const houseNumber = addr.house_number ? `${addr.house_number} ` : '';
+            const state = addr.state || '';
+
+            setValues((current) => ({
+              ...current,
+              gps_location: coordsFormatted,
+              city: current.city || city,
+              street: current.street || (road ? `${houseNumber}${road}` : ''),
+              region: regions.find((r) => state.toLowerCase().includes(r.toLowerCase())) || current.region,
+            }));
+            setLocationStatus('Current location captured!');
+          } else {
+            setLocationStatus('Location captured!');
+          }
+        } catch {
+          setLocationStatus('Location captured!');
+        } finally {
+          setIsLocating(false);
+          setTimeout(() => setLocationStatus(''), 4000);
+        }
+      },
+      (error) => {
+        setIsLocating(false);
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationStatus('Location permission was denied.');
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          setLocationStatus('Location information is unavailable.');
+        } else if (error.code === error.TIMEOUT) {
+          setLocationStatus('Location request timed out.');
+        } else {
+          setLocationStatus('Unable to retrieve location.');
+        }
+        setTimeout(() => setLocationStatus(''), 4000);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 12000,
+        maximumAge: 10000,
+      }
+    );
   };
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
@@ -206,9 +281,34 @@ function AddressForm({
               <span>GPS / digital address <small>Recommended</small></span>
               <div className="address-gps-control">
                 <MapPin size={16} aria-hidden="true" />
-                <input name="gps_location" value={values.gps_location} onChange={(event) => update('gps_location', event.target.value)} placeholder="Enter GPS coordinates or digital address" />
-                <button type="button" onClick={() => update('gps_location', 'GA-184-6021')}>Use location</button>
+                <input
+                  name="gps_location"
+                  value={values.gps_location}
+                  onChange={(event) => update('gps_location', event.target.value)}
+                  placeholder="Enter GPS coordinates or digital address"
+                />
+                <button
+                  type="button"
+                  className="address-use-location-btn"
+                  onClick={handleGetCurrentLocation}
+                  disabled={isLocating}
+                  title="Use my current location"
+                >
+                  {isLocating ? (
+                    <>
+                      <Loader2 size={12} className="address-location-spinner" aria-hidden="true" />
+                      <span>Locating...</span>
+                    </>
+                  ) : (
+                    <span>Use my current location</span>
+                  )}
+                </button>
               </div>
+              {locationStatus && (
+                <small className="address-location-feedback" role="status">
+                  {locationStatus}
+                </small>
+              )}
             </label>
           </div>
 

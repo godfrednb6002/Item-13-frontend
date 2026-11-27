@@ -534,6 +534,12 @@ export default function SavedAddressesPage({
                   className={`address-card${address.isDefault ? ' is-default' : ''}${isCollapsed ? ' is-collapsed' : ''}`}
                   key={address.id}
                 >
+                  {address.isDefault && (
+                    <span className="address-default-badge" title="Default delivery address">
+                      <Check size={11} aria-hidden="true" />
+                      <span>Default</span>
+                    </span>
+                  )}
                   <header
                     className="address-card-header address-card-header-clickable"
                     onClick={() => toggleAddressCollapse(address.id)}
@@ -554,11 +560,6 @@ export default function SavedAddressesPage({
                       <span>DELIVERY LOCATION</span>
                       <h2>{displayTitle}</h2>
                     </div>
-                    {address.isDefault && (
-                      <span className="address-default-badge">
-                        <Check size={12} aria-hidden="true" /> Default address
-                      </span>
-                    )}
                     <button
                       type="button"
                       className={`address-collapse-btn ${isCollapsed ? 'is-collapsed' : 'is-expanded'}`}

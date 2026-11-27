@@ -8,6 +8,7 @@ import {
   ChevronDown,
   CircleHelp,
   Clock3,
+  Copy,
   Download,
   MapPin,
   Package,
@@ -209,7 +210,27 @@ export default function OrderTrackingPage({
             <h1 id="order-heading">Thank you, {firstName}!</h1>
             <p className="order-intro-copy">We’ve got your order and we’ll keep you posted every step of the way.</p>
             <div className="order-meta">
-              <span>Order <strong>#{order.id}</strong></span>
+              <div className="order-id-copy-group">
+                <span>Order <strong>#{order.id}</strong></span>
+                <button
+                  type="button"
+                  className="order-id-copy-btn"
+                  onClick={() => {
+                    try {
+                      navigator.clipboard.writeText(order.id);
+                      setNotice(`Order ID #${order.id} copied to clipboard!`);
+                      setTimeout(() => setNotice(''), 2500);
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }}
+                  title="Copy order ID"
+                  aria-label={`Copy order ID ${order.id}`}
+                >
+                  <Copy size={13} />
+                  <span className="copy-btn-tooltip">Copy ID</span>
+                </button>
+              </div>
               <span className="order-meta-dot" aria-hidden="true" />
               <span>Placed {order.orderDate}</span>
             </div>

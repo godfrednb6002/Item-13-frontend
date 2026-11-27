@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronRight,
   Clock3,
+  Copy,
   Download,
   Package,
   RotateCcw,
@@ -112,6 +113,18 @@ function OrderCard({
   const hiddenCount = Math.max(0, order.items.length - visibleItems.length);
   const primaryItemName = order.items.map((i) => i.name).join(', ');
 
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (id: string) => {
+    try {
+      navigator.clipboard.writeText(id);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId((cur) => (cur === id ? null : cur)), 2000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <article className={`history-order-card ${isCollapsed ? 'is-collapsed' : ''}`} aria-labelledby={`order-title-${order.id}`}>
       <header className="history-order-header">
@@ -127,9 +140,27 @@ function OrderCard({
               <span className="history-order-collapsed-id">#{order.id}</span>
             </div>
           ) : (
-            <div className="history-order-id">
-              <span>ORDER</span>
-              <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
+            <div className="history-order-id-copy-group">
+              <div className="history-order-id">
+                <span>ORDER</span>
+                <h2 id={`order-title-${order.id}`}>#{order.id}</h2>
+              </div>
+              <button
+                type="button"
+                className="history-id-copy-btn"
+                onClick={() => handleCopy(order.id)}
+                title="Copy order ID"
+                aria-label={`Copy order ID ${order.id}`}
+              >
+                {copiedId === order.id ? (
+                  <Check size={13} className="copy-check-icon" />
+                ) : (
+                  <Copy size={13} />
+                )}
+                <span className="copy-btn-tooltip">
+                  {copiedId === order.id ? 'Copied!' : 'Copy ID'}
+                </span>
+              </button>
             </div>
           )}
           {onToggleCollapse && (

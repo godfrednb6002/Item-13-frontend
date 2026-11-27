@@ -695,6 +695,55 @@ html.light-theme .history-arrow-collapse-btn:hover {
   color: #8c6307;
 }
 
+.history-order-id-copy-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.history-id-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #a1a1aa;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.history-id-copy-btn:hover {
+  background: rgba(244, 182, 39, 0.18);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+}
+
+.history-id-copy-btn .copy-check-icon {
+  color: #22c55e;
+}
+
+.history-id-copy-btn:hover .copy-btn-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+html.light-theme .history-id-copy-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #64748b;
+}
+
+html.light-theme .history-id-copy-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: #8c6307;
+}
+
 .history-collapse-btn:hover {
   background: rgba(244, 182, 39, 0.15);
   border-color: var(--gold, #f4b627);

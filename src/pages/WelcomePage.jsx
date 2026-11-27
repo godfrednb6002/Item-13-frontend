@@ -28,6 +28,7 @@ import {
   PhoneCall,
   ExternalLink,
   X,
+  Copy,
   Search,
   ArrowUpDown,
 } from 'lucide-react';
@@ -66,6 +67,23 @@ export default function WelcomePage({
   const [orderSortBy, setOrderSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-high' | 'price-low'
   const [isOrderSortOpen, setIsOrderSortOpen] = useState(false);
   const [collapsedOrders, setCollapsedOrders] = useState({ 'ITM-8921': false, 'ITM-8104': false });
+  const [copiedOrderId, setCopiedOrderId] = useState(null);
+
+  const handleCopyOrderId = (id) => {
+    if (!id) return;
+    try {
+      navigator.clipboard.writeText(id);
+      setCopiedOrderId(id);
+      if (onToast) {
+        onToast(`Order ID #${id} copied to clipboard!`);
+      }
+      setTimeout(() => {
+        setCopiedOrderId((cur) => (cur === id ? null : cur));
+      }, 2000);
+    } catch (e) {
+      console.error('Failed to copy order ID', e);
+    }
+  };
 
   const toggleOrderCollapse = (orderId) => {
     setCollapsedOrders((prev) => ({
@@ -945,7 +963,28 @@ export default function WelcomePage({
                                   <span className="order-id">#ITM-8921</span>
                                 </div>
                               ) : (
-                                <span className="order-id">#ITM-8921</span>
+                                <div className="order-id-copy-group">
+                                  <span className="order-id">#ITM-8921</span>
+                                  <button
+                                    type="button"
+                                    className="order-id-copy-btn"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleCopyOrderId('ITM-8921');
+                                    }}
+                                    title="Copy order ID"
+                                    aria-label="Copy order ID ITM-8921"
+                                  >
+                                    {copiedOrderId === 'ITM-8921' ? (
+                                      <Check size={13} className="copy-check-icon" />
+                                    ) : (
+                                      <Copy size={13} />
+                                    )}
+                                    <span className="copy-btn-tooltip">
+                                      {copiedOrderId === 'ITM-8921' ? 'Copied!' : 'Copy ID'}
+                                    </span>
+                                  </button>
+                                </div>
                               )}
                               <button
                                 type="button"
@@ -1041,7 +1080,28 @@ export default function WelcomePage({
                                   <span className="order-id">#ITM-8104</span>
                                 </div>
                               ) : (
-                                <span className="order-id">#ITM-8104</span>
+                                <div className="order-id-copy-group">
+                                  <span className="order-id">#ITM-8104</span>
+                                  <button
+                                    type="button"
+                                    className="order-id-copy-btn"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleCopyOrderId('ITM-8104');
+                                    }}
+                                    title="Copy order ID"
+                                    aria-label="Copy order ID ITM-8104"
+                                  >
+                                    {copiedOrderId === 'ITM-8104' ? (
+                                      <Check size={13} className="copy-check-icon" />
+                                    ) : (
+                                      <Copy size={13} />
+                                    )}
+                                    <span className="copy-btn-tooltip">
+                                      {copiedOrderId === 'ITM-8104' ? 'Copied!' : 'Copy ID'}
+                                    </span>
+                                  </button>
+                                </div>
                               )}
                               <button
                                 type="button"

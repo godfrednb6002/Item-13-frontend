@@ -2783,6 +2783,81 @@ html.light-theme .order-arrow-collapse-btn:hover {
   color: #8c6307;
 }
 
+/* Order ID Copy Button upon expansion */
+.order-id-copy-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.order-id-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #a1a1aa;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.order-id-copy-btn:hover {
+  background: rgba(244, 182, 39, 0.18);
+  border-color: var(--gold, #f4b627);
+  color: var(--gold, #f4b627);
+}
+
+.order-id-copy-btn .copy-check-icon {
+  color: #22c55e;
+}
+
+.copy-btn-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #18181b;
+  color: #fafafa;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.order-id-copy-btn:hover .copy-btn-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+html.light-theme .order-id-copy-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #64748b;
+}
+
+html.light-theme .order-id-copy-btn:hover {
+  background: rgba(244, 182, 39, 0.15);
+  border-color: var(--gold, #f4b627);
+  color: #8c6307;
+}
+
+html.light-theme .copy-btn-tooltip {
+  background: #0f172a;
+  color: #ffffff;
+}
+
 html.light-theme .order-collapsed-prod-name {
   color: #1e293b;
 }

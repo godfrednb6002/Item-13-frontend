@@ -52,7 +52,12 @@ export default function App() {
     const hasUser = !!getStoredUser();
 
     // 1. Dual-Routing Enforcement:
-    // If authenticated customer visits guest storefront, automatically redirect to equivalent /a route
+    // If the visitor opens root '/' or empty path, always default to the landing page
+    if (path === '/' || path === '' || path === '/showcase' || path === '/landing') {
+      return 'landing';
+    }
+
+    // If authenticated customer visits other guest storefront routes, redirect to equivalent /a route
     if (hasUser && !isAuthenticatedRoute(path)) {
       const authPath = toAuthenticatedUrl(path, window.location.search);
       window.history.replaceState({}, '', authPath);
@@ -232,7 +237,13 @@ export default function App() {
       const hasUser = !!getStoredUser();
 
       // Dual-Routing Enforcement:
-      // Redirect logged-in user if they hit guest URLs back to /a equivalent
+      // If visitor navigates to root or showcase, render landing page
+      if (path === '/' || path === '' || path === '/showcase' || path === '/landing') {
+        setCurrentPage('landing');
+        return;
+      }
+
+      // Redirect logged-in user if they hit other guest URLs back to /a equivalent
       if (hasUser && !isAuthenticatedRoute(path)) {
         const authPath = toAuthenticatedUrl(path, window.location.search);
         window.history.replaceState({}, '', authPath);
@@ -406,7 +417,7 @@ export default function App() {
         setCurrentPage(`welcome-${sub}`);
       }
     } else if (page === 'home') {
-      setCurrentPage('home');
+      setCurrentPage(user ? 'home' : 'landing');
     } else if (page === 'landing' || page === 'showcase') {
       setCurrentPage('landing');
     } else {
@@ -1317,7 +1328,14 @@ export default function App() {
 
       {/* Top Navigation */}
       <header className="navbar">
-        <a href="/" className="brand-logo" onClick={(e) => { e.preventDefault(); navigateTo('home'); }}>
+        <a
+          href={user ? "/a" : "/"}
+          className="brand-logo"
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo(user ? 'home' : 'landing');
+          }}
+        >
           <img
             src="/item13Logo-trimmed.png"
             alt="Item13 Logo"

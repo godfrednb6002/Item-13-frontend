@@ -66,7 +66,7 @@ export default function WelcomePage({
   const [isOrderSearchOpen, setIsOrderSearchOpen] = useState(false);
   const [orderSortBy, setOrderSortBy] = useState('newest'); // 'newest' | 'oldest' | 'price-high' | 'price-low'
   const [isOrderSortOpen, setIsOrderSortOpen] = useState(false);
-  const [collapsedOrders, setCollapsedOrders] = useState({ 'ITM-8921': false, 'ITM-8104': false });
+  const [collapsedOrders, setCollapsedOrders] = useState({ 'ITM-8921': true, 'ITM-8104': true });
   const [copiedOrderId, setCopiedOrderId] = useState(null);
 
   const handleCopyOrderId = (id) => {

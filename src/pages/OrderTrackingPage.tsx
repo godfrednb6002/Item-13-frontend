@@ -125,7 +125,7 @@ export default function OrderTrackingPage({
   const [whatsappAlerts, setWhatsappAlerts] = useState(false);
   const [status, setStatus] = useState<OrderStatus>(order.status);
   const [notice, setNotice] = useState('');
-  const [isOverviewCollapsed, setIsOverviewCollapsed] = useState(false);
+  const [isOverviewCollapsed, setIsOverviewCollapsed] = useState(true);
   const purchaseEventSent = useRef(false);
 
   useEffect(() => {

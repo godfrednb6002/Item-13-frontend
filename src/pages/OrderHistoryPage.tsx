@@ -266,12 +266,18 @@ export default function OrderHistoryPage({
   const [reorderCount, setReorderCount] = useState(0);
   const [guestOrderId, setGuestOrderId] = useState('');
   const [guestError, setGuestError] = useState('');
+  // Orders default to collapsed view
   const [collapsedOrders, setCollapsedOrders] = useState<Record<string, boolean>>({});
+
+  const isOrderCollapsed = (id: string) => {
+    // If not explicitly toggled to false, default to true (collapsed)
+    return collapsedOrders[id] === undefined ? true : collapsedOrders[id];
+  };
 
   const toggleOrderCollapse = (id: string) => {
     setCollapsedOrders((prev) => ({
       ...prev,
-      [id]: !prev[id],
+      [id]: !isOrderCollapsed(id),
     }));
   };
 
@@ -548,7 +554,7 @@ export default function OrderHistoryPage({
                 onViewOrder={onViewOrder}
                 onReorder={handleReorder}
                 onReceipt={handleReceipt}
-                isCollapsed={!!collapsedOrders[order.id]}
+                isCollapsed={isOrderCollapsed(order.id)}
                 onToggleCollapse={() => toggleOrderCollapse(order.id)}
               />
             ))}

@@ -46,80 +46,6 @@
 .addresses-add-button { min-height: 44px; display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; border: 1px solid var(--gold); border-radius: 10px; background: var(--gold); color: #201a0e; font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; transition: background 150ms ease, transform 150ms ease; }
 .addresses-add-button:hover { transform: translateY(-1px); background: #ffca4f; }
 
-.addresses-heading-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.addresses-layout-switcher {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  background: rgba(25, 26, 30, 0.85);
-  gap: 3px;
-}
-
-.addresses-layout-btn {
-  height: 38px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 12px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: #9ea0a7;
-  font: inherit;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 160ms ease;
-}
-
-.addresses-layout-btn:hover {
-  color: #f1f1ef;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.addresses-layout-btn.is-active {
-  background: rgba(244, 182, 39, 0.16);
-  color: var(--gold);
-}
-
-.addresses-container {
-  display: grid;
-  gap: 16px;
-  transition: all 200ms ease;
-}
-
-/* Grid Layout (2-column desktop, default) */
-.addresses-layout-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-/* List Layout (Full width single-column stacked) */
-.addresses-layout-list {
-  grid-template-columns: 1fr;
-}
-
-/* Tile Layout (Compact multi-column dense layout) */
-.addresses-layout-tile {
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-}
-
-.addresses-layout-tile .address-card {
-  padding: 16px;
-}
-
-.addresses-layout-tile .address-category-icon {
-  width: 36px;
-  height: 36px;
-}
-
 .addresses-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .address-card {
   position: relative;
@@ -147,27 +73,26 @@
 .address-card-label > span { color: #8c8e95; font-size: 8px; font-weight: 800; letter-spacing: 1px; }
 .address-card-label h2 { margin: 0; color: #f1f1ef; font-family: var(--font-heading); font-size: 17px; }
 
-/* Connected Right-Edge Default Tag / Ribbon */
+/* Connected Top-Line Default Tag / Ribbon */
 .address-default-badge {
   position: absolute;
-  top: 14px;
-  right: -1px;
+  top: 0;
+  right: 24px;
+  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 4px 9px 4px 8px;
+  padding: 3px 10px 4px;
   background: linear-gradient(135deg, #f4b627 0%, #d89914 100%);
   color: #1a160d;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  box-shadow: -2px 3px 8px rgba(0, 0, 0, 0.25), 0 0 10px rgba(244, 182, 39, 0.2);
-  z-index: 2;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), 0 0 10px rgba(244, 182, 39, 0.25);
+  z-index: 5;
   user-select: none;
   pointer-events: none;
   animation: addressFadeIn 180ms ease;
@@ -194,7 +119,7 @@
 }
 
 .address-card.is-default .address-collapse-btn {
-  margin-right: 68px; /* Leave comfortable room for the connected right-edge default tab */
+  margin-right: 0;
 }
 
 .address-collapse-btn:hover {
@@ -407,15 +332,6 @@
 .addresses-page button:focus-visible, .addresses-page a:focus-visible, .addresses-page input:focus-visible, .addresses-page select:focus-visible { outline: 2px solid #f7d47b; outline-offset: 3px; }
 
 @media (max-width: 768px) {
-  .addresses-heading-actions {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .addresses-layout-grid {
-    grid-template-columns: 1fr;
-  }
-
   .addresses-live-notice {
     right: 16px;
     bottom: calc(100px + env(safe-area-inset-bottom, 0px));
@@ -428,24 +344,6 @@
 }
 
 @media (max-width: 480px) {
-  .addresses-heading-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .addresses-layout-switcher {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .addresses-layout-btn {
-    flex: 1;
-    justify-content: center;
-    padding: 0 8px;
-    font-size: 10px;
-  }
-
   .addresses-topbar { min-height: 60px; padding: 0 14px; }
   .addresses-back-link { font-size: 0; }
   .addresses-back-link svg { width: 20px; height: 20px; }
